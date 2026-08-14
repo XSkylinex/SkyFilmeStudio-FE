@@ -1,0 +1,17 @@
+dist
+coverage
+node_modules
+.yarn
+yarn.lock
+
+# Markdown here is hand-wrapped and its tables are hand-aligned — plan/,
+# .claude/ and the two READMEs are read far more often than they are edited.
+# Prettier would reflow all of it into one unreviewable diff.
+*.md
+
+# Authored assets, not generated output.
+public
+
+# Agent configuration and skill tooling. The scripts under skills/ are written
+# compactly on purpose; Prettier reflows them into a diff nobody asked for.
+.claude

@@ -75,8 +75,15 @@ compiler and it only type-checks here — Vite emits. Its Go binary lives in
   metadata and constructor parameter properties. Do not "align" them.
 - Never import from `typescript`'s `./unstable/*` exports.
 - Prefer `import type` / `export type` — `verbatimModuleSyntax` requires it.
-- `noUncheckedIndexedAccess` is **not** on in the scaffold. Turn it on in the first hardening phase
-  (`plan/00-toolchain.md`) and fix the fallout then, not gradually.
+- **`strict`, `noUncheckedIndexedAccess` and `exactOptionalPropertyTypes` are all on** since
+  `plan/00` (2026-08-15). `arr[i]` is `T | undefined`; bind and guard rather than asserting.
+- **`paths` targets must be relative in TS 7** — `"@/*": ["./src/*"]`, with the leading `./`. Without
+  it you get `TS5090: Non-relative paths are not allowed`, which is a confusing message for a missing
+  two characters, and it fires in every config that `extends` the offending one.
+- `tsconfig.test.json` extends `tsconfig.app.json`, overrides `include` to `["test"]`, and sets
+  `types: ["vitest/globals", "node", "vite/client"]`. `vite/client` is not optional there — it is what
+  declares `*.css` as a module, and a component test importing a component that imports a stylesheet
+  fails without it.
 
 ## oxlint, not ESLint
 
@@ -91,11 +98,12 @@ Error: typescript-eslint does not support TS 7.0.
 
 There is no ESLint config in this repo and adding one would not run.
 
-- oxlint reads types through `tsgolint`. Its binding here is
-  the unscoped `oxlint-tsgolint@7.0.2001`, which is **not installed here**. So
-  `typescript/no-floating-promises` and friends are real type-aware checks, not approximations.
-  Type-aware mode is a config key (`"options": { "typeAware": true }` in `.oxlintrc.json`), not a CLI
-  flag; `typeAware` is present in oxlint's own `configuration_schema.json`.
+- oxlint reads types through `tsgolint`. Its binding here is the unscoped
+  `oxlint-tsgolint@7.0.2001`, **installed 2026-08-15**, and `"options": { "typeAware": true }` is set
+  in `.oxlintrc.json`. So `typescript/no-floating-promises` and friends are real type-aware checks,
+  not approximations — proven by a probe whose unawaited promise the rule caught. `typeAware` is a
+  config key, not a CLI flag, and it sits alongside `typeCheck` in oxlint's own
+  `configuration_schema.json` under `OxlintOptions`. Leave `typeCheck` off; `tsc` does that job.
 - **Plugin names are a closed set.** `react-hooks` and `react-refresh` are **not** plugins: those
   rules live under `react` as `react/rules-of-hooks`, `react/exhaustive-deps` and
   `react/only-export-components`. A `react-hooks/*` rule *name* still resolves — oxlint normalises it
@@ -104,9 +112,16 @@ There is no ESLint config in this repo and adding one would not run.
   "the linter is broken" rather than "that rule is misspelled".
 - **Always invoke it as `yarn oxlint`.** Running the bin outside the package manager's resolution fails with
   `Cannot find module './oxlint.darwin-arm64.node'` — the binding only resolves through Yarn's loader.
-- The scaffold enables three plugins (`react`, `typescript`, `oxc`) and two rules. That is thin for
-  this project; `plan/00-toolchain.md` widens it to include `jsx-a11y`, `promise`, `import` and
-  `unicorn`, which is where the accessibility and floating-promise coverage comes from.
+- **Nine plugins and eleven rules** since `plan/00` (2026-08-15): `eslint`, `react`, `typescript`,
+  `oxc`, `import`, `jsx-a11y`, `promise`, `unicorn`, `vitest`. Setting `plugins` *overwrites* the base
+  set, so `eslint` is listed explicitly — drop it and the core rules go silent.
+  Three of the rules exist to enforce `code-style.md` mechanically rather than by review:
+  `import/no-default-export`, `func-style: ["error", "expression"]` and
+  `typescript/no-non-null-assertion`. `vite.config.ts` and `vitest.config.ts` are the only files
+  exempted from the first, via `overrides`.
+- The full valid plugin list, read out of `LintPluginOptionsSchema` in oxlint 1.78.0's
+  `configuration_schema.json`: `eslint`, `react`, `unicorn`, `typescript`, `oxc`, `import`, `jsdoc`,
+  `jest`, `vitest`, `jsx-a11y`, `nextjs`, `react-perf`, `promise`, `node`, `vue`. Nothing else.
 
 ## Vite 8
 
@@ -137,18 +152,28 @@ prose is weaker evidence than the type next to it.
   *narrows* support. `.claude/rules/css.md` covers what the floor means for stylesheets.
 - React Compiler runs via `@rolldown/plugin-babel` with `reactCompilerPreset()`. The preset carries its
   own rolldown filter and the plugin already skips `node_modules`, so it needs no `include`.
-- **`resolve.tsconfigPaths` exists and defaults to `false`** (confirmed in the `.d.ts`,
-  `@default false`). Setting it `true` in both `vite.config.ts` and `vitest.config.ts` collapses the
-  alias into one source of truth — `paths` in `tsconfig.app.json`. Until that is done and *verified by
-  running both a build and the test suite*, `resolve.alias` must mirror `paths` everywhere it appears.
-  Change one, change all; nothing checks it for you, and the failure is asymmetric: `typecheck` passes
-  on a drifted alias while `build` or `vitest` fails, and the two errors look unrelated.
+- **`resolve.tsconfigPaths: true` is set, and it is verified.** It defaults to `false` (confirmed in
+  the `.d.ts`, `@default false`); `plan/00` turned it on 2026-08-15 and proved it on *both* resolvers,
+  which was the condition for choosing it: `@/App` resolves in `yarn build` and in `yarn test`. There
+  is no `resolve.alias` anywhere and there must not be one — `paths` in `tsconfig.app.json` is the
+  single source of truth, and `vitest.config.ts` inherits it by `mergeConfig`-ing `vite.config.ts`.
+  `src/main.tsx` imports `@/App` deliberately rather than `./App.tsx`, so every build exercises the
+  alias instead of leaving it proven once and then untested.
 
 ## Vitest
 
-Not installed yet. When it is added: registry `latest` was **4.1.10** on 2026-08-14, with
-`beta=5.0.0-beta.7` and `rc=5.0.0-rc.1`. **Install 4.x.** Vitest 5 is not stable, and a test runner is
-the worst place to run an RC.
+Installed 2026-08-15 by `plan/00`: **4.1.10** (registry `latest`, published 2026-07-06), with
+`jsdom@30.0.1`, `@testing-library/react@16.3.2`, `@testing-library/user-event@14.6.3` and
+`@testing-library/jest-dom@7.0.1`. `5.0.0` was still `rc` and was declined — a test runner is the
+worst place to run a release candidate.
+
+**`vitest.config.ts` does not re-declare anything.** It `mergeConfig`s `vite.config.ts` and adds only
+the `test` block, so the React Compiler pass and the `@/` alias have exactly one definition. A second
+copy is the drift that makes `typecheck` pass while `test` fails on the same import.
+
+**MSW is not installed.** The decision to mock at the HTTP boundary stands, but it lands in FE-04
+with the first real fetcher — until BE-01 publishes a contract there is nothing to mock and no way to
+prove a handler works.
 
 ## Yarn 4
 
@@ -156,9 +181,12 @@ Yarn 4.18.0, Node 26.7.0, **`nodeLinker: node-modules`** — `node_modules/` exi
 resolution works. (This repo was briefly on PnP; if a doc tells you to `unzip` out of the Yarn cache,
 it is stale — read `node_modules/` directly.)
 
-- There is no `.yarnrc.yml`, so every Yarn setting is at its default — including `npmMinimalAgeGate`,
-  which is therefore **off**. If it is ever switched on, `yarn add` will refuse a package published
-  inside the window; pick the newest version that clears the gate rather than disabling it.
+- **`.yarnrc.yml` exists and `npmMinimalAgeGate: 3d` is ON** (corrected 2026-08-15 — an earlier
+  version of this file said there was no `.yarnrc.yml`). `yarn add` refuses a version published
+  inside the window; pick the newest that clears the gate rather than disabling it. Measured while
+  installing the test stack: `@testing-library/user-event@14.6.4` and `rolldown@1.2.4` were both two
+  days old and blocked, so `14.6.3` and `~1.2.1` were used. Note the gate applies to what `yarn add`
+  *resolves*, not to a range already pinned in `yarn.lock` by a transitive dependency.
 - `npx` and `npm view` fail on this machine (`~/.npm/_cacache` is root-owned, `EACCES`). Run tools
   through the repo's own `yarn`.
 - `yarn dlx` in a directory with no `packageManager` field re-downloads Yarn through Corepack and

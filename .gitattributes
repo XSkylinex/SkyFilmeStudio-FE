@@ -1,0 +1,29 @@
+* text=auto eol=lf
+
+# Both workstations are first-class (plan §4.1.1). Checked-out line endings are
+# LF everywhere so a Windows checkout cannot produce a whitespace-only diff.
+
+# Yarn ships its own release binary in-repo; never normalise or diff it.
+/.yarn/releases/** binary
+/.yarn/plugins/**  binary
+
+# Media. This is a video production tool, so these will appear.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.mp4   binary
+*.mov   binary
+*.webm  binary
+*.mkv   binary
+*.wav   binary
+*.mp3   binary
+*.flac  binary
+*.ogg   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary

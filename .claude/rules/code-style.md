@@ -52,8 +52,10 @@ noise here — it is what catches an accidental `return someValue` inside a `use
 ## Named exports only
 
 No `export default` anywhere in `src`. Default exports make a symbol renameable at each import site
-and defeat grep. `vite.config.ts` is the sole exception, and the rule is switched off for that one
-file in `.oxlintrc.json` rather than repo-wide.
+and defeat grep. **This is enforced, not reviewed** — `import/no-default-export` is on since
+`plan/00`, switched off in `.oxlintrc.json` `overrides` for exactly two files that cannot avoid it,
+`vite.config.ts` and `vitest.config.ts`. The companion rules are `func-style: ["error", "expression"]`
+for the arrow-const rule above and `typescript/no-non-null-assertion` for `!`.
 
 Lazy routes still use named exports: `lazy: () => import("./ShotReviewPage").then((m) => ({ Component: m.ShotReviewPage }))`.
 

@@ -1,7 +1,7 @@
 # FE-00 — Toolchain & repository hardening
 
 > **Depends on:** — · **Blocks:** everything · **Backend needs:** — · **Plan authority:** §4.1.1, §4.6
-> **Status:** not started
+> **Status:** done 2026-08-15
 
 ## Goal
 
@@ -36,6 +36,17 @@ declaration, all three of which this project forbids.
 | 3 | Alias mechanism | (a) mirror `paths` in every config, (b) `resolve.tsconfigPaths: true` | **(b) if verified.** The option exists in Vite 8.2.1 (`@default false`, confirmed in the shipped `.d.ts`). It must be proven by running **both** a build and the test suite — the two resolvers have been observed to disagree. Until proven, (a), edited everywhere together. |
 | 4 | HTTP mocking | MSW vs Vitest fetch mocking | **MSW.** Mock at the HTTP boundary, not by stubbing query hooks — stubbing hooks tests the mock. |
 | 5 | Formatter | Prettier vs none | **Prettier**, sharing the backend's config, so the two repos read the same. |
+
+### Answered, 2026-08-15
+
+| # | Answer |
+| - | ------ |
+| 1 | **Vitest 4.1.10** (registry `latest`, published 2026-07-06). `5.0.0-rc.1` declined. |
+| 2 | **jsdom 30.0.1.** Not measured against `happy-dom` — the suite is too small for the measurement to mean anything. Revisit when it is slow. |
+| 3 | **(b) `resolve.tsconfigPaths: true`**, and it is *verified*: `@/App` resolves in `yarn build` (`src/main.tsx` imports through the alias on purpose, so every build exercises it) and in `yarn test` (`test/App.test.tsx`). `paths` in `tsconfig.app.json` is the single source of truth; `vitest.config.ts` `mergeConfig`s `vite.config.ts` rather than re-declaring it, so there is nothing to drift. |
+| 4 | **MSW, but at FE-04, not here.** BE-01 has not published a contract, so there is nothing to mock and no way to prove a handler works. `test/setup.ts` ships RTL cleanup only. The decision is unchanged; only its timing moved. |
+| 5 | **Prettier 3.9.6**, with the backend's `.prettierrc` copied verbatim (`singleQuote`, `trailingComma: "all"`). `.prettierignore` excludes `*.md` and `.claude/` — the docs are hand-wrapped and their tables hand-aligned, and reflowing them produces an unreviewable diff. |
+| Trap | **`rolldown` declared explicitly, as `~1.2.1`** — deliberately the same range `vite@8.2.1` uses, not a pin. Pinning `1.2.3` (the newest clearing the 3-day age gate) was tried first and produced *two* rolldown copies, `1.2.3` hoisted and `1.2.4` nested under `vite/`, on different `@oxc-project/types`. Matching Vite's range collapses them to one. `rm -rf node_modules && yarn install` is now silent. |
 
 ## Steps
 
@@ -134,7 +145,9 @@ Extend for: `.env*` (except `.env.example`), `coverage/`, `.vitest/`, and any lo
 
 ### 9. Git init, identity and remote
 
-**This repository is not a git repository yet.** Initialise it, then:
+**Stale as written — corrected 2026-08-15.** The repository was already initialised before this phase
+began, with `origin` set to the URL below and three commits all authored by
+`Alex Moshinsky <alex1mosh@gmail.com>`. Nothing to do; the requirement stands for anyone re-cloning:
 
 ```text
 remote origin  https://github.com/XSkylinex/SkyFilmeStudio-FE.git
@@ -159,17 +172,30 @@ Paste the real output of each.
 
 ## Done when
 
-- [ ] `yarn typecheck` and `yarn test` exist, run, and pass
-- [ ] oxlint runs with `jsx-a11y`, `promise`, `import`, `unicorn` and type-aware mode, and **fails on a
-      deliberately broken file** (prove it)
-- [ ] `strict` + `noUncheckedIndexedAccess` on, with the fallout fixed
-- [ ] no `export default`, no `function` declaration, and no `!` assertion in `src/`
-- [ ] the starter demo and its assets are gone; `favicon.svg` and `icons.svg` still resolve
-- [ ] `test/` exists, mirrors `src/`, and contains one test proven to have teeth
-- [ ] `@/` resolves in `src`, in `test`, in a build, and in the test run
-- [ ] the build fails if an external URL reaches `dist/` (prove it by adding one)
-- [ ] `.gitattributes`, `.editorconfig`, extended `.gitignore` committed
-- [ ] git initialised, remote set, author is Alex Moshinsky, first commit exists
+- [x] `yarn typecheck` and `yarn test` exist, run, and pass
+- [x] oxlint runs with `jsx-a11y`, `promise`, `import`, `unicorn` and type-aware mode, and **fails on a
+      deliberately broken file** — proven twice: a probe exporting a `function` declaration with a `!`
+      assertion and an `<img>` with no `alt` produced four errors across three plugins, and a second
+      probe with an unawaited promise produced `typescript(no-floating-promises)`, which is impossible
+      without type information and is therefore the proof that `"typeAware": true` is live
+- [x] `strict` + `noUncheckedIndexedAccess` on, with the fallout fixed — a probe produced `TS2532`
+      (unchecked index) and `TS7006` (implicit any); there was no other fallout, because `src/` held
+      four files
+- [x] no `export default`, no `function` declaration, and no `!` assertion in `src/` — and all three
+      are now *enforced* rather than reviewed, by `import/no-default-export`, `func-style` and
+      `typescript/no-non-null-assertion`
+- [x] the starter demo and its assets are gone; `favicon.svg` and `icons.svg` still resolve — checked
+      against the **served** output, where both return `image/svg+xml` while a deliberately missing
+      path returns `text/html` from the SPA fallback
+- [x] `test/` exists, mirrors `src/`, and contains one test proven to have teeth — 8 tests in 2 files;
+      breaking `findExternalUrls` to always return `[]` failed exactly the 3 that assert detection
+- [x] `@/` resolves in `src`, in `test`, in a build, and in the test run
+- [x] the build fails if an external URL reaches `dist/` — proven with the real scenario, a Google
+      Fonts `<link>` in `index.html`: the guard named the file and the URL and `yarn build` exited 1
+- [x] `.gitattributes`, `.editorconfig`, extended `.gitignore` committed
+- [x] git initialised, remote set, author is Alex Moshinsky, first commit exists — **already true when
+      this phase started.** Step 9 below is stale: the repository was initialised before FE-00, with
+      `origin` at the right URL and all three commits authored by Alex Moshinsky.
 
 ## Traps
 

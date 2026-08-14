@@ -12,10 +12,13 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 
 ## Status, honestly
 
-This is still the untouched `create-vite` React scaffold plus this configuration. `src/` contains
-`App.tsx`, `main.tsx` and two stylesheets — no features, no router, no data layer, no tests. Anything
-in `.claude/rules/` describing `src/features/**` is describing the target, not the present. Do not
-report structure that does not exist yet.
+**`plan/00-toolchain.md` is done (2026-08-15). Nothing after it has started.**
+
+The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
+all pass, and each was proven to fail on a deliberately broken file. But `src/` is still only
+`App.tsx` (a placeholder naming the product), `main.tsx` and two stylesheets: **no features, no
+router, no data layer**. Anything in `.claude/rules/` describing `src/features/**` is describing the
+target, not the present. Do not report structure that does not exist yet.
 
 ## The five rules that outrank everything else
 
@@ -39,13 +42,15 @@ report structure that does not exist yet.
 ```bash
 yarn install
 yarn dev          # vite
-yarn build        # tsc -b && vite build   ← this is what actually type-checks today
-yarn lint         # oxlint
+yarn typecheck    # tsc -b, across app + node + test projects
+yarn lint         # oxlint, type-aware
+yarn test         # vitest run          (test:watch, test:cov)
+yarn build        # tsc -b && vite build
 yarn preview      # serve dist/
+yarn format       # prettier --write .  (format:check)
 ```
 
-**`yarn typecheck` and `yarn test` do not exist yet.** `plan/00-toolchain.md` adds them along with
-Vitest. Until then, do not claim to have run them — `yarn build` is the type-check.
+Run all four gate stages, not a subset — the `gate` skill says what each one is blind to.
 
 Use `yarn`, never `npm` or `npx`: `~/.npm/_cacache` on this machine is root-owned and both fail with
 `EACCES`, which reads as "package not found".
@@ -59,7 +64,9 @@ Use `yarn`, never `npm` or `npx`: `~/.npm/_cacache` on this machine is root-owne
 | TypeScript | 7.0.2 | native Go compiler; type-checks only, Vite emits |
 | React | 19.2.8 | React Compiler **on** via `@rolldown/plugin-babel` + `reactCompilerPreset()` |
 | Vite | 8.2.1 | Rolldown + Oxc; esbuild is an *optional* peer and is **not installed** |
-| oxlint | 1.78.0 | 3 plugins, 2 rules. **Type-aware mode is OFF** — `oxlint-tsgolint` is not installed |
+| oxlint | 1.78.0 | 9 plugins, 11 rules. **Type-aware mode is ON** — `oxlint-tsgolint@7.0.2001` installed |
+| Vitest | 4.1.10 | jsdom 30.0.1, RTL 16.3.2, jest-dom 7.0.1. **MSW is deferred to FE-04** |
+| Prettier | 3.9.6 | backend's config verbatim; `*.md` and `.claude/` are ignored |
 
 **ESLint is not an option on this stack.** Measured in the backend repo on 2026-08-14 with
 `typescript-eslint@8.67.0` + `typescript@7.0.2`: ESLint 10.8.1 aborts with
@@ -91,8 +98,9 @@ The browser floor is not a preference — it is what Vite's default `build.targe
 ## Where things live
 
 ```
-src/                      the app (today: Vite scaffold only)
-test/                     tests, mirroring src/ — created in plan/00
+src/                      the app (today: a placeholder App, main.tsx, two stylesheets)
+test/                     tests, mirroring src/ — nothing under src/ is a test
+build/                    build-time code: the external-URL guard that vite.config.ts installs
 public/                   copied verbatim to dist/ root; favicon.svg and icons.svg exist and resolve
 plan/                     the step-by-step build order for this repo
 .claude/rules/            conventions, path-scoped

@@ -100,15 +100,15 @@ have broken every user.
 - **Always run oxlint as `yarn oxlint`.** Its native binding is a separate optional dependency
   (`@oxlint/binding-darwin-arm64`); invoking the bin directly outside the package manager's
   resolution failed with `Cannot find module './oxlint.darwin-arm64.node'`.
-- **oxlint's type-aware engine is the unscoped `oxlint-tsgolint@7.0.2001`, and it is NOT installed** — nominally built against
-  TypeScript 7.0.2. Type-aware linting and TS 7 are compatible; `"typeAware": true` is a real key in
-  `configuration_schema.json`.
+- **oxlint's type-aware engine is the unscoped `oxlint-tsgolint@7.0.2001`, and it IS installed here**
+  (frontend, since 2026-08-15) — nominally built against TypeScript 7.0.2. Type-aware linting and
+  TS 7 are compatible; `"typeAware": true` is a real key in `configuration_schema.json`.
 - **`typescript-eslint` is not an option on this stack.** Measured in the sibling backend repo at
   `typescript-eslint@8.67.0` + `typescript@7.0.2`, ESLint 10.8.1 aborts before linting anything:
   `Error: typescript-eslint does not support TS 7.0.` Tracking issue: typescript-eslint#10940. This
   is why both repos lint with oxlint.
 
-## Correction, 2026-08-15
+## Correction, 2026-08-15 (morning)
 
 **oxlint's type-aware mode is NOT active in either repo.** The engine is the unscoped package
 `oxlint-tsgolint` (7.0.2001, published 2026-07-21) — **not** `@oxlint/tsgolint`, which 404s on the
@@ -116,3 +116,31 @@ registry. It is not a dependency of `oxlint` (oxlint's only optional deps are it
 it is **not installed here**, and `"options": { "typeAware": true }` is absent from `.oxlintrc.json`.
 Enabling type-aware linting means installing it explicitly and turning the flag on — and verifying it
 works against TypeScript 7, which has not been done.
+
+## Superseded, 2026-08-15 (same day, after `plan/00`)
+
+**In THIS repo, type-aware mode is now active and verified against TypeScript 7.0.2.**
+`oxlint-tsgolint@7.0.2001` is installed and `"options": { "typeAware": true }` is set. Verified by
+probe rather than by reading config: a file with an unawaited `Promise` produced
+`typescript(no-floating-promises)`, a rule that cannot be evaluated without type information.
+
+The correction above still stands **for the backend repo**, which was not touched.
+
+Also installed here on 2026-08-15, all registry `latest` at the time unless noted:
+
+| Package | Version | Note |
+| ------- | ------- | ---- |
+| `vitest`, `@vitest/coverage-v8` | 4.1.10 | 5.0 still `rc`; declined |
+| `jsdom` | 30.0.1 | `happy-dom` not measured — suite too small to mean anything |
+| `@testing-library/react` | 16.3.2 | required peer `@testing-library/dom@^10` installed explicitly |
+| `@testing-library/user-event` | 14.6.3 | **not** 14.6.4 — 2 days old, blocked by `npmMinimalAgeGate: 3d` |
+| `@testing-library/jest-dom` | 7.0.1 | |
+| `prettier` | 3.9.6 | backend's `.prettierrc` verbatim |
+| `oxlint-tsgolint` | 7.0.2001 | |
+| `rolldown` | `~1.2.1` → 1.2.4 | range copied from `vite@8.2.1`'s own dependency, **not** pinned |
+
+**The `rolldown` entry is the one worth remembering.** Pinning it to `1.2.3` (the newest clearing the
+age gate) silenced the `@rolldown/plugin-babel` peer warning but produced two rolldown copies on
+different `@oxc-project/types` — `1.2.3` hoisted, `1.2.4` under `vite/node_modules/`. Declaring the
+same *range* Vite declares collapses them to one. Check with
+`find node_modules -path '*rolldown/package.json' -not -path '*/@rolldown/*'` after any Vite upgrade.

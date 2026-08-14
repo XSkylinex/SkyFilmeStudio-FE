@@ -145,10 +145,12 @@ is the user's file: show the diff and wait, never edit it unasked.
 ## Before an upgrade
 
 1. `node .claude/skills/newest/scripts/pkg-check.mjs <pkg>` — what exists, and how old it is.
-2. Check the `AGE` column against `npmMinimalAgeGate` in `.yarnrc.yml` if one is ever configured.
-   Nothing is set today, so the gate is off — but NestJS and `@swc/core` both published on
-   2026-08-14, so a same-day version is a real scenario. Pick the newest version that clears the
-   gate rather than disabling the gate.
+2. Check the `AGE` column against `npmMinimalAgeGate` in `.yarnrc.yml`. **Corrected 2026-08-15: the
+   gate is ON, at `3d`** — an earlier version of this file said nothing was configured. `yarn add`
+   refuses anything published inside the window, and the failure does not announce the gate. Measured
+   while installing the test stack: `@testing-library/user-event@14.6.4` and `rolldown@1.2.4` were
+   both two days old and blocked. Pick the newest version that clears the gate rather than disabling
+   the gate.
 3. Read the changelog **before** the version bump, not after the build goes red.
 4. Run the `gate` skill.
 
