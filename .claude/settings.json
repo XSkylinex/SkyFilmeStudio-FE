@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(yarn install)",
+      "Bash(yarn dev)",
+      "Bash(yarn build)",
+      "Bash(yarn preview)",
+      "Bash(yarn typecheck)",
+      "Bash(yarn typecheck:watch)",
+      "Bash(yarn lint)",
+      "Bash(yarn lint:fix)",
+      "Bash(yarn test)",
+      "Bash(yarn test:watch)",
+      "Bash(yarn oxlint*)",
+      "Bash(yarn vitest*)",
+      "Bash(yarn tsc*)",
+      "Bash(yarn vite*)",
+      "Bash(yarn npm info*)",
+      "Bash(yarn why*)",
+      "Bash(node .claude/skills/newest/scripts/*)",
+      "Bash(git status)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git remote -v)",
+      "WebFetch(domain:react.dev)",
+      "WebFetch(domain:vite.dev)",
+      "WebFetch(domain:vitest.dev)",
+      "WebFetch(domain:oxc.rs)",
+      "WebFetch(domain:web.dev)",
+      "WebFetch(domain:developer.mozilla.org)",
+      "WebFetch(domain:api.webstatus.dev)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:tanstack.com)",
+      "WebFetch(domain:redux-toolkit.js.org)",
+      "WebFetch(domain:reactrouter.com)",
+      "WebFetch(domain:zod.dev)",
+      "WebFetch(domain:devblogs.microsoft.com)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Edit(./.env)",
+      "Edit(./.env.*)",
+      "Write(./.env)",
+      "Write(./.env.*)",
+      "Bash(rm -rf /*)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(npm *)",
+      "Bash(npx *)"
+    ],
+    "ask": [
+      "Bash(git push*)",
+      "Bash(git commit*)",
+      "Bash(yarn add*)",
+      "Bash(yarn remove*)",
+      "Bash(yarn up*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'SkyFilmeStudio FE — local-only AI studio UI. Non-negotiables: talk ONLY to the NestJS orchestrator (never ComfyUI :8188 / LM Studio :1234 / a DB); no external asset or CDN in the bundle; wire types inferred from shared Zod, never hand-written; no optimistic updates on approve/reject/retake/cancel/export; renders return a renderJobId, never an awaited result; socket messages buffer in a ref and flush on an interval; logical CSS properties only (Hebrew/RTL is a product requirement); tests live in test/ mirroring src/, never inside src/; no shell commands in .ts/.tsx, not even in comments. Never state a version or browser-support fact from memory — use the newest skill.'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Review the assistant's work in this conversation. If any .ts/.tsx/.css/.html files were created or modified, check whether a verification command (yarn build, yarn typecheck, yarn lint, or yarn test) was actually run AFTER the last edit and its real output shown. If files were changed but no verification was run, respond with {\"decision\": \"block\", \"reason\": \"Run the gate (yarn lint && yarn build, plus yarn typecheck/yarn test once they exist) and paste the real output before declaring work complete.\"}. If the assistant claimed a stage passed without running it, block for the same reason. Otherwise respond with {\"decision\": \"allow\"}."
+          }
+        ]
+      }
+    ]
+  }
+}
