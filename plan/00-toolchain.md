@@ -71,6 +71,13 @@ exactOptionalPropertyTypes: true
 paths: { "@/*": ["src/*"] }
 ```
 
+`target` and `lib` are already `ES2024` / `["ES2024", "DOM"]` — verified 2026-08-15 by compiling a
+probe (`Object.groupBy`, resizable `ArrayBuffer`, `String.prototype.isWellFormed`,
+`Promise.withResolvers`) with this repo's own `tsc -b --force`: clean under `ES2024`, five `TS2550`
+errors under `es2023`. `DOM.Iterable` is deliberately **not** listed — the same probe showed
+`[...formData.keys()]` and `[...nodeList]` type-check without it. Add it only with a case that needs
+it.
+
 Keep `erasableSyntaxOnly` on — the frontend can, the backend cannot (NestJS needs decorators and
 parameter properties). **Do not "align" the two tsconfigs.**
 

@@ -59,6 +59,15 @@ compiler and it only type-checks here — Vite emits. Its Go binary lives in
 - **`types` defaults to `[]`.** An ambient package (`vite/client`, `node`, `vitest/globals`) must be
   listed explicitly in the right tsconfig or its globals silently vanish. `tsconfig.app.json` lists
   `["vite/client"]` today; adding Vitest globals means adding to that array, not assuming.
+- **`target` and `lib` are `ES2024` across both repos.** Measured 2026-08-15 with a probe compiled by
+  this repo's own `tsc -b --force`: under `ES2024`, `Object.groupBy`, resizable `ArrayBuffer`
+  (`new ArrayBuffer(8, { maxByteLength: 16 })`, `.resizable`), `String.prototype.isWellFormed` and
+  `Promise.withResolvers` all type-check; under `es2023` the same file produced five `TS2550
+  … Try changing the 'lib' compiler option to 'es2024' or later` errors. The negative control is what
+  makes this a fact rather than a preference.
+  **`DOM.Iterable` is deliberately absent.** It is a valid lib name in 7.0.2, but the probe showed
+  `[...formData.keys()]` and `[...nodeList]` both type-check without it — `lib.dom` already carries
+  those declarations. Add it only when a case that actually needs it appears.
 - `module`/`moduleResolution` stay `esnext`/`bundler` for the app and `nodenext` for `vite.config.ts`;
   `node`, `node10` and `classic` were removed.
 - `erasableSyntaxOnly` is on: **no enums, no parameter properties, no namespaces.** This is the one
