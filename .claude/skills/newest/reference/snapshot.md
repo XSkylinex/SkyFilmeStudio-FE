@@ -55,11 +55,10 @@ ESBUILD_BASELINE_WIDELY_AVAILABLE_TARGET
   = ["chrome111", "edge111", "firefox114", "safari16.4", "ios16.4"]
 ```
 
-Under PnP the file is inside a zip:
+Read it straight out of `node_modules` (the linker is `node-modules`):
 
 ```bash
-Z=$(find ~/.yarn/berry/cache -name "vite-npm-8*.zip" | head -1)
-unzip -p "$Z" node_modules/vite/dist/node/chunks/node.js | grep -A8 BASELINE_WIDELY_AVAILABLE
+grep -A8 BASELINE_WIDELY_AVAILABLE node_modules/vite/dist/node/chunks/node.js
 ```
 
 Five browsers. The `build.target` JSDoc names four — it omits `ios16.4`.
@@ -89,19 +88,31 @@ have broken every user.
 
 ## Toolchain facts measured on this machine, 2026-08-14
 
-- **Node 26.7.0, Yarn 4.18.0, PnP.** No `node_modules`. No `.yarnrc.yml` exists, so every Yarn
-  setting is at its default — including `npmMinimalAgeGate`, which is therefore **off**.
+- **Node 26.7.0, Yarn 4.18.0, `nodeLinker: node-modules`.** `node_modules/` exists and is the
+  resolution mechanism. `.yarnrc.yml` is committed and sets `npmMinimalAgeGate: 3d`, so the
+  quarantine is **ON** — `yarn add` refuses anything published in the last three days.
+  (Corrected 2026-08-15: this repo was briefly on PnP; several docs described that state.)
 - **`npx` and `npm view` are unusable.** `~/.npm/_cacache` is root-owned; both fail `EACCES`. Use
   `yarn`, `yarn dlx`, or the scripts in this skill.
-- **`yarn dlx` re-downloads Yarn 4.14.1 through Corepack** in a directory with no `packageManager`
-  field, which stalls on a confirmation prompt. Run tools through the repo's own `yarn` instead.
-- **oxlint 1.78.0 resolves its native binding through PnP only.** Invoking
-  `.yarn/unplugged/oxlint-*/node_modules/oxlint/bin/oxlint` directly fails with
-  `Cannot find module './oxlint.darwin-arm64.node'`. Always run it as `yarn oxlint`.
-- **oxlint's type-aware backend is `@oxlint/tsgolint-darwin-arm64@7.0.2001`** — built against
+- **`yarn dlx` re-downloads Yarn through Corepack** in a directory with no `packageManager` field,
+  and stalls on a confirmation prompt. Both repos now declare `packageManager: yarn@4.18.0`, so this
+  applies to scratch directories, not to the repos themselves.
+- **Always run oxlint as `yarn oxlint`.** Its native binding is a separate optional dependency
+  (`@oxlint/binding-darwin-arm64`); invoking the bin directly outside the package manager's
+  resolution failed with `Cannot find module './oxlint.darwin-arm64.node'`.
+- **oxlint's type-aware engine is the unscoped `oxlint-tsgolint@7.0.2001`, and it is NOT installed** — nominally built against
   TypeScript 7.0.2. Type-aware linting and TS 7 are compatible; `"typeAware": true` is a real key in
   `configuration_schema.json`.
 - **`typescript-eslint` is not an option on this stack.** Measured in the sibling backend repo at
   `typescript-eslint@8.67.0` + `typescript@7.0.2`, ESLint 10.8.1 aborts before linting anything:
   `Error: typescript-eslint does not support TS 7.0.` Tracking issue: typescript-eslint#10940. This
   is why both repos lint with oxlint.
+
+## Correction, 2026-08-15
+
+**oxlint's type-aware mode is NOT active in either repo.** The engine is the unscoped package
+`oxlint-tsgolint` (7.0.2001, published 2026-07-21) — **not** `@oxlint/tsgolint`, which 404s on the
+registry. It is not a dependency of `oxlint` (oxlint's only optional deps are its platform bindings),
+it is **not installed here**, and `"options": { "typeAware": true }` is absent from `.oxlintrc.json`.
+Enabling type-aware linting means installing it explicitly and turning the flag on — and verifying it
+works against TypeScript 7, which has not been done.

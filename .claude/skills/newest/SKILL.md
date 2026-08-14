@@ -12,7 +12,7 @@ when_to_use: >-
   structured data, upgrading a dependency, or answering "is X available yet".
   Trigger phrases: "latest", "newest", "current version", "is it supported",
   "Baseline", "what's new", "can I use", "modern".
-allowed-tools: Read, Grep, Glob, WebFetch, WebSearch, Bash(node .claude/skills/newest/scripts/*), Bash(yarn npm info*), Bash(curl -s https://registry.npmjs.org/*), Bash(curl -s https://api.webstatus.dev/*), Bash(yarn oxlint*), Bash(yarn typecheck*), Bash(find ~/.yarn/berry/cache*), Bash(unzip -p*)
+allowed-tools: Read, Grep, Glob, WebFetch, WebSearch, Bash(node .claude/skills/newest/scripts/*), Bash(yarn npm info*), Bash(curl -s https://registry.npmjs.org/*), Bash(curl -s https://api.webstatus.dev/*), Bash(yarn oxlint*), Bash(yarn typecheck*), Bash(node -p*), Bash(grep*)
 ---
 
 # newest — look it up, don't remember it
@@ -51,19 +51,19 @@ Two halves, and the split is the point:
 | What a config option defaults to | the shipped `.d.ts`, read out of the Yarn zip (see below) |
 | Whether an export exists | grep the same zip — a wrong name is a build failure, not a warning |
 
-### Reading inside a package under Yarn PnP
+### Reading inside a package
 
-There is no `node_modules`. Packages are zips in the global Yarn cache, so the usual
-`cat node_modules/<pkg>/…` returns nothing and looks like the file is missing:
+The linker is `node-modules`, so read the file directly:
 
 ```bash
-Z=$(find ~/.yarn/berry/cache -name "vite-npm-8*.zip" | head -1)
-unzip -l "$Z" | grep dist/node          # what is in there
-unzip -p "$Z" node_modules/vite/dist/node/chunks/node.js | grep -A8 BASELINE_WIDELY_AVAILABLE
+grep -A8 BASELINE_WIDELY_AVAILABLE node_modules/vite/dist/node/chunks/node.js
+node -p "require('./node_modules/vite/package.json').version"
 ```
 
-`.yarn/unplugged/` holds only packages with native binaries — that is where `oxlint`,
-`lightningcss`, the Rolldown binding and the TypeScript 7 Go binary actually live on disk.
+**Corrected 2026-08-15.** This repo was briefly on Yarn PnP, where packages are zips in
+`~/.yarn/berry/cache` and must be read with `unzip -p`. It is not on PnP any more. If a doc tells you
+to unzip out of the cache, that doc is stale — and treat that as a reminder to re-verify anything else
+it asserts about the toolchain.
 
 ### Four traps in the lookups themselves
 

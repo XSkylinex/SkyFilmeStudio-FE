@@ -53,7 +53,7 @@ before building on it.
 
 `typescript@7.0.2` (registry `latest`, published 2026-07-08, verified 2026-08-14). It is the native Go
 compiler and it only type-checks here — Vite emits. Its Go binary lives in
-`.yarn/unplugged/@typescript-typescript-darwin-arm64-npm-7.0.2/`.
+`node_modules/typescript/` (the Go binary lives under its `bin`/`lib`, not as `lib.*.d.ts` files).
 
 - **Never add `baseUrl`** — removed in TS 7. Alias through `paths` alone.
 - **`types` defaults to `[]`.** An ambient package (`vite/client`, `node`, `vitest/globals`) must be
@@ -92,7 +92,7 @@ Error: typescript-eslint does not support TS 7.0.
 There is no ESLint config in this repo and adding one would not run.
 
 - oxlint reads types through `tsgolint`. Its binding here is
-  `@oxlint/tsgolint-darwin-arm64@7.0.2001` — built against TypeScript **7.0.2**. So
+  the unscoped `oxlint-tsgolint@7.0.2001`, which is **not installed here**. So
   `typescript/no-floating-promises` and friends are real type-aware checks, not approximations.
   Type-aware mode is a config key (`"options": { "typeAware": true }` in `.oxlintrc.json`), not a CLI
   flag; `typeAware` is present in oxlint's own `configuration_schema.json`.
@@ -102,7 +102,7 @@ There is no ESLint config in this repo and adding one would not run.
   — but listing `react-hooks` in `plugins` is a config error.
 - Verify a rule exists before adding it. An unknown rule fails config parsing outright, which reads as
   "the linter is broken" rather than "that rule is misspelled".
-- **Always invoke it as `yarn oxlint`.** Under PnP, running the unplugged binary directly fails with
+- **Always invoke it as `yarn oxlint`.** Running the bin outside the package manager's resolution fails with
   `Cannot find module './oxlint.darwin-arm64.node'` — the binding only resolves through Yarn's loader.
 - The scaffold enables three plugins (`react`, `typescript`, `oxc`) and two rules. That is thin for
   this project; `plan/00-toolchain.md` widens it to include `jsx-a11y`, `promise`, `import` and
@@ -111,7 +111,7 @@ There is no ESLint config in this repo and adding one would not run.
 ## Vite 8
 
 Everything below was read out of `vite@8.2.1`'s shipped `index.d.ts` and `package.json` on
-**2026-08-14** — under PnP, via `unzip -p` from `~/.yarn/berry/cache`. Re-read after an upgrade rather
+**2026-08-14**, read from `node_modules/vite/`. Re-read after an upgrade rather
 than trusting this list, and note that Vite's JSDoc lags its implementation, so a sentence in the
 prose is weaker evidence than the type next to it.
 
@@ -150,9 +150,11 @@ Not installed yet. When it is added: registry `latest` was **4.1.10** on 2026-08
 `beta=5.0.0-beta.7` and `rc=5.0.0-rc.1`. **Install 4.x.** Vitest 5 is not stable, and a test runner is
 the worst place to run an RC.
 
-## Yarn 4 / PnP
+## Yarn 4
 
-Yarn 4.18.0, Node 26.7.0, PnP linker, **no `node_modules`**.
+Yarn 4.18.0, Node 26.7.0, **`nodeLinker: node-modules`** — `node_modules/` exists and is how
+resolution works. (This repo was briefly on PnP; if a doc tells you to `unzip` out of the Yarn cache,
+it is stale — read `node_modules/` directly.)
 
 - There is no `.yarnrc.yml`, so every Yarn setting is at its default — including `npmMinimalAgeGate`,
   which is therefore **off**. If it is ever switched on, `yarn add` will refuse a package published
@@ -161,5 +163,4 @@ Yarn 4.18.0, Node 26.7.0, PnP linker, **no `node_modules`**.
   through the repo's own `yarn`.
 - `yarn dlx` in a directory with no `packageManager` field re-downloads Yarn through Corepack and
   waits on a prompt. Don't reach for it in scripts.
-- To read a file inside a dependency, `unzip -p` it out of `~/.yarn/berry/cache`. `.yarn/unplugged/`
-  holds only the packages with native binaries.
+- To read a file inside a dependency, read it straight out of `node_modules/`.

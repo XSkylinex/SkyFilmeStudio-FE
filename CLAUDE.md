@@ -59,7 +59,7 @@ Use `yarn`, never `npm` or `npx`: `~/.npm/_cacache` on this machine is root-owne
 | TypeScript | 7.0.2 | native Go compiler; type-checks only, Vite emits |
 | React | 19.2.8 | React Compiler **on** via `@rolldown/plugin-babel` + `reactCompilerPreset()` |
 | Vite | 8.2.1 | Rolldown + Oxc; esbuild is an *optional* peer and is **not installed** |
-| oxlint | 1.78.0 | type-aware through `@oxlint/tsgolint@7.0.2001` |
+| oxlint | 1.78.0 | 3 plugins, 2 rules. **Type-aware mode is OFF** — `oxlint-tsgolint` is not installed |
 
 **ESLint is not an option on this stack.** Measured in the backend repo on 2026-08-14 with
 `typescript-eslint@8.67.0` + `typescript@7.0.2`: ESLint 10.8.1 aborts with

@@ -10,7 +10,7 @@ Four stages, in this order. Each catches a class the others are blind to; none i
 
 ```bash
 yarn typecheck   # tsc -b, TypeScript 7 native
-yarn lint        # oxlint, type-aware through tsgolint
+yarn lint        # oxlint  (type-aware mode is OFF — see below)
 yarn test        # vitest run
 yarn build       # tsc -b && vite build
 ```
@@ -76,9 +76,13 @@ covered these — name what you looked at instead.
 - `Failed to parse oxlint configuration file` is a **config** error, not a code error — usually an
   unknown rule or an invalid plugin name in `.oxlintrc.json`. The message names it. Do not "fix" the
   source. Remember `react-hooks` is not a valid plugin name; those rules live under `react`.
-- **Always invoke oxlint as `yarn oxlint`.** Running the binary from `.yarn/unplugged/` directly fails
-  with `Cannot find module './oxlint.darwin-arm64.node'` — the native binding only resolves through
-  Yarn's loader. That error is about invocation, not about a broken install.
+- **Always invoke oxlint as `yarn oxlint`.** Running the bin outside the package manager's resolution
+  fails with `Cannot find module './oxlint.darwin-arm64.node'` — the binding is a separate optional
+  dependency. That error is about invocation, not a broken install.
+- **`lint` is NOT type-aware.** Corrected 2026-08-15: the engine is the unscoped `oxlint-tsgolint`
+  package, it is **not installed**, and `"typeAware": true` is absent from `.oxlintrc.json`. So
+  `typescript/no-floating-promises` and the other type-aware rules are **not running**. Treat the
+  `lint` row in the table above as aspirational until `plan/00` installs and enables it.
 - A `react(react-compiler)` error is real: the compiler cannot safely memoise that component and will
   bail out on it. Fix the purity violation; do not suppress it.
 - `Some chunks are larger than 500 kB` from `vite build` is a warning, not a failure — but in this app
