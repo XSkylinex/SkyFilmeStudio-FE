@@ -123,9 +123,11 @@ taste:
   (prefers-reduced-motion: reduce)` block that damps a keyframe while the app autoplays every shot
   preview is half a feature. If you touch motion, honour the query in the React layer too.
 - **Hebrew is a first-class production language, so the UI must survive `dir="rtl"`.** Use logical
-  properties (`margin-inline-start`, `padding-inline`, `inset-inline`) everywhere — the scaffold
-  already does in `#root` and `.hero`. `margin-left` in a component is a bug the day someone switches
-  the interface language. This is the single most common CSS mistake this project will make.
+  properties (`margin-inline-start`, `padding-inline`, `inset-inline`) everywhere — `#root` uses
+  `border-inline` and `.app-placeholder` uses `padding-inline` / `max-inline-size`. `margin-left` in a
+  component is a bug the day someone switches the interface language. This is the single most common
+  CSS mistake this project will make. `logical-properties` is `widely` **and inside this floor** —
+  checked with `floor-check.mjs`, 2026-08-15, all seven browsers at or below it.
 - One breakpoint set, defined once as tokens. Extend the existing `@media` blocks rather than
   scattering new widths.
 

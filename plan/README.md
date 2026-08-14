@@ -37,7 +37,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 
 | # | Phase | Depends on | Backend needs | Status |
 | - | ----- | ---------- | ------------- | ------ |
-| 00 | [Toolchain & repository hardening](00-toolchain.md) | — | — | not started |
+| 00 | [Toolchain & repository hardening](00-toolchain.md) | — | — | done 2026-08-15 |
 | 01 | [Document shell & app identity](01-document-shell.md) | 00 | — | not started |
 | 02 | [Design system & tokens](02-design-system.md) | 01 | — | not started |
 | 03 | [App shell, routing & boundaries](03-app-shell.md) | 02 | — | not started |

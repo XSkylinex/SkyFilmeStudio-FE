@@ -8,8 +8,11 @@ paths:
 
 # Tests (`test/**`)
 
-Nothing here exists yet. `plan/00-toolchain.md` adds Vitest, Testing Library and this directory; this
-file is the contract it builds to.
+`plan/00-toolchain.md` landed 2026-08-15: Vitest, Testing Library and this directory exist, and
+`yarn test` runs 8 tests in 2 files. `test/setup.ts` wires jest-dom's matchers and an `afterEach`
+cleanup. What is here is a toolchain proof, not coverage — `test/App.test.tsx` asserts the placeholder
+names the product, and `test/build/find-external-urls.test.ts` covers the build's external-URL guard.
+Everything below is the contract the real suite builds to.
 
 ## Layout — mirrored, never nested
 
@@ -31,10 +34,15 @@ Because depth no longer matches, **import through `@/`, never relatively**:
 import { formatDuration } from "@/features/shots/helpers/format-duration";
 ```
 
-The alias must resolve identically in `tsconfig.app.json`, `vite.config.ts` and `vitest.config.ts`.
-Vite 8.2's `resolve.tsconfigPaths` can collapse those into one — but **it must be verified by running
-both a build and the suite**, because the two resolvers have been observed to disagree. Until that is
-proven here, mirror the alias in every config and change them together.
+There is exactly one definition of that alias: `paths` in `tsconfig.app.json`. `vite.config.ts` sets
+`resolve.tsconfigPaths: true` and `vitest.config.ts` `mergeConfig`s it, so nothing mirrors and nothing
+can drift. **This was verified on both resolvers before being relied on** (2026-08-15): `@/App`
+resolves in `yarn build` and in `yarn test`. Do not add a `resolve.alias` "to be safe" — a second
+definition is the failure this arrangement exists to prevent.
+
+A test for something outside `src/` imports relatively, because `@/` means `src/`:
+`test/build/find-external-urls.test.ts` imports `../../build/find-external-urls.ts`. Do not invent a
+second alias for it; one alias with one definition is the whole point.
 
 `test/` needs its own tsconfig (`tsconfig.test.json`, referenced from the root `tsconfig.json`) so
 that `include: ["src"]` in `tsconfig.app.json` is not widened. Test-only globals go in that file's
@@ -43,11 +51,15 @@ unresolved name rather than an obvious error.
 
 ## Runner
 
-Vitest. Registry `latest` was **4.1.10** on 2026-08-14; `5.0.0` was still `rc`. Install 4.x — a test
-runner is the worst place to run a release candidate. Re-check with the `newest` skill before adding.
+Vitest **4.1.10**, installed 2026-08-15. `5.0.0` was `rc` and was declined — a test runner is the
+worst place to run a release candidate.
 
-Environment: `jsdom` (or `happy-dom` if measured faster on this suite — measure, don't assume). React
-Testing Library for components, `@testing-library/user-event` for interaction.
+Environment: `jsdom@30.0.1`. `happy-dom` was *not* measured against it; the suite is far too small for
+the comparison to mean anything. Revisit when the suite is slow, and measure then rather than
+assuming.
+
+`@testing-library/react@16.3.2` for components, `@testing-library/user-event@14.6.3` for interaction,
+`@testing-library/jest-dom@7.0.1` for matchers (imported once, in `test/setup.ts`).
 
 ## What to assert
 
@@ -74,7 +86,9 @@ test that passes on broken code is worse than no test because it reads as covera
 ## Mocking
 
 - **Mock the network at the HTTP boundary** (MSW or Vitest's fetch mocking), not by stubbing the query
-  hooks. Stubbing hooks tests the mock.
+  hooks. Stubbing hooks tests the mock. **MSW is not installed yet** — it lands in `plan/04` with the
+  first real fetcher, because until BE-01 publishes a contract there is nothing to mock and no way to
+  prove a handler works.
 - **Mock responses are built from the shared Zod schema** — parse the fixture through the real schema
   in a test helper. A hand-written fixture that no longer matches the contract is how a green suite
   ships a broken page.

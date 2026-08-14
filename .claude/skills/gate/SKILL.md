@@ -17,25 +17,17 @@ yarn build       # tsc -b && vite build
 
 Run them and **paste the real output**. "Should pass" is not a result.
 
-## Two of those scripts do not exist yet
+## All four scripts exist — corrected 2026-08-15
 
-Verified in `package.json` on 2026-08-14. The scaffold ships only:
+`plan/00-toolchain.md` landed. `package.json` now ships `typecheck`, `lint`, `lint:fix`, `test`,
+`test:watch`, `test:cov`, `build`, `preview`, `format` and `format:check`, and all four gate stages
+pass. The previous version of this section said `typecheck` and `test` did not exist; that is no
+longer true, and reporting it would be the same failure in the opposite direction.
 
-```json
-"dev": "vite", "build": "tsc -b && vite build", "lint": "oxlint", "preview": "vite preview"
-```
-
-So today the working gate is:
-
-```bash
-yarn lint            # oxlint — 3 plugins, 2 rules. Thin.
-yarn build           # this is what actually type-checks, via `tsc -b`
-```
-
-`plan/00-toolchain.md` adds `typecheck`, `test`, `lint:fix` and widens the oxlint plugin set. Until it
-lands, **say that `yarn typecheck` does not exist** rather than reporting a stage you did not run.
-Reporting four green stages when two scripts are missing is the exact failure this skill exists to
-prevent.
+`yarn typecheck` is `tsc -b` across three projects — `tsconfig.app.json` (`src`),
+`tsconfig.node.json` (`vite.config.ts`, `vitest.config.ts`, `build/`) and `tsconfig.test.json`
+(`test`). All three write a `.tsbuildinfo` under `node_modules/.tmp/`, which is how you confirm a
+project actually ran rather than being skipped.
 
 ## What each stage actually catches
 
@@ -65,6 +57,13 @@ runner never imports one. So a fully green gate says nothing at all about:
 - **Every rule in `.claude/rules/studio-domain.md`.** `yarn typecheck` will happily compile a `fetch`
   straight to ComfyUI.
 
+One exception, added in `plan/00`: **`yarn build` now fails if any absolute non-loopback URL reaches
+`dist/`.** `build/external-url-guard.ts` scans the written output — including `index.html` and
+everything copied verbatim from `public/`, neither of which passes through the chunk graph. Two
+prefixes are allowlisted because they are names rather than addresses and are never fetched:
+`http://www.w3.org/` (XML namespaces) and `https://react.dev/errors/` (React's error decoder link).
+Widen that list only with evidence that the URL cannot cause a request.
+
 For that layer the verification is `yarn build && yarn preview`, reading the **served** HTML rather
 than the source, and looking at the page with real data in it. Never report "the gate passes" as if it
 covered these — name what you looked at instead.
@@ -79,19 +78,21 @@ covered these — name what you looked at instead.
 - **Always invoke oxlint as `yarn oxlint`.** Running the bin outside the package manager's resolution
   fails with `Cannot find module './oxlint.darwin-arm64.node'` — the binding is a separate optional
   dependency. That error is about invocation, not a broken install.
-- **`lint` is NOT type-aware.** Corrected 2026-08-15: the engine is the unscoped `oxlint-tsgolint`
-  package, it is **not installed**, and `"typeAware": true` is absent from `.oxlintrc.json`. So
-  `typescript/no-floating-promises` and the other type-aware rules are **not running**. Treat the
-  `lint` row in the table above as aspirational until `plan/00` installs and enables it.
+- **`lint` IS type-aware.** Corrected again 2026-08-15, later the same day, after `plan/00` landed:
+  `oxlint-tsgolint@7.0.2001` is installed and `"options": { "typeAware": true }` is set in
+  `.oxlintrc.json`. Proven, not assumed — a probe with an unawaited promise produced
+  `typescript(no-floating-promises)`, a rule that cannot exist without type information. The `lint`
+  row in the table above is now real rather than aspirational.
 - A `react(react-compiler)` error is real: the compiler cannot safely memoise that component and will
   bail out on it. Fix the purity violation; do not suppress it.
 - `Some chunks are larger than 500 kB` from `vite build` is a warning, not a failure — but in this app
   it is usually a genuine signal that a media/timeline route stopped being lazily loaded. The fix is a
   dynamic `import()`, not a raised threshold.
-- **`yarn install` warns `doesn't provide rolldown (p29b489), requested by @rolldown/plugin-babel`.**
-  Observed 2026-08-14. It is an unmet optional peer — Vite depends on `rolldown` itself, so the plugin
-  resolves it in practice and the build succeeds. Known, not yours to fix mid-task; `plan/00` decides
-  whether to add the explicit peer.
+- **The `doesn't provide rolldown … requested by @rolldown/plugin-babel` warning is gone.** Fixed in
+  `plan/00`, 2026-08-15, by declaring `rolldown` in `devDependencies` at **`~1.2.1`** — deliberately
+  the same range `vite@8.2.1` declares, not a pin. If you ever pin it to an exact version you will get
+  two rolldown copies on different `@oxc-project/types`, one hoisted and one under `vite/`, which is
+  worse than the warning. If the warning returns, that range has drifted from Vite's.
 - **A failing test is not automatically broken code.** Before changing an implementation to satisfy a
   test, check that the assertion is right.
 

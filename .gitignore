@@ -35,3 +35,12 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Test runner
+coverage
+.vitest
+
+# Local media fixtures. Private photographs, video and voice references never
+# enter Git (plan §4.6) — they are the user's source assets, not the project's.
+/.local-media/
+test/fixtures/media/

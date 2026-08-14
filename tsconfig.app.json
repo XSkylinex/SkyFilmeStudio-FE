@@ -16,9 +16,17 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Alias — mirrored by resolve.tsconfigPaths in vite.config.ts */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
     /* Linting */
+    "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
