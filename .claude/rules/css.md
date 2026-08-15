@@ -30,10 +30,16 @@ import "./styles/tokens.css"   // every custom property on :root
   declaration, which is not cosmetic — see the `light-dark()` row below. Only rules that apply to
   bare tags.
 - **`src/styles/tokens.css`** — the design tokens on `:root`.
-- **`src/App.css`** — component styles, until feature stylesheets replace it.
+- **`src/lib/components/<kebab-name>/<kebab-name>.css`** — one stylesheet per component, living in
+  that component's folder and imported by its `index.tsx`. Wrap the whole file in
+  `@layer primitives { … }`; a surface rather than a primitive uses `@layer features { … }`.
 
-`src/index.css` no longer exists. Every rule it held moved into `reset.css` or `tokens.css`, so do
-not recreate it.
+`src/index.css` and `src/App.css` no longer exist. Every rule `index.css` held moved into
+`reset.css` or `tokens.css`; `App.css` died with the placeholder it styled. Do not recreate either.
+
+**A component's styles live with the component**, never in a shared sheet keyed by class name. The
+layer order is declared once in `layers.css`, so a rule landing in `@layer primitives` from a file
+imported deep in the tree still cascades correctly — verified in the built CSS.
 
 **Design tokens are custom properties on `:root`,** named `--<family>[-<role>]`. A new colour or
 spacing value becomes a token before it is used, exactly as a magic number becomes a named const in

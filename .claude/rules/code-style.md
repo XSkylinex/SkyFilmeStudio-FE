@@ -15,24 +15,49 @@ before writing and match it. `src/shell/` is the closest thing to a worked examp
 
 ## One concern per file
 
+**A component is a folder, not a file.** Everything it owns — markup, styles, props type — sits
+together, so moving or deleting it is one operation and nothing is left behind:
+
+```text
+components/<kebab-name>/
+  index.tsx                     the component; FC<Props>, named export
+  <kebab-name>.css              its styles, wrapped in @layer primitives (or features)
+  <kebab-name>.interface.ts     its props interface
+```
+
 ```text
 src/features/<feature>/
   <feature>.constants.ts        named constants; no magic strings or numbers in logic
   <feature>.routes.ts           route objects this feature contributes
   api/<name>.ts                 ONE query/mutation definition per file
   helpers/<name>.ts             ONE pure arrow-const per file
-  interfaces/<name>.ts          ONE interface or type alias per file
-  components/<Name>.tsx         ONE React component per file
+  interfaces/<name>.ts          types shared across the feature — not component props
+  components/<kebab-name>/      one folder per component, as above
   <Feature>Page.tsx             the route-level component
 
 src/shell/                      app frame: layout, navigation, error/suspense boundaries
-src/lib/                        cross-feature primitives that two features already import
-src/styles/                     tokens.css, reset.css, layers.css
+src/lib/components/<kebab-name>/  the shared primitives
+src/lib/interfaces/<name>.ts    types more than one component uses, e.g. status-tone.ts
+src/styles/                     layers.css, reset.css, tokens.css
 
-test/features/<feature>/
-  helpers/<name>.test.ts        mirrors src/features/<feature>/helpers/<name>.ts
-  components/<Name>.test.tsx    mirrors src/features/<feature>/components/<Name>.tsx
+test/lib/components/<kebab-name>/index.test.tsx    mirrors the component's index.tsx
+test/features/<feature>/helpers/<name>.test.ts     mirrors the helper
 ```
+
+Folder and stylesheet names are kebab-case and match the component: `status-dot/`,
+`progress-bar/`, `media-tile/`. The exported symbol stays PascalCase — `status-dot/index.tsx`
+exports `StatusDot`. Import the folder, never the file: `@/lib/components/status-dot`.
+
+`interfaces/` is for types **more than one component uses**. A component's own props interface lives
+in its folder, and may carry the small unions only that component uses — `skeleton.interface.ts`
+holds `SkeletonShape` next to `SkeletonProps`, because splitting a three-member union into its own
+file buys nothing. A type a second component imports moves up to `interfaces/`, the same way a
+helper's second consumer moves it to `src/lib/`.
+
+**Reuse before you extract.** A new component is justified when an existing one cannot express the
+case, not when it would be convenient to have a differently-named wrapper. Extract only the part
+that is genuinely shared, and leave the rest where it is — a library of near-duplicates is worse
+than one component with a prop.
 
 No `shared/`, `utils/` or `common/` junk drawer: a function goes to `helpers/`, a value to
 `*.constants.ts`, a type to `interfaces/`. A helper genuinely used by two features moves down to
@@ -42,8 +67,23 @@ No `shared/`, `utils/` or `common/` junk drawer: a function goes to `helpers/`, 
 
 ## Functions are arrow consts
 
-`export const fn = (x: X): Y => …`. Never `function fn() {}`. React components are arrow consts too:
-`export const ShotCard = ({ shot }: ShotCardProps) => …`.
+`export const fn = (x: X): Y => …`. Never `function fn() {}`.
+
+**React components are `FC<Props>`**, with the props interface imported from the component's own
+folder:
+
+```tsx
+import type { FC } from 'react';
+import type { ShotCardProps } from './shot-card.interface';
+import './shot-card.css';
+
+export const ShotCard: FC<ShotCardProps> = ({ shot }) => …;
+```
+
+`FC` carries the return type, so no separate `: ReactElement` annotation is needed on a component —
+the rule below about annotating exported return types is satisfied by the `FC` itself. A component
+taking no props is `FC` bare. React 19's `FC` does **not** imply `children`; a component that takes
+children declares `children: ReactNode` in its interface.
 
 Annotate the return type on anything exported. `(): void` on an effect cleanup or a callback is not
 noise here — it is what catches an accidental `return someValue` inside a `useEffect`, which oxlint's
