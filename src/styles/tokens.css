@@ -54,6 +54,141 @@
     --color-media-text: oklch(97% 0 0);
     --color-media-text-muted: oklch(72% 0 0);
 
+    /* state tone */
+    --tone-neutral-fg: light-dark(oklch(32% 0.012 264), oklch(88% 0.008 264));
+    --tone-neutral-bg: light-dark(oklch(94% 0.004 264), oklch(26% 0.012 264));
+    --tone-neutral-border: light-dark(
+      oklch(74% 0.008 264),
+      oklch(44% 0.014 264)
+    );
+
+    --tone-ready-fg: light-dark(oklch(32% 0.09 195), oklch(88% 0.07 195));
+    --tone-ready-bg: light-dark(oklch(94% 0.035 195), oklch(26% 0.05 195));
+    --tone-ready-border: light-dark(oklch(74% 0.09 195), oklch(44% 0.09 195));
+
+    --tone-checking-fg: light-dark(oklch(32% 0.11 222), oklch(88% 0.08 222));
+    --tone-checking-bg: light-dark(oklch(94% 0.03 222), oklch(26% 0.05 222));
+    --tone-checking-border: light-dark(oklch(74% 0.1 222), oklch(44% 0.1 222));
+
+    --tone-attention-fg: light-dark(oklch(38% 0.18 255), oklch(90% 0.14 255));
+    --tone-attention-bg: light-dark(oklch(91% 0.06 255), oklch(27% 0.08 255));
+    --tone-attention-border: light-dark(
+      oklch(64% 0.17 255),
+      oklch(54% 0.15 255)
+    );
+
+    --tone-active-fg: light-dark(oklch(32% 0.15 300), oklch(88% 0.1 300));
+    --tone-active-bg: light-dark(oklch(94% 0.035 300), oklch(26% 0.06 300));
+    --tone-active-border: light-dark(oklch(74% 0.13 300), oklch(44% 0.12 300));
+
+    --tone-processing-fg: light-dark(oklch(32% 0.16 335), oklch(88% 0.11 335));
+    --tone-processing-bg: light-dark(oklch(94% 0.035 335), oklch(26% 0.06 335));
+    --tone-processing-border: light-dark(
+      oklch(74% 0.14 335),
+      oklch(44% 0.13 335)
+    );
+
+    --tone-success-fg: light-dark(oklch(40% 0.15 150), oklch(92% 0.13 150));
+    --tone-success-bg: light-dark(oklch(95% 0.035 150), oklch(29% 0.05 150));
+    --tone-success-border: light-dark(oklch(78% 0.12 150), oklch(48% 0.1 150));
+
+    --tone-warning-fg: light-dark(oklch(30% 0.14 75), oklch(84% 0.11 75));
+    --tone-warning-bg: light-dark(oklch(92% 0.04 75), oklch(24% 0.05 75));
+    --tone-warning-border: light-dark(oklch(71% 0.13 75), oklch(41% 0.11 75));
+
+    --tone-danger-fg: light-dark(oklch(18% 0.17 25), oklch(74% 0.12 25));
+    --tone-danger-bg: light-dark(oklch(88% 0.04 25), oklch(19% 0.05 25));
+    --tone-danger-border: light-dark(oklch(62% 0.14 25), oklch(33% 0.11 25));
+
+    --tone-stale-fg: light-dark(oklch(32% 0.05 95), oklch(88% 0.035 95));
+    --tone-stale-bg: light-dark(oklch(94% 0.018 95), oklch(26% 0.022 95));
+    --tone-stale-border: light-dark(oklch(74% 0.045 95), oklch(44% 0.04 95));
+
+    /* job state */
+    --color-job-state-pending-fg: var(--tone-neutral-fg);
+    --color-job-state-pending-bg: var(--tone-neutral-bg);
+    --color-job-state-pending-border: var(--tone-neutral-border);
+    --color-job-state-claimed-fg: var(--tone-neutral-fg);
+    --color-job-state-claimed-bg: var(--tone-neutral-bg);
+    --color-job-state-claimed-border: var(--tone-neutral-border);
+    --color-job-state-preparing-fg: var(--tone-neutral-fg);
+    --color-job-state-preparing-bg: var(--tone-neutral-bg);
+    --color-job-state-preparing-border: var(--tone-neutral-border);
+    --color-job-state-submitted-fg: var(--tone-neutral-fg);
+    --color-job-state-submitted-bg: var(--tone-neutral-bg);
+    --color-job-state-submitted-border: var(--tone-neutral-border);
+    --color-job-state-running-fg: var(--tone-active-fg);
+    --color-job-state-running-bg: var(--tone-active-bg);
+    --color-job-state-running-border: var(--tone-active-border);
+    --color-job-state-post-processing-fg: var(--tone-processing-fg);
+    --color-job-state-post-processing-bg: var(--tone-processing-bg);
+    --color-job-state-post-processing-border: var(--tone-processing-border);
+    --color-job-state-validating-fg: var(--tone-checking-fg);
+    --color-job-state-validating-bg: var(--tone-checking-bg);
+    --color-job-state-validating-border: var(--tone-checking-border);
+    --color-job-state-succeeded-fg: var(--tone-success-fg);
+    --color-job-state-succeeded-bg: var(--tone-success-bg);
+    --color-job-state-succeeded-border: var(--tone-success-border);
+    --color-job-state-failed-retryable-fg: var(--tone-warning-fg);
+    --color-job-state-failed-retryable-bg: var(--tone-warning-bg);
+    --color-job-state-failed-retryable-border: var(--tone-warning-border);
+    --color-job-state-failed-final-fg: var(--tone-danger-fg);
+    --color-job-state-failed-final-bg: var(--tone-danger-bg);
+    --color-job-state-failed-final-border: var(--tone-danger-border);
+    --color-job-state-cancelled-fg: var(--tone-neutral-fg);
+    --color-job-state-cancelled-bg: var(--tone-neutral-bg);
+    --color-job-state-cancelled-border: var(--tone-neutral-border);
+    --color-job-state-stale-fg: var(--tone-stale-fg);
+    --color-job-state-stale-bg: var(--tone-stale-bg);
+    --color-job-state-stale-border: var(--tone-stale-border);
+
+    /* shot state */
+    --color-shot-state-planned-fg: var(--tone-neutral-fg);
+    --color-shot-state-planned-bg: var(--tone-neutral-bg);
+    --color-shot-state-planned-border: var(--tone-neutral-border);
+    --color-shot-state-storyboard-pending-fg: var(--tone-neutral-fg);
+    --color-shot-state-storyboard-pending-bg: var(--tone-neutral-bg);
+    --color-shot-state-storyboard-pending-border: var(--tone-neutral-border);
+    --color-shot-state-storyboard-ready-fg: var(--tone-ready-fg);
+    --color-shot-state-storyboard-ready-bg: var(--tone-ready-bg);
+    --color-shot-state-storyboard-ready-border: var(--tone-ready-border);
+    --color-shot-state-storyboard-approved-fg: var(--tone-success-fg);
+    --color-shot-state-storyboard-approved-bg: var(--tone-success-bg);
+    --color-shot-state-storyboard-approved-border: var(--tone-success-border);
+    --color-shot-state-audio-pending-fg: var(--tone-neutral-fg);
+    --color-shot-state-audio-pending-bg: var(--tone-neutral-bg);
+    --color-shot-state-audio-pending-border: var(--tone-neutral-border);
+    --color-shot-state-audio-ready-fg: var(--tone-ready-fg);
+    --color-shot-state-audio-ready-bg: var(--tone-ready-bg);
+    --color-shot-state-audio-ready-border: var(--tone-ready-border);
+    --color-shot-state-video-pending-fg: var(--tone-neutral-fg);
+    --color-shot-state-video-pending-bg: var(--tone-neutral-bg);
+    --color-shot-state-video-pending-border: var(--tone-neutral-border);
+    --color-shot-state-video-rendering-fg: var(--tone-active-fg);
+    --color-shot-state-video-rendering-bg: var(--tone-active-bg);
+    --color-shot-state-video-rendering-border: var(--tone-active-border);
+    --color-shot-state-video-ready-fg: var(--tone-ready-fg);
+    --color-shot-state-video-ready-bg: var(--tone-ready-bg);
+    --color-shot-state-video-ready-border: var(--tone-ready-border);
+    --color-shot-state-auto-qc-fg: var(--tone-checking-fg);
+    --color-shot-state-auto-qc-bg: var(--tone-checking-bg);
+    --color-shot-state-auto-qc-border: var(--tone-checking-border);
+    --color-shot-state-manual-review-fg: var(--tone-attention-fg);
+    --color-shot-state-manual-review-bg: var(--tone-attention-bg);
+    --color-shot-state-manual-review-border: var(--tone-attention-border);
+    --color-shot-state-approved-fg: var(--tone-success-fg);
+    --color-shot-state-approved-bg: var(--tone-success-bg);
+    --color-shot-state-approved-border: var(--tone-success-border);
+    --color-shot-state-rejected-fg: var(--tone-warning-fg);
+    --color-shot-state-rejected-bg: var(--tone-warning-bg);
+    --color-shot-state-rejected-border: var(--tone-warning-border);
+    --color-shot-state-render-failed-fg: var(--tone-danger-fg);
+    --color-shot-state-render-failed-bg: var(--tone-danger-bg);
+    --color-shot-state-render-failed-border: var(--tone-danger-border);
+    --color-shot-state-assembled-fg: var(--tone-success-fg);
+    --color-shot-state-assembled-bg: var(--tone-success-bg);
+    --color-shot-state-assembled-border: var(--tone-success-border);
+
     /* elevation */
     --elevation-sm: 0 1px 2px
       light-dark(oklch(0% 0 0 / 0.1), oklch(0% 0 0 / 0.36));
