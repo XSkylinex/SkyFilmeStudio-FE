@@ -131,6 +131,29 @@ Assert a claim the code makes — a 20-minute target with 11 minutes of planned 
 warning, a rejected shot keeps its previous attempts — not the shape of the code. Prove the test has
 teeth: break the helper on purpose, watch it fail, put it back.
 
+## Code files carry code, not explanation
+
+Explanation belongs in `plan/`, which is dated and reviewed, or in a test, which fails when it stops
+being true. It does not belong in the source.
+
+**This is about what the comment says, not how it is written.** `/** */`, `//` and `<!-- -->` are
+the same rule, and rewriting a docblock as a row of `//` lines is not a fix. None of the following
+goes in a `.ts`, `.tsx`, `.css` or `.html` file:
+
+- rationale — why a shape was chosen, what was considered and rejected;
+- plan citations, `§36` or `plan/15 says …`. The plan moves and nothing checks the reference;
+- `GAP:` / `TODO:` / `NOTE:` prose about work not done. An unbuilt thing is a plan item;
+- predictions about later phases — unverifiable when written, and in `index.html` they ship to the
+  user;
+- restatements of the signature, the type, or the function's own name;
+- the measurement that justified a value. The value goes in the code, the measurement in the phase
+  file.
+
+Name things well enough that the paragraph you were about to write is unnecessary. **A fact that
+must not drift belongs in a test** — `index.html` duplicating the boot `lang`/`dir` pair and the
+theme colours is held by `test/shell/document-shell-defaults.test.ts`, not by prose asking the next
+person to be careful.
+
 ## No shell commands inside `.ts` / `.tsx`
 
 Source files describe the app. They do not describe how to operate it.

@@ -12,15 +12,18 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 
 ## Status, honestly
 
-**`plan/00-toolchain.md` is done (2026-08-15). Nothing after it has started.**
+**`plan/00-toolchain.md` and `plan/01-document-shell.md` are done (2026-08-15). Phase 02 is next.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
-all pass, and each was proven to fail on a deliberately broken file. But `src/` is still only
-`App.tsx` (a placeholder naming the product), `main.tsx` and two stylesheets: **no features, no
-router, no data layer**. Anything in `.claude/rules/` describing `src/features/**` is describing the
-target, not the present. Do not report structure that does not exist yet.
+all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
+and has a `<noscript>`, and `src/shell/` owns `<html lang>` / `<html dir>` after boot.
 
-## The five rules that outrank everything else
+But `src/` is still only `App.tsx` (a placeholder naming the product), `main.tsx`, `shell/` and two
+stylesheets: **no features, no router, no data layer**. Anything in `.claude/rules/` describing
+`src/features/**` is describing the target, not the present. Do not report structure that does not
+exist yet.
+
+## The six rules that outrank everything else
 
 1. **One backend, no exceptions.** The UI talks to the NestJS orchestrator and nothing else. Never
    ComfyUI (`:8188`), never LM Studio (`:1234`), never a database, never a Python runtime — not
@@ -36,6 +39,10 @@ target, not the present. Do not report structure that does not exist yet.
 5. **No shell commands in `.ts`/`.tsx` files, including in comments.** Commands live in
    `package.json`, `.claude/skills/`, and `plan/`. A command in a comment is documentation nothing
    verifies.
+6. **Source files carry code, not explanation.** No rationale, no plan citations (`§36`), no `GAP:`
+   or `TODO:` prose, no predictions about later phases, no restating a signature. This is about the
+   comment's content — rewriting a docblock as `//` lines is not a fix. Explanation goes in `plan/`;
+   a fact that must not drift goes in a test. See `.claude/rules/code-style.md`.
 
 ## Commands
 
@@ -98,7 +105,8 @@ The browser floor is not a preference — it is what Vite's default `build.targe
 ## Where things live
 
 ```
-src/                      the app (today: a placeholder App, main.tsx, two stylesheets)
+src/                      the app (today: a placeholder App, main.tsx, shell/, two stylesheets)
+src/shell/                app frame; today the only writer of <html lang>/<html dir>, called at boot
 test/                     tests, mirroring src/ — nothing under src/ is a test
 build/                    build-time code: the external-URL guard that vite.config.ts installs
 public/                   copied verbatim to dist/ root; favicon.svg and icons.svg exist and resolve

@@ -1,13 +1,42 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>skyfilmestudio-fe</title>
+    <meta
+      name="theme-color"
+      content="#fff"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#16171d"
+      media="(prefers-color-scheme: dark)"
+    />
+    <noscript>
+      <style>
+        #boot-fallback {
+          display: none;
+        }
+      </style>
+    </noscript>
+    <title>Local AI Studio</title>
   </head>
   <body>
-    <div id="root"></div>
+    <noscript>
+      <p style="padding-inline: 16px; margin-block: 16px">
+        Local AI Studio is a client-rendered application and needs JavaScript to
+        run — please enable it and reload.
+      </p>
+    </noscript>
+    <div id="root">
+      <p id="boot-fallback" style="padding-inline: 16px; margin-block: 16px">
+        Local AI Studio is starting. If this message stays on screen, the
+        application bundle failed to load — check the browser console, then
+        reload.
+      </p>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -5,10 +5,6 @@ import { findExternalUrls } from './find-external-urls.ts';
 
 const PLUGIN_NAME = 'local-ai-studio:external-url-guard';
 
-/**
- * Extensions worth reading as text. Anything not listed is treated as binary
- * and skipped, so a codec's byte stream cannot produce a false positive.
- */
 const TEXT_EXTENSIONS = [
   '.js',
   '.mjs',
@@ -40,18 +36,6 @@ const collectTextFiles = async (directory: string): Promise<string[]> => {
   return files;
 };
 
-/**
- * Fails the build if any absolute non-loopback URL survives into the output
- * directory.
- *
- * Local AI Studio's entire promise is that nothing leaves the machine, and the
- * frontend is where that gets broken quietly — a web font, an analytics
- * snippet, a remote placeholder image. Nothing else in the gate looks for it.
- *
- * The scan reads the written output rather than the bundle object on purpose:
- * index.html and everything copied verbatim from public/ never pass through
- * the chunk graph.
- */
 export const externalUrlGuard = (): Plugin => {
   let outputDirectory = '';
 
