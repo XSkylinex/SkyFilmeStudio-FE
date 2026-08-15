@@ -1,0 +1,53 @@
+@layer primitives {
+  .skeleton {
+    --skeleton-shimmer-duration: calc(var(--duration-slow) * 6);
+
+    box-sizing: border-box;
+    display: block;
+    inline-size: 100%;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-border-subtle);
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-border-strong) 50%,
+      transparent 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 60% 100%;
+    animation: skeleton-shimmer var(--skeleton-shimmer-duration) linear infinite;
+
+    /* shape */
+    &[data-shape='text'] {
+      block-size: 1em;
+      border-radius: var(--radius-full);
+    }
+
+    &[data-shape='circle'] {
+      aspect-ratio: 1;
+      border-radius: var(--radius-full);
+    }
+
+    &[data-shape='rect'] {
+      aspect-ratio: 16 / 9;
+      border-radius: var(--radius-md);
+    }
+  }
+
+  @keyframes skeleton-shimmer {
+    0% {
+      background-position: -60% 0;
+    }
+    100% {
+      background-position: 160% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      animation: none;
+      background-image: none;
+      background-color: var(--color-border);
+    }
+  }
+}

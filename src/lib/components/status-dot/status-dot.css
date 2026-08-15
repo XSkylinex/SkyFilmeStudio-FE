@@ -1,0 +1,89 @@
+@layer primitives {
+  .status-dot {
+    --status-dot-color: var(--tone-neutral-fg);
+
+    box-sizing: border-box;
+    display: inline-block;
+    flex-shrink: 0;
+    vertical-align: middle;
+    inline-size: var(--space-2);
+    block-size: var(--space-2);
+    border: 1px solid var(--status-dot-color);
+    border-radius: var(--radius-full);
+    background: var(--status-dot-color);
+
+    /* tone: colour channel */
+    &[data-tone='neutral'] {
+      --status-dot-color: var(--tone-neutral-fg);
+    }
+    &[data-tone='ready'] {
+      --status-dot-color: var(--tone-ready-fg);
+    }
+    &[data-tone='checking'] {
+      --status-dot-color: var(--tone-checking-fg);
+    }
+    &[data-tone='active'] {
+      --status-dot-color: var(--tone-active-fg);
+    }
+    &[data-tone='processing'] {
+      --status-dot-color: var(--tone-processing-fg);
+    }
+    &[data-tone='success'] {
+      --status-dot-color: var(--tone-success-fg);
+    }
+    &[data-tone='warning'] {
+      --status-dot-color: var(--tone-warning-fg);
+    }
+    &[data-tone='danger'] {
+      --status-dot-color: var(--tone-danger-fg);
+    }
+    &[data-tone='stale'] {
+      --status-dot-color: var(--tone-stale-fg);
+    }
+    &[data-tone='attention'] {
+      --status-dot-color: var(--tone-attention-fg);
+    }
+
+    /* form: shape channel */
+    &[data-form='solid'] {
+      background: var(--status-dot-color);
+    }
+
+    &[data-form='ring'] {
+      background: transparent;
+      border-width: 2px;
+    }
+
+    &[data-form='half'] {
+      background: linear-gradient(
+        to bottom,
+        var(--status-dot-color) 50%,
+        transparent 50%
+      );
+    }
+
+    &[data-form='dashed'] {
+      background: transparent;
+      border-width: 2px;
+      border-style: dashed;
+    }
+
+    &[data-form='cross'] {
+      background: repeating-conic-gradient(
+        var(--status-dot-color) 0deg 45deg,
+        transparent 45deg 90deg
+      );
+    }
+
+    &[data-form='diamond'] {
+      background: var(--status-dot-color);
+      border-radius: var(--radius-xs);
+      transform: rotate(45deg);
+      box-shadow:
+        0 0 0 var(--space-1)
+          color-mix(in oklch, var(--status-dot-color) 40%, transparent),
+        0 0 0 calc(var(--space-1) * 2)
+          color-mix(in oklch, var(--status-dot-color) 18%, transparent);
+    }
+  }
+}

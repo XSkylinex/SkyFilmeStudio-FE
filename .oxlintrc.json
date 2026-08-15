@@ -33,6 +33,12 @@
       "rules": {
         "import/no-default-export": "off"
       }
+    },
+    {
+      "files": ["src/lib/components/progress-bar/index.tsx"],
+      "rules": {
+        "jsx-a11y/prefer-tag-over-role": "off"
+      }
     }
   ]
 }
