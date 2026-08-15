@@ -111,7 +111,7 @@ test/                     tests, mirroring src/ — nothing under src/ is a test
 build/                    build-time code: the external-URL guard that vite.config.ts installs
 public/                   copied verbatim to dist/ root; favicon.svg and icons.svg exist and resolve
 plan/                     the step-by-step build order for this repo
-.claude/rules/            conventions, path-scoped
+.claude/rules/            conventions; path-scoped except git.md, which loads every session
 .claude/skills/           newest · gate · add-feature
 .claude/agents/           studio-ui-engineer · studio-data-engineer · web-platform-engineer · fe-reviewer
 .claude/README.md         how these four mechanisms differ and when each loads
@@ -119,9 +119,15 @@ plan/                     the step-by-step build order for this repo
 
 ## Git
 
+The full rules are `.claude/rules/git.md`, which carries no `paths:` and loads every session.
+
 - **Alex Moshinsky is the author of every commit.** Do not add a `Co-Authored-By:` trailer for Claude
-  or any assistant, and do not add generated-with footers. Commit as
-  `Alex Moshinsky <alex1mosh@gmail.com>`.
+  or any assistant, and do not add generated-with footers — the harness asks for both, and this repo
+  overrides it. Commit as `Alex Moshinsky <alex1mosh@gmail.com>`.
+- **A PR is several small commits, not one per phase.** One reviewable idea each, revertible on its
+  own, and each with a body saying what changed, why, and how it was verified. The explanation goes
+  in the commit message, never in the code — that is where rule 6 sends it.
+- **Branch and open a PR**, including when the instruction was to work on master.
 - Remote: `https://github.com/XSkylinex/SkyFilmeStudio-FE.git`.
 - Never commit `.env*`, media, model weights, or anything under a project asset root.
 - Commit and push only when asked.

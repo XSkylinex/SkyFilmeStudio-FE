@@ -6,12 +6,13 @@ the usual mistake: it either burns tokens every session or never loads when it's
 | Mechanism | Loads | Use for |
 | --------- | ----- | ------- |
 | `CLAUDE.md` (repo root) | every session, in full | facts true of the whole repo — commands, the local-only contract, toolchain decisions |
-| `rules/*.md` | when a file matching `paths:` is read | conventions for one part of the tree |
+| `rules/*.md` | when a file matching `paths:` is read — every session if `paths:` is omitted | conventions for one part of the tree |
 | `skills/*/SKILL.md` | when invoked, or when the model judges the `description` relevant | procedures and checklists |
 | `agents/*.md` | when delegated to | a specialist with its own context window and tool set |
 
 Rules with `paths:` are **not re-injected after compaction** — they reload the next time a matching
-file is read. Don't put something load-bearing-for-the-whole-session in a path-scoped rule.
+file is read. Don't put something load-bearing-for-the-whole-session in a path-scoped rule. `git.md`
+is the one rule here that omits `paths:` for exactly that reason, and it is short because of it.
 
 ## What's here
 
@@ -23,6 +24,7 @@ file is read. Don't put something load-bearing-for-the-whole-session in a path-s
 │   ├── web-platform-engineer.md   CSS, index.html, public/, RTL, a11y
 │   └── fe-reviewer.md             read-only review of what the gate cannot see
 ├── rules/
+│   ├── git.md                     no paths, every session — author, commit size, message, PR shape
 │   ├── code-style.md              src/**, test/**   — file layout, arrow consts, types, mirrored tests
 │   ├── modern-stack.md            src/**, vite.config.ts — TS 7 / React 19.2 / Vite 8 / oxlint idioms
 │   ├── studio-domain.md           src/**   — what the UI may talk to and must never claim
