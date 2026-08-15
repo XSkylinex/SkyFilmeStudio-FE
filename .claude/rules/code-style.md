@@ -9,9 +9,9 @@ paths:
 
 # Code style (`src/**`, `test/**`)
 
-Today `src/` is still the bare `create-vite` scaffold — `App.tsx`, `main.tsx`, two stylesheets. There
-is no reference feature to copy yet, so this file *is* the reference until one exists. Once
-`src/features/projects/` lands, read it before writing and match it.
+Today `src/` holds `App.tsx`, `main.tsx`, `shell/`, `styles/` and `App.css` — no feature slice exists
+yet, so this file *is* the reference until one does. Once `src/features/projects/` lands, read it
+before writing and match it. `src/shell/` is the closest thing to a worked example in the meantime.
 
 ## One concern per file
 

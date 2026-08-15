@@ -13,27 +13,43 @@ preview` and your eyes, so look before you claim.
 
 ## Where a style goes
 
-Two stylesheets today, and the import order in `src/main.tsx` is load-bearing:
+FE-02 split the single `index.css` into three, and the import order in `src/main.tsx` is
+load-bearing:
 
 ```ts
-import "./index.css"   // tokens + element-level reset, imported by main.tsx
+import "./styles/layers.css"   // the @layer order, first
+import "./styles/reset.css"    // color-scheme + element-level reset
+import "./styles/tokens.css"   // every custom property on :root
 // App.css is imported by App.tsx
 ```
 
-- **`src/index.css`** — the design tokens on `:root` and the element-level reset. Only rules that
-  apply to bare tags belong here. It also declares `color-scheme: light dark`, which is not cosmetic
-  — see the `light-dark()` row below.
-- **`src/App.css`** — component styles.
+- **`src/styles/layers.css`** — one statement, `@layer reset, tokens, primitives, features,
+  utilities;`, and nothing else. It is imported first so the order exists before anything fills a
+  layer.
+- **`src/styles/reset.css`** — the element-level reset, and the `color-scheme: light dark`
+  declaration, which is not cosmetic — see the `light-dark()` row below. Only rules that apply to
+  bare tags.
+- **`src/styles/tokens.css`** — the design tokens on `:root`.
+- **`src/App.css`** — component styles, until feature stylesheets replace it.
 
-As the Studio grows past one page this splits into `src/styles/tokens.css`, `src/styles/reset.css`
-and per-feature stylesheets; `plan/02-design-system.md` owns that move. Until then, do not scatter
-new stylesheets.
+`src/index.css` no longer exists. Every rule it held moved into `reset.css` or `tokens.css`, so do
+not recreate it.
 
-**Design tokens are custom properties on `:root`.** A new colour or spacing value becomes a token
-before it is used, exactly as a magic number becomes a named const in TypeScript. The scaffold ships
-`--text`, `--text-h`, `--bg`, `--border`, `--code-bg`, `--accent`, `--accent-bg`, `--accent-border`,
-`--social-bg`, `--shadow`, `--sans`, `--heading`, `--mono`. That palette is a Vite starter's, not
-this Studio's — replacing it is a planned step, not a drive-by edit.
+**Design tokens are custom properties on `:root`,** named `--<family>[-<role>]`. A new colour or
+spacing value becomes a token before it is used, exactly as a magic number becomes a named const in
+TypeScript. The families are `--color-surface-*`, `--color-text*`, `--color-border*`,
+`--color-accent*`, `--color-media-*`, `--elevation-*`, `--radius-*`, `--space-*`, `--font-*`,
+`--line-height-*`, `--font-weight-*`, `--duration-*`, `--ease-*`, `--z-*`.
+
+**Two colour families, and the split is a decision.** `--color-surface-*` and friends follow the
+system through `light-dark()`. `--color-media-*` does **not** — it is pinned dark at near-zero chroma
+in both schemes, because every media surface is a ground someone judges a render against, and the
+same frame must not look different on a light desktop. A media surface that reaches for
+`--color-surface-canvas` has broken that.
+
+**Motion tokens already honour `prefers-reduced-motion`.** `--duration-*` collapse to `0.01ms` under
+the query, so a transition written against a token is correct for free. Hard-coding `200ms` opts out
+of that silently — and per the section below, the React layer has to honour the query too.
 
 Class names are kebab-case and match their component: `.shot-card`, `.render-queue`,
 `.storyboard-strip`.
@@ -81,11 +97,27 @@ reading `dist/assets/*.css`. Date: 2026-08-14, `vite@8.2.1`.
 
 Two things follow that are easy to get wrong:
 
-**`light-dark()` only works because `index.css` declares `color-scheme: light dark` on `:root`.** A
+**`light-dark()` only works because `reset.css` declares `color-scheme: light dark` on `:root`.** A
 build-time CSS transform never sees `index.html`, so a `<meta name="color-scheme">` tag would not be
 enough. Lightning CSS emits the `var()` pair regardless; without a `color-scheme` declaration **in a
 stylesheet** it does not emit the `:root` definitions that resolve them, and the colour silently comes
 out empty. If you ever move the reset, that declaration moves with it.
+
+**The declaration and the `light-dark()` calls may live in different files** — verified 2026-08-15
+after the FE-02 split, with `color-scheme` in `reset.css` and every `light-dark()` in `tokens.css`.
+The emitted bundle still carries `--lightningcss-light:initial;--lightningcss-dark: ;` on `:root` plus
+the `@media (prefers-color-scheme:dark)` flip, because Vite bundles both into one stylesheet before
+Lightning CSS runs. Do not assume this survives a future change that emits them as separate files.
+
+**`light-dark()` also lowers correctly inside a composite value**, not just as a whole colour —
+measured on `--elevation-sm`, which emits
+`0 1px 2px var(--lightningcss-light,oklch(0% 0 0/.1))var(--lightningcss-dark,oklch(0% 0 0/.36))`. One
+of the two custom properties is `initial` and the other is empty, so exactly one contributes.
+
+**Lightning CSS rewrites the `@layer` statement and that is not a bug.** `layers.css` declares five
+names; the built CSS declares `@layer reset{…}`, `@layer tokens{…}`, then a trailing bare
+`@layer primitives,features,utilities;`. First-appearance order is unchanged, so the cascade is the
+one you asked for. Check the *order names first appear*, not whether the statement survived intact.
 
 **Lightning CSS rewriting media queries into range syntax is a floor-derived decision.** It emits
 `(width<=1024px)` because Safari 16.4 supports it. Pinning `build.cssTarget` lower would change the
@@ -136,3 +168,6 @@ taste:
 `yarn build` proves it compiles, not that it renders. Run `yarn dev`, look at the component with real
 data in it, and check both the narrow breakpoint and `dir="rtl"`. If the change touched a feature near
 the floor, say which browser is the binding constraint and how you know.
+
+`vite preview` binds `[::1]`, not `127.0.0.1` — measured 2026-08-15. A curl at the IPv4 loopback
+fails with a connection refused that reads exactly like a build that produced nothing.

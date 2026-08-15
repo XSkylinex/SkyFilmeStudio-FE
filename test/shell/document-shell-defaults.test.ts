@@ -13,9 +13,12 @@ const documentShell = new DOMParser().parseFromString(
   'text/html',
 );
 
-const backgroundTokens = [
-  ...readRepoFile('src/index.css').matchAll(/--bg:\s*([^;]+);/g),
-].map((match) => match[1]?.trim());
+const canvasToken = readRepoFile('src/styles/tokens.css').match(
+  /--color-surface-canvas:\s*light-dark\(\s*([^,]+),\s*(.+?)\s*\);/,
+);
+const backgroundTokens = canvasToken
+  ? [canvasToken[1]?.trim(), canvasToken[2]?.trim()]
+  : [];
 
 const themeColorFor = (scheme: string): string | null =>
   documentShell
@@ -32,7 +35,7 @@ describe('the document shell agrees with the values src/ owns', () => {
     );
   });
 
-  it('tints the titlebar with the same backgrounds index.css paints', () => {
+  it('tints the titlebar with the same background tokens.css paints', () => {
     const [lightBackground, darkBackground] = backgroundTokens;
 
     expect(backgroundTokens).toHaveLength(2);
