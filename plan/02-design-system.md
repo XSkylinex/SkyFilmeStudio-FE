@@ -89,6 +89,59 @@ states and the shot machine has fifteen. They need a palette where `RUNNING`, `V
 `FAILED_RETRYABLE` and `FAILED_FINAL` do **not** look the same, because they mean different things to
 the user. `oklch()` with even lightness steps is why decision 3 matters.
 
+#### The states, from the authority
+
+Not from this file's prose. `LOCAL_AI_STUDIO_PLAN.md` §10.1 (12 job states) and §24 (15 shot
+states). Grouped into the families the palette is designed around:
+
+| Family | Job states | Reads as |
+| ------ | ---------- | -------- |
+| Queued — nothing is burning GPU yet | `PENDING` `CLAIMED` `PREPARING` `SUBMITTED` | low chroma, calm; a queue at rest should not look busy |
+| Active — work in flight | `RUNNING` `POST_PROCESSING` `VALIDATING` | the only saturated moving things on screen, and **distinguishable from each other** |
+| Settled, good | `SUCCEEDED` | |
+| Settled, bad, recoverable | `FAILED_RETRYABLE` | |
+| Settled, bad, final | `FAILED_FINAL` | must not be confusable with the row above |
+| Stopped by a person | `CANCELLED` | neutral — a choice, not a fault |
+| Lost | `STALE` | lease expired; neither running nor deliberately stopped |
+
+| Family | Shot states |
+| ------ | ----------- |
+| Not started | `PLANNED` |
+| Storyboard track | `STORYBOARD_PENDING` `STORYBOARD_READY` `STORYBOARD_APPROVED` |
+| Audio track | `AUDIO_PENDING` `AUDIO_READY` |
+| Video track | `VIDEO_PENDING` `VIDEO_RENDERING` `VIDEO_READY` |
+| Review | `AUTO_QC` `MANUAL_REVIEW` |
+| Terminal | `APPROVED` `REJECTED` `RENDER_FAILED` `ASSEMBLED` |
+
+#### Two constraints that are product rules, not taste
+
+**`AUTO_QC` must not read as approval.** §27.2: *"Do not treat a VLM `PASS` as equivalent to human
+approval for a hero shot."* So `AUTO_QC` never borrows the `APPROVED` hue and never carries the same
+visual weight. An advisory machine verdict that looks like a human gate is the single most expensive
+confusion this UI can create — it is what causes a wrong keyframe to spawn hundreds of renders.
+
+**Colour is never the only channel.** The verification step requires the states to be distinguishable
+"including for the most common colour-vision deficiencies", and under deuteranopia and protanopia
+`SUCCEEDED` green, `FAILED_RETRYABLE` amber and `FAILED_FINAL` red collapse toward a common
+yellow-grey — which is precisely the distinction that matters most. So every state indicator carries a
+**second, non-colour channel**: a distinct dot form (solid · hollow ring · half · crossed · dashed)
+plus an always-present text label. A colour-only status dot is a defect here, not a simplification.
+
+#### Why the values are a table and not a formula
+
+`relative-color` is outside the floor, so `oklch(from var(--state-active) …)` cannot derive one state
+from another. Each value is written literally, with lightness held constant per role so the scale
+stays readable on one surface and hue carrying the family distinction.
+
+#### These are wire types, so no TypeScript union is written here
+
+`code-style.md`: anything crossing the API boundary is inferred from the shared Zod contract and never
+re-declared by hand. There is no `zod` in `package.json` and BE-01 has not been consumed, so
+`type JobState = 'PENDING' | …` would be exactly the drift that rule exists to prevent. The state
+colours therefore ship as **CSS tokens only**; primitives take a presentational tone
+(`neutral · info · active · success · warning · danger`), and the state→tone mapping is written in
+FE-04 against the real inferred contract.
+
 ### 3. Primitives
 
 Only what every phase needs: `Button`, `IconButton`, `Field`, `Select`, `Dialog` (native
