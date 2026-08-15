@@ -17,6 +17,14 @@ dense media, long lists and continuously updating job state — not a document s
 | 3 | Colour space | hex vs `oklch()` | **`oklch()`**. Measured inside this repo's floor on 2026-08-14, and it makes a perceptually even state scale possible — which matters when eight job states need distinguishable colours. |
 | 4 | Layering | ad-hoc vs `@layer` | **`@layer`**, measured to pass through the build unchanged. `reset → tokens → primitives → features → utilities`. |
 
+**Answered 2026-08-15.** 1 — both surfaces, media always dark: chrome follows the system through
+`light-dark()`, and every media-viewing surface is pinned dark regardless, so the same frame is never
+judged against two different grounds. 2, 3 and 4 as recommended.
+
+Primitives live in `src/lib/components/` with their interfaces in `src/lib/interfaces/`. `src/lib/`
+is "earned, not anticipated" for a helper migrating out of a feature; these are commissioned by this
+phase as the shared layer 03 and every UI phase build on, so the caveat does not apply.
+
 ## What the pipeline actually does to your CSS
 
 **Measured** by building probe declarations through this repo's own Vite and reading
@@ -35,6 +43,25 @@ dense media, long lists and continuously updating job state — not a document s
 
 Settle anything new with `node .claude/skills/newest/scripts/floor-check.mjs <id>`, never from memory.
 `.claude/rules/css.md` carries the full table and the `light-dark()` trap.
+
+### Checked for this phase, 2026-08-15
+
+`floor-check.mjs`, against `["chrome111","edge111","firefox114","safari16.4","ios16.4"]`:
+
+| Inside — ship raw | Outside, lowered by the build | Outside — unusable here |
+| ----------------- | ----------------------------- | ----------------------- |
+| `cascade-layers` · `oklab`/`oklch` · `aspect-ratio` · `dialog` · `container-queries` · `color-mix` · `logical-properties` · `focus-visible` · `inert` · `grid` · `flexbox` · `media-query-range-syntax` · `custom-properties` | `nesting` (flattened) · `light-dark` (var pair + `:root` definitions) | `popover` · `starting-style` · `content-visibility` · `accent-color` · `text-wrap-balance` · `scrollbar-gutter` · `has` · `subgrid` · `relative-color` |
+
+Two of those change the design rather than merely restricting it:
+
+- **`popover` is out** (`safari_ios 18.3` > 16.4), so `Tooltip` cannot use the popover API and gets no
+  top-layer promotion for free. It is positioned and dismissed by the component.
+- **`relative-color` is out** (`safari 18` > 16.4), so `oklch(from var(--x) l c h)` cannot derive one
+  token from another. Every state colour is written out literally, which is why the scale below is a
+  table of measured values rather than a formula.
+
+`content-visibility` being out also means the 200-cell contact sheet has no cheap render-skipping —
+`aspect-ratio` reservation is doing the whole job, which raises the stakes on step 3's `MediaTile`.
 
 ## Steps
 
