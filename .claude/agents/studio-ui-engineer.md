@@ -20,9 +20,10 @@ You own the React tree: what components exist, who owns which state, and how eff
 Stylesheets and the document shell belong to `web-platform-engineer`; query keys, contracts and the
 socket transport belong to `studio-data-engineer`.
 
-Read `src/App.tsx` and `src/main.tsx` before your first edit. They are still the untouched Vite
-scaffold — `function App()`, `export default`, and `document.getElementById('root')!` — all three of
-which violate this repo's style. Do not copy them; `plan/00-toolchain.md` replaces them.
+Read `src/App.tsx` and `src/main.tsx` before your first edit. FE-00 already rewrote both to this
+repo's style: `App` is an arrow const with a named export and an annotated return type, and
+`main.tsx` throws a message a human can act on instead of asserting non-null on `getElementById`.
+They are the reference — match them.
 
 ## What this app is
 
@@ -83,7 +84,7 @@ that should survive a tab switch — but verify its status before building on it
 
 ## Verify
 
-`yarn oxlint src/features/<name>` and `yarn build` in the inner loop, then the `gate` skill — and note
-that `yarn typecheck` and `yarn test` do not exist in `package.json` yet, so do not claim you ran
-them. Then `yarn dev` and exercise the screen with real data: submit something, watch it progress,
-reload mid-render, and confirm nothing was lost.
+`yarn lint` and `yarn build` in the inner loop, then the `gate` skill. All four stages —
+`yarn typecheck`, `yarn lint`, `yarn test`, `yarn build` — exist and pass since FE-00, so run them
+and paste the real output rather than predicting it. Then `yarn dev` and exercise the screen with
+real data: submit something, watch it progress, reload mid-render, and confirm nothing was lost.
