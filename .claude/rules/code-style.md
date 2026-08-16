@@ -85,6 +85,33 @@ case, not when it would be convenient to have a differently-named wrapper. Extra
 that is genuinely shared, and leave the rest where it is — a library of near-duplicates is worse
 than one component with a prop.
 
+### A variant of a component composes it. It never re-renders its element
+
+If two components would render the same underlying element, the second one **calls the first**. It
+does not emit its own `<button>`, its own class, and its own copy of the styles.
+
+```tsx
+export const IconButton: FC<IconButtonProps> = ({ label, ...rest }) => (
+  <Button {...rest} shape="icon" aria-label={label}>…</Button>
+);
+```
+
+The variation goes in as a **prop that the base component turns into a `data-` attribute**, and the
+stylesheet branches on that attribute. `Button` owns `data-shape`; there is no `.icon-button` class
+and no `icon-button.css`. A component folder that contributes no styles of its own simply has no
+stylesheet — that is the convention working, not a gap in it.
+
+**This is not a tidiness rule; the duplicate version already cost real bugs.** `IconButton` began as
+a copy of `Button`'s markup with a renamed custom property, and the two stylesheets were identical
+across every variant, hover, active, focus and disabled rule — about ninety duplicated lines. The
+consequence showed up immediately: `aria-describedby` had to be added to *both* components in the
+same session, `type="button"` was defaulted twice, and the focus ring was defined twice. Every fix
+to a forked component is a fix someone has to remember to make twice, and the second one is the one
+that gets forgotten.
+
+The test that keeps it honest asserts the composition, not the appearance: `IconButton` renders an
+element carrying `.button` and `data-shape="icon"`. If someone re-forks it, that test fails.
+
 No `shared/`, `utils/` or `common/` junk drawer: a function goes to `helpers/`, a value to
 `*.constants.ts`, a type to `interfaces/`. A helper genuinely used by two features moves down to
 `src/lib/`, never sideways into another feature.

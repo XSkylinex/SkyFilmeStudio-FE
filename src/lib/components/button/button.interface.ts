@@ -1,4 +1,5 @@
 import type { MouseEventHandler, ReactNode } from 'react';
+import type { ButtonShape } from '@/lib/interfaces/button-shape';
 import type { ButtonSize } from '@/lib/interfaces/button-size';
 import type { ButtonType } from '@/lib/interfaces/button-type';
 import type { ButtonVariant } from '@/lib/interfaces/button-variant';
@@ -6,8 +7,11 @@ import type { ButtonVariant } from '@/lib/interfaces/button-variant';
 export interface ButtonProps {
   variant: ButtonVariant;
   size: ButtonSize;
-  type?: ButtonType;
-  disabled?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  shape?: ButtonShape | undefined;
+  type?: ButtonType | undefined;
+  disabled?: boolean | undefined;
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+  'aria-label'?: string | undefined;
+  'aria-describedby'?: string | undefined;
   children: ReactNode;
 }

@@ -68,4 +68,22 @@ describe('Button', () => {
     await user.click(screen.getByRole('button', { name: 'Approve' }));
     expect(handleClick).toHaveBeenCalledOnce();
   });
+
+  it('forwards aria-describedby, so a wrapping Tooltip actually describes it', () => {
+    render(
+      <>
+        <Button variant="primary" size="md" aria-describedby="tip-approve">
+          Approve
+        </Button>
+        <span id="tip-approve">Locks the keyframe for every later render</span>
+      </>,
+    );
+    const button = screen.getByRole('button', { name: 'Approve' });
+
+    expect(
+      document.getElementById(
+        button.getAttribute('aria-describedby') as string,
+      ),
+    ).toHaveTextContent('Locks the keyframe for every later render');
+  });
 });

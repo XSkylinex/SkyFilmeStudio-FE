@@ -49,19 +49,37 @@
       cursor: not-allowed;
     }
 
-    /* size */
-    &[data-size='sm'] {
-      gap: var(--space-1);
-      padding-block: var(--space-1);
-      padding-inline: var(--space-3);
-      font-size: var(--font-size-xs);
+    /* size: a text button pads to its label, an icon button is square */
+    &[data-shape='text'] {
+      &[data-size='sm'] {
+        gap: var(--space-1);
+        padding-block: var(--space-1);
+        padding-inline: var(--space-3);
+        font-size: var(--font-size-xs);
+      }
+
+      &[data-size='md'] {
+        gap: var(--space-2);
+        padding-block: var(--space-2);
+        padding-inline: var(--space-4);
+        font-size: var(--font-size-sm);
+      }
     }
 
-    &[data-size='md'] {
-      gap: var(--space-2);
-      padding-block: var(--space-2);
-      padding-inline: var(--space-4);
-      font-size: var(--font-size-sm);
+    &[data-shape='icon'] {
+      flex-shrink: 0;
+
+      &[data-size='sm'] {
+        inline-size: var(--space-6);
+        block-size: var(--space-6);
+        font-size: var(--font-size-sm);
+      }
+
+      &[data-size='md'] {
+        inline-size: var(--space-7);
+        block-size: var(--space-7);
+        font-size: var(--font-size-lg);
+      }
     }
 
     /* variant: colour channel */

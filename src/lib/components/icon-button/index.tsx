@@ -1,25 +1,27 @@
 import type { FC } from 'react';
+import { Button } from '@/lib/components/button';
 import type { IconButtonProps } from './icon-button.interface';
-import './icon-button.css';
 
 export const IconButton: FC<IconButtonProps> = ({
   variant,
   size,
   label,
-  type = 'button',
+  type,
   disabled,
   onClick,
+  'aria-describedby': describedBy,
   children,
 }) => (
-  <button
-    className="icon-button"
-    data-variant={variant}
-    data-size={size}
+  <Button
+    variant={variant}
+    size={size}
+    shape="icon"
     type={type}
     disabled={disabled}
-    aria-label={label}
     onClick={onClick}
+    aria-label={label}
+    aria-describedby={describedBy}
   >
     {children}
-  </button>
+  </Button>
 );

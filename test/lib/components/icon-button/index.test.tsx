@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Icon } from '@/lib/components/icon';
 import { IconButton } from '@/lib/components/icon-button';
 
 describe('IconButton', () => {
   it('exposes the required label as its accessible name, since the icon carries none', () => {
     render(
       <IconButton variant="ghost" size="sm" label="Cancel render">
-        <svg aria-hidden="true" />
+        <Icon name="close" />
       </IconButton>,
     );
 
@@ -18,7 +19,7 @@ describe('IconButton', () => {
   it('defaults to type="button"', () => {
     render(
       <IconButton variant="primary" size="md" label="Retake">
-        <svg aria-hidden="true" />
+        <Icon name="close" />
       </IconButton>,
     );
 
@@ -31,13 +32,25 @@ describe('IconButton', () => {
   it('carries the variant and size the caller chose', () => {
     render(
       <IconButton variant="danger" size="sm" label="Reject">
-        <svg aria-hidden="true" />
+        <Icon name="close" />
       </IconButton>,
     );
     const button = screen.getByRole('button', { name: 'Reject' });
 
     expect(button).toHaveAttribute('data-variant', 'danger');
     expect(button).toHaveAttribute('data-size', 'sm');
+  });
+
+  it('renders Button in its icon shape rather than a second button of its own', () => {
+    render(
+      <IconButton variant="ghost" size="md" label="Cancel render">
+        <Icon name="close" />
+      </IconButton>,
+    );
+    const button = screen.getByRole('button', { name: 'Cancel render' });
+
+    expect(button).toHaveClass('button');
+    expect(button).toHaveAttribute('data-shape', 'icon');
   });
 
   it('does not call the handler while disabled', async () => {
@@ -51,11 +64,34 @@ describe('IconButton', () => {
         disabled
         onClick={handleClick}
       >
-        <svg aria-hidden="true" />
+        <Icon name="close" />
       </IconButton>,
     );
 
     await user.click(screen.getByRole('button', { name: 'Export' }));
     expect(handleClick).not.toHaveBeenCalled();
+  });
+
+  it('forwards aria-describedby, so a wrapping Tooltip actually describes it', () => {
+    render(
+      <>
+        <IconButton
+          variant="ghost"
+          size="sm"
+          label="Retake region"
+          aria-describedby="tip-retake"
+        >
+          <Icon name="close" />
+        </IconButton>
+        <span id="tip-retake">Re-renders only the masked area</span>
+      </>,
+    );
+    const button = screen.getByRole('button', { name: 'Retake region' });
+
+    expect(
+      document.getElementById(
+        button.getAttribute('aria-describedby') as string,
+      ),
+    ).toHaveTextContent('Re-renders only the masked area');
   });
 });

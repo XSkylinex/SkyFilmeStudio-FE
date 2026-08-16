@@ -10,5 +10,6 @@ export interface IconButtonProps {
   type?: ButtonType;
   disabled?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  'aria-describedby'?: string;
   children: ReactNode;
 }
