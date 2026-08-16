@@ -1,0 +1,21 @@
+@layer primitives {
+  .icon {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    inline-size: 1em;
+    block-size: 1em;
+    background-color: currentColor;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+
+    &[data-icon='close'] {
+      mask-image: url('../../../assets/lib/components/icon/close.svg');
+    }
+
+    &[data-icon='circle'] {
+      mask-image: url('../../../assets/lib/components/icon/circle.svg');
+    }
+  }
+}

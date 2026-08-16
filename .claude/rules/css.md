@@ -99,6 +99,7 @@ reading `dist/assets/*.css`. Date: 2026-08-14, `vite@8.2.1`.
 | `@media (max-width: 1024px)` | `@media (width<=1024px)` | Lightning CSS *upgrades* to range syntax |
 | `@container (min-width: 40rem)` | `@container (width>=40rem)` | same upgrade; container queries are inside the floor |
 | `:has()`, `@layer`, `@starting-style`, logical properties | unchanged | ships raw — check the floor first |
+| `mask-image`, `mask-size`, `mask-repeat` | `-webkit-` copy emitted first | **this is what makes icons work here** — see below |
 | `#11223344` | `#1234` | minified, not lowered |
 
 Two things follow that are easy to get wrong:
@@ -131,6 +132,44 @@ emitted syntax, not just the prefixes. Don't pin it casually.
 
 Safe here today and worth reaching for: `@layer`, container queries, `color-mix()`, `oklch()`,
 `aspect-ratio`, `inert`, `<dialog>`, logical properties, `dvh`/`svh` (already used by `#root`).
+
+## Icons are masks, not markup
+
+SVG source lives in `src/assets/`, mirroring `src/` — never as `<svg>` inside a `.tsx` file. See
+`.claude/rules/code-style.md`. The stylesheet is what puts it on screen:
+
+```css
+.icon {
+  background-color: currentColor;
+  mask-image: url('../../../assets/lib/components/icon/close.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+```
+
+`currentColor` under the mask is the whole point: one asset serves every button variant and every
+tone, so a new tone never needs a recoloured copy of the artwork.
+
+**This ships only because of the prefix.** `floor-check.mjs` reports `masks` as **OUTSIDE** the floor
+— blocked by `chrome 120`, `chrome_android 120`, `edge 120` against our 111 — and unprefixed
+`mask-image` genuinely is. Measured 2026-08-16 by transforming a probe through this repo's own
+`lightningcss` at the floor's targets: it emits `-webkit-mask-image` **and** `mask-image`, the same
+pattern as `backdrop-filter`. The `-webkit-` form is old enough to cover the floor everywhere.
+
+So do not "fix" this by hand-writing the prefix, and do not read the `floor-check` line as a ban —
+it is the reason the build's prefixing is load-bearing here rather than cosmetic.
+
+Two traps that produce an invisible icon with a fully green gate:
+
+- **A mask reads the alpha channel, not the colour.** Artwork that draws with `stroke` and no fill,
+  or that relies on `fill="currentColor"`, masks to nothing. Author icons as opaque filled paths.
+- **A `url()` that fails to resolve is silent.** Confirm in `dist/assets/*.css` that the reference
+  resolved — either to a hashed file under `dist/assets/`, or, below Vite's `build.assetsInlineLimit`
+  (`4096` bytes by default, read from `vite`'s own shipped `.d.ts`), inlined as a
+  `data:image/svg+xml,…` URI directly in the CSS. Measured 2026-08-16: `close.svg` (273 B) and
+  `circle.svg` (113 B) both inline — `dist/assets/` has no third file, only the JS and CSS bundles.
+  Check the same way regardless: a resolved reference, of either shape, is fine; a broken path is
+  silent.
 
 ## `@supports` is not always a valid gate
 

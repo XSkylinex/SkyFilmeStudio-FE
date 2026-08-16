@@ -48,6 +48,32 @@ Folder and stylesheet names are kebab-case and match the component: `status-dot/
 `progress-bar/`, `media-tile/`. The exported symbol stays PascalCase — `status-dot/index.tsx`
 exports `StatusDot`. Import the folder, never the file: `@/lib/components/status-dot`.
 
+## SVG lives in `src/assets/`, never in JSX
+
+**No `.tsx` file contains `<svg>` markup** — not a component, not a test, not the preview gallery.
+An icon is an asset, and `src/assets/` mirrors `src/` the same way `test/` does:
+
+```text
+src/lib/components/icon/index.tsx          the component
+src/assets/lib/components/icon/close.svg   the artwork it draws
+```
+
+A path drawn inline in a component cannot be reused by a second component, cannot be swapped without
+touching TypeScript, and turns an artwork edit into a source-code diff reviewed as logic. A file is
+none of those things. Where it *ends up* is the build's business: measured 2026-08-16, these icons
+are small enough that Vite inlines them into the stylesheet as `data:` URIs rather than emitting
+separate files — so do not claim a caching win for the split. The win is authoring, not transport.
+
+Icons are applied with a **CSS mask over `background-color: currentColor`**, so one asset works on
+every button variant and every tone without a recoloured copy — the component renders
+`<span className="icon" data-icon="close" aria-hidden="true" />` and the stylesheet points at the
+file. Not `<img>` (it cannot inherit colour), not `?raw` with `dangerouslySetInnerHTML`, not an
+SVG-to-component plugin. `.claude/rules/css.md` carries the measured prefix behaviour that makes
+masking ship at this repo's floor.
+
+An icon is decoration: it is `aria-hidden`, and the accessible name comes from the control that
+contains it. An icon-only control with no `label` is a defect, not a terse style.
+
 `interfaces/` is for types **more than one component uses**. A component's own props interface lives
 in its folder, and may carry the small unions only that component uses — `skeleton.interface.ts`
 holds `SkeletonShape` next to `SkeletonProps`, because splitting a three-member union into its own
