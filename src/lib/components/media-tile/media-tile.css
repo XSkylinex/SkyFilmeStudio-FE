@@ -1,0 +1,92 @@
+@layer primitives {
+  .media-tile {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    min-inline-size: 0;
+    border: 1px solid var(--color-media-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-media-canvas);
+
+    &[data-ratio='16:9'] {
+      aspect-ratio: 16 / 9;
+    }
+
+    &[data-ratio='9:16'] {
+      aspect-ratio: 9 / 16;
+    }
+
+    &[data-ratio='1:1'] {
+      aspect-ratio: 1;
+    }
+  }
+
+  .media-tile__image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+
+  .media-tile[data-state='loading'] .skeleton {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: inherit;
+    background-color: var(--color-media-surface);
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-media-border) 50%,
+      transparent 100%
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .media-tile[data-state='loading'] .skeleton {
+      background-image: none;
+      background-color: var(--color-media-border);
+    }
+  }
+
+  .media-tile__fallback {
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: var(--space-2);
+    border-radius: inherit;
+    background-color: var(--color-media-surface);
+    color: var(--color-media-text-muted);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-base);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .media-tile__caption {
+    box-sizing: border-box;
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    margin: 0;
+    padding-block: var(--space-1);
+    padding-inline: var(--space-2);
+    background-color: color-mix(
+      in oklch,
+      var(--color-media-canvas) 82%,
+      transparent
+    );
+    color: var(--color-media-text);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-base);
+    overflow-wrap: anywhere;
+  }
+}
