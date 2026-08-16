@@ -155,10 +155,12 @@ describe('DesignSystemPreview', () => {
   });
 
   it('gives every icon button an accessible name, since the icon itself is decorative', () => {
-    render(<DesignSystemPreview />);
+    const { container } = render(<DesignSystemPreview />);
+    const iconButtons = container.querySelectorAll('[data-shape="icon"]');
 
-    ['Approve', 'Retake', 'Cancel', 'Reject'].forEach((label) => {
-      expect(screen.getByRole('button', { name: label })).toBeInTheDocument();
+    expect(iconButtons.length).toBeGreaterThan(0);
+    iconButtons.forEach((iconButton) => {
+      expect(iconButton).toHaveAccessibleName();
     });
   });
 

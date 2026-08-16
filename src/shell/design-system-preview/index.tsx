@@ -3,6 +3,8 @@ import { useState } from 'react';
 import type { StatusTone } from '@/lib/interfaces/status-tone';
 import type { ButtonSize } from '@/lib/interfaces/button-size';
 import type { ButtonVariant } from '@/lib/interfaces/button-variant';
+import type { MediaRatio } from '@/lib/components/media-tile/media-tile.interface';
+import type { RegenerationModeOption } from '@/lib/components/approval-controls/approval-controls.interface';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { Badge } from '@/lib/components/badge';
 import { ProgressBar } from '@/lib/components/progress-bar';
@@ -18,6 +20,8 @@ import { Tooltip } from '@/lib/components/tooltip';
 import { Toast } from '@/lib/components/toast';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
+import { MediaTile } from '@/lib/components/media-tile';
+import { ApprovalControls } from '@/lib/components/approval-controls';
 import './design-system-preview.css';
 
 interface StatePreviewEntry {
@@ -109,7 +113,65 @@ const DURATION_OPTIONS = [
   { value: '8', label: '8 seconds' },
 ];
 
+interface MediaTileShowcaseEntry {
+  readonly ratio: MediaRatio;
+  readonly src: string;
+  readonly alt: string;
+  readonly caption: string;
+}
+
+const MEDIA_TILE_RATIO_SHOWCASE: readonly MediaTileShowcaseEntry[] = [
+  {
+    ratio: '16:9',
+    src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOwSpgHAAIQATlADQkMAAAAAElFTkSuQmCC',
+    alt: 'Wide keyframe candidate',
+    caption: '16:9 keyframe',
+  },
+  {
+    ratio: '9:16',
+    src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGOo8psHAAKsAWcjeUVtAAAAAElFTkSuQmCC',
+    alt: 'Tall keyframe candidate',
+    caption: '9:16 keyframe',
+  },
+  {
+    ratio: '1:1',
+    src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGNw66kAAAJmAUtjS3f6AAAAAElFTkSuQmCC',
+    alt: 'Square keyframe candidate',
+    caption: '1:1 keyframe',
+  },
+];
+
+const REGENERATION_MODE_SHOWCASE: RegenerationModeOption[] = [
+  {
+    id: 'EXACT_REPLAY',
+    label: 'Exact replay',
+    description:
+      'Same seed, same prompt: reproduces the previous render exactly.',
+  },
+  {
+    id: 'SAME_PROMPT_NEW_SEED',
+    label: 'Same prompt, new seed',
+    description: 'Keeps the prompt and draws a new seed for a fresh variation.',
+  },
+  {
+    id: 'CONTROLLED_PROMPT_REVISION',
+    label: 'Controlled prompt revision',
+    description: 'Edits the prompt while keeping the locked subject reference.',
+  },
+  {
+    id: 'NEW_KEYFRAME',
+    label: 'New keyframe',
+    description: 'Starts over from a freshly generated keyframe.',
+  },
+  {
+    id: 'RETAKE_REGION',
+    label: 'Retake region',
+    description: 'Re-renders only the masked region of the shot.',
+  },
+];
+
 const handleToastDismiss = (): void => {};
+const handleApprovalControlsAction = (): void => {};
 
 export const DesignSystemPreview: FC = () => {
   const [durationValue, setDurationValue] = useState(DURATION_DEFAULT_VALUE);
@@ -335,6 +397,57 @@ export const DesignSystemPreview: FC = () => {
                 Retry with the same seed
               </Button>
             }
+          />
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>Media tile</h2>
+        <div className="design-system-preview__grid">
+          {MEDIA_TILE_RATIO_SHOWCASE.map((entry) => (
+            <MediaTile
+              key={entry.ratio}
+              ratio={entry.ratio}
+              src={entry.src}
+              alt={entry.alt}
+              caption={entry.caption}
+            />
+          ))}
+          <MediaTile alt="Shot with no proxy yet" caption="Awaiting render" />
+          <MediaTile
+            src="data:image/png;base64,broken"
+            alt="Shot proxy that failed to decode"
+            caption="Decode failed"
+          />
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>Approval controls</h2>
+        <div className="design-system-preview__grid">
+          <ApprovalControls
+            onApprove={handleApprovalControlsAction}
+            onReject={handleApprovalControlsAction}
+            regenerationModes={REGENERATION_MODE_SHOWCASE}
+            onRegenerate={handleApprovalControlsAction}
+            pending={false}
+            decided={false}
+          />
+          <ApprovalControls
+            onApprove={handleApprovalControlsAction}
+            onReject={handleApprovalControlsAction}
+            regenerationModes={REGENERATION_MODE_SHOWCASE}
+            onRegenerate={handleApprovalControlsAction}
+            pending
+            decided={false}
+          />
+          <ApprovalControls
+            onApprove={handleApprovalControlsAction}
+            onReject={handleApprovalControlsAction}
+            regenerationModes={REGENERATION_MODE_SHOWCASE}
+            onRegenerate={handleApprovalControlsAction}
+            pending={false}
+            decided
           />
         </div>
       </section>
