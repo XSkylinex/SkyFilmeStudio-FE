@@ -47,6 +47,9 @@
     );
     --color-accent-border: light-dark(oklch(70% 0.11 255), oklch(50% 0.11 255));
 
+    /* scrim */
+    --color-scrim: light-dark(oklch(0% 0 0 / 0.32), oklch(0% 0 0 / 0.56));
+
     /* media — pinned dark regardless of color-scheme */
     --color-media-canvas: oklch(11% 0 0);
     --color-media-surface: oklch(16% 0 0);
@@ -219,6 +222,11 @@
     --space-6: 1.5rem;
     --space-7: 2rem;
     --space-8: 3rem;
+
+    /* size */
+    --size-xs: 16rem;
+    --size-sm: 22rem;
+    --size-md: 32rem;
 
     /* type */
     --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
