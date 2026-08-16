@@ -11,6 +11,13 @@ import { Button } from '@/lib/components/button';
 import { IconButton } from '@/lib/components/icon-button';
 import { Field } from '@/lib/components/field';
 import { Select } from '@/lib/components/select';
+import { Input } from '@/lib/components/input';
+import { Icon } from '@/lib/components/icon';
+import { Dialog } from '@/lib/components/dialog';
+import { Tooltip } from '@/lib/components/tooltip';
+import { Toast } from '@/lib/components/toast';
+import { EmptyState } from '@/lib/components/empty-state';
+import { ErrorState } from '@/lib/components/error-state';
 import './design-system-preview.css';
 
 interface StatePreviewEntry {
@@ -102,8 +109,11 @@ const DURATION_OPTIONS = [
   { value: '8', label: '8 seconds' },
 ];
 
+const handleToastDismiss = (): void => {};
+
 export const DesignSystemPreview: FC = () => {
   const [durationValue, setDurationValue] = useState(DURATION_DEFAULT_VALUE);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <main className="design-system-preview">
@@ -172,6 +182,14 @@ export const DesignSystemPreview: FC = () => {
       </section>
 
       <section className="design-system-preview__section">
+        <h2>Icon</h2>
+        <div className="design-system-preview__grid">
+          <Icon name="close" />
+          <Icon name="circle" />
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
         <h2>Icon button</h2>
         <div className="design-system-preview__grid">
           {ICON_BUTTON_SHOWCASE.map((entry) => (
@@ -181,14 +199,7 @@ export const DesignSystemPreview: FC = () => {
               size="md"
               label={entry.label}
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                aria-hidden="true"
-              >
-                <circle cx="8" cy="8" r="6" fill="currentColor" />
-              </svg>
+              <Icon name="circle" />
             </IconButton>
           ))}
         </div>
@@ -205,7 +216,7 @@ export const DesignSystemPreview: FC = () => {
             />
           </Field>
           <Field label="Seed" error="Must be a whole number">
-            <input defaultValue="not a number" />
+            <Input defaultValue="not a number" />
           </Field>
         </div>
       </section>
@@ -217,6 +228,113 @@ export const DesignSystemPreview: FC = () => {
             options={DURATION_OPTIONS}
             value={durationValue}
             onChange={setDurationValue}
+          />
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>Dialog</h2>
+        <div className="design-system-preview__grid">
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={() => setDialogOpen(true)}
+          >
+            Open dialog
+          </Button>
+        </div>
+        <Dialog
+          open={dialogOpen}
+          title="Approve this keyframe?"
+          onClose={() => setDialogOpen(false)}
+          footer={
+            <>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setDialogOpen(false)}
+              >
+                Approve
+              </Button>
+            </>
+          }
+        >
+          <p>
+            This keyframe becomes the reference for every later shot in this
+            scene.
+          </p>
+        </Dialog>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>Tooltip</h2>
+        <div className="design-system-preview__grid">
+          <Tooltip label="Measured on this hardware profile, not the model's marketing">
+            <Button variant="secondary" size="sm">
+              Duration: 8s
+            </Button>
+          </Tooltip>
+          <Tooltip label="Re-renders only the masked area">
+            <IconButton variant="ghost" size="sm" label="Retake region">
+              <Icon name="circle" />
+            </IconButton>
+          </Tooltip>
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>Toast</h2>
+        <div className="design-system-preview__grid">
+          <Toast tone={STATUS_TONE.NEUTRAL} title="Queued for rendering" />
+          <Toast
+            tone={STATUS_TONE.SUCCESS}
+            title="Shot approved"
+            description="Queued for the next scene"
+            onDismiss={handleToastDismiss}
+          />
+          <Toast
+            tone={STATUS_TONE.DANGER}
+            title="Render failed"
+            description="CUDA_OUT_OF_MEMORY"
+            onDismiss={handleToastDismiss}
+          />
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>Empty state</h2>
+        <div className="design-system-preview__grid">
+          <EmptyState
+            title="No shots yet"
+            description="Plan a scene to see its shots here."
+            action={
+              <Button variant="primary" size="sm">
+                Plan a scene
+              </Button>
+            }
+          />
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>Error state</h2>
+        <div className="design-system-preview__grid">
+          <ErrorState
+            title="Render failed"
+            description="The GPU ran out of memory partway through this shot."
+            detail="CUDA_OUT_OF_MEMORY"
+            action={
+              <Button variant="secondary" size="sm">
+                Retry with the same seed
+              </Button>
+            }
           />
         </div>
       </section>
