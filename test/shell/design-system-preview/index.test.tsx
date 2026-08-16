@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { DesignSystemPreview } from '@/shell/design-system-preview';
 
 const TONE_LABELS = [
@@ -64,6 +65,12 @@ describe('DesignSystemPreview', () => {
     expect(
       screen.getByRole('heading', { name: 'Skeleton' }),
     ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Button' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Icon button' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Field' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Select' })).toBeInTheDocument();
   });
 
   it('shows every one of the ten presentational tones as its own badge', () => {
@@ -133,5 +140,63 @@ describe('DesignSystemPreview', () => {
     expect(
       container.querySelector('.skeleton[data-shape="rect"]'),
     ).toBeInTheDocument();
+  });
+
+  it('shows every button variant at both sizes, in full unabbreviated words', () => {
+    render(<DesignSystemPreview />);
+
+    ['Primary', 'Secondary', 'Ghost', 'Danger'].forEach((variant) => {
+      ['small', 'medium'].forEach((size) => {
+        expect(
+          screen.getByRole('button', { name: `${variant} ${size}` }),
+        ).toBeInTheDocument();
+      });
+    });
+  });
+
+  it('gives every icon button an accessible name, since the icon itself is decorative', () => {
+    render(<DesignSystemPreview />);
+
+    ['Approve', 'Retake', 'Cancel', 'Reject'].forEach((label) => {
+      expect(screen.getByRole('button', { name: label })).toBeInTheDocument();
+    });
+  });
+
+  it('links the errored field to its error text through aria-describedby', () => {
+    render(<DesignSystemPreview />);
+
+    const seedControl = screen.getByLabelText('Seed');
+    expect(seedControl).toHaveAttribute('aria-invalid', 'true');
+    const describedBy = seedControl.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    expect(document.getElementById(describedBy as string)).toHaveTextContent(
+      'Must be a whole number',
+    );
+  });
+
+  it('links the hinted field to its hint text, not its error, since it has none', () => {
+    render(<DesignSystemPreview />);
+
+    const durationControl = screen.getByLabelText('Duration');
+    expect(durationControl).not.toHaveAttribute('aria-invalid');
+    const describedBy = durationControl.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    expect(document.getElementById(describedBy as string)).toHaveTextContent(
+      'Measured on this hardware profile',
+    );
+  });
+
+  it('changes the standalone select value when the user picks a different option', async () => {
+    const user = userEvent.setup();
+    render(<DesignSystemPreview />);
+
+    const selects = screen.getAllByRole('combobox');
+    const standaloneSelect = selects[selects.length - 1];
+    if (!standaloneSelect) {
+      throw new Error('expected the standalone select to render');
+    }
+
+    await user.selectOptions(standaloneSelect, '8 seconds');
+    expect(standaloneSelect).toHaveValue('8');
   });
 });

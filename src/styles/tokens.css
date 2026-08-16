@@ -197,6 +197,11 @@
     --elevation-lg: 0 12px 24px
       light-dark(oklch(0% 0 0 / 0.16), oklch(0% 0 0 / 0.48));
 
+    /* focus */
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+    --focus-ring-color: var(--color-accent);
+
     /* radius */
     --radius-xs: 2px;
     --radius-sm: 4px;

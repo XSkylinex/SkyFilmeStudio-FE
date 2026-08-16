@@ -1,0 +1,36 @@
+@layer primitives {
+  .field {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    inline-size: 100%;
+  }
+
+  .field__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    overflow-wrap: anywhere;
+  }
+
+  .field__control {
+    display: flex;
+    inline-size: 100%;
+  }
+
+  .field__hint {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  .field__error {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--tone-danger-fg);
+    overflow-wrap: anywhere;
+  }
+}
