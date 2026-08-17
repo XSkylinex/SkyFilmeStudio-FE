@@ -5,5 +5,6 @@ export const VoicesPage: FC = () => (
   <EmptyState
     title="Voices"
     description="The voices available for narration and dialogue in this project. Not connected to the orchestrator yet."
+    headingLevel={1}
   />
 );

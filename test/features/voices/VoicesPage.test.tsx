@@ -5,6 +5,8 @@ describe('VoicesPage', () => {
   it('renders the voices empty state', () => {
     render(<VoicesPage />);
 
-    expect(screen.getByRole('heading', { name: 'Voices' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Voices', level: 1 }),
+    ).toBeInTheDocument();
   });
 });

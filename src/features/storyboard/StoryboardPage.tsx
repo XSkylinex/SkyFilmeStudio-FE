@@ -5,5 +5,6 @@ export const StoryboardPage: FC = () => (
   <EmptyState
     title="Storyboard"
     description="Review this production's keyframes scene by scene before they render. Not connected to the orchestrator yet."
+    headingLevel={1}
   />
 );

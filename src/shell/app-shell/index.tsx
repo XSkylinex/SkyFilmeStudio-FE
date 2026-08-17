@@ -1,24 +1,40 @@
 import type { FC } from 'react';
-import { Outlet, useNavigation } from 'react-router-dom';
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useMatches,
+  useNavigation,
+} from 'react-router-dom';
 import { ProgressBar } from '@/lib/components/progress-bar';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { ShellStateProvider } from '@/shell/shell-state';
 import { ConnectionStateProvider } from '@/shell/connection-indicator/connection-state-provider';
 import { ConnectionIndicator } from '@/shell/connection-indicator';
 import { OfflineIndicator } from '@/shell/offline-indicator';
-import { OFFLINE_MODE_FIXTURE } from '@/shell/offline-indicator/offline-indicator.constants';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
-import { APP_SHELL_MAIN_ID } from './app-shell.constants';
+import { RouteTitle } from '@/shell/route-title';
+import { resolveCurrentRouteParam } from '@/shell/helpers/resolve-current-route-param';
+import {
+  PROJECT_ID_PARAM,
+  projectListPath,
+} from '@/shell/routes/routes.constants';
+import { resolveAppShellNavLinks } from './helpers/resolve-app-shell-nav-links';
+import { APP_NAME, APP_SHELL_MAIN_ID } from './app-shell.constants';
 import './app-shell.css';
 
 export const AppShell: FC = () => {
   const navigation = useNavigation();
   const isNavigating = navigation.state === 'loading';
+  const matches = useMatches();
+  const projectId = resolveCurrentRouteParam(matches, PROJECT_ID_PARAM);
+  const navLinks = resolveAppShellNavLinks(projectId);
 
   return (
     <ShellStateProvider>
       <ConnectionStateProvider>
         <KeyboardShortcutsProvider>
+          <RouteTitle />
           <div className="app-shell">
             <a className="app-shell__skip-link" href={`#${APP_SHELL_MAIN_ID}`}>
               Skip to main content
@@ -34,11 +50,28 @@ export const AppShell: FC = () => {
               />
             </div>
             <header className="app-shell__header">
-              <span>Local AI Studio</span>
-              <OfflineIndicator offlineMode={OFFLINE_MODE_FIXTURE} />
+              <Link className="app-shell__brand" to={projectListPath()}>
+                {APP_NAME}
+              </Link>
+              <nav className="app-shell__nav" aria-label="Primary">
+                <ul className="app-shell__nav-list">
+                  {navLinks.map((link) => (
+                    <li key={link.to}>
+                      <NavLink className="app-shell__nav-link" to={link.to}>
+                        {link.label}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <OfflineIndicator />
               <ConnectionIndicator />
             </header>
-            <main className="app-shell__main" id={APP_SHELL_MAIN_ID}>
+            <main
+              className="app-shell__main"
+              id={APP_SHELL_MAIN_ID}
+              tabIndex={-1}
+            >
               <Outlet />
             </main>
           </div>

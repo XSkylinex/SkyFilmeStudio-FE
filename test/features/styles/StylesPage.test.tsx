@@ -5,6 +5,8 @@ describe('StylesPage', () => {
   it('renders the styles empty state', () => {
     render(<StylesPage />);
 
-    expect(screen.getByRole('heading', { name: 'Styles' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Styles', level: 1 }),
+    ).toBeInTheDocument();
   });
 });

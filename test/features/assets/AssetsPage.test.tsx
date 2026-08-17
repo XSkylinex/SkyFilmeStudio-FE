@@ -5,6 +5,8 @@ describe('AssetsPage', () => {
   it('renders the assets empty state', () => {
     render(<AssetsPage />);
 
-    expect(screen.getByRole('heading', { name: 'Assets' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Assets', level: 1 }),
+    ).toBeInTheDocument();
   });
 });

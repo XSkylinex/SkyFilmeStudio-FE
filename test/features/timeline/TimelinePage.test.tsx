@@ -6,7 +6,7 @@ describe('TimelinePage', () => {
     render(<TimelinePage />);
 
     expect(
-      screen.getByRole('heading', { name: 'Timeline' }),
+      screen.getByRole('heading', { name: 'Timeline', level: 1 }),
     ).toBeInTheDocument();
   });
 });

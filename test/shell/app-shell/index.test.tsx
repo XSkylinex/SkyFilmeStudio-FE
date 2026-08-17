@@ -3,9 +3,15 @@ import { Link, createRoutesStub } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AppShell } from '@/shell/app-shell';
+import {
+  projectAssetsPath,
+  projectListPath,
+  systemPath,
+} from '@/shell/routes/routes.constants';
 
 const HomePage: FC = () => <Link to="/slow">Go slow</Link>;
 const SlowPage: FC = () => <p>slow page arrived</p>;
+const AssetsPageStub: FC = () => <p>assets page arrived</p>;
 
 describe('AppShell', () => {
   it('renders a skip link pointing at the main content region, as the first focusable element', () => {
@@ -75,5 +81,92 @@ describe('AppShell', () => {
 
     expect(await screen.findByText('slow page arrived')).toBeInTheDocument();
     expect(progress).toHaveAttribute('data-pending', 'false');
+  });
+
+  it('gives the skip link somewhere programmatically focusable to land on', () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: AppShell,
+        children: [{ index: true, Component: () => <p>home</p> }],
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(document.getElementById('app-shell-main')).toHaveAttribute(
+      'tabindex',
+      '-1',
+    );
+  });
+
+  it('links the brand text home and reaches the project list and /system by keyboard, with no project in the URL', () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: AppShell,
+        children: [{ index: true, Component: () => <p>home</p> }],
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(
+      screen.getByRole('link', { name: 'Local AI Studio' }),
+    ).toHaveAttribute('href', projectListPath());
+    expect(screen.getByRole('link', { name: 'System' })).toHaveAttribute(
+      'href',
+      systemPath(),
+    );
+    expect(
+      screen.queryByRole('link', { name: 'Assets' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('adds the project-scoped destinations, built from the path helpers, once a project id is in the URL', () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: AppShell,
+        children: [
+          {
+            path: 'projects/:projectId/assets',
+            Component: AssetsPageStub,
+          },
+        ],
+      },
+    ]);
+
+    render(<Stub initialEntries={['/projects/proj-1/assets']} />);
+
+    expect(screen.getByRole('link', { name: 'Assets' })).toHaveAttribute(
+      'href',
+      projectAssetsPath('proj-1'),
+    );
+    expect(screen.getByRole('link', { name: 'Assets' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+    expect(screen.getByText('assets page arrived')).toBeInTheDocument();
+  });
+
+  it('sets the document title from the matched route and falls back to the app name', () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: AppShell,
+        children: [
+          {
+            index: true,
+            Component: () => <p>home</p>,
+            handle: { title: 'Projects' },
+          },
+        ],
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(document.title).toBe('Projects · Local AI Studio');
   });
 });

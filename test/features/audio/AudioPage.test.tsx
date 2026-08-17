@@ -5,6 +5,8 @@ describe('AudioPage', () => {
   it('renders the audio empty state', () => {
     render(<AudioPage />);
 
-    expect(screen.getByRole('heading', { name: 'Audio' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Audio', level: 1 }),
+    ).toBeInTheDocument();
   });
 });

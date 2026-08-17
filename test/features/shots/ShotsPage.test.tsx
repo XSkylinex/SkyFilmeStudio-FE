@@ -5,6 +5,8 @@ describe('ShotsPage', () => {
   it('renders the shots empty state', () => {
     render(<ShotsPage />);
 
-    expect(screen.getByRole('heading', { name: 'Shots' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Shots', level: 1 }),
+    ).toBeInTheDocument();
   });
 });

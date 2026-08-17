@@ -5,6 +5,8 @@ describe('PlannerPage', () => {
   it('renders the plan empty state', () => {
     render(<PlannerPage />);
 
-    expect(screen.getByRole('heading', { name: 'Plan' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Plan', level: 1 }),
+    ).toBeInTheDocument();
   });
 });

@@ -6,7 +6,7 @@ describe('ShotReviewPage', () => {
     render(<ShotReviewPage />);
 
     expect(
-      screen.getByRole('heading', { name: 'Shot review' }),
+      screen.getByRole('heading', { name: 'Shot review', level: 1 }),
     ).toBeInTheDocument();
   });
 });

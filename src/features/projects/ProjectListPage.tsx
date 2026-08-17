@@ -5,5 +5,6 @@ export const ProjectListPage: FC = () => (
   <EmptyState
     title="Projects"
     description="Every Local AI Studio project on this machine. Not connected to the orchestrator yet."
+    headingLevel={1}
   />
 );

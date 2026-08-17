@@ -5,5 +5,6 @@ export const ShotReviewPage: FC = () => (
   <EmptyState
     title="Shot review"
     description="Compare a rendered shot against its reference and decide whether it stands. Not connected to the orchestrator yet."
+    headingLevel={1}
   />
 );

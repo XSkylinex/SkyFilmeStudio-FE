@@ -5,5 +5,6 @@ export const PlannerPage: FC = () => (
   <EmptyState
     title="Plan"
     description="The screenplay or production plan driving this production. Not connected to the orchestrator yet."
+    headingLevel={1}
   />
 );

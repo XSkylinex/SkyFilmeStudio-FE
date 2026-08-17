@@ -6,7 +6,7 @@ describe('RenderQueuePage', () => {
     render(<RenderQueuePage />);
 
     expect(
-      screen.getByRole('heading', { name: 'Render queue' }),
+      screen.getByRole('heading', { name: 'Render queue', level: 1 }),
     ).toBeInTheDocument();
   });
 });

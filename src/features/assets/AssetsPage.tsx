@@ -5,5 +5,6 @@ export const AssetsPage: FC = () => (
   <EmptyState
     title="Assets"
     description="The source footage, images and audio brought into this project. Not connected to the orchestrator yet."
+    headingLevel={1}
   />
 );

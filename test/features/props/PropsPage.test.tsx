@@ -5,6 +5,8 @@ describe('PropsPage', () => {
   it('renders the props empty state', () => {
     render(<PropsPage />);
 
-    expect(screen.getByRole('heading', { name: 'Props' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Props', level: 1 }),
+    ).toBeInTheDocument();
   });
 });

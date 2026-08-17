@@ -21,6 +21,77 @@
     background: var(--color-surface-raised);
   }
 
+  .app-shell__brand {
+    box-sizing: border-box;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    text-decoration: none;
+
+    &:focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset);
+    }
+  }
+
+  .app-shell__nav {
+    box-sizing: border-box;
+    order: 1;
+    flex-basis: 100%;
+    min-inline-size: 0;
+    padding-block-start: var(--space-2);
+    border-block-start: 1px solid var(--color-border-subtle);
+  }
+
+  .app-shell__nav-list {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .app-shell__nav-link {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    padding-block: var(--space-2);
+    padding-inline: var(--space-3);
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
+
+    &:hover {
+      background: color-mix(
+        in oklch,
+        var(--color-surface-raised) 88%,
+        var(--color-text-heading)
+      );
+    }
+
+    &:focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset);
+    }
+
+    &[aria-current='page'] {
+      border-color: var(--color-accent-border);
+      background: var(--color-accent-subtle);
+      color: var(--color-text-heading);
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+
   .app-shell__main {
     box-sizing: border-box;
     flex: 1;

@@ -6,7 +6,7 @@ describe('SubjectsPage', () => {
     render(<SubjectsPage />);
 
     expect(
-      screen.getByRole('heading', { name: 'Subjects' }),
+      screen.getByRole('heading', { name: 'Subjects', level: 1 }),
     ).toBeInTheDocument();
   });
 });
