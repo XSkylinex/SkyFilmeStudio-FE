@@ -46,10 +46,6 @@ const writeStoredNavCollapsed = (value: boolean): void => {
 export const ShellStateProvider: FC<ShellStateProviderProps> = ({
   children,
 }) => {
-  const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
-  const [currentProductionId, setCurrentProductionId] = useState<string | null>(
-    null,
-  );
   const [panelLayout, setPanelLayout] =
     useState<PanelLayout>(DEFAULT_PANEL_LAYOUT);
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
@@ -64,13 +60,9 @@ export const ShellStateProvider: FC<ShellStateProviderProps> = ({
   };
 
   const value: ShellStateContextValue = {
-    currentProjectId,
-    currentProductionId,
     panelLayout,
     theme,
     navCollapsed,
-    setCurrentProjectId,
-    setCurrentProductionId,
     setPanelLayout,
     setTheme,
     toggleNavCollapsed,

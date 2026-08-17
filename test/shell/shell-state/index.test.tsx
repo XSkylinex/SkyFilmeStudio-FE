@@ -114,28 +114,12 @@ describe('ShellStateProvider nav-collapse persistence', () => {
   });
 });
 
-const IdentityProbe: FC = () => {
-  const {
-    currentProjectId,
-    currentProductionId,
-    theme,
-    setCurrentProjectId,
-    setCurrentProductionId,
-    setTheme,
-  } = useShellState();
+const ThemeProbe: FC = () => {
+  const { theme, setTheme } = useShellState();
 
   return (
     <>
-      <p>
-        project:{currentProjectId ?? 'none'} production:
-        {currentProductionId ?? 'none'} theme:{theme}
-      </p>
-      <button type="button" onClick={() => setCurrentProjectId('proj-1')}>
-        set project
-      </button>
-      <button type="button" onClick={() => setCurrentProductionId('prod-1')}>
-        set production
-      </button>
+      <p>theme:{theme}</p>
       <button type="button" onClick={() => setTheme('dark')}>
         set theme
       </button>
@@ -143,26 +127,20 @@ const IdentityProbe: FC = () => {
   );
 };
 
-describe('ShellStateProvider identity and theme', () => {
-  it('defaults project id, production id and theme, and lets a descendant set each', async () => {
+describe('ShellStateProvider theme', () => {
+  it('defaults to the system theme and lets a descendant set it', async () => {
     const user = userEvent.setup();
     render(
       <ShellStateProvider>
-        <IdentityProbe />
+        <ThemeProbe />
       </ShellStateProvider>,
     );
 
-    expect(
-      screen.getByText('project:none production:none theme:system'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('theme:system')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'set project' }));
-    await user.click(screen.getByRole('button', { name: 'set production' }));
     await user.click(screen.getByRole('button', { name: 'set theme' }));
 
-    expect(
-      screen.getByText('project:proj-1 production:prod-1 theme:dark'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('theme:dark')).toBeInTheDocument();
   });
 });
 

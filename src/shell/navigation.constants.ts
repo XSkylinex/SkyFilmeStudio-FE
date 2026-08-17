@@ -6,6 +6,7 @@ import type { ProductionStageState } from './interfaces/production-stage-state';
 export const PRODUCTION_STAGE_ID = {
   SCREENPLAY: 'screenplay',
   MUSIC_PLAN: 'music-plan',
+  PLAN: 'plan',
   STORYBOARD: 'storyboard',
   QUEUE: 'queue',
   SHOTS: 'shots',
@@ -24,6 +25,10 @@ export const DEFAULT_PRODUCTION_STAGE_STATE: ProductionStageState =
   PRODUCTION_STAGE_STATE.PENDING;
 
 export const MUSIC_DRIVEN_NARRATIVE_MODE = 'MUSIC_DRIVEN';
+
+export const SCREENPLAY_DRIVEN_NARRATIVE_MODES: ReadonlySet<string> = new Set([
+  'SCREENPLAY',
+]);
 
 export const PRODUCTION_STAGE_STATE_TONE = {
   pending: STATUS_TONE.NEUTRAL,

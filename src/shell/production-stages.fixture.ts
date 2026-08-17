@@ -19,6 +19,12 @@ export const MUSIC_PLAN_STAGE: ProductionStageDefinition = {
   path: 'plan',
 };
 
+export const PLAN_STAGE: ProductionStageDefinition = {
+  id: PRODUCTION_STAGE_ID.PLAN,
+  label: 'Plan',
+  path: 'plan',
+};
+
 const STORYBOARD_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.STORYBOARD,
   label: 'Storyboard',

@@ -50,9 +50,18 @@ describe('resolveProductionStages', () => {
     ]);
   });
 
-  it('treats any mode string other than MUSIC_DRIVEN as needing a screenplay stage', () => {
+  it('gives a mode the plan does not resolve as screenplay-driven a neutral Plan stage, not Screenplay', () => {
     const stages = resolveProductionStages('TREATMENT_TO_SCENES', {});
 
-    expect(stages.some((stage) => stage.id === 'screenplay')).toBe(true);
+    expect(stages.some((stage) => stage.id === 'screenplay')).toBe(false);
+    expect(stages.some((stage) => stage.id === 'plan')).toBe(true);
+  });
+
+  it('gives a visual-only mode, which has no screenplay, the neutral Plan stage', () => {
+    const stages = resolveProductionStages('VISUAL_ONLY', {});
+
+    expect(stages.some((stage) => stage.id === 'screenplay')).toBe(false);
+    expect(stages.some((stage) => stage.id === 'music-plan')).toBe(false);
+    expect(stages.some((stage) => stage.id === 'plan')).toBe(true);
   });
 });
