@@ -62,6 +62,24 @@ describe('findExternalUrls', () => {
     ]);
   });
 
+  it('allows the Redux and Immer minified-error decoder links', () => {
+    const js = [
+      'return `Minified Redux error #${code}; visit https://redux.js.org/Errors?code=${code} for the full message.`',
+      'return `Minified Redux Toolkit error #${code}; visit https://redux-toolkit.js.org/Errors?code=${code}.`',
+      'throw new Error(`[Immer] minified error nr: ${e}. Full error at: https://bit.ly/3cXEKWf`)',
+    ].join('\n');
+
+    expect(findExternalUrls(js)).toStrictEqual([]);
+  });
+
+  it('reports any other shortened link, since only that one decoder URL is allowed', () => {
+    const js = 'fetch("https://bit.ly/some-other-link")';
+
+    expect(findExternalUrls(js)).toStrictEqual([
+      'https://bit.ly/some-other-link',
+    ]);
+  });
+
   it('reports a host that merely looks like loopback', () => {
     const js = 'fetch("https://localhost.evil.example.com/exfiltrate")';
 

@@ -4,6 +4,9 @@ const NON_FETCHING_URL_PREFIXES = [
   'http://www.w3.org/',
   'https://react.dev/errors/',
   'https://reactrouter.com/en/main/',
+  'https://redux.js.org/Errors',
+  'https://redux-toolkit.js.org/Errors',
+  'https://bit.ly/3cXEKWf',
 ];
 
 const LOOPBACK_IPV4_PREFIX = '127.';
