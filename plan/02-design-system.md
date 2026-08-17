@@ -1,7 +1,7 @@
 # FE-02 — Design system & tokens
 
 > **Depends on:** 01 · **Blocks:** 03 and every UI phase · **Backend needs:** — · **Plan authority:** §39
-> **Status:** not started
+> **Status:** done 2026-08-17
 
 ## Goal
 
@@ -196,17 +196,112 @@ yarn build && yarn dev
   colour-vision deficiencies;
 - read `dist/assets/*.css` and confirm the build did what the table above says it does.
 
+### What a review caught that this file had already claimed
+
+The first version of the measurement below tested the three pairs this file
+names and ticked the box. A review re-ran it across **all 45 tone pairs** and
+found the failure was in a pair nobody had thought to measure. Recorded because
+the lesson generalises: a partial measurement presented as a verdict is its own
+kind of wrong, and the fix is to enumerate the space rather than the examples.
+
+Four other things were true and untested at the same time — the Reject button's
+label sat at **1.53:1** in dark mode, `:root { font-size: var(--font-size-md) }`
+silently multiplied every rem token by 0.875, an indeterminate `ProgressBar`
+under `prefers-reduced-motion` rendered as a **full** bar, and `Field` around a
+`Select` dropped `aria-invalid` behind a CSS rule that could never match. Every
+one passed `typecheck`, `lint`, `test` and `build`.
+
+### Colour-vision deficiency, measured 2026-08-17 (all 45 pairs)
+
+Not eyeballed. Protanopia and deuteranopia simulated with the Viénot 1999 matrices in linear RGB
+against the rendered badges, ΔE reported in CIE Lab. Roughly, ΔE 2.3 is a just-noticeable
+difference and 10 is "tells them apart at a glance in a list".
+
+| Pair | normal | protanopia | deuteranopia |
+| ---- | ------ | ---------- | ------------ |
+| `SUCCEEDED` ↔ `FAILED_FINAL` | 80.9 | 37.1 | 25.6 |
+| `SUCCEEDED` ↔ `FAILED_RETRYABLE` | 56.0 | 19.3 | 23.7 |
+| `FAILED_RETRYABLE` ↔ `FAILED_FINAL` | 37.3 | 32.7 | 13.8 |
+
+The trio this phase names as the expensive confusion survives both deficiencies.
+
+**The pair that failed was the one not on that list.** `neutral` and `ready` had identical lightness
+at every role — 32/88, 94/26, 74/44 — differing only in hue and chroma, which is exactly what
+dichromacy destroys. They measured ΔE 1.1–4.6 across every channel and both schemes. `neutral` is
+`PENDING · CLAIMED · PREPARING · SUBMITTED · CANCELLED · PLANNED · *_PENDING`; `ready` is
+`STORYBOARD_READY · AUDIO_READY · VIDEO_READY`. *"Is this asset done?"* is the single question a
+producer scans a 200-row shot list to answer.
+
+`ready`, `processing` and `stale` now sit on their own lightness steps rather than sharing
+`neutral`'s ladder, because **lightness survives dichromacy where hue does not**. After:
+
+| Pair | protanopia | deuteranopia |
+| ---- | ---------- | ------------ |
+| `neutral` ↔ `ready` | 26.1 | 23.5 |
+| `neutral` ↔ `processing` | fixed (was 4.4, and shared `neutral`'s ring form) | |
+| `success` ↔ `stale` | fixed (was 6.1) | |
+
+**The claim to make is the pairwise one, not the per-tone one.** Across all 45 pairs, two remain
+under 10 — `checking` ↔ `active` (deut 5.4, protan 24) and `danger` ↔ `stale` (protan 5.8, deut
+18.1). Each fails in only one deficiency while staying strong in the other, and both carry distinct
+dot forms. **No pair is both under 10 and sharing a dot form**: colour or shape separates every one
+of the 45. That is the honest form of "distinguishable".
+
+**Where the identity lives is still the border and the dot, not the text.** Holding lightness even
+per role is what keeps the palette readable on one surface, and the price is that two tones can share
+almost exactly the same foreground colour. So a state rendered as **bare coloured text, with no
+border and no dot, is not accessible.** Any surface showing state must carry the border or the dot.
+FE-04 maps states to tones against the real contract and is where this constraint has to hold.
+
 ## Done when
 
-- [ ] tokens live in `src/styles/tokens.css`; no component defines a raw colour or spacing value
-- [ ] `@layer` order established
-- [ ] `color-scheme` still declared in a stylesheet, not the HTML
-- [ ] state colours cover all twelve job and fifteen shot states, and are distinguishable
-- [ ] `MediaTile` reserves its box before load; a 200-cell grid does not shift
-- [ ] `ApprovalControls` exposes explicit regeneration modes and gates on server state
-- [ ] every primitive uses logical properties, verified under `dir="rtl"`
-- [ ] `prefers-reduced-motion` reflected in the tokens
-- [ ] no CSS framework added
+- [x] tokens live in `src/styles/tokens.css`; no component defines a raw colour or spacing value
+- [x] `@layer` order established
+- [x] `color-scheme` still declared in a stylesheet, not the HTML
+- [x] state colours cover all twelve job and fifteen shot states, and are distinguishable
+- [x] `MediaTile` reserves its box before load; a 200-cell grid does not shift
+- [x] `ApprovalControls` exposes explicit regeneration modes and gates on server state
+- [x] every primitive uses logical properties, verified under `dir="rtl"`
+- [x] `prefers-reduced-motion` reflected in the tokens
+- [x] no CSS framework added
+
+### What each tick actually rests on, 2026-08-16
+
+Ticked against measurement, not reading. Where a box is only mostly true, it says so.
+
+- **No raw values** — audited across every `src/**/*.css`: zero raw colours, zero raw spacing. Four
+  literals remain, each a named custom property: `--select-indicator-size: 6px`, two
+  `border-width: 2px` on status-dot forms, the `1px` diamond ring, and `--preview-column-min: 13rem`
+  in a feature stylesheet. The first four are device-pixel glyph dimensions and the spacing scale is
+  rem-based, so putting a hairline on it would make it scale with the type scale — exactly what a
+  hairline must not do. The review also found `80rem`, `10rem` and a `1126px` that were **not**
+  justified; those are now `--size-xl`, `--size-2xs`, and deleted respectively.
+- **Logical properties** — audited the same way: zero physical properties anywhere. Two deliberate
+  `html[dir='rtl']` escape hatches, both because no logical form exists: `background-position` for
+  the select chevron, and `translate` for the tooltip's centring, which has no logical longhand
+  (open spec issue `w3c/fxtf-drafts#311`). `:dir()` is outside the floor, hence the attribute
+  selector.
+- **RTL** — verified in Chrome, not inferred from the emitted CSS. The chevron and the toast
+  dismiss both mirror; zero elements overflow at 380px or 320px; nothing is clipped.
+- **200-cell grid** — measured. 200 tiles across all three ratios, boxes reserved with no image
+  present, then 200 images loaded under a `PerformanceObserver`: cumulative layout shift **0**, zero
+  shift entries, zero tiles resized, container height identical at 6125.2px. The images were 2×3, an
+  intrinsic ratio disagreeing with every box, so the reservation decided the layout rather than the
+  image happening to match.
+- **Distinguishable states** — the CVD measurement above, with the constraint it exposed.
+- **`prefers-reduced-motion`** — durations collapse to `0.01ms` in the tokens. `Skeleton` drops its
+  moving gradient for a flat colour. The indeterminate `ProgressBar` gets a **static stripe**, not a
+  flat fill: its fill is `inline-size: 100%` masked by a sweeping gradient, so removing the gradient
+  left a full bar and `PREPARING` read as `SUCCEEDED`. A rendering artefact is confusing; a bar
+  claiming a render finished is wrong.
+
+### A limitation, stated rather than left to be discovered
+
+`Tooltip` has no top layer — `popover` is outside the floor — so it cannot detect a viewport
+collision without JS. A tooltip whose trigger sits within half a tip-width of the container edge
+overflows by ~27px at 320px. Nothing clips and no information is lost (the tip is
+`pointer-events: none` and its text is also the control's accessible description), but a dense
+screen with edge-adjacent tooltips will need real positioning logic.
 
 ## Traps
 
