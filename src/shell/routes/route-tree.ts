@@ -1,8 +1,9 @@
-import type { RouteObject } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
+import type { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 import { AppShell } from '@/shell/app-shell';
 import { ProductionShell } from '@/shell/production-shell';
 import { RouteErrorBoundary } from '@/shell/route-error-boundary';
-import { DesignSystemPreview } from '@/shell/design-system-preview';
+import { RootErrorBoundary } from '@/shell/root-error-boundary';
 import { ProjectListPage } from '@/features/projects/ProjectListPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { AssetsPage } from '@/features/assets/AssetsPage';
@@ -18,6 +19,7 @@ import { RenderQueuePage } from '@/features/render-queue/RenderQueuePage';
 import { SystemPage } from '@/features/system/SystemPage';
 import { NotFoundPage } from './not-found-page';
 import { RouteHydrateFallback } from './route-hydrate-fallback';
+import type { RouteHandle } from '@/shell/interfaces/route-handle';
 import {
   ASSETS_SEGMENT,
   AUDIO_SEGMENT,
@@ -40,13 +42,35 @@ import {
   SYSTEM_SEGMENT,
   TIMELINE_SEGMENT,
   VOICES_SEGMENT,
+  productionPlanPath,
 } from './routes.constants';
 
+const routeHandle = (title: string): RouteHandle => ({ title });
+
+const resolveProductionIndexRedirect = ({
+  params,
+}: LoaderFunctionArgs): Response => {
+  const { projectId, productionId } = params;
+  if (!projectId || !productionId) {
+    throw new Response('Missing production route parameters', {
+      status: 400,
+    });
+  }
+
+  return redirect(productionPlanPath(projectId, productionId));
+};
+
 const productionRoutes: RouteObject[] = [
+  {
+    index: true,
+    loader: resolveProductionIndexRedirect,
+    ErrorBoundary: RouteErrorBoundary,
+  },
   {
     path: PLAN_SEGMENT,
     Component: PlannerPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Plan'),
   },
   {
     path: STORYBOARD_SEGMENT,
@@ -56,11 +80,13 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Storyboard'),
   },
   {
     path: QUEUE_SEGMENT,
     Component: RenderQueuePage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Render queue'),
   },
   {
     path: SHOTS_SEGMENT,
@@ -70,6 +96,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Shots'),
   },
   {
     path: `${SHOTS_SEGMENT}/:${SHOT_ID_PARAM}`,
@@ -79,6 +106,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Shot review'),
   },
   {
     path: AUDIO_SEGMENT,
@@ -88,6 +116,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Audio'),
   },
   {
     path: TIMELINE_SEGMENT,
@@ -97,6 +126,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Timeline'),
   },
 ];
 
@@ -105,46 +135,55 @@ const projectRoutes: RouteObject[] = [
     index: true,
     Component: DashboardPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Dashboard'),
   },
   {
     path: ASSETS_SEGMENT,
     Component: AssetsPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Assets'),
   },
   {
     path: SUBJECTS_SEGMENT,
     Component: SubjectsPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Subjects'),
   },
   {
     path: `${SUBJECTS_SEGMENT}/:${SUBJECT_ID_PARAM}`,
     Component: SubjectReviewPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Subject review'),
   },
   {
     path: STYLES_SEGMENT,
     Component: StylesPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Styles'),
   },
   {
     path: VOICES_SEGMENT,
     Component: VoicesPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Voices'),
   },
   {
     path: LOCATIONS_SEGMENT,
     Component: LocationsPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Locations'),
   },
   {
     path: PROPS_SEGMENT,
     Component: PropsPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Props'),
   },
   {
     path: PRODUCTIONS_SEGMENT,
     Component: ProductionListPage,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Productions'),
   },
   {
     path: `${PRODUCTIONS_SEGMENT}/:${PRODUCTION_ID_PARAM}`,
@@ -158,17 +197,23 @@ export const routeTree: RouteObject[] = [
   {
     path: ROOT_PATH,
     Component: AppShell,
-    ErrorBoundary: RouteErrorBoundary,
+    ErrorBoundary: RootErrorBoundary,
     children: [
       {
         index: true,
         Component: ProjectListPage,
         ErrorBoundary: RouteErrorBoundary,
+        handle: routeHandle('Projects'),
       },
       {
         path: DESIGN_SYSTEM_SEGMENT,
-        Component: DesignSystemPreview,
+        lazy: () =>
+          import('@/shell/design-system-preview').then((routeModule) => ({
+            Component: routeModule.DesignSystemPreview,
+          })),
+        HydrateFallback: RouteHydrateFallback,
         ErrorBoundary: RouteErrorBoundary,
+        handle: routeHandle('Design system'),
       },
       {
         path: `${PROJECTS_SEGMENT}/:${PROJECT_ID_PARAM}`,
@@ -179,11 +224,13 @@ export const routeTree: RouteObject[] = [
         path: SYSTEM_SEGMENT,
         Component: SystemPage,
         ErrorBoundary: RouteErrorBoundary,
+        handle: routeHandle('System'),
       },
       {
         path: '*',
         Component: NotFoundPage,
         ErrorBoundary: RouteErrorBoundary,
+        handle: routeHandle('Page not found'),
       },
     ],
   },

@@ -7,7 +7,10 @@ import type { RouteObject } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { routeTree } from '@/shell/routes/route-tree';
 import { NotFoundPage } from '@/shell/routes/not-found-page';
+import { RootErrorBoundary } from '@/shell/root-error-boundary';
 import {
+  productionPath,
+  productionPlanPath,
   productionShotPath,
   projectDashboardPath,
   subjectReviewPath,
@@ -40,7 +43,7 @@ describe('routeTree', () => {
     expect(flatRoutes.every((route) => route.hasErrorBoundary)).toBe(true);
   });
 
-  it('keeps exactly the five media-heavy routes lazy, each with a skeleton HydrateFallback', () => {
+  it('keeps every media-heavy route, plus the design-system gallery, lazy with a skeleton HydrateFallback', () => {
     const lazyRoutes = flatRoutes.filter((route) => route.isLazy);
     const lazyPaths = lazyRoutes
       .map((route) => route.path)
@@ -48,12 +51,30 @@ describe('routeTree', () => {
 
     expect(lazyPaths).toEqual([
       'audio',
+      'design-system',
       'shots',
       'shots/:shotId',
       'storyboard',
       'timeline',
     ]);
     expect(lazyRoutes.every((route) => route.hasHydrateFallback)).toBe(true);
+  });
+
+  it('gives the root route a boundary that survives a shell-level failure, distinct from a leaf page boundary', () => {
+    expect(routeTree[0]?.ErrorBoundary).toBe(RootErrorBoundary);
+  });
+
+  it('redirects the bare production URL to its plan stage', async () => {
+    const memoryRouter = createMemoryRouter(routeTree, {
+      initialEntries: [productionPath('proj-1', 'prod-1')],
+    });
+
+    render(<RouterProvider router={memoryRouter} />);
+
+    expect(await screen.findByText('Plan')).toBeInTheDocument();
+    expect(memoryRouter.state.location.pathname).toBe(
+      productionPlanPath('proj-1', 'prod-1'),
+    );
   });
 
   it('resolves a URL built by productionShotPath back to the shot review route', () => {
@@ -92,7 +113,7 @@ describe('routeTree', () => {
 });
 
 describe('the design-system gallery route', () => {
-  it('still renders at /design-system', () => {
+  it('still renders at /design-system, lazily', async () => {
     const memoryRouter = createMemoryRouter(routeTree, {
       initialEntries: ['/design-system'],
     });
@@ -100,7 +121,7 @@ describe('the design-system gallery route', () => {
     render(<RouterProvider router={memoryRouter} />);
 
     expect(
-      screen.getByRole('heading', { name: 'Design system preview' }),
+      await screen.findByRole('heading', { name: 'Design system preview' }),
     ).toBeInTheDocument();
   });
 });
