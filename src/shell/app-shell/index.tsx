@@ -14,6 +14,7 @@ import { ConnectionIndicator } from '@/shell/connection-indicator';
 import { OfflineIndicator } from '@/shell/offline-indicator';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
 import { RouteTitle } from '@/shell/route-title';
+import { Breadcrumbs } from '@/shell/breadcrumbs';
 import { resolveCurrentRouteParam } from '@/shell/helpers/resolve-current-route-param';
 import {
   PROJECT_ID_PARAM,
@@ -72,6 +73,7 @@ export const AppShell: FC = () => {
               id={APP_SHELL_MAIN_ID}
               tabIndex={-1}
             >
+              <Breadcrumbs />
               <Outlet />
             </main>
           </div>

@@ -189,6 +189,7 @@ const projectRoutes: RouteObject[] = [
     path: `${PRODUCTIONS_SEGMENT}/:${PRODUCTION_ID_PARAM}`,
     Component: ProductionShell,
     ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('Production'),
     children: productionRoutes,
   },
 ];
@@ -218,6 +219,7 @@ export const routeTree: RouteObject[] = [
       {
         path: `${PROJECTS_SEGMENT}/:${PROJECT_ID_PARAM}`,
         ErrorBoundary: RouteErrorBoundary,
+        handle: routeHandle('Project'),
         children: projectRoutes,
       },
       {

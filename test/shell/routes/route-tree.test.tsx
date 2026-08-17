@@ -71,7 +71,9 @@ describe('routeTree', () => {
 
     render(<RouterProvider router={memoryRouter} />);
 
-    expect(await screen.findByText('Plan')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: 'Plan', level: 1 }),
+    ).toBeInTheDocument();
     expect(memoryRouter.state.location.pathname).toBe(
       productionPlanPath('proj-1', 'prod-1'),
     );
