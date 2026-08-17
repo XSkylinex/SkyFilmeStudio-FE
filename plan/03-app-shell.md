@@ -1,7 +1,7 @@
 # FE-03 — App shell, routing & boundaries
 
 > **Depends on:** 02 · **Blocks:** 04+ · **Backend needs:** — · **Plan authority:** §39, §3.2
-> **Status:** not started
+> **Status:** done 2026-08-17
 
 ## Goal
 
@@ -189,16 +189,70 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 
 ## Done when
 
-- [ ] the full route tree exists and every stateful screen is addressable
-- [ ] media-heavy routes are lazy behind `Suspense`, with named exports
-- [ ] nav stages derive from `narrativeMode` and state; no stage is hard-coded
-- [ ] route error boundaries render typed codes; the shell survives
-- [ ] no external error-reporting SDK anywhere
-- [ ] offline/operator mode is persistently visible
-- [ ] socket connection state is surfaced
-- [ ] a keyboard shortcut layer exists
-- [ ] shell state is limited to the list above
-- [ ] verified under `dir="rtl"`
+- [x] the full route tree exists and every stateful screen is addressable
+- [x] media-heavy routes are lazy, with named exports, and a loading state that actually fires
+- [x] nav stages derive from `narrativeMode` and state; no stage label is hard-coded
+- [x] route error boundaries render typed codes; the shell survives
+- [x] no external error-reporting SDK anywhere
+- [x] offline/operator mode is persistently visible
+- [x] socket connection state is surfaced
+- [x] a keyboard shortcut layer exists
+- [x] shell state is limited to the list above
+- [x] verified under `dir="rtl"`
+
+### What each tick rests on, 2026-08-17
+
+Two boxes were reworded rather than merely ticked, because the original text
+described mechanisms this router does not have.
+
+- **"behind `Suspense`" → "a loading state that actually fires."** See the step 2
+  correction: `route.lazy` resolves before render, so a `Suspense` boundary never
+  activates for these routes. `HydrateFallback` covers the cold deep link and
+  `useNavigation().state` covers same-session navigation, and both were exercised
+  against the real tree. Note the app-shell test proves the pending state with a
+  `loader`, not with `lazy` — the case the correction is about is not the case
+  that test covers.
+- **"no stage is hard-coded" → "no stage label is hard-coded."** The honest
+  claim. The five-stage sequence *is* fixed in a fixture until BE-15; what
+  derives from the mode is which planning stage appears and what it is called.
+  Screenplay is now an allowlist of the single mode both authority lists agree
+  on, and every other mode — including any unresolved between §2171 and §14.2 —
+  gets a neutral "Plan".
+
+Measured in a browser, not inferred: a cold deep link to a production route
+renders the right screen; `/projects/:id/productions/:id` redirects to its plan;
+`document.title` and the `h1` change per route and there is exactly one `<title>`
+in `<head>`; the shell navigation reaches `/system` and every project-scoped
+screen; `aria-current="page"` marks the active link; `<main>` takes focus from
+the skip link; and **zero elements overflow at 420px or 320px in either
+direction**.
+
+Entry chunk excludes every lazy route, checked by searching the emitted bundles
+for text unique to each page rather than by reading filenames. Making
+`/design-system` lazy took the entry chunk from 324.50 kB to 310.72 kB and its
+stylesheet from 37.89 kB to 28.92 kB.
+
+### What a review caught that the gate and I both missed
+
+Recorded because the pattern repeats: everything below passed `typecheck`,
+`lint`, `test` and `build`.
+
+- The offline indicator **asserted a safety guarantee nothing had checked**, and
+  its resolver could print a sentence another flag contradicted. This is the
+  signal the whole product is about.
+- The keyboard layer **replayed the last shortcut into any component that mounted
+  afterwards** — an approval nobody pressed, which is submission rather than
+  display.
+- The shell had **no navigation at all**: on four of five screens the only
+  focusable element in the application was the skip link, and `/system` was
+  unreachable despite two error messages pointing there.
+- A throw in `AppShell` was caught by the *page* boundary, which then claimed the
+  rest of the app was fine while the whole shell was gone and offered no reload.
+  My claim that it reached `FatalBoundary` was wrong: the router wraps the root
+  match in its own boundary unconditionally.
+- The error boundary **only recovered a typed code when the response happened to
+  carry a JSON content-type** — and my own verification had used exactly that
+  case, which is how a single representative check hides a bug.
 
 ## Traps
 

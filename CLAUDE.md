@@ -12,9 +12,9 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 
 ## Status, honestly
 
-**`plan/00` and `plan/01` are done (2026-08-15). `plan/02` is built and under review — its
-primitives all exist and the gate is green, but a review found defects that are being fixed, so do
-not report it as done until `plan/02-design-system.md` says so.**
+**`plan/00` and `plan/01` are done (2026-08-15); `plan/02` and `plan/03` are done (2026-08-17).
+`plan/04` — the data layer — is next, and it is blocked on **BE-01** publishing the shared Zod
+contract. Do not start it against a guessed shape.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
@@ -28,9 +28,23 @@ it contributes no styles of its own (`icon-button` composes `button` and so has 
 `approval-controls`. `src/shell/design-system-preview/` renders all of them and is the only place
 any of it can be looked at.
 
-But there are still **no features, no router and no data layer** — `src/features/` does not exist,
-and `App.tsx` renders the preview gallery. Anything in `.claude/rules/` describing `src/features/**`
-is describing the target, not the present. Do not report structure that does not exist yet.
+FE-03 added the app shell: `react-router-dom@7.18.2`, the full route tree in `src/shell/routes/`,
+and shell chrome under `src/shell/` — `app-shell`, `production-shell`, `production-nav`,
+`route-error-boundary`, `root-error-boundary`, `fatal-boundary`, `offline-indicator`,
+`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` now holds eighteen
+route-level page stubs; the preview gallery lives at `/design-system`.
+
+**There is still no data layer.** Every page is an `EmptyState`, nothing fetches, and no `zod` is
+installed. Three things in the shell are explicitly fixtures waiting on a contract: the production
+stage sets, the error-code sentences, and the offline-mode payload — which is why the offline
+indicator currently reads **"Not yet verified"** rather than claiming the project is local-only.
+Do not report structure or capability that does not exist yet.
+
+Two things FE-03 established that later phases inherit. **The router is v7, not v8** —
+`react-router-dom` has never published an 8.x and is a re-export shim over `react-router@7.18.2`, so
+v8 documentation is the wrong documentation here. And **`route.lazy` resolves before render**, so
+`<Suspense>` never fires for a lazy route; loading state comes from `HydrateFallback` on a cold deep
+link and `useNavigation()` on same-session navigation.
 
 Two things FE-02 established that later phases inherit rather than re-decide: state colours ship as
 **CSS tokens only** — components take a presentational `StatusTone`, and the state→tone mapping is
