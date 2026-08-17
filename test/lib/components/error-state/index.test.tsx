@@ -10,6 +10,22 @@ describe('ErrorState', () => {
     ).toBeInTheDocument();
   });
 
+  it('defaults to a level-2 heading, so it slots under a page title', () => {
+    render(<ErrorState title="Render failed" />);
+
+    expect(
+      screen.getByRole('heading', { name: 'Render failed', level: 2 }),
+    ).toBeInTheDocument();
+  });
+
+  it('renders at the heading level the caller chose, so it can sit under a panel heading', () => {
+    render(<ErrorState title="Render failed" headingLevel={3} />);
+
+    expect(
+      screen.getByRole('heading', { name: 'Render failed', level: 3 }),
+    ).toBeInTheDocument();
+  });
+
   it('keeps the technical detail separate from the human description', () => {
     render(
       <ErrorState

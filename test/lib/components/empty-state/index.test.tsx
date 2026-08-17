@@ -10,6 +10,22 @@ describe('EmptyState', () => {
     ).toBeInTheDocument();
   });
 
+  it('defaults to a level-2 heading, so it slots under a page title', () => {
+    render(<EmptyState title="No shots yet" />);
+
+    expect(
+      screen.getByRole('heading', { name: 'No shots yet', level: 2 }),
+    ).toBeInTheDocument();
+  });
+
+  it('renders at the heading level the caller chose, so it can sit under a panel heading', () => {
+    render(<EmptyState title="No shots yet" headingLevel={3} />);
+
+    expect(
+      screen.getByRole('heading', { name: 'No shots yet', level: 3 }),
+    ).toBeInTheDocument();
+  });
+
   it('renders the description only when given', () => {
     const { container, rerender } = render(<EmptyState title="No shots yet" />);
     expect(
