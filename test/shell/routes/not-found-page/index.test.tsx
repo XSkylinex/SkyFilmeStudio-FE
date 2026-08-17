@@ -6,7 +6,7 @@ describe('NotFoundPage', () => {
     render(<NotFoundPage />);
 
     expect(
-      screen.getByRole('heading', { name: 'Page not found' }),
+      screen.getByRole('heading', { name: 'Page not found', level: 1 }),
     ).toBeInTheDocument();
   });
 });

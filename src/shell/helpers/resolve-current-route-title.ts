@@ -1,10 +1,5 @@
 import type { UIMatch } from 'react-router-dom';
-import type { RouteHandle } from '../interfaces/route-handle';
-
-const isRouteHandle = (handle: unknown): handle is RouteHandle =>
-  typeof handle === 'object' &&
-  handle !== null &&
-  typeof (handle as Partial<RouteHandle>).title === 'string';
+import { isRouteHandle } from './is-route-handle';
 
 export const resolveCurrentRouteTitle = (
   matches: readonly UIMatch[],

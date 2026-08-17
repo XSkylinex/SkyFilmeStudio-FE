@@ -5,7 +5,12 @@ import { FatalErrorView } from '@/shell/fatal-error-view';
 
 export const RootErrorBoundary: FC = () => {
   const error = useRouteError();
-  const { detail } = resolveRouteErrorView(error);
+  const { detail, description, isUnknownError } = resolveRouteErrorView(error);
 
-  return <FatalErrorView detail={detail} />;
+  return (
+    <FatalErrorView
+      detail={detail}
+      description={isUnknownError ? undefined : description}
+    />
+  );
 };

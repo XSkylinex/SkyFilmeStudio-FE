@@ -19,8 +19,22 @@ describe('parseRouteErrorPayload', () => {
     expect(payload).toEqual({ code: 'DISK_SPACE_LOW', message: undefined });
   });
 
-  it('returns null for a payload with no code', () => {
-    expect(parseRouteErrorPayload({ message: 'no code here' })).toBeNull();
+  it('reads the message off a payload with no code, the shape NestJS sends by default', () => {
+    const payload = parseRouteErrorPayload({
+      statusCode: 503,
+      message: 'The orchestrator is restarting',
+      error: 'Service Unavailable',
+    });
+
+    expect(payload).toEqual({ message: 'The orchestrator is restarting' });
+  });
+
+  it('returns null for a payload with neither a code nor a message', () => {
+    expect(parseRouteErrorPayload({ statusCode: 500 })).toBeNull();
+  });
+
+  it('returns null for a plain Error instance, which is not a backend payload even though it has a message', () => {
+    expect(parseRouteErrorPayload(new Error('boom'))).toBeNull();
   });
 
   it('returns null when the code is not a string', () => {

@@ -41,4 +41,42 @@ describe('resolveRouteErrorView', () => {
 
     expect(view.detail).not.toBe('[object Object]');
   });
+
+  it('never renders [object Object] for a thrown circular object either', () => {
+    const circular: Record<string, unknown> = { code: undefined };
+    circular.self = circular;
+
+    const view = resolveRouteErrorView(circular);
+
+    expect(view.detail).not.toBe('[object Object]');
+    expect(view.detail).not.toBe('');
+  });
+
+  it('renders the backend message when a Response body carries one but no typed code', () => {
+    const view = resolveRouteErrorView({
+      status: 503,
+      statusText: '',
+      data: { message: 'The orchestrator is restarting' },
+      internal: false,
+    });
+
+    expect(view.description).toBe('The orchestrator is restarting');
+  });
+
+  it('flags a typed or messaged Response as not an unknown error', () => {
+    const view = resolveRouteErrorView({
+      status: 507,
+      statusText: '',
+      data: { code: 'DISK_SPACE_LOW' },
+      internal: false,
+    });
+
+    expect(view.isUnknownError).toBe(false);
+  });
+
+  it('flags a completely untyped thrown value as an unknown error', () => {
+    const view = resolveRouteErrorView(new Error('boom'));
+
+    expect(view.isUnknownError).toBe(true);
+  });
 });

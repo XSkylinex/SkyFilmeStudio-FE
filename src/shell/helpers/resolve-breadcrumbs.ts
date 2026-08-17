@@ -1,12 +1,7 @@
 import type { UIMatch } from 'react-router-dom';
 import type { Breadcrumb } from '../interfaces/breadcrumb';
-import type { RouteHandle } from '../interfaces/route-handle';
+import { isRouteHandle } from './is-route-handle';
 import { ROOT_PATH } from '../routes/routes.constants';
-
-const isRouteHandle = (handle: unknown): handle is RouteHandle =>
-  typeof handle === 'object' &&
-  handle !== null &&
-  typeof (handle as Partial<RouteHandle>).title === 'string';
 
 export const resolveBreadcrumbs = (
   matches: readonly UIMatch[],

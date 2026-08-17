@@ -81,12 +81,12 @@ describe('RouteErrorBoundary', () => {
     expect(await screen.findByText(/disk full/i)).toBeInTheDocument();
   });
 
-  it('does not render a dangling status sentence when statusText is empty', async () => {
+  it('does not render a dangling status sentence when statusText is empty and there is no message either', async () => {
     const Stub = createRoutesStub([
       {
         path: '/',
         loader: () => {
-          throw Response.json({ message: 'only a message' }, { status: 500 });
+          throw Response.json({}, { status: 500 });
         },
         Component: () => null,
         ErrorBoundary: RouteErrorBoundary,
@@ -99,6 +99,27 @@ describe('RouteErrorBoundary', () => {
     expect(description.textContent).toBe(
       'The orchestrator responded with 500.',
     );
+  });
+
+  it('renders the message from a body with no code, the shape NestJS sends by default', async () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        loader: () => {
+          throw Response.json(
+            { statusCode: 503, message: 'The orchestrator is restarting' },
+            { status: 503 },
+          );
+        },
+        Component: () => null,
+        ErrorBoundary: RouteErrorBoundary,
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    const description = await screen.findByText(/orchestrator is restarting/i);
+    expect(description.textContent).toBe('The orchestrator is restarting');
   });
 
   it('shows the backend message alongside the canned description for a known code', async () => {

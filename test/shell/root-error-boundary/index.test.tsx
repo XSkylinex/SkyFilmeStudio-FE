@@ -56,6 +56,33 @@ describe('RootErrorBoundary', () => {
     render(<Stub initialEntries={['/']} />);
 
     expect(await screen.findByText('DISK_SPACE_LOW')).toBeInTheDocument();
+    expect(screen.getByText(/low on disk space/i)).toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('keeps its own generic description, not the route-level "is unaffected" claim, for an untyped shell failure', () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: () => {
+          throw new Error('shell render failed');
+        },
+        ErrorBoundary: RootErrorBoundary,
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(
+      screen.getByText(
+        'Reload the app. If this keeps happening, check that the orchestrator is still running.',
+      ),
+    ).toBeInTheDocument();
 
     consoleErrorSpy.mockRestore();
   });

@@ -1,7 +1,7 @@
 import type { RouteErrorPayload } from '../interfaces/route-error-payload';
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null;
+  typeof value === 'object' && value !== null && !(value instanceof Error);
 
 const toRecord = (data: unknown): Record<string, unknown> | null => {
   if (isRecord(data)) {
@@ -28,12 +28,12 @@ export const parseRouteErrorPayload = (
   }
 
   const { code, message } = record;
-  if (typeof code !== 'string') {
+  const parsedCode = typeof code === 'string' ? code : undefined;
+  const parsedMessage = typeof message === 'string' ? message : undefined;
+
+  if (!parsedCode && !parsedMessage) {
     return null;
   }
 
-  return {
-    code,
-    message: typeof message === 'string' ? message : undefined,
-  };
+  return { code: parsedCode, message: parsedMessage };
 };
