@@ -30,7 +30,7 @@ export const OFFLINE_INDICATOR_MODE_DESCRIPTION = {
   'lan-workers':
     'Render workers on the local network are allowed to take jobs for this project. Project data can cross to those machines.',
   'strict-offline':
-    'Strict offline mode is on: the Claude Code operator is disabled and cannot be used to move project context off this machine.',
+    'Strict offline mode is on for this project: Claude Code must not be treated as an available operator while it is set.',
   local:
     'This project runs local-only. No render or context leaves this machine.',
 } satisfies Record<OfflineIndicatorMode, string>;

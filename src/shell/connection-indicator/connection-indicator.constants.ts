@@ -3,6 +3,7 @@ import { STATUS_TONE } from '@/lib/status-tone.constants';
 import type { ConnectionState } from './connection-indicator.interface';
 
 export const CONNECTION_STATE = {
+  UNKNOWN: 'unknown',
   CONNECTING: 'connecting',
   OPEN: 'open',
   CLOSED: 'closed',
@@ -10,9 +11,10 @@ export const CONNECTION_STATE = {
 } satisfies Record<string, ConnectionState>;
 
 export const DEFAULT_CONNECTION_STATE: ConnectionState =
-  CONNECTION_STATE.CONNECTING;
+  CONNECTION_STATE.UNKNOWN;
 
 export const CONNECTION_STATE_TONE = {
+  unknown: STATUS_TONE.CHECKING,
   connecting: STATUS_TONE.CHECKING,
   open: STATUS_TONE.SUCCESS,
   closed: STATUS_TONE.DANGER,
@@ -20,6 +22,7 @@ export const CONNECTION_STATE_TONE = {
 } satisfies Record<ConnectionState, StatusTone>;
 
 export const CONNECTION_STATE_LABEL = {
+  unknown: 'Not yet verified',
   connecting: 'Connecting',
   open: 'Connected',
   closed: 'Disconnected',
@@ -27,6 +30,8 @@ export const CONNECTION_STATE_LABEL = {
 } satisfies Record<ConnectionState, string>;
 
 export const CONNECTION_STATE_DESCRIPTION = {
+  unknown:
+    'No connection to the orchestrator has been attempted yet. Do not treat this as a working connection.',
   connecting: 'Connecting to the orchestrator.',
   open: 'Connected to the orchestrator. Render progress updates live.',
   closed:

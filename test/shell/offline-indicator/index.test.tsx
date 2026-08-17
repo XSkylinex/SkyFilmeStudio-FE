@@ -42,7 +42,7 @@ describe('OfflineIndicator', () => {
     expect(screen.getByText(/can leave this machine/i)).toBeInTheDocument();
   });
 
-  it('says the operator is disabled under strict offline, without a blanket "nothing can leave" claim', () => {
+  it('describes strict offline on its own terms, without a blanket "nothing can leave" claim or a claim about the operator flag', () => {
     render(
       <OfflineIndicator
         offlineMode={{ ...BASE_OFFLINE_MODE, strictOffline: true }}
@@ -53,6 +53,22 @@ describe('OfflineIndicator', () => {
     expect(
       screen.queryByText(/nothing about this project can leave this machine/i),
     ).not.toBeInTheDocument();
+    expect(screen.queryByText(/operator is disabled/i)).not.toBeInTheDocument();
+  });
+
+  it('never says the operator is disabled while the operator flag itself is enabled, even under strict offline', () => {
+    render(
+      <OfflineIndicator
+        offlineMode={{
+          ...BASE_OFFLINE_MODE,
+          strictOffline: true,
+          claudeCodeOperatorEnabled: true,
+        }}
+      />,
+    );
+
+    expect(screen.getByText(/can leave this machine/i)).toBeInTheDocument();
+    expect(screen.queryByText(/operator is disabled/i)).not.toBeInTheDocument();
   });
 
   it('reports LAN workers as a live concern even while strict offline is also on, instead of a single absolute claim', () => {
@@ -100,5 +116,56 @@ describe('OfflineIndicator', () => {
       'data-tone',
       'success',
     );
+  });
+
+  it('still mentions Claude when the build is not local-only, instead of the remote fact swallowing it', () => {
+    render(
+      <OfflineIndicator
+        offlineMode={{
+          ...BASE_OFFLINE_MODE,
+          localOnly: false,
+          claudeCodeOperatorEnabled: true,
+        }}
+      />,
+    );
+
+    expect(screen.getByText(/not running local-only/i)).toBeInTheDocument();
+    expect(screen.getByText(/can leave this machine/i)).toBeInTheDocument();
+  });
+});
+
+describe('OfflineIndicator across every flag combination', () => {
+  const ALL_OFFLINE_MODE_COMBINATIONS: readonly OfflineMode[] = Array.from(
+    { length: 16 },
+    (_, bits): OfflineMode => ({
+      localOnly: (bits & 1) !== 0,
+      strictOffline: (bits & 2) !== 0,
+      allowLanWorkers: (bits & 4) !== 0,
+      claudeCodeOperatorEnabled: (bits & 8) !== 0,
+    }),
+  );
+
+  ALL_OFFLINE_MODE_COMBINATIONS.forEach((offlineMode) => {
+    it(`shows exactly its own true flags, never one another's, for ${JSON.stringify(offlineMode)}`, () => {
+      const { container, unmount } = render(
+        <OfflineIndicator offlineMode={offlineMode} />,
+      );
+      const text = container.textContent ?? '';
+
+      expect(text.includes('can leave this machine through Claude')).toBe(
+        offlineMode.claudeCodeOperatorEnabled,
+      );
+      expect(
+        text.includes('Render workers on the local network are allowed'),
+      ).toBe(offlineMode.allowLanWorkers);
+      expect(text.includes('Strict offline mode is on')).toBe(
+        offlineMode.strictOffline,
+      );
+      expect(text.includes('not running local-only')).toBe(
+        !offlineMode.localOnly,
+      );
+
+      unmount();
+    });
   });
 });

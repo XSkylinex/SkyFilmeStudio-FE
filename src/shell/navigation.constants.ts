@@ -15,6 +15,7 @@ export const PRODUCTION_STAGE_ID = {
 } satisfies Record<string, ProductionStageId>;
 
 export const PRODUCTION_STAGE_STATE = {
+  UNKNOWN: 'unknown',
   PENDING: 'pending',
   IN_REVIEW: 'in_review',
   APPROVED: 'approved',
@@ -22,7 +23,7 @@ export const PRODUCTION_STAGE_STATE = {
 } satisfies Record<string, ProductionStageState>;
 
 export const DEFAULT_PRODUCTION_STAGE_STATE: ProductionStageState =
-  PRODUCTION_STAGE_STATE.PENDING;
+  PRODUCTION_STAGE_STATE.UNKNOWN;
 
 export const MUSIC_DRIVEN_NARRATIVE_MODE = 'MUSIC_DRIVEN';
 
@@ -31,6 +32,7 @@ export const SCREENPLAY_DRIVEN_NARRATIVE_MODES: ReadonlySet<string> = new Set([
 ]);
 
 export const PRODUCTION_STAGE_STATE_TONE = {
+  unknown: STATUS_TONE.CHECKING,
   pending: STATUS_TONE.NEUTRAL,
   in_review: STATUS_TONE.ATTENTION,
   approved: STATUS_TONE.SUCCESS,
@@ -38,6 +40,7 @@ export const PRODUCTION_STAGE_STATE_TONE = {
 } satisfies Record<ProductionStageState, StatusTone>;
 
 export const PRODUCTION_STAGE_STATE_LABEL = {
+  unknown: 'Not yet verified',
   pending: 'Pending',
   in_review: 'In review',
   approved: 'Approved',

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { ConnectionIndicator } from '@/shell/connection-indicator';
+import { ConnectionStateProvider } from '@/shell/connection-indicator/connection-state-provider';
 import { ConnectionStateContext } from '@/shell/connection-indicator/connection-state.context';
 import type { ConnectionState } from '@/shell/connection-indicator/connection-indicator.interface';
 
@@ -52,6 +53,7 @@ describe('ConnectionIndicator', () => {
 
   it('renders distinct text for every connection state', () => {
     const states: ConnectionState[] = [
+      'unknown',
       'connecting',
       'open',
       'closed',
@@ -78,5 +80,20 @@ describe('ConnectionIndicator', () => {
     });
 
     expect(labels.size).toBe(states.length);
+  });
+
+  it('starts unknown rather than claiming a connection attempt that has not happened', () => {
+    const { container } = render(
+      <ConnectionStateProvider>
+        <ConnectionIndicator />
+      </ConnectionStateProvider>,
+    );
+
+    expect(container.querySelector('.connection-indicator')).toHaveAttribute(
+      'data-state',
+      'unknown',
+    );
+    expect(screen.getByText('Not yet verified')).toBeInTheDocument();
+    expect(screen.queryByText('Connecting')).not.toBeInTheDocument();
   });
 });

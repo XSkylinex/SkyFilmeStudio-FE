@@ -9,11 +9,11 @@ export const resolveOfflineIndicatorFacts = (
   if (!offlineMode) {
     return ['unknown'];
   }
-  if (!offlineMode.localOnly) {
-    return ['remote'];
-  }
 
   const facts: OfflineIndicatorMode[] = [];
+  if (!offlineMode.localOnly) {
+    facts.push('remote');
+  }
   if (offlineMode.claudeCodeOperatorEnabled) {
     facts.push('operator-enabled');
   }

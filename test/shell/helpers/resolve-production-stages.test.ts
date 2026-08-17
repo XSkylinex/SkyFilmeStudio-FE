@@ -15,10 +15,10 @@ describe('resolveProductionStages', () => {
     expect(stages.some((stage) => stage.id === 'music-plan')).toBe(false);
   });
 
-  it('resolves every stage to the pending default when no state was supplied', () => {
+  it('resolves every stage to unknown, not pending, when no state was supplied', () => {
     const stages = resolveProductionStages('SCREENPLAY', {});
 
-    expect(stages.every((stage) => stage.state === 'pending')).toBe(true);
+    expect(stages.every((stage) => stage.state === 'unknown')).toBe(true);
   });
 
   it('carries the caller-supplied state through for each stage that has one', () => {

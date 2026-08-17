@@ -1,4 +1,5 @@
-export type ConnectionState = 'connecting' | 'open' | 'closed' | 'reconnecting';
+export type ConnectionState =
+  'unknown' | 'connecting' | 'open' | 'closed' | 'reconnecting';
 
 export interface ConnectionStateContextValue {
   readonly connectionState: ConnectionState;

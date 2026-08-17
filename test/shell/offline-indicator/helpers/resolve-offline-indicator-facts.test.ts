@@ -13,7 +13,7 @@ describe('resolveOfflineIndicatorFacts', () => {
     expect(resolveOfflineIndicatorFacts(undefined)).toEqual(['unknown']);
   });
 
-  it('reports only remote when the build is not local-only, regardless of the other flags', () => {
+  it('reports remote first but still reports every other true flag, instead of remote swallowing them', () => {
     const facts = resolveOfflineIndicatorFacts({
       ...BASE_OFFLINE_MODE,
       localOnly: false,
@@ -22,7 +22,22 @@ describe('resolveOfflineIndicatorFacts', () => {
       claudeCodeOperatorEnabled: true,
     });
 
-    expect(facts).toEqual(['remote']);
+    expect(facts).toEqual([
+      'remote',
+      'operator-enabled',
+      'lan-workers',
+      'strict-offline',
+    ]);
+  });
+
+  it('reports the Claude Code operator even when the build is not local-only', () => {
+    const facts = resolveOfflineIndicatorFacts({
+      ...BASE_OFFLINE_MODE,
+      localOnly: false,
+      claudeCodeOperatorEnabled: true,
+    });
+
+    expect(facts).toEqual(['remote', 'operator-enabled']);
   });
 
   it('reports both lan-workers and strict-offline when both are true, instead of the strict-offline absolute swallowing the lan-workers fact', () => {

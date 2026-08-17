@@ -1,2 +1,2 @@
 export type ProductionStageState =
-  'pending' | 'in_review' | 'approved' | 'blocked';
+  'unknown' | 'pending' | 'in_review' | 'approved' | 'blocked';
