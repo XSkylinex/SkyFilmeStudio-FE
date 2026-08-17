@@ -1,18 +1,9 @@
 import type { StatusTone } from '@/lib/interfaces/status-tone';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
-import type {
-  OfflineIndicatorMode,
-  OfflineMode,
-} from './offline-indicator.interface';
-
-export const OFFLINE_MODE_FIXTURE: OfflineMode = {
-  localOnly: true,
-  strictOffline: false,
-  allowLanWorkers: false,
-  claudeCodeOperatorEnabled: false,
-};
+import type { OfflineIndicatorMode } from './offline-indicator.interface';
 
 export const OFFLINE_INDICATOR_MODE_TONE = {
+  unknown: STATUS_TONE.CHECKING,
   remote: STATUS_TONE.DANGER,
   'operator-enabled': STATUS_TONE.WARNING,
   'lan-workers': STATUS_TONE.ATTENTION,
@@ -21,6 +12,7 @@ export const OFFLINE_INDICATOR_MODE_TONE = {
 } satisfies Record<OfflineIndicatorMode, StatusTone>;
 
 export const OFFLINE_INDICATOR_MODE_LABEL = {
+  unknown: 'Not yet verified',
   remote: 'Not local',
   'operator-enabled': 'Operator enabled',
   'lan-workers': 'LAN workers allowed',
@@ -29,6 +21,8 @@ export const OFFLINE_INDICATOR_MODE_LABEL = {
 } satisfies Record<OfflineIndicatorMode, string>;
 
 export const OFFLINE_INDICATOR_MODE_DESCRIPTION = {
+  unknown:
+    'Whether this project is running local-only has not been confirmed yet. Do not treat this as a safety guarantee.',
   remote:
     'This build is not running local-only. Project data may leave this machine — check the orchestrator configuration.',
   'operator-enabled':
@@ -36,7 +30,7 @@ export const OFFLINE_INDICATOR_MODE_DESCRIPTION = {
   'lan-workers':
     'Render workers on the local network are allowed to take jobs for this project. Project data can cross to those machines.',
   'strict-offline':
-    'Strict offline mode is on. Nothing about this project can leave this machine.',
+    'Strict offline mode is on: the Claude Code operator is disabled and cannot be used to move project context off this machine.',
   local:
     'This project runs local-only. No render or context leaves this machine.',
 } satisfies Record<OfflineIndicatorMode, string>;

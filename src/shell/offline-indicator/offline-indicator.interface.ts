@@ -6,8 +6,13 @@ export interface OfflineMode {
 }
 
 export type OfflineIndicatorMode =
-  'remote' | 'operator-enabled' | 'lan-workers' | 'strict-offline' | 'local';
+  | 'unknown'
+  | 'remote'
+  | 'operator-enabled'
+  | 'lan-workers'
+  | 'strict-offline'
+  | 'local';
 
 export interface OfflineIndicatorProps {
-  offlineMode: OfflineMode;
+  offlineMode?: OfflineMode | undefined;
 }

@@ -32,11 +32,6 @@
       background: var(--connection-indicator-fg);
     }
 
-    &:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
-    }
-
     &[data-state='connecting'] {
       --connection-indicator-fg: var(--tone-checking-fg);
       --connection-indicator-bg: var(--tone-checking-bg);

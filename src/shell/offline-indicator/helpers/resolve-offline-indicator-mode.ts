@@ -1,22 +1,12 @@
+import { resolveOfflineIndicatorFacts } from './resolve-offline-indicator-facts';
 import type {
   OfflineIndicatorMode,
   OfflineMode,
 } from '../offline-indicator.interface';
 
 export const resolveOfflineIndicatorMode = (
-  offlineMode: OfflineMode,
+  offlineMode: OfflineMode | undefined,
 ): OfflineIndicatorMode => {
-  if (!offlineMode.localOnly) {
-    return 'remote';
-  }
-  if (offlineMode.claudeCodeOperatorEnabled) {
-    return 'operator-enabled';
-  }
-  if (offlineMode.strictOffline) {
-    return 'strict-offline';
-  }
-  if (offlineMode.allowLanWorkers) {
-    return 'lan-workers';
-  }
-  return 'local';
+  const facts = resolveOfflineIndicatorFacts(offlineMode);
+  return facts[0] ?? 'unknown';
 };

@@ -10,7 +10,7 @@ export const CONNECTION_STATE = {
 } satisfies Record<string, ConnectionState>;
 
 export const DEFAULT_CONNECTION_STATE: ConnectionState =
-  CONNECTION_STATE.CLOSED;
+  CONNECTION_STATE.CONNECTING;
 
 export const CONNECTION_STATE_TONE = {
   connecting: STATUS_TONE.CHECKING,

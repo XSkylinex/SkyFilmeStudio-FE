@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { Badge } from '@/lib/components/badge';
-import { resolveOfflineIndicatorMode } from './helpers/resolve-offline-indicator-mode';
+import { resolveOfflineIndicatorFacts } from './helpers/resolve-offline-indicator-facts';
 import {
   OFFLINE_INDICATOR_MODE_DESCRIPTION,
   OFFLINE_INDICATOR_MODE_LABEL,
@@ -12,7 +12,12 @@ import './offline-indicator.css';
 export const OfflineIndicator: FC<OfflineIndicatorProps> = ({
   offlineMode,
 }) => {
-  const mode = resolveOfflineIndicatorMode(offlineMode);
+  const facts = resolveOfflineIndicatorFacts(offlineMode);
+  const [headline] = facts;
+  const mode = headline ?? 'unknown';
+  const description = facts
+    .map((fact) => OFFLINE_INDICATOR_MODE_DESCRIPTION[fact])
+    .join(' ');
 
   return (
     <div className="offline-indicator" data-mode={mode}>
@@ -20,7 +25,7 @@ export const OfflineIndicator: FC<OfflineIndicatorProps> = ({
         tone={OFFLINE_INDICATOR_MODE_TONE[mode]}
         label={OFFLINE_INDICATOR_MODE_LABEL[mode]}
       />
-      <p>{OFFLINE_INDICATOR_MODE_DESCRIPTION[mode]}</p>
+      <p>{description}</p>
     </div>
   );
 };

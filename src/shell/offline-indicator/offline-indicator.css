@@ -31,15 +31,57 @@
       background: var(--offline-indicator-fg);
     }
 
-    &:focus-visible {
-      outline: var(--focus-ring-width) solid var(--focus-ring-color);
-      outline-offset: var(--focus-ring-offset);
+    &[data-mode='unknown'] {
+      --offline-indicator-fg: var(--tone-checking-fg);
+      --offline-indicator-bg: var(--tone-checking-bg);
+      --offline-indicator-border: var(--tone-checking-border);
+      border-style: dashed;
+
+      &::before {
+        background: transparent;
+      }
+    }
+
+    &[data-mode='local'] {
+      --offline-indicator-fg: var(--tone-ready-fg);
+      --offline-indicator-bg: var(--tone-ready-bg);
+      --offline-indicator-border: var(--tone-ready-border);
     }
 
     &[data-mode='strict-offline'] {
       --offline-indicator-fg: var(--tone-success-fg);
       --offline-indicator-bg: var(--tone-success-bg);
       --offline-indicator-border: var(--tone-success-border);
+    }
+
+    &[data-mode='lan-workers'] {
+      --offline-indicator-fg: var(--tone-attention-fg);
+      --offline-indicator-bg: var(--tone-attention-bg);
+      --offline-indicator-border: var(--tone-attention-border);
+      border-width: 2px;
+      border-style: dashed;
+
+      &::before {
+        background: repeating-conic-gradient(
+          var(--offline-indicator-fg) 0deg 90deg,
+          transparent 90deg 180deg
+        );
+      }
+    }
+
+    &[data-mode='remote'] {
+      --offline-indicator-fg: var(--tone-danger-fg);
+      --offline-indicator-bg: var(--tone-danger-bg);
+      --offline-indicator-border: var(--tone-danger-border);
+      border-width: 2px;
+      border-style: dashed;
+
+      &::before {
+        background: repeating-conic-gradient(
+          var(--offline-indicator-fg) 0deg 90deg,
+          transparent 90deg 180deg
+        );
+      }
     }
 
     &[data-mode='operator-enabled'] {

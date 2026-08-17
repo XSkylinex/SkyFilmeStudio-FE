@@ -52,4 +52,18 @@ describe('resolveOfflineIndicatorMode', () => {
   it('reports local as the default when nothing else is set', () => {
     expect(resolveOfflineIndicatorMode(BASE_OFFLINE_MODE)).toBe('local');
   });
+
+  it('reports unknown when no payload has arrived yet, rather than assuming local', () => {
+    expect(resolveOfflineIndicatorMode(undefined)).toBe('unknown');
+  });
+
+  it('reports lan-workers, not strict-offline, when both are true — strict offline says nothing about LAN workers', () => {
+    const mode = resolveOfflineIndicatorMode({
+      ...BASE_OFFLINE_MODE,
+      strictOffline: true,
+      allowLanWorkers: true,
+    });
+
+    expect(mode).toBe('lan-workers');
+  });
 });
