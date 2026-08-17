@@ -35,9 +35,14 @@ means the compiler is **on for every component**, and the following are conseque
   long-lived WebSocket subscriptions whose handlers must see fresh props.
 - **`useEffectEvent` results may not be returned or passed down.** Rules-of-hooks fails on it. A
   function that leaves the component is a plain arrow const.
-- **Never call `setState` synchronously in an effect body.** It cascades renders and
-  `react/react-compiler` flags it. Drive the change from the thing that caused it, or bump a nonce the
-  effect depends on.
+- **Never call `setState` synchronously in an effect body.** It cascades renders. Drive the change
+  from the thing that caused it, or bump a nonce the effect depends on — and most often the value is
+  derived, so derive it during render and let the compiler pay for it.
+  **Corrected 2026-08-17: nothing enforces this.** An earlier version of this line claimed
+  `react/react-compiler` flags it. Measured on `src/shell/production-shell/index.tsx`, which called
+  two setters synchronously inside a `useEffect` body: the rule is enabled as `"error"` in
+  `.oxlintrc.json` and `yarn oxlint <that file>` still exited **0**. Review is the only thing that
+  catches this shape, so do not read a green lint as evidence that it is absent.
 - **Never mutate a ref during render.** Refs are read and written in effects and event handlers only.
 - An effect that returns a cleanup on one path must return `undefined` explicitly on the others —
   oxlint's `consistent-return` flags the mixed form.
