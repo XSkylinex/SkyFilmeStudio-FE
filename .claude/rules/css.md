@@ -13,27 +13,49 @@ preview` and your eyes, so look before you claim.
 
 ## Where a style goes
 
-Two stylesheets today, and the import order in `src/main.tsx` is load-bearing:
+FE-02 split the single `index.css` into three, and the import order in `src/main.tsx` is
+load-bearing:
 
 ```ts
-import "./index.css"   // tokens + element-level reset, imported by main.tsx
+import "./styles/layers.css"   // the @layer order, first
+import "./styles/reset.css"    // color-scheme + element-level reset
+import "./styles/tokens.css"   // every custom property on :root
 // App.css is imported by App.tsx
 ```
 
-- **`src/index.css`** — the design tokens on `:root` and the element-level reset. Only rules that
-  apply to bare tags belong here. It also declares `color-scheme: light dark`, which is not cosmetic
-  — see the `light-dark()` row below.
-- **`src/App.css`** — component styles.
+- **`src/styles/layers.css`** — one statement, `@layer reset, tokens, primitives, features,
+  utilities;`, and nothing else. It is imported first so the order exists before anything fills a
+  layer.
+- **`src/styles/reset.css`** — the element-level reset, and the `color-scheme: light dark`
+  declaration, which is not cosmetic — see the `light-dark()` row below. Only rules that apply to
+  bare tags.
+- **`src/styles/tokens.css`** — the design tokens on `:root`.
+- **`src/lib/components/<kebab-name>/<kebab-name>.css`** — one stylesheet per component, living in
+  that component's folder and imported by its `index.tsx`. Wrap the whole file in
+  `@layer primitives { … }`; a surface rather than a primitive uses `@layer features { … }`.
 
-As the Studio grows past one page this splits into `src/styles/tokens.css`, `src/styles/reset.css`
-and per-feature stylesheets; `plan/02-design-system.md` owns that move. Until then, do not scatter
-new stylesheets.
+`src/index.css` and `src/App.css` no longer exist. Every rule `index.css` held moved into
+`reset.css` or `tokens.css`; `App.css` died with the placeholder it styled. Do not recreate either.
 
-**Design tokens are custom properties on `:root`.** A new colour or spacing value becomes a token
-before it is used, exactly as a magic number becomes a named const in TypeScript. The scaffold ships
-`--text`, `--text-h`, `--bg`, `--border`, `--code-bg`, `--accent`, `--accent-bg`, `--accent-border`,
-`--social-bg`, `--shadow`, `--sans`, `--heading`, `--mono`. That palette is a Vite starter's, not
-this Studio's — replacing it is a planned step, not a drive-by edit.
+**A component's styles live with the component**, never in a shared sheet keyed by class name. The
+layer order is declared once in `layers.css`, so a rule landing in `@layer primitives` from a file
+imported deep in the tree still cascades correctly — verified in the built CSS.
+
+**Design tokens are custom properties on `:root`,** named `--<family>[-<role>]`. A new colour or
+spacing value becomes a token before it is used, exactly as a magic number becomes a named const in
+TypeScript. The families are `--color-surface-*`, `--color-text*`, `--color-border*`,
+`--color-accent*`, `--color-media-*`, `--elevation-*`, `--radius-*`, `--space-*`, `--font-*`,
+`--line-height-*`, `--font-weight-*`, `--duration-*`, `--ease-*`, `--z-*`.
+
+**Two colour families, and the split is a decision.** `--color-surface-*` and friends follow the
+system through `light-dark()`. `--color-media-*` does **not** — it is pinned dark at near-zero chroma
+in both schemes, because every media surface is a ground someone judges a render against, and the
+same frame must not look different on a light desktop. A media surface that reaches for
+`--color-surface-canvas` has broken that.
+
+**Motion tokens already honour `prefers-reduced-motion`.** `--duration-*` collapse to `0.01ms` under
+the query, so a transition written against a token is correct for free. Hard-coding `200ms` opts out
+of that silently — and per the section below, the React layer has to honour the query too.
 
 Class names are kebab-case and match their component: `.shot-card`, `.render-queue`,
 `.storyboard-strip`.
@@ -77,15 +99,32 @@ reading `dist/assets/*.css`. Date: 2026-08-14, `vite@8.2.1`.
 | `@media (max-width: 1024px)` | `@media (width<=1024px)` | Lightning CSS *upgrades* to range syntax |
 | `@container (min-width: 40rem)` | `@container (width>=40rem)` | same upgrade; container queries are inside the floor |
 | `:has()`, `@layer`, `@starting-style`, logical properties | unchanged | ships raw — check the floor first |
+| `mask-image`, `mask-size`, `mask-repeat` | `-webkit-` copy emitted first | **this is what makes icons work here** — see below |
 | `#11223344` | `#1234` | minified, not lowered |
 
 Two things follow that are easy to get wrong:
 
-**`light-dark()` only works because `index.css` declares `color-scheme: light dark` on `:root`.** A
+**`light-dark()` only works because `reset.css` declares `color-scheme: light dark` on `:root`.** A
 build-time CSS transform never sees `index.html`, so a `<meta name="color-scheme">` tag would not be
 enough. Lightning CSS emits the `var()` pair regardless; without a `color-scheme` declaration **in a
 stylesheet** it does not emit the `:root` definitions that resolve them, and the colour silently comes
 out empty. If you ever move the reset, that declaration moves with it.
+
+**The declaration and the `light-dark()` calls may live in different files** — verified 2026-08-15
+after the FE-02 split, with `color-scheme` in `reset.css` and every `light-dark()` in `tokens.css`.
+The emitted bundle still carries `--lightningcss-light:initial;--lightningcss-dark: ;` on `:root` plus
+the `@media (prefers-color-scheme:dark)` flip, because Vite bundles both into one stylesheet before
+Lightning CSS runs. Do not assume this survives a future change that emits them as separate files.
+
+**`light-dark()` also lowers correctly inside a composite value**, not just as a whole colour —
+measured on `--elevation-sm`, which emits
+`0 1px 2px var(--lightningcss-light,oklch(0% 0 0/.1))var(--lightningcss-dark,oklch(0% 0 0/.36))`. One
+of the two custom properties is `initial` and the other is empty, so exactly one contributes.
+
+**Lightning CSS rewrites the `@layer` statement and that is not a bug.** `layers.css` declares five
+names; the built CSS declares `@layer reset{…}`, `@layer tokens{…}`, then a trailing bare
+`@layer primitives,features,utilities;`. First-appearance order is unchanged, so the cascade is the
+one you asked for. Check the *order names first appear*, not whether the statement survived intact.
 
 **Lightning CSS rewriting media queries into range syntax is a floor-derived decision.** It emits
 `(width<=1024px)` because Safari 16.4 supports it. Pinning `build.cssTarget` lower would change the
@@ -93,6 +132,44 @@ emitted syntax, not just the prefixes. Don't pin it casually.
 
 Safe here today and worth reaching for: `@layer`, container queries, `color-mix()`, `oklch()`,
 `aspect-ratio`, `inert`, `<dialog>`, logical properties, `dvh`/`svh` (already used by `#root`).
+
+## Icons are masks, not markup
+
+SVG source lives in `src/assets/`, mirroring `src/` — never as `<svg>` inside a `.tsx` file. See
+`.claude/rules/code-style.md`. The stylesheet is what puts it on screen:
+
+```css
+.icon {
+  background-color: currentColor;
+  mask-image: url('../../../assets/lib/components/icon/close.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+}
+```
+
+`currentColor` under the mask is the whole point: one asset serves every button variant and every
+tone, so a new tone never needs a recoloured copy of the artwork.
+
+**This ships only because of the prefix.** `floor-check.mjs` reports `masks` as **OUTSIDE** the floor
+— blocked by `chrome 120`, `chrome_android 120`, `edge 120` against our 111 — and unprefixed
+`mask-image` genuinely is. Measured 2026-08-16 by transforming a probe through this repo's own
+`lightningcss` at the floor's targets: it emits `-webkit-mask-image` **and** `mask-image`, the same
+pattern as `backdrop-filter`. The `-webkit-` form is old enough to cover the floor everywhere.
+
+So do not "fix" this by hand-writing the prefix, and do not read the `floor-check` line as a ban —
+it is the reason the build's prefixing is load-bearing here rather than cosmetic.
+
+Two traps that produce an invisible icon with a fully green gate:
+
+- **A mask reads the alpha channel, not the colour.** Artwork that draws with `stroke` and no fill,
+  or that relies on `fill="currentColor"`, masks to nothing. Author icons as opaque filled paths.
+- **A `url()` that fails to resolve is silent.** Confirm in `dist/assets/*.css` that the reference
+  resolved — either to a hashed file under `dist/assets/`, or, below Vite's `build.assetsInlineLimit`
+  (`4096` bytes by default, read from `vite`'s own shipped `.d.ts`), inlined as a
+  `data:image/svg+xml,…` URI directly in the CSS. Measured 2026-08-16: `close.svg` (273 B) and
+  `circle.svg` (113 B) both inline — `dist/assets/` has no third file, only the JS and CSS bundles.
+  Check the same way regardless: a resolved reference, of either shape, is fine; a broken path is
+  silent.
 
 ## `@supports` is not always a valid gate
 
@@ -136,3 +213,6 @@ taste:
 `yarn build` proves it compiles, not that it renders. Run `yarn dev`, look at the component with real
 data in it, and check both the narrow breakpoint and `dir="rtl"`. If the change touched a feature near
 the floor, say which browser is the binding constraint and how you know.
+
+`vite preview` binds `[::1]`, not `127.0.0.1` — measured 2026-08-15. A curl at the IPv4 loopback
+fails with a connection refused that reads exactly like a build that produced nothing.

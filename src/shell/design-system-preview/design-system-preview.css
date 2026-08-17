@@ -1,0 +1,53 @@
+@layer features {
+  .design-system-preview {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+    inline-size: 100%;
+    max-inline-size: var(--size-xl);
+    margin-inline: auto;
+    padding-block: var(--space-6);
+    padding-inline: var(--space-5);
+    text-align: start;
+
+    & h1 {
+      margin-block-start: 0;
+    }
+  }
+
+  .design-system-preview__section {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-raised);
+
+    & h2 {
+      margin-block-start: 0;
+    }
+  }
+
+  .design-system-preview__grid {
+    display: grid;
+    --preview-column-min: 13rem;
+
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(var(--preview-column-min), 1fr)
+    );
+    align-items: start;
+    gap: var(--space-4);
+
+    & .skeleton[data-shape='circle'] {
+      max-inline-size: var(--space-8);
+    }
+
+    & .skeleton[data-shape='rect'] {
+      max-inline-size: var(--size-2xs);
+    }
+  }
+}

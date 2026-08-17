@@ -2,11 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { App } from '@/App';
 
 describe('App', () => {
-  it('names the application in the top-level heading', () => {
+  it('renders the design system preview', () => {
     render(<App />);
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Local AI Studio',
-    );
+    expect(
+      screen.getByRole('heading', { name: 'Design system preview' }),
+    ).toBeInTheDocument();
   });
 });

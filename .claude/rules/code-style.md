@@ -9,11 +9,21 @@ paths:
 
 # Code style (`src/**`, `test/**`)
 
-Today `src/` is still the bare `create-vite` scaffold — `App.tsx`, `main.tsx`, two stylesheets. There
-is no reference feature to copy yet, so this file *is* the reference until one exists. Once
-`src/features/projects/` lands, read it before writing and match it.
+Today `src/` holds `App.tsx`, `main.tsx`, `shell/`, `styles/` and `App.css` — no feature slice exists
+yet, so this file *is* the reference until one does. Once `src/features/projects/` lands, read it
+before writing and match it. `src/shell/` is the closest thing to a worked example in the meantime.
 
 ## One concern per file
+
+**A component is a folder, not a file.** Everything it owns — markup, styles, props type — sits
+together, so moving or deleting it is one operation and nothing is left behind:
+
+```text
+components/<kebab-name>/
+  index.tsx                     the component; FC<Props>, named export
+  <kebab-name>.css              its styles, wrapped in @layer primitives (or features)
+  <kebab-name>.interface.ts     its props interface
+```
 
 ```text
 src/features/<feature>/
@@ -21,18 +31,86 @@ src/features/<feature>/
   <feature>.routes.ts           route objects this feature contributes
   api/<name>.ts                 ONE query/mutation definition per file
   helpers/<name>.ts             ONE pure arrow-const per file
-  interfaces/<name>.ts          ONE interface or type alias per file
-  components/<Name>.tsx         ONE React component per file
+  interfaces/<name>.ts          types shared across the feature — not component props
+  components/<kebab-name>/      one folder per component, as above
   <Feature>Page.tsx             the route-level component
 
 src/shell/                      app frame: layout, navigation, error/suspense boundaries
-src/lib/                        cross-feature primitives that two features already import
-src/styles/                     tokens.css, reset.css, layers.css
+src/lib/components/<kebab-name>/  the shared primitives
+src/lib/interfaces/<name>.ts    types more than one component uses, e.g. status-tone.ts
+src/styles/                     layers.css, reset.css, tokens.css
 
-test/features/<feature>/
-  helpers/<name>.test.ts        mirrors src/features/<feature>/helpers/<name>.ts
-  components/<Name>.test.tsx    mirrors src/features/<feature>/components/<Name>.tsx
+test/lib/components/<kebab-name>/index.test.tsx    mirrors the component's index.tsx
+test/features/<feature>/helpers/<name>.test.ts     mirrors the helper
 ```
+
+Folder and stylesheet names are kebab-case and match the component: `status-dot/`,
+`progress-bar/`, `media-tile/`. The exported symbol stays PascalCase — `status-dot/index.tsx`
+exports `StatusDot`. Import the folder, never the file: `@/lib/components/status-dot`.
+
+## SVG lives in `src/assets/`, never in JSX
+
+**No `.tsx` file contains `<svg>` markup** — not a component, not a test, not the preview gallery.
+An icon is an asset, and `src/assets/` mirrors `src/` the same way `test/` does:
+
+```text
+src/lib/components/icon/index.tsx          the component
+src/assets/lib/components/icon/close.svg   the artwork it draws
+```
+
+A path drawn inline in a component cannot be reused by a second component, cannot be swapped without
+touching TypeScript, and turns an artwork edit into a source-code diff reviewed as logic. A file is
+none of those things. Where it *ends up* is the build's business: measured 2026-08-16, these icons
+are small enough that Vite inlines them into the stylesheet as `data:` URIs rather than emitting
+separate files — so do not claim a caching win for the split. The win is authoring, not transport.
+
+Icons are applied with a **CSS mask over `background-color: currentColor`**, so one asset works on
+every button variant and every tone without a recoloured copy — the component renders
+`<span className="icon" data-icon="close" aria-hidden="true" />` and the stylesheet points at the
+file. Not `<img>` (it cannot inherit colour), not `?raw` with `dangerouslySetInnerHTML`, not an
+SVG-to-component plugin. `.claude/rules/css.md` carries the measured prefix behaviour that makes
+masking ship at this repo's floor.
+
+An icon is decoration: it is `aria-hidden`, and the accessible name comes from the control that
+contains it. An icon-only control with no `label` is a defect, not a terse style.
+
+`interfaces/` is for types **more than one component uses**. A component's own props interface lives
+in its folder, and may carry the small unions only that component uses — `skeleton.interface.ts`
+holds `SkeletonShape` next to `SkeletonProps`, because splitting a three-member union into its own
+file buys nothing. A type a second component imports moves up to `interfaces/`, the same way a
+helper's second consumer moves it to `src/lib/`.
+
+**Reuse before you extract.** A new component is justified when an existing one cannot express the
+case, not when it would be convenient to have a differently-named wrapper. Extract only the part
+that is genuinely shared, and leave the rest where it is — a library of near-duplicates is worse
+than one component with a prop.
+
+### A variant of a component composes it. It never re-renders its element
+
+If two components would render the same underlying element, the second one **calls the first**. It
+does not emit its own `<button>`, its own class, and its own copy of the styles.
+
+```tsx
+export const IconButton: FC<IconButtonProps> = ({ label, ...rest }) => (
+  <Button {...rest} shape="icon" aria-label={label}>…</Button>
+);
+```
+
+The variation goes in as a **prop that the base component turns into a `data-` attribute**, and the
+stylesheet branches on that attribute. `Button` owns `data-shape`; there is no `.icon-button` class
+and no `icon-button.css`. A component folder that contributes no styles of its own simply has no
+stylesheet — that is the convention working, not a gap in it.
+
+**This is not a tidiness rule; the duplicate version already cost real bugs.** `IconButton` began as
+a copy of `Button`'s markup with a renamed custom property, and the two stylesheets were identical
+across every variant, hover, active, focus and disabled rule — about ninety duplicated lines. The
+consequence showed up immediately: `aria-describedby` had to be added to *both* components in the
+same session, `type="button"` was defaulted twice, and the focus ring was defined twice. Every fix
+to a forked component is a fix someone has to remember to make twice, and the second one is the one
+that gets forgotten.
+
+The test that keeps it honest asserts the composition, not the appearance: `IconButton` renders an
+element carrying `.button` and `data-shape="icon"`. If someone re-forks it, that test fails.
 
 No `shared/`, `utils/` or `common/` junk drawer: a function goes to `helpers/`, a value to
 `*.constants.ts`, a type to `interfaces/`. A helper genuinely used by two features moves down to
@@ -42,8 +120,23 @@ No `shared/`, `utils/` or `common/` junk drawer: a function goes to `helpers/`, 
 
 ## Functions are arrow consts
 
-`export const fn = (x: X): Y => …`. Never `function fn() {}`. React components are arrow consts too:
-`export const ShotCard = ({ shot }: ShotCardProps) => …`.
+`export const fn = (x: X): Y => …`. Never `function fn() {}`.
+
+**React components are `FC<Props>`**, with the props interface imported from the component's own
+folder:
+
+```tsx
+import type { FC } from 'react';
+import type { ShotCardProps } from './shot-card.interface';
+import './shot-card.css';
+
+export const ShotCard: FC<ShotCardProps> = ({ shot }) => …;
+```
+
+`FC` carries the return type, so no separate `: ReactElement` annotation is needed on a component —
+the rule below about annotating exported return types is satisfied by the `FC` itself. A component
+taking no props is `FC` bare. React 19's `FC` does **not** imply `children`; a component that takes
+children declares `children: ReactNode` in its interface.
 
 Annotate the return type on anything exported. `(): void` on an effect cleanup or a callback is not
 noise here — it is what catches an accidental `return someValue` inside a `useEffect`, which oxlint's

@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
+import './styles/layers.css';
+import './styles/reset.css';
+import './styles/tokens.css';
 import { App } from '@/App';
 import {
   DEFAULT_DOCUMENT_DIRECTION,

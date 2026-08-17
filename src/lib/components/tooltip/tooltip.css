@@ -1,0 +1,39 @@
+@layer primitives {
+  .tooltip {
+    display: inline-flex;
+    position: relative;
+    justify-self: start;
+
+    &:hover .tooltip__tip,
+    &:focus-within .tooltip__tip {
+      opacity: 1;
+    }
+  }
+
+  .tooltip__tip {
+    position: absolute;
+    z-index: var(--z-tooltip);
+    inset-block-end: 100%;
+    inset-inline-start: 50%;
+    translate: -50%;
+    margin-block-end: var(--space-1);
+    inline-size: max-content;
+    max-inline-size: min(var(--size-2xs), 90vw);
+    padding-block: var(--space-1);
+    padding-inline: var(--space-2);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-overlay);
+    color: var(--color-text);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-tight);
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    [dir='rtl'] & {
+      translate: 50%;
+    }
+  }
+}

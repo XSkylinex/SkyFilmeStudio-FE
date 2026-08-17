@@ -12,16 +12,30 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 
 ## Status, honestly
 
-**`plan/00-toolchain.md` and `plan/01-document-shell.md` are done (2026-08-15). Phase 02 is next.**
+**`plan/00` and `plan/01` are done (2026-08-15). `plan/02` is built and under review — its
+primitives all exist and the gate is green, but a review found defects that are being fixed, so do
+not report it as done until `plan/02-design-system.md` says so.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
 and has a `<noscript>`, and `src/shell/` owns `<html lang>` / `<html dir>` after boot.
 
-But `src/` is still only `App.tsx` (a placeholder naming the product), `main.tsx`, `shell/` and two
-stylesheets: **no features, no router, no data layer**. Anything in `.claude/rules/` describing
-`src/features/**` is describing the target, not the present. Do not report structure that does not
-exist yet.
+FE-02 added the token system (`src/styles/`) and a primitive layer of seventeen components under
+`src/lib/components/`, each a folder of `index.tsx` + `<name>.interface.ts` + a `<name>.css` unless
+it contributes no styles of its own (`icon-button` composes `button` and so has none):
+`badge`, `button`, `icon`, `icon-button`, `field`, `input`, `select`, `status-dot`, `progress-bar`,
+`skeleton`, `dialog`, `tooltip`, `toast`, `empty-state`, `error-state`, `media-tile`,
+`approval-controls`. `src/shell/design-system-preview/` renders all of them and is the only place
+any of it can be looked at.
+
+But there are still **no features, no router and no data layer** — `src/features/` does not exist,
+and `App.tsx` renders the preview gallery. Anything in `.claude/rules/` describing `src/features/**`
+is describing the target, not the present. Do not report structure that does not exist yet.
+
+Two things FE-02 established that later phases inherit rather than re-decide: state colours ship as
+**CSS tokens only** — components take a presentational `StatusTone`, and the state→tone mapping is
+FE-04's job against the real inferred contract — and a tone's identity lives in its **border and
+dot form, not its text colour**, which `plan/02-design-system.md` records with the measurements.
 
 ## The six rules that outrank everything else
 
@@ -105,8 +119,12 @@ The browser floor is not a preference — it is what Vite's default `build.targe
 ## Where things live
 
 ```
-src/                      the app (today: a placeholder App, main.tsx, shell/, two stylesheets)
-src/shell/                app frame; today the only writer of <html lang>/<html dir>, called at boot
+src/                      the app (today: App, main.tsx, shell/, lib/, assets/, styles/)
+src/shell/                app frame; writes <html lang>/<html dir> at boot; holds the preview gallery
+src/lib/components/       the shared primitives, one folder per component
+src/lib/interfaces/       types more than one component uses
+src/assets/               SVG artwork, mirroring src/; never inlined in JSX
+src/styles/               layers.css, reset.css, tokens.css
 test/                     tests, mirroring src/ — nothing under src/ is a test
 build/                    build-time code: the external-URL guard that vite.config.ts installs
 public/                   copied verbatim to dist/ root; favicon.svg and icons.svg exist and resolve
