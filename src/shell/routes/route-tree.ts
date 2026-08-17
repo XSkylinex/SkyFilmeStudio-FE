@@ -1,4 +1,4 @@
-import { redirect } from 'react-router-dom';
+import { replace } from 'react-router-dom';
 import type { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 import { AppShell } from '@/shell/app-shell';
 import { ProductionShell } from '@/shell/production-shell';
@@ -57,7 +57,7 @@ const resolveProductionIndexRedirect = ({
     });
   }
 
-  return redirect(productionPlanPath(projectId, productionId));
+  return replace(productionPlanPath(projectId, productionId));
 };
 
 const productionRoutes: RouteObject[] = [

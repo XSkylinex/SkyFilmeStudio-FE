@@ -150,6 +150,36 @@ describe('AppShell', () => {
     expect(screen.getByText('assets page arrived')).toBeInTheDocument();
   });
 
+  it('does not mark an ancestor nav link as the current page when a deeper route is active', () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: AppShell,
+        children: [
+          {
+            path: 'projects/:projectId/productions',
+            Component: () => <p>productions list</p>,
+          },
+          {
+            path: 'projects/:projectId/productions/:productionId/storyboard',
+            Component: () => <p>storyboard page</p>,
+          },
+        ],
+      },
+    ]);
+
+    render(
+      <Stub
+        initialEntries={['/projects/proj-1/productions/prod-1/storyboard']}
+      />,
+    );
+
+    expect(screen.getByText('storyboard page')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Productions' }),
+    ).not.toHaveAttribute('aria-current');
+  });
+
   it('sets the document title from the matched route and falls back to the app name', () => {
     const Stub = createRoutesStub([
       {

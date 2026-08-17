@@ -1,4 +1,4 @@
-describe('the dynamic imports behind the five lazy routes', () => {
+describe('the dynamic imports behind the five media-heavy lazy routes', () => {
   it('resolves the storyboard route module', async () => {
     const routeModule = await import('@/features/storyboard/StoryboardPage');
 

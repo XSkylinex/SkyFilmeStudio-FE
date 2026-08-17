@@ -58,7 +58,7 @@ export const AppShell: FC = () => {
                 <ul className="app-shell__nav-list">
                   {navLinks.map((link) => (
                     <li key={link.to}>
-                      <NavLink className="app-shell__nav-link" to={link.to}>
+                      <NavLink className="app-shell__nav-link" to={link.to} end>
                         {link.label}
                       </NavLink>
                     </li>

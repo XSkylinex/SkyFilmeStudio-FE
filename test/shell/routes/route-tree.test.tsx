@@ -9,10 +9,15 @@ import { routeTree } from '@/shell/routes/route-tree';
 import { NotFoundPage } from '@/shell/routes/not-found-page';
 import { RootErrorBoundary } from '@/shell/root-error-boundary';
 import {
+  productionAudioPath,
   productionPath,
   productionPlanPath,
   productionShotPath,
+  productionShotsPath,
+  productionStoryboardPath,
+  productionTimelinePath,
   projectDashboardPath,
+  projectListPath,
   subjectReviewPath,
   systemPath,
 } from '@/shell/routes/routes.constants';
@@ -79,6 +84,24 @@ describe('routeTree', () => {
     );
   });
 
+  it('replaces the production-index redirect instead of pushing it, so Back escapes on the first press', async () => {
+    const memoryRouter = createMemoryRouter(routeTree, {
+      initialEntries: [projectListPath(), productionPath('proj-1', 'prod-1')],
+      initialIndex: 1,
+    });
+
+    render(<RouterProvider router={memoryRouter} />);
+
+    expect(
+      await screen.findByRole('heading', { name: 'Plan', level: 1 }),
+    ).toBeInTheDocument();
+    expect(memoryRouter.state.historyAction).toBe('REPLACE');
+
+    await memoryRouter.navigate(-1);
+
+    expect(memoryRouter.state.location.pathname).toBe(projectListPath());
+  });
+
   it('resolves a URL built by productionShotPath back to the shot review route', () => {
     const url = productionShotPath('proj-1', 'prod-1', 'shot-1');
     const shotMatch = matchRoutes(routeTree, url)?.at(-1);
@@ -124,6 +147,68 @@ describe('the design-system gallery route', () => {
 
     expect(
       await screen.findByRole('heading', { name: 'Design system preview' }),
+    ).toBeInTheDocument();
+  });
+});
+
+describe('the media-heavy lazy routes, rendered through the router so their route.lazy mapper actually runs', () => {
+  it('resolves the storyboard route to StoryboardPage', async () => {
+    const memoryRouter = createMemoryRouter(routeTree, {
+      initialEntries: [productionStoryboardPath('proj-1', 'prod-1')],
+    });
+
+    render(<RouterProvider router={memoryRouter} />);
+
+    expect(
+      await screen.findByRole('heading', { name: 'Storyboard', level: 1 }),
+    ).toBeInTheDocument();
+  });
+
+  it('resolves the shots list route to ShotsPage', async () => {
+    const memoryRouter = createMemoryRouter(routeTree, {
+      initialEntries: [productionShotsPath('proj-1', 'prod-1')],
+    });
+
+    render(<RouterProvider router={memoryRouter} />);
+
+    expect(
+      await screen.findByRole('heading', { name: 'Shots', level: 1 }),
+    ).toBeInTheDocument();
+  });
+
+  it('resolves the shot review route to ShotReviewPage', async () => {
+    const memoryRouter = createMemoryRouter(routeTree, {
+      initialEntries: [productionShotPath('proj-1', 'prod-1', 'shot-1')],
+    });
+
+    render(<RouterProvider router={memoryRouter} />);
+
+    expect(
+      await screen.findByRole('heading', { name: 'Shot review', level: 1 }),
+    ).toBeInTheDocument();
+  });
+
+  it('resolves the audio route to AudioPage', async () => {
+    const memoryRouter = createMemoryRouter(routeTree, {
+      initialEntries: [productionAudioPath('proj-1', 'prod-1')],
+    });
+
+    render(<RouterProvider router={memoryRouter} />);
+
+    expect(
+      await screen.findByRole('heading', { name: 'Audio', level: 1 }),
+    ).toBeInTheDocument();
+  });
+
+  it('resolves the timeline route to TimelinePage', async () => {
+    const memoryRouter = createMemoryRouter(routeTree, {
+      initialEntries: [productionTimelinePath('proj-1', 'prod-1')],
+    });
+
+    render(<RouterProvider router={memoryRouter} />);
+
+    expect(
+      await screen.findByRole('heading', { name: 'Timeline', level: 1 }),
     ).toBeInTheDocument();
   });
 });

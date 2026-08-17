@@ -51,6 +51,18 @@ describe('ProductionNav', () => {
     expect(screen.getByText('Blocked')).toBeInTheDocument();
   });
 
+  it('does not mark the Shots stage as current while reviewing one specific shot, which is a different page', () => {
+    render(
+      <MemoryRouter initialEntries={['/shots/shot-1']}>
+        <ProductionNav mode="SCREENPLAY" stageStates={{}} />
+      </MemoryRouter>,
+    );
+
+    expect(
+      screen.queryByRole('link', { current: 'page' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('renders every stage as a link a keyboard user can reach', () => {
     render(
       <MemoryRouter initialEntries={['/plan']}>

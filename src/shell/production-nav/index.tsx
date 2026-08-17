@@ -22,6 +22,7 @@ export const ProductionNav: FC<ProductionNavProps> = ({
           key={stage.id}
           to={stage.path}
           className="production-nav__stage"
+          end
         >
           <span className="production-nav__stage-label">{stage.label}</span>
           <span className="production-nav__stage-state">
