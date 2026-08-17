@@ -274,6 +274,25 @@ look is where the cheap findings are.*
 - **The five lazy route wirings were never executed by any test.** A typo'd
   export would have produced a silently empty page with a fully green suite.
 
+### Three ticks that are narrower than they read
+
+- **"nav stages derive from `narrativeMode` and state"** — the *selection* derives. The five-stage
+  sequence is a fixture until BE-15, and the mode itself is a constant, so **no URL in this app
+  renders a `MUSIC_DRIVEN` nav.** The Verification bullet "a `MUSIC_DRIVEN` production shows no
+  screenplay stage" is therefore proven by unit test only and cannot have been checked in a browser.
+- **"shell state is limited to the list"** — true, and only recently meaningful. `navCollapsed` now
+  has a real consumer and a real persisted effect; `theme` and `panelLayout` still have none. They
+  are kept because step 8 names them as the shell's to own, not because anything reads them. `theme`
+  is the one to watch: `reset.css` already resolves light and dark through `color-scheme`, so a
+  `theme` value that nothing applies would be a second source of truth the moment someone wires it.
+- **`OfflineMode` is a hand-written wire type**, and this phase made the opposite call for
+  `narrativeMode` one section above. The difference is that §2171 and §14.2 contradict each other
+  about narrative modes, whereas BE-02's offline payload is quoted once and unambiguously — so this
+  is transcription rather than invention. It is still a second source of truth, and it belongs on
+  FE-04's contract-generation list: if BE-02 ships `lanWorkersAllowed` instead of `allowLanWorkers`,
+  the resolver reads `undefined`, drops the fact, and the indicator under-reports a mode in which
+  data leaves the machine — the exact failure it exists to prevent.
+
 ### Two limits that remain, stated rather than discovered later
 
 - **The shortcuts dialog reads the document direction once, at render — and after a runtime switch
