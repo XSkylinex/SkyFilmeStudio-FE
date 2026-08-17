@@ -47,6 +47,21 @@ describe('findExternalUrls', () => {
     expect(findExternalUrls(js)).toStrictEqual([]);
   });
 
+  it("allows React Router's documentation link inside an invariant message", () => {
+    const js =
+      'return `${hookName} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`;';
+
+    expect(findExternalUrls(js)).toStrictEqual([]);
+  });
+
+  it('still reports a fetchable asset on an allowed documentation host', () => {
+    const js = 'const font = "https://reactrouter.com/assets/inter.woff2";';
+
+    expect(findExternalUrls(js)).toStrictEqual([
+      'https://reactrouter.com/assets/inter.woff2',
+    ]);
+  });
+
   it('reports a host that merely looks like loopback', () => {
     const js = 'fetch("https://localhost.evil.example.com/exfiltrate")';
 

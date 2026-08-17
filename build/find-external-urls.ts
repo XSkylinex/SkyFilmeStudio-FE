@@ -3,6 +3,7 @@ const URL_PATTERN = /\bhttps?:\/\/[^\s"'`\\)<>]+/gi;
 const NON_FETCHING_URL_PREFIXES = [
   'http://www.w3.org/',
   'https://react.dev/errors/',
+  'https://reactrouter.com/en/main/',
 ];
 
 const LOOPBACK_IPV4_PREFIX = '127.';
