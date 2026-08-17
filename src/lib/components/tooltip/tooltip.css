@@ -18,7 +18,7 @@
     translate: -50%;
     margin-block-end: var(--space-1);
     inline-size: max-content;
-    max-inline-size: var(--size-xs);
+    max-inline-size: min(var(--size-2xs), 90vw);
     padding-block: var(--space-1);
     padding-inline: var(--space-2);
     border: 1px solid var(--color-border-strong);
@@ -32,7 +32,7 @@
     pointer-events: none;
     transition: opacity var(--duration-fast) var(--ease-standard);
 
-    html[dir='rtl'] & {
+    [dir='rtl'] & {
       translate: 50%;
     }
   }

@@ -5,7 +5,7 @@
     flex-direction: column;
     gap: var(--space-7);
     inline-size: 100%;
-    max-inline-size: 80rem;
+    max-inline-size: var(--size-xl);
     margin-inline: auto;
     padding-block: var(--space-6);
     padding-inline: var(--space-5);
@@ -33,7 +33,12 @@
 
   .design-system-preview__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+    --preview-column-min: 13rem;
+
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(var(--preview-column-min), 1fr)
+    );
     align-items: start;
     gap: var(--space-4);
 
@@ -42,7 +47,7 @@
     }
 
     & .skeleton[data-shape='rect'] {
-      max-inline-size: 10rem;
+      max-inline-size: var(--size-2xs);
     }
   }
 }
