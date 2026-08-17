@@ -232,7 +232,48 @@ for text unique to each page rather than by reading filenames. Making
 `/design-system` lazy took the entry chunk from 324.50 kB to 310.72 kB and its
 stylesheet from 37.89 kB to 28.92 kB.
 
-### What a review caught that the gate and I both missed
+### What the second review caught, after the first round was called done
+
+The phase was marked done once already. A second review — asked to verify the
+first round's fixes rather than trust them — found **two of six not actually
+fixed** and six more nobody had looked at. The status was reverted, five boxes
+un-ticked, and the fixes are the last four commits. Worth recording because the
+pattern is the lesson: *a fix reported as done is not evidence, and the second
+look is where the cheap findings are.*
+
+- **The space bar did not scroll, anywhere.** `preventDefault()` ran before the
+  listener lookup, and nothing in the app subscribes to any shortcut except the
+  help dialog — so on every screen Space and the arrow keys were dead, in a
+  console built for long lists and dense media grids. This predated both
+  reviews.
+- **The offline indicator's contradiction had moved, not gone.** The resolver was
+  fixed; the *copy* still asserted a fact about a flag it does not read, and a
+  passing test locked it in. `localOnly: false` also discarded three facts, so
+  half the truth table could not distinguish operator-enabled at all.
+- **The index redirect trapped the Back button.** A loader `redirect()` pushes;
+  measured four Back presses that never escaped. It fires on exactly the case
+  Decision 2 exists for — a bookmark, or a URL pasted between the two machines.
+- **Ancestor nav links claimed `aria-current="page"`**, so a screen-reader user
+  on the storyboard was told "Productions, current page".
+- **Two more surfaces were still claiming**: the connection indicator said
+  "Connecting" forever with nothing driving it, and the stage badges asserted
+  "In review" — that work awaits a human — from a fixture with no disclaimer.
+- **The five lazy route wirings were never executed by any test.** A typo'd
+  export would have produced a silently empty page with a fully green suite.
+
+### Two limits that remain, stated rather than discovered later
+
+- **The shortcuts dialog reads the document direction once, at render.** That is
+  correct for the direction the shell writes at boot, and it will not track a
+  runtime language switch. FE-15 introduces that switch and wants a direction
+  context rather than a document read.
+- **A throw inside `RootErrorBoundary` itself yields a blank page.** The router's
+  `RenderErrorBoundary` re-renders the same error component rather than bubbling,
+  so `FatalBoundary` never sees it. `RootErrorBoundary`, `RouteErrorBoundary`,
+  `FatalErrorView`, `ErrorState` and `Button` therefore have no backstop and must
+  not throw.
+
+### What the first review caught that the gate and I both missed
 
 Recorded because the pattern repeats: everything below passed `typecheck`,
 `lint`, `test` and `build`.
