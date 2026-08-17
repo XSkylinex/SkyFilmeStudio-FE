@@ -72,10 +72,16 @@ describe('findExternalUrls', () => {
     expect(findExternalUrls(js)).toStrictEqual([]);
   });
 
-  it('reports any other shortened link, since only that one decoder URL is allowed', () => {
-    const js = 'fetch("https://bit.ly/some-other-link")';
+  it('reports a shortened link that merely starts with the allowed one, since a shortener can be repointed', () => {
+    const js = [
+      'fetch("https://bit.ly/3cXEKWfZZ9")',
+      'fetch("https://bit.ly/3cXEKWf/steal")',
+      'fetch("https://bit.ly/some-other-link")',
+    ].join('\n');
 
     expect(findExternalUrls(js)).toStrictEqual([
+      'https://bit.ly/3cXEKWfZZ9',
+      'https://bit.ly/3cXEKWf/steal',
       'https://bit.ly/some-other-link',
     ]);
   });

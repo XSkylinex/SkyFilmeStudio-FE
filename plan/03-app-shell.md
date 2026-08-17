@@ -175,9 +175,10 @@ later.
 > server/editor/ephemeral split is re-litigated, and TanStack Query still owns everything the
 > orchestrator can tell us.
 >
-> `@reduxjs/toolkit@2.12.0`, `react-redux@9.3.0` and `axios@1.19.0`, all checked against the registry
-> and clear of `.yarnrc.yml`'s 3-day age gate (94, 94 and 19 days). `axios` sits **under** the query
-> layer as its HTTP client, never called from a component.
+> `@reduxjs/toolkit@2.12.0` and `react-redux@9.3.0`, both checked against the registry and clear of
+> `.yarnrc.yml`'s 3-day age gate at 94 days. `axios` was installed with them and **removed again** —
+> nothing imported it and nothing could, since the data layer is FE-04 and FE-04 is blocked on BE-01.
+> The bundle was byte-identical with and without it.
 >
 > The list below is unchanged — it is what the *slice* holds, not what a context held.
 
@@ -275,15 +276,22 @@ look is where the cheap findings are.*
 
 ### Two limits that remain, stated rather than discovered later
 
-- **The shortcuts dialog reads the document direction once, at render.** That is
-  correct for the direction the shell writes at boot, and it will not track a
-  runtime language switch. FE-15 introduces that switch and wants a direction
-  context rather than a document read.
-- **A throw inside `RootErrorBoundary` itself yields a blank page.** The router's
-  `RenderErrorBoundary` re-renders the same error component rather than bubbling,
-  so `FatalBoundary` never sees it. `RootErrorBoundary`, `RouteErrorBoundary`,
-  `FatalErrorView`, `ErrorState` and `Button` therefore have no backstop and must
-  not throw.
+- **The shortcuts dialog reads the document direction once, at render — and after a runtime switch
+  it does not merely go stale, it contradicts the keys.** The dispatch side reads
+  `document.documentElement.dir` live inside the keydown handler; the dialog reads it during render,
+  which React Compiler is entitled to cache and does. So a session that starts LTR and switches to
+  RTL gets a dialog saying → is "next shot" while → actually fires *previous*. Correct for the
+  direction the shell writes at boot, which is the only case today. FE-15 introduces the switch and
+  wants a direction context rather than a document read on both sides.
+- **A boundary that throws while handling a *loader* error yields a blank page** — and only that
+  case. Measured both paths: when the failing route threw during **render**, `FatalBoundary` caught
+  the boundary's own failure and rendered the fatal screen with a working reload. When the error came
+  from a **loader**, nothing above ever saw it — no `getDerivedStateFromError`, no
+  `componentDidCatch`, zero bytes of DOM.
+
+  An earlier version of this note claimed the render case had no backstop either. It does. The
+  correction matters because a recorded limit is how a future reader decides *not* to test
+  something.
 
 ### What the first review caught that the gate and I both missed
 
