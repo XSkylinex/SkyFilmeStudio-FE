@@ -10,6 +10,8 @@ export const Button: FC<ButtonProps> = ({
   disabled,
   onClick,
   'aria-label': label,
+  'aria-expanded': expanded,
+  'aria-controls': controls,
   'aria-describedby': describedBy,
   children,
 }) => (
@@ -21,6 +23,8 @@ export const Button: FC<ButtonProps> = ({
     type={type}
     disabled={disabled}
     aria-label={label}
+    aria-expanded={expanded}
+    aria-controls={controls}
     aria-describedby={describedBy}
     onClick={onClick}
   >

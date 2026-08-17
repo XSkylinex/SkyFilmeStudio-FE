@@ -1,6 +1,5 @@
-import type { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
-import type { ShellSliceRootState } from '@/shell/interfaces/shell-state';
+import type { store } from './index';
 
-export type RootState = ShellSliceRootState;
+export type RootState = ReturnType<typeof store.getState>;
 
-export type AppDispatch = ThunkDispatch<RootState, undefined, UnknownAction>;
+export type AppDispatch = typeof store.dispatch;

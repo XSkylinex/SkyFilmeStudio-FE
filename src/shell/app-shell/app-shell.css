@@ -42,6 +42,10 @@
     min-inline-size: 0;
     padding-block-start: var(--space-2);
     border-block-start: 1px solid var(--color-border-subtle);
+
+    &[data-collapsed='true'] {
+      display: none;
+    }
   }
 
   .app-shell__nav-list {
