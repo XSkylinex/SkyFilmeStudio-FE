@@ -65,9 +65,9 @@
       oklch(44% 0.014 264)
     );
 
-    --tone-ready-fg: light-dark(oklch(32% 0.09 195), oklch(88% 0.07 195));
-    --tone-ready-bg: light-dark(oklch(94% 0.035 195), oklch(26% 0.05 195));
-    --tone-ready-border: light-dark(oklch(74% 0.09 195), oklch(44% 0.09 195));
+    --tone-ready-fg: light-dark(oklch(24% 0.1 195), oklch(94% 0.09 195));
+    --tone-ready-bg: light-dark(oklch(86% 0.06 195), oklch(34% 0.07 195));
+    --tone-ready-border: light-dark(oklch(58% 0.12 195), oklch(62% 0.12 195));
 
     --tone-checking-fg: light-dark(oklch(32% 0.11 222), oklch(88% 0.08 222));
     --tone-checking-bg: light-dark(oklch(94% 0.03 222), oklch(26% 0.05 222));
@@ -84,11 +84,11 @@
     --tone-active-bg: light-dark(oklch(94% 0.035 300), oklch(26% 0.06 300));
     --tone-active-border: light-dark(oklch(74% 0.13 300), oklch(44% 0.12 300));
 
-    --tone-processing-fg: light-dark(oklch(32% 0.16 335), oklch(88% 0.11 335));
-    --tone-processing-bg: light-dark(oklch(94% 0.035 335), oklch(26% 0.06 335));
+    --tone-processing-fg: light-dark(oklch(20% 0.16 335), oklch(96% 0.11 335));
+    --tone-processing-bg: light-dark(oklch(84% 0.06 335), oklch(38% 0.08 335));
     --tone-processing-border: light-dark(
-      oklch(74% 0.14 335),
-      oklch(44% 0.13 335)
+      oklch(48% 0.16 335),
+      oklch(70% 0.15 335)
     );
 
     --tone-success-fg: light-dark(oklch(40% 0.15 150), oklch(92% 0.13 150));
@@ -103,9 +103,13 @@
     --tone-danger-bg: light-dark(oklch(88% 0.04 25), oklch(19% 0.05 25));
     --tone-danger-border: light-dark(oklch(62% 0.14 25), oklch(33% 0.11 25));
 
-    --tone-stale-fg: light-dark(oklch(32% 0.05 95), oklch(88% 0.035 95));
-    --tone-stale-bg: light-dark(oklch(94% 0.018 95), oklch(26% 0.022 95));
-    --tone-stale-border: light-dark(oklch(74% 0.045 95), oklch(44% 0.04 95));
+    /* solid fill: does not invert across schemes, so text on it never does either */
+    --tone-danger-solid: oklch(45% 0.18 25);
+    --tone-danger-on-solid: oklch(99% 0 0);
+
+    --tone-stale-fg: light-dark(oklch(28% 0.03 95), oklch(72% 0.025 95));
+    --tone-stale-bg: light-dark(oklch(87% 0.014 95), oklch(20% 0.016 95));
+    --tone-stale-border: light-dark(oklch(56% 0.03 95), oklch(32% 0.028 95));
 
     /* job state */
     --color-job-state-pending-fg: var(--tone-neutral-fg);
@@ -224,9 +228,11 @@
     --space-8: 3rem;
 
     /* size */
+    --size-2xs: 10rem;
     --size-xs: 16rem;
     --size-sm: 22rem;
     --size-md: 32rem;
+    --size-xl: 80rem;
 
     /* type */
     --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
