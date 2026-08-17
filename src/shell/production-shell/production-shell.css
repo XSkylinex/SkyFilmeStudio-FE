@@ -1,0 +1,24 @@
+@layer features {
+  .production-shell {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: var(--space-5);
+  }
+
+  .production-shell__nav {
+    box-sizing: border-box;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: var(--size-xs);
+  }
+
+  .production-shell__content {
+    box-sizing: border-box;
+    flex-grow: 999;
+    flex-shrink: 1;
+    flex-basis: 0;
+    min-inline-size: 50%;
+  }
+}

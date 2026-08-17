@@ -1,0 +1,104 @@
+@layer features {
+  .connection-indicator {
+    --connection-indicator-fg: var(--tone-neutral-fg);
+    --connection-indicator-bg: var(--tone-neutral-bg);
+    --connection-indicator-border: var(--tone-neutral-border);
+    --connection-indicator-pulse-duration: calc(var(--duration-slow) * 6);
+
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    max-inline-size: 100%;
+    padding-block: var(--space-1);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--connection-indicator-border);
+    border-radius: var(--radius-lg);
+    background: var(--connection-indicator-bg);
+    color: var(--connection-indicator-fg);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+
+    &::before {
+      content: '';
+      box-sizing: border-box;
+      flex-shrink: 0;
+      inline-size: var(--space-2);
+      block-size: var(--space-2);
+      border: 1px solid var(--connection-indicator-fg);
+      border-radius: var(--radius-full);
+      background: var(--connection-indicator-fg);
+    }
+
+    &:focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset);
+    }
+
+    &[data-state='connecting'] {
+      --connection-indicator-fg: var(--tone-checking-fg);
+      --connection-indicator-bg: var(--tone-checking-bg);
+      --connection-indicator-border: var(--tone-checking-border);
+
+      &::before {
+        animation: connection-indicator-pulse
+          var(--connection-indicator-pulse-duration) var(--ease-standard)
+          infinite;
+      }
+    }
+
+    &[data-state='open'] {
+      --connection-indicator-fg: var(--tone-success-fg);
+      --connection-indicator-bg: var(--tone-success-bg);
+      --connection-indicator-border: var(--tone-success-border);
+    }
+
+    &[data-state='closed'] {
+      --connection-indicator-fg: var(--tone-danger-fg);
+      --connection-indicator-bg: var(--tone-danger-bg);
+      --connection-indicator-border: var(--tone-danger-border);
+
+      &::before {
+        background: transparent;
+        border-width: 2px;
+      }
+    }
+
+    &[data-state='reconnecting'] {
+      --connection-indicator-fg: var(--tone-warning-fg);
+      --connection-indicator-bg: var(--tone-warning-bg);
+      --connection-indicator-border: var(--tone-warning-border);
+
+      &::before {
+        animation: connection-indicator-pulse
+          var(--connection-indicator-pulse-duration) var(--ease-standard)
+          infinite;
+        background: transparent;
+        border-width: 2px;
+      }
+    }
+  }
+
+  @keyframes connection-indicator-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .connection-indicator[data-state='connecting']::before,
+    .connection-indicator[data-state='reconnecting']::before {
+      animation: none;
+      background: transparent;
+      border-width: 2px;
+      border-style: dashed;
+    }
+  }
+}
