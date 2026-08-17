@@ -13,10 +13,11 @@ export interface ShortcutDefinition {
   readonly description: string;
 }
 
-export interface FiredShortcut {
-  readonly id: ShortcutId;
-}
+export type ShortcutListener = () => void;
 
 export interface KeyboardShortcutsContextValue {
-  readonly lastFiredShortcut: FiredShortcut | null;
+  readonly subscribe: (
+    id: ShortcutId,
+    listener: ShortcutListener,
+  ) => () => void;
 }

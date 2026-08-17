@@ -6,12 +6,12 @@ export const useKeyboardShortcut = (
   id: ShortcutId,
   handler: () => void,
 ): void => {
-  const { lastFiredShortcut } = useKeyboardShortcutsContext();
+  const { subscribe } = useKeyboardShortcutsContext();
   const handleFire = useEffectEvent(handler);
 
   useEffect(() => {
-    if (lastFiredShortcut?.id === id) {
+    return subscribe(id, () => {
       handleFire();
-    }
-  }, [lastFiredShortcut, id]);
+    });
+  }, [id, subscribe]);
 };
