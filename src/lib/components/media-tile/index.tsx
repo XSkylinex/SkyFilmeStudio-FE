@@ -1,10 +1,11 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Skeleton } from '@/lib/components/skeleton';
-import type { MediaTileProps } from './media-tile.interface';
+import type {
+  MediaTileLoadState,
+  MediaTileProps,
+} from './media-tile.interface';
 import './media-tile.css';
-
-type MediaTileLoadState = 'empty' | 'loading' | 'ready' | 'failed';
 
 const resolveMediaTileLoadState = (
   src: string | undefined,

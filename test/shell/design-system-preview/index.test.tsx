@@ -184,8 +184,14 @@ describe('DesignSystemPreview', () => {
     const describedBy = durationControl.getAttribute('aria-describedby');
     expect(describedBy).toBeTruthy();
     expect(document.getElementById(describedBy as string)).toHaveTextContent(
-      'Measured on this hardware profile',
+      'Fixture values for this preview, not measured on any hardware profile',
     );
+  });
+
+  it('never claims the fixture duration options were measured on real hardware', () => {
+    render(<DesignSystemPreview />);
+
+    expect(screen.queryByText(/^measured/i)).not.toBeInTheDocument();
   });
 
   it('changes the standalone select value when the user picks a different option', async () => {

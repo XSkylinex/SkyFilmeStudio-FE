@@ -106,10 +106,10 @@ const ICON_BUTTON_SHOWCASE: readonly IconButtonShowcaseEntry[] = [
   { variant: 'danger', label: 'Reject' },
 ];
 
-const DURATION_DEFAULT_VALUE = '4';
+const FIXTURE_DURATION_DEFAULT_VALUE = '4';
 
-const DURATION_OPTIONS = [
-  { value: DURATION_DEFAULT_VALUE, label: '4 seconds' },
+const FIXTURE_DURATION_OPTIONS = [
+  { value: FIXTURE_DURATION_DEFAULT_VALUE, label: '4 seconds' },
   { value: '8', label: '8 seconds' },
 ];
 
@@ -174,7 +174,9 @@ const handleToastDismiss = (): void => {};
 const handleApprovalControlsAction = (): void => {};
 
 export const DesignSystemPreview: FC = () => {
-  const [durationValue, setDurationValue] = useState(DURATION_DEFAULT_VALUE);
+  const [durationValue, setDurationValue] = useState(
+    FIXTURE_DURATION_DEFAULT_VALUE,
+  );
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
@@ -214,12 +216,17 @@ export const DesignSystemPreview: FC = () => {
           {PROGRESS_BAR_PREVIEW_VALUES.map((value) => (
             <ProgressBar
               key={value}
+              label={`Fixture render progress, ${value}%`}
               tone={STATUS_TONE.ACTIVE}
               indeterminate={false}
               value={value}
             />
           ))}
-          <ProgressBar tone={STATUS_TONE.ACTIVE} indeterminate />
+          <ProgressBar
+            label="Fixture render progress, still preparing"
+            tone={STATUS_TONE.ACTIVE}
+            indeterminate
+          />
         </div>
       </section>
 
@@ -270,9 +277,12 @@ export const DesignSystemPreview: FC = () => {
       <section className="design-system-preview__section">
         <h2>Field</h2>
         <div className="design-system-preview__grid">
-          <Field label="Duration" hint="Measured on this hardware profile">
+          <Field
+            label="Duration"
+            hint="Fixture values for this preview, not measured on any hardware profile"
+          >
             <Select
-              options={DURATION_OPTIONS}
+              options={FIXTURE_DURATION_OPTIONS}
               value={durationValue}
               onChange={setDurationValue}
             />
@@ -287,7 +297,7 @@ export const DesignSystemPreview: FC = () => {
         <h2>Select</h2>
         <div className="design-system-preview__grid">
           <Select
-            options={DURATION_OPTIONS}
+            options={FIXTURE_DURATION_OPTIONS}
             value={durationValue}
             onChange={setDurationValue}
           />
@@ -338,7 +348,7 @@ export const DesignSystemPreview: FC = () => {
       <section className="design-system-preview__section">
         <h2>Tooltip</h2>
         <div className="design-system-preview__grid">
-          <Tooltip label="Measured on this hardware profile, not the model's marketing">
+          <Tooltip label="Fixture value for this preview, not a measured capability">
             <Button variant="secondary" size="sm">
               Duration: 8s
             </Button>

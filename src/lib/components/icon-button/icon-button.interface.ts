@@ -7,9 +7,9 @@ export interface IconButtonProps {
   variant: ButtonVariant;
   size: ButtonSize;
   label: string;
-  type?: ButtonType;
-  disabled?: boolean;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-  'aria-describedby'?: string;
+  type?: ButtonType | undefined;
+  disabled?: boolean | undefined;
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+  'aria-describedby'?: string | undefined;
   children: ReactNode;
 }

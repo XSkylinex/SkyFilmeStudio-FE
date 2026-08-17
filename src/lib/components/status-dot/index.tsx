@@ -1,9 +1,7 @@
 import type { FC } from 'react';
 import type { StatusTone } from '@/lib/interfaces/status-tone';
-import type { StatusDotProps } from './status-dot.interface';
+import type { StatusDotForm, StatusDotProps } from './status-dot.interface';
 import './status-dot.css';
-
-type StatusDotForm = 'solid' | 'ring' | 'half' | 'dashed' | 'cross' | 'diamond';
 
 const STATUS_DOT_FORM = {
   neutral: 'ring',
