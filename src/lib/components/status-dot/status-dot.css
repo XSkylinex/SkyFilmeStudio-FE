@@ -79,11 +79,8 @@
       background: var(--status-dot-color);
       border-radius: var(--radius-xs);
       transform: rotate(45deg);
-      box-shadow:
-        0 0 0 var(--space-1)
-          color-mix(in oklch, var(--status-dot-color) 40%, transparent),
-        0 0 0 calc(var(--space-1) * 2)
-          color-mix(in oklch, var(--status-dot-color) 18%, transparent);
+      box-shadow: 0 0 0 1px
+        color-mix(in oklch, var(--status-dot-color) 45%, transparent);
     }
   }
 }
