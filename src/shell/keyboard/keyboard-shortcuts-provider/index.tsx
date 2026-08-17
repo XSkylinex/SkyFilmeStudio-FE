@@ -25,7 +25,7 @@ export const KeyboardShortcutsProvider: FC<KeyboardShortcutsProviderProps> = ({
       if (event.ctrlKey || event.metaKey || event.altKey) {
         return;
       }
-      if (isEditableTarget(event.target)) {
+      if (isEditableTarget(event.target, event.key)) {
         return;
       }
       if (isModalOpen()) {
@@ -39,14 +39,17 @@ export const KeyboardShortcutsProvider: FC<KeyboardShortcutsProviderProps> = ({
         return;
       }
 
-      event.preventDefault();
-
       const id = resolveDirectionalShortcutId(
         shortcut.id,
         document.documentElement.dir,
       );
       const listeners = listenersRef.current.get(id);
-      listeners?.forEach((listener) => listener());
+      if (!listeners || listeners.size === 0) {
+        return;
+      }
+
+      event.preventDefault();
+      listeners.forEach((listener) => listener());
     };
 
     window.addEventListener('keydown', handleKeyDown);

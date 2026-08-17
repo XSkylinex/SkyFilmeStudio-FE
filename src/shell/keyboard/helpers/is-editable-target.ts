@@ -1,6 +1,11 @@
 const EDITABLE_TAG_NAMES = new Set(['INPUT', 'TEXTAREA', 'SELECT']);
+const SPACE_ACTIVATED_TAG_NAMES = new Set(['BUTTON']);
+const SPACE_KEY = ' ';
 
-export const isEditableTarget = (target: EventTarget | null): boolean => {
+export const isEditableTarget = (
+  target: EventTarget | null,
+  key: string,
+): boolean => {
   if (!(target instanceof HTMLElement)) {
     return false;
   }
@@ -12,5 +17,9 @@ export const isEditableTarget = (target: EventTarget | null): boolean => {
   }
 
   const contentEditableAttribute = target.getAttribute('contenteditable');
-  return contentEditableAttribute === '' || contentEditableAttribute === 'true';
+  if (contentEditableAttribute === '' || contentEditableAttribute === 'true') {
+    return true;
+  }
+
+  return key === SPACE_KEY && SPACE_ACTIVATED_TAG_NAMES.has(target.tagName);
 };

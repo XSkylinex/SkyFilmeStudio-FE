@@ -169,6 +169,67 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
     expect(handleApprove).not.toHaveBeenCalled();
   });
 
+  it('does not prevent Space when nothing subscribes to toggle-playback, so the page can still scroll', () => {
+    render(
+      <KeyboardShortcutsProvider>
+        <p>page content</p>
+      </KeyboardShortcutsProvider>,
+    );
+
+    const event = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
+    window.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+  });
+
+  it('does not prevent ArrowRight or "a" when nothing subscribes to either', () => {
+    render(
+      <KeyboardShortcutsProvider>
+        <p>page content</p>
+      </KeyboardShortcutsProvider>,
+    );
+
+    const arrowEvent = new KeyboardEvent('keydown', {
+      key: 'ArrowRight',
+      cancelable: true,
+    });
+    const letterEvent = new KeyboardEvent('keydown', {
+      key: 'a',
+      cancelable: true,
+    });
+    window.dispatchEvent(arrowEvent);
+    window.dispatchEvent(letterEvent);
+
+    expect(arrowEvent.defaultPrevented).toBe(false);
+    expect(letterEvent.defaultPrevented).toBe(false);
+  });
+
+  it('does not hijack Space for toggle-playback when a focused button would natively handle it', () => {
+    const handleTogglePlayback = vi.fn<() => void>();
+    const TogglePlaybackProbe: FC = () => {
+      useKeyboardShortcut('toggle-playback', handleTogglePlayback);
+      return <button type="button">Play</button>;
+    };
+
+    render(
+      <KeyboardShortcutsProvider>
+        <TogglePlaybackProbe />
+      </KeyboardShortcutsProvider>,
+    );
+
+    const button = screen.getByRole('button', { name: 'Play' });
+    button.focus();
+    const event = new KeyboardEvent('keydown', {
+      key: ' ',
+      cancelable: true,
+      bubbles: true,
+    });
+    button.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(handleTogglePlayback).not.toHaveBeenCalled();
+  });
+
   it('swaps ArrowRight/ArrowLeft under dir="rtl" so the key still moves in reading order', async () => {
     document.documentElement.dir = 'rtl';
     const handleNext = vi.fn<() => void>();
@@ -190,6 +251,26 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
 
     expect(handlePrevious).toHaveBeenCalledTimes(1);
     expect(handleNext).not.toHaveBeenCalled();
+
+    document.documentElement.dir = 'ltr';
+  });
+
+  it('documents the arrow keys in reading order under dir="rtl", matching what they actually dispatch', async () => {
+    document.documentElement.dir = 'rtl';
+    const user = userEvent.setup();
+    render(
+      <KeyboardShortcutsProvider>
+        <p>page content</p>
+      </KeyboardShortcutsProvider>,
+    );
+
+    await user.keyboard('?');
+
+    const rightArrowRow = screen.getByText('→').closest('li');
+    const leftArrowRow = screen.getByText('←').closest('li');
+
+    expect(rightArrowRow).toHaveTextContent('Go to the previous shot');
+    expect(leftArrowRow).toHaveTextContent('Go to the next shot');
 
     document.documentElement.dir = 'ltr';
   });
