@@ -32,4 +32,19 @@ describe('parseRouteErrorPayload', () => {
     expect(parseRouteErrorPayload(null)).toBeNull();
     expect(parseRouteErrorPayload(undefined)).toBeNull();
   });
+
+  it('parses a JSON-shaped string body, which is what a Response gets when no content-type header was set', () => {
+    const payload = parseRouteErrorPayload(
+      JSON.stringify({ code: 'DISK_SPACE_LOW', message: 'out of space' }),
+    );
+
+    expect(payload).toEqual({
+      code: 'DISK_SPACE_LOW',
+      message: 'out of space',
+    });
+  });
+
+  it('returns null for a string body that is not valid JSON, rather than throwing', () => {
+    expect(parseRouteErrorPayload('disk full')).toBeNull();
+  });
 });

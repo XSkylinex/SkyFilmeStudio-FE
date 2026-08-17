@@ -41,6 +41,115 @@ describe('RouteErrorBoundary', () => {
     ).toBeInTheDocument();
   });
 
+  it('recovers the code from a JSON body thrown without a content-type header', async () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        loader: () => {
+          throw new Response(JSON.stringify({ code: 'DISK_SPACE_LOW' }), {
+            status: 507,
+          });
+        },
+        Component: () => null,
+        ErrorBoundary: RouteErrorBoundary,
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(await screen.findByText(/low on disk space/i)).toBeInTheDocument();
+    expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
+  });
+
+  it('shows the raw response body instead of a dangling status sentence for a plain-text error', async () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        loader: () => {
+          throw new Response('disk full', {
+            status: 507,
+            headers: { 'content-type': 'text/plain' },
+          });
+        },
+        Component: () => null,
+        ErrorBoundary: RouteErrorBoundary,
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(await screen.findByText(/disk full/i)).toBeInTheDocument();
+  });
+
+  it('does not render a dangling status sentence when statusText is empty', async () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        loader: () => {
+          throw Response.json({ message: 'only a message' }, { status: 500 });
+        },
+        Component: () => null,
+        ErrorBoundary: RouteErrorBoundary,
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    const description = await screen.findByText(/orchestrator/i);
+    expect(description.textContent).toBe(
+      'The orchestrator responded with 500.',
+    );
+  });
+
+  it('shows the backend message alongside the canned description for a known code', async () => {
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        loader: () => {
+          throw Response.json(
+            {
+              code: 'DISK_SPACE_LOW',
+              message: '2.1 GB free on /Volumes/Media',
+            },
+            { status: 507 },
+          );
+        },
+        Component: () => null,
+        ErrorBoundary: RouteErrorBoundary,
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(
+      await screen.findByText(/2\.1 GB free on \/Volumes\/Media/),
+    ).toBeInTheDocument();
+  });
+
+  it('reads the code off a thrown plain object instead of stringifying it', () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const Stub = createRoutesStub([
+      {
+        path: '/',
+        Component: () => {
+          throw { code: 'DISK_SPACE_LOW', detail: 'x' };
+        },
+        ErrorBoundary: RouteErrorBoundary,
+      },
+    ]);
+
+    render(<Stub initialEntries={['/']} />);
+
+    expect(screen.getByText(/low on disk space/i)).toBeInTheDocument();
+    expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
+    expect(screen.queryByText('[object Object]')).not.toBeInTheDocument();
+
+    consoleErrorSpy.mockRestore();
+  });
+
   it('keeps the shell alive and shows a message for a plain render error with no typed backend code', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
