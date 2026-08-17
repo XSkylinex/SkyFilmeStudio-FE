@@ -107,9 +107,9 @@
     }
 
     &[data-variant='danger'] {
-      --button-bg: var(--tone-danger-border);
-      --button-fg: var(--color-text-on-accent);
-      --button-border: var(--tone-danger-border);
+      --button-bg: var(--tone-danger-solid);
+      --button-fg: var(--tone-danger-on-solid);
+      --button-border: var(--tone-danger-solid);
 
       &:disabled {
         --button-bg: var(--color-surface-raised);
