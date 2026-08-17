@@ -1,10 +1,5 @@
 import type { ReactElement } from 'react';
-
-export interface FieldControlProps {
-  id?: string | undefined;
-  'aria-describedby'?: string | undefined;
-  'aria-invalid'?: boolean | undefined;
-}
+import type { FieldControlProps } from '@/lib/interfaces/field-control-props';
 
 export interface FieldProps {
   label: string;

@@ -1,15 +1,13 @@
 import type { ChangeEventHandler } from 'react';
+import type { FieldControlProps } from '@/lib/interfaces/field-control-props';
 
 export type InputType = 'text' | 'number' | 'search';
 
-export interface InputProps {
-  type?: InputType;
-  value?: string;
-  defaultValue?: string;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-  placeholder?: string;
-  disabled?: boolean;
-  id?: string | undefined;
-  'aria-describedby'?: string | undefined;
-  'aria-invalid'?: boolean | undefined;
+export interface InputProps extends FieldControlProps {
+  type?: InputType | undefined;
+  value?: string | undefined;
+  defaultValue?: string | undefined;
+  onChange?: ChangeEventHandler<HTMLInputElement> | undefined;
+  placeholder?: string | undefined;
+  disabled?: boolean | undefined;
 }

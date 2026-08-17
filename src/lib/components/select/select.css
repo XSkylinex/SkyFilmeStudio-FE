@@ -36,7 +36,7 @@
     cursor: pointer;
     transition: border-color var(--duration-fast) var(--ease-standard);
 
-    html[dir='rtl'] & {
+    [dir='rtl'] & {
       background-position:
         var(--space-3) calc(50% - 1px),
         var(--space-4) calc(50% - 1px);

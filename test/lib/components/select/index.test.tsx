@@ -80,4 +80,25 @@ describe('Select', () => {
     expect(control.tagName).toBe('SELECT');
     expect(control).toHaveAttribute('aria-describedby');
   });
+
+  it('composes with Field, taking its generated id, aria-describedby and aria-invalid', () => {
+    render(
+      <Field label="Duration" error="Exceeds the tested maximum">
+        <Select
+          options={DURATION_OPTIONS}
+          value="4"
+          onChange={vi.fn<ChangeHandler>()}
+        />
+      </Field>,
+    );
+    const control = screen.getByLabelText('Duration');
+
+    expect(control.tagName).toBe('SELECT');
+    expect(control).toHaveAttribute('aria-invalid', 'true');
+    const describedBy = control.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    expect(document.getElementById(describedBy as string)).toHaveTextContent(
+      'Exceeds the tested maximum',
+    );
+  });
 });
