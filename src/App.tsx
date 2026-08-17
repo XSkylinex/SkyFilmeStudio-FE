@@ -1,4 +1,12 @@
 import type { FC } from 'react';
-import { DesignSystemPreview } from '@/shell/design-system-preview';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { FatalBoundary } from '@/shell/fatal-boundary';
+import { routeTree } from '@/shell/routes/route-tree';
 
-export const App: FC = () => <DesignSystemPreview />;
+const router = createBrowserRouter(routeTree);
+
+export const App: FC = () => (
+  <FatalBoundary>
+    <RouterProvider router={router} />
+  </FatalBoundary>
+);
