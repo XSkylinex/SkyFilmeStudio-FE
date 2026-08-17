@@ -48,6 +48,29 @@ it yet**. That is editor state, and it is a different value with a different nam
 
 ## Redux Toolkit
 
+**The store landed in FE-03, not FE-04** (2026-08-17, the user's call). The split above is unchanged
+— this is a timing decision, not a re-litigation. It exists so the shell stops passing state through
+props and every later feature has a slice to attach to.
+
+```text
+src/shell/store/index.ts               configureStore + the listener middleware
+src/shell/store/hooks.ts               useAppDispatch / useAppSelector, typed
+src/shell/store/store.interface.ts     RootState / AppDispatch
+src/shell/shell.slice.ts               the shell's own slice and its selectors
+```
+
+`axios` is installed as the HTTP client the query layer will call — it sits **under** TanStack Query,
+never beside it. A component that imports `axios` directly is the bug this arrangement prevents.
+
+Two things about the shell slice worth copying rather than re-deriving:
+
+- **A selector types against the smallest state it needs** (`{ shell: ShellState }`), not `RootState`
+  imported from the store. Importing the store into a slice is a cycle; the narrow shape is
+  structurally assignable and breaks it.
+- **Persistence is a listener, not a reducer.** Writing `localStorage` inside a reducer makes it
+  impure and untestable. `createListenerMiddleware` watches the action and writes after the fact, and
+  the read is guarded so a browser with storage blocked falls back rather than failing to boot.
+
 - Slices are per feature and colocated: `src/features/<feature>/<feature>.slice.ts`.
 - **No thunks that fetch.** Fetching is TanStack Query's job. A thunk in this app is for coordinating
   editor state across slices, and most of the time you do not need one.

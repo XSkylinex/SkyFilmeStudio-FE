@@ -169,6 +169,18 @@ later.
 
 ### 8. Shell state only
 
+> **Amended 2026-08-17: the store is Redux Toolkit, and it lands here rather than in FE-04.** The
+> user's call, made to stop the shell drilling state through props. `state-and-data.md` already named
+> Redux Toolkit as the store for this tier, so only the timing changed — nothing about the
+> server/editor/ephemeral split is re-litigated, and TanStack Query still owns everything the
+> orchestrator can tell us.
+>
+> `@reduxjs/toolkit@2.12.0`, `react-redux@9.3.0` and `axios@1.19.0`, all checked against the registry
+> and clear of `.yarnrc.yml`'s 3-day age gate (94, 94 and 19 days). `axios` sits **under** the query
+> layer as its HTTP client, never called from a component.
+>
+> The list below is unchanged — it is what the *slice* holds, not what a context held.
+
 The shell owns: current project, current production, panel layout, theme, nav collapse, toasts, and the
 socket. **Nothing else.** Server data belongs to the query layer (phase 04); uncommitted edits belong
 to feature slices.

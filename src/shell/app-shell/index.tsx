@@ -8,7 +8,8 @@ import {
 } from 'react-router-dom';
 import { ProgressBar } from '@/lib/components/progress-bar';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
-import { ShellStateProvider } from '@/shell/shell-state';
+import { Provider } from 'react-redux';
+import { store } from '@/shell/store';
 import { ConnectionStateProvider } from '@/shell/connection-indicator/connection-state-provider';
 import { ConnectionIndicator } from '@/shell/connection-indicator';
 import { OfflineIndicator } from '@/shell/offline-indicator';
@@ -32,7 +33,7 @@ export const AppShell: FC = () => {
   const navLinks = resolveAppShellNavLinks(projectId);
 
   return (
-    <ShellStateProvider>
+    <Provider store={store}>
       <ConnectionStateProvider>
         <KeyboardShortcutsProvider>
           <RouteTitle />
@@ -79,6 +80,6 @@ export const AppShell: FC = () => {
           </div>
         </KeyboardShortcutsProvider>
       </ConnectionStateProvider>
-    </ShellStateProvider>
+    </Provider>
   );
 };

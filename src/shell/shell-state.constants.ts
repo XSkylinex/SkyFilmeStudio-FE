@@ -1,4 +1,4 @@
-import type { PanelLayout, Theme } from './shell-state.interface';
+import type { PanelLayout, Theme } from '@/shell/interfaces/shell-state';
 
 export const THEME = {
   LIGHT: 'light',
