@@ -159,8 +159,8 @@ Run 2026-08-20.
 ```text
 yarn typecheck   clean
 yarn lint        clean
-yarn test        500 passed, 99 files   (477 / 92 before this phase)
-yarn build       clean, entry 390.47 kB, CSS 33.40 kB
+yarn test        563 passed, 99 files   (511 / 91 before this phase)
+yarn build       clean, entry 392.07 kB, CSS 33.53 kB
 yarn format      clean
 ```
 
@@ -212,6 +212,58 @@ check on real dialogue belongs to the phase that first renders dialogue.
 **Not translated, deliberately.** `src/shell/design-system-preview/` is a developer gallery, not
 product UI, and its fixture strings stay English. Identifiers stay English everywhere: error *codes*,
 model ids, file paths, hashes.
+
+## What a review caught that the gate did not
+
+Nine findings, all fixed. The gate was green throughout; none of these is a thing
+`typecheck`, `lint`, `test` or `build` has an opinion about.
+
+**The worst one defeated the point of the refactor.** `parseRouteErrorPayload`
+excludes `Error` instances, and a `StudioError` **is** an `Error` — so every error
+the data layer throws fell through to the generic branch. A Hebrew user hitting a
+507 would have seen "something failed while rendering this page" plus the English
+sentence in a monospace `<code>`, while the correct Hebrew sentence sat unreachable
+in the catalogue. `resolveRouteErrorView` now branches on `StudioError` first and
+reads the `messageKey` it already carries. The existing test only covered
+`new Error('boom')`, which is exactly why it survived.
+
+**Three surfaces were half-translated, which reads as a bug rather than a gap.**
+Route handles carried English titles, so the breadcrumb trail and `document.title`
+stayed English under a translated H1; production stage names sat in English beside
+translated state badges; and `Skip to main content` — the first focusable element
+on every page — was raw JSX the sweep never saw. All three now carry a
+`TranslationKey`, the same move the nav links and stage states already made.
+
+**Every load flashed LTR for a Hebrew user.** `main.tsx` applied `'en'`/`'ltr'`
+before `createRoot()`, and `DocumentLanguage` corrected it in a passive effect
+that runs after paint — while the store had already read the stored language
+synchronously, so the first painted frame was Hebrew text in an LTR shell. Boot
+now resolves the stored language before the first render.
+
+**`resolveTextDirection` was a language test, not a direction test** — and its
+table was, byte for byte, the `:lang()` list Lightning CSS lowers `:dir()` into.
+So the helper reproduced exactly the mistake this phase condemns three sections
+above. It now checks a script subtag first: `yi-Latn` and `he-Latn` are LTR,
+`az-Arab` and `pa-Arab` are RTL. `iw` was added too — the deprecated code for
+Hebrew, which the contract's `languageTagSchema` accepts and older ICU emits.
+
+**`translate` threw on an unknown key, and the throw could not be contained.**
+No unreachable key exists today, but `useTranslate` is called inside
+`RouteErrorBoundary`, `RootErrorBoundary` *and* `FatalErrorView` — so a throw
+would throw again in each boundary meant to catch it and end as a blank page. It
+returns the key on a miss now: an ugly screen instead of no screen.
+
+**Smaller, same spirit:** the error `<code>` detail carries `dir="ltr"`, because
+its contents are machine notation (`HTTP_500`, `(root): Invalid input`) and an
+unisolated leading `(` bidi-mirrors inside an RTL page; `route-error.constants.ts`
+was dead after the sentences moved and is deleted; `RouteHydrateFallback` used a
+literal where `shell.loadingPage` already existed.
+
+**And a measurement of my own that was wrong.** This file recorded the entry
+chunk as 390.47 kB and the CSS as 33.40 kB; a fresh build gave 390.54 and 33.53.
+Small numbers, but a plan that presents a measurement and is off by 130 bytes has
+taught the next reader to distrust the rest of it. The figures above are re-measured
+after these fixes.
 
 ## Done when
 
