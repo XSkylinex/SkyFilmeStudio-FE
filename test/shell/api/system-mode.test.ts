@@ -4,10 +4,10 @@ import { API_PATH } from '@/lib/api/api.constants';
 import {
   systemModeQueryKey,
   systemModeQueryOptions,
-} from '@/features/system/api/system-mode.query';
+} from '@/shell/api/system-mode.query';
 import { SYSTEM_MODE_STALE_TIME_MS } from '@/lib/query/query.constants';
-import { buildSystemMode } from '../../../fixtures/system-mode.fixture';
-import { mockOrchestratorServer } from '../../../lib/api/msw-server';
+import { buildSystemMode } from '../../fixtures/system-mode.fixture';
+import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
 const server = mockOrchestratorServer();
 
