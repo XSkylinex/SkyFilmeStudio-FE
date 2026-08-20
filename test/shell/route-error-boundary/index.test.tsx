@@ -1,3 +1,4 @@
+import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
 import { createRoutesStub } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { RouteErrorBoundary } from '@/shell/route-error-boundary';
@@ -17,7 +18,9 @@ describe('RouteErrorBoundary', () => {
 
     render(<Stub initialEntries={['/']} />);
 
-    expect(await screen.findByText(/low on disk space/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+    ).toBeInTheDocument();
     expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
   });
 
@@ -57,7 +60,9 @@ describe('RouteErrorBoundary', () => {
 
     render(<Stub initialEntries={['/']} />);
 
-    expect(await screen.findByText(/low on disk space/i)).toBeInTheDocument();
+    expect(
+      await screen.findByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+    ).toBeInTheDocument();
     expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
   });
 
@@ -164,7 +169,9 @@ describe('RouteErrorBoundary', () => {
 
     render(<Stub initialEntries={['/']} />);
 
-    expect(screen.getByText(/low on disk space/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+    ).toBeInTheDocument();
     expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
     expect(screen.queryByText('[object Object]')).not.toBeInTheDocument();
 

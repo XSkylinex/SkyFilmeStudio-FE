@@ -18,10 +18,13 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
+    "@tanstack/react-query": "5.101.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-redux": "^9.3.0",
-    "react-router-dom": "7.18.2"
+    "react-router-dom": "7.18.2",
+    "sky-filme-studio-be": "portal:../sky-filme-studio-be",
+    "zod": "4.4.3"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
@@ -38,6 +41,7 @@
     "@vitest/coverage-v8": "^4.1.10",
     "babel-plugin-react-compiler": "^1.0.0",
     "jsdom": "^30.0.1",
+    "msw": "2.15.0",
     "oxlint": "^1.78.0",
     "oxlint-tsgolint": "^7.0.2001",
     "prettier": "^3.9.6",

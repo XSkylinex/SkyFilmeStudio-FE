@@ -1,3 +1,4 @@
+import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
 import { createRoutesStub } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -56,7 +57,9 @@ describe('RootErrorBoundary', () => {
     render(<Stub initialEntries={['/']} />);
 
     expect(await screen.findByText('DISK_SPACE_LOW')).toBeInTheDocument();
-    expect(screen.getByText(/low on disk space/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+    ).toBeInTheDocument();
 
     consoleErrorSpy.mockRestore();
   });

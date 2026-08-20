@@ -31,6 +31,9 @@ it yet**. That is editor state, and it is a different value with a different nam
 
 ## TanStack Query
 
+- **Every fetcher forwards `signal`.** `queryFn: ({ signal }) => requestJson(path, schema, { signal })`.
+  Without it an unmounted screen's request runs to completion, and the render-queue poll cannot be
+  cancelled.
 - **Query keys are built by a factory, never inline.** One file per feature under `api/`, exporting
   both the key and the fetcher. An inline `['shots', id]` at a call site is how invalidation silently
   stops matching.
@@ -59,11 +62,11 @@ src/shell/store/store.interface.ts     RootState / AppDispatch
 src/shell/shell.slice.ts               the shell's own slice and its selectors
 ```
 
-**No HTTP client is installed.** `axios` was added alongside the store and removed again on
-2026-08-18: nothing imported it, and nothing could — the data layer is FE-04 and FE-04 is blocked on
-BE-01. The rule it leaves behind is the part worth keeping: when a client does arrive it sits
-**under** TanStack Query, never beside it. A component that imports one directly is the bug this
-arrangement exists to prevent.
+**The client is `fetch`, wrapped exactly once.** `axios` was added alongside the store on
+2026-08-17 and removed on 2026-08-18 because nothing imported it; FE-04 did not bring it back.
+`src/lib/api/request-json.ts` is the only place in the app that calls `fetch`, and it sits **under**
+TanStack Query, never beside it. A component that imports it directly is the bug this arrangement
+exists to prevent.
 
 Four things about the shell slice worth copying rather than re-deriving:
 
@@ -118,11 +121,56 @@ per active job, and there may be several. Naively `dispatch`-ing each one re-ren
 Every wire type is inferred from the shared Zod contract published by the orchestrator — not
 hand-written in `interfaces/`, not copy-pasted from a Swagger page.
 
-- The generation/sync step and where the contracts land is `plan/04-data-layer.md`.
-- **`zod` must be the same major in both repos.** Backend and frontend were both on `zod@4.4.3`
-  (registry latest, 2026-08-14). A v3/v4 split silently produces two incompatible `z.infer` shapes.
+**The mechanism, landed 2026-08-20.** `package.json` depends on
+`sky-filme-studio-be@portal:../sky-filme-studio-be` and every wire type comes from
+`import ... from 'sky-filme-studio-be/contracts'`. The backend's `exports` map points that subpath's
+`types` condition at `./src/contracts/index.ts` — its *source*, not its build output — which is what
+makes a rename break this repo on the next `tsc` instead of on the next version bump.
+
+**`vite.config.ts` aliases that specifier to the same source file, and must keep doing so.** The
+backend's `default` export condition points at `dist/`, which is gitignored and CommonJS. Left alone,
+the runtime would load a build artifact while the types came from source — so appending an enum value
+in the backend would typecheck green here and then throw at `parse()` against a stale `dist/`. The
+alias also lets the bundle tree-shake: 456.68 kB and 17 zod modules, against 759 kB and 79 through
+`dist/`. Do not "simplify" it away.
+
+- **`zod` is the same version in both repos**: `4.4.3` in each `package.json` (registry latest,
+  re-checked 2026-08-20). A v3/v4 split silently produces two incompatible `z.infer` shapes.
+- **Two zod copies are installed; one reaches the bundle.** The frontend uses zod's types, which
+  erase, and its runtime only through the contracts. Measured from the build sourcemap: a single zod
+  root, 17 modules. Do not add `resolve.dedupe` until a file here constructs its own schema.
+- **The contract module is browser-safe, and that is load-bearing.** All 47 files import nothing but
+  `zod`; no `@nestjs/*`, no `drizzle-orm`, no `node:*`. Check that again before importing any *new*
+  backend subpath — the portal link would happily drag a database driver into the bundle.
+- **Everything is `z.strictObject` and every id is branded.** A route param is a `string` and a
+  `ProjectId` is not; run it through `projectIdSchema.parse` at the boundary. `Timestamp` is an ISO
+  string, never a `Date`.
 - When a contract changes, the frontend build should break. That is the feature. Do not add a
   permissive `Record<string, unknown>` to make it compile.
+
+## Errors are typed, and the taxonomy is exhaustive
+
+`src/lib/api/error-taxonomy.ts` maps **every** `ERROR_CODE` the contract defines to a sentence a
+person can act on. It is typed `Record<ErrorCode, ErrorCodeGuidance>`, so a new backend code fails
+`yarn typecheck` here rather than rendering nothing.
+
+- `StudioError` carries `kind` — `NETWORK`, `HTTP`, `MALFORMED` or `CONTRACT` — plus the code, status
+  and detail. The four are genuinely different failures: the orchestrator is down; it refused; something
+  that is not the orchestrator answered (a `MALFORMED` non-JSON reply is usually Vite's SPA fallback on
+  a path missing from the dev proxy); or the two halves disagree about the shape. A single "request
+  failed" hides which, and telling someone the contract drifted when they actually got HTML sends them
+  hunting a version skew that does not exist.
+- **`presentation` means "may this message auto-dismiss".** `PERSISTENT` when the sentence carries the
+  only remedy or names a broken promise; `TRANSIENT` when re-running the step is the whole answer. Both
+  out-of-memory codes are `PERSISTENT` — their remedy is "choose a lower render profile", and a toast
+  takes the remedy away with it. `OFFLINE_POLICY_VIOLATION` is `PERSISTENT` because the product's
+  central promise was nearly broken.
+- **The out-of-memory codes never say "try again".** The identical request fails identically.
+- **A sentence never points at a screen or an action this build does not have.** A test greps for the
+  ones that were wrong once.
+- **`CONTRACT`, `MALFORMED`, any 4xx and any cancellation are never retried.** Retrying a shape
+  mismatch or an aborted request only spends time; `isPermanentFailure` is the single definition, and
+  the render-queue poll uses it too so a job id that 404s stops being asked about.
 
 ## Forbidden shortcuts
 

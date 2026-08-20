@@ -41,7 +41,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 | 01 | [Document shell & app identity](01-document-shell.md) | 00 | — | done 2026-08-15 |
 | 02 | [Design system & tokens](02-design-system.md) | 01 | — | done 2026-08-17 |
 | 03 | [App shell, routing & boundaries](03-app-shell.md) | 02 | — | done 2026-08-17 |
-| 04 | [Data layer — contracts, queries, store](04-data-layer.md) | 03 | **BE-01** | not started |
+| 04 | [Data layer — contracts, queries, store](04-data-layer.md) | 03 | **BE-01** | **done 2026-08-20** · seam complete; covers the 4 endpoints the orchestrator serves. `POST /render-jobs`, capabilities, error codes over HTTP and the socket are all blocked on the backend — see the phase file |
 | 05 | [Realtime bridge](05-realtime.md) | 04 | **BE-23** | not started |
 | 06 | [Project dashboard & system status](06-dashboard.md) | 05 | BE-04, BE-11 | not started |
 | 07 | [Asset ingestion & subject review](07-assets-and-subjects.md) | 06 | BE-11, BE-12 | not started |

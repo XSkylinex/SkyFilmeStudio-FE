@@ -1,3 +1,5 @@
+import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
+import { ROUTE_ERROR_DEFAULT_MESSAGE } from '@/shell/route-error.constants';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 
 describe('resolveRouteErrorView', () => {
@@ -72,6 +74,29 @@ describe('resolveRouteErrorView', () => {
     });
 
     expect(view.isUnknownError).toBe(false);
+  });
+
+  it('describes a known error code with the shared taxonomy, not a copy of its own', () => {
+    const view = resolveRouteErrorView({
+      status: 507,
+      statusText: '',
+      data: { code: 'DISK_SPACE_LOW' },
+      internal: false,
+    });
+
+    expect(view.description).toBe(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence);
+  });
+
+  it('falls back to the default message for a code this build has never heard of', () => {
+    const view = resolveRouteErrorView({
+      status: 500,
+      statusText: '',
+      data: { code: 'A_CODE_FROM_A_NEWER_BACKEND' },
+      internal: false,
+    });
+
+    expect(view.description).toBe(ROUTE_ERROR_DEFAULT_MESSAGE);
+    expect(view.detail).toBe('A_CODE_FROM_A_NEWER_BACKEND');
   });
 
   it('flags a completely untyped thrown value as an unknown error', () => {
