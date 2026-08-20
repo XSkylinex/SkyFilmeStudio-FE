@@ -14,7 +14,7 @@ export const resolveBreadcrumbs = (
     }
 
     byPathname.set(match.pathname, {
-      title: match.handle.title,
+      titleKey: match.handle.titleKey,
       pathname: match.pathname,
     });
   }

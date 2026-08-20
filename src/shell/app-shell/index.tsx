@@ -48,7 +48,7 @@ export const AppShell: FC = () => {
         <RouteTitle />
         <div className="app-shell">
           <a className="app-shell__skip-link" href={`#${APP_SHELL_MAIN_ID}`}>
-            Skip to main content
+            {translate('shell.skipToMain')}
           </a>
           <div
             className="app-shell__navigation-progress"

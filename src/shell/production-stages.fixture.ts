@@ -13,49 +13,49 @@ type ProductionStageDefinition = Omit<ProductionStage, 'state'>;
 
 export const SCREENPLAY_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.SCREENPLAY,
-  label: 'Screenplay',
+  labelKey: 'productionStage.screenplay',
   path: PLAN_SEGMENT,
 };
 
 export const MUSIC_PLAN_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.MUSIC_PLAN,
-  label: 'Music plan',
+  labelKey: 'productionStage.musicPlan',
   path: PLAN_SEGMENT,
 };
 
 export const PLAN_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.PLAN,
-  label: 'Plan',
+  labelKey: 'page.planner.title',
   path: PLAN_SEGMENT,
 };
 
 const STORYBOARD_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.STORYBOARD,
-  label: 'Storyboard',
+  labelKey: 'page.storyboard.title',
   path: STORYBOARD_SEGMENT,
 };
 
 const QUEUE_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.QUEUE,
-  label: 'Render queue',
+  labelKey: 'page.renderQueue.title',
   path: QUEUE_SEGMENT,
 };
 
 const SHOTS_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.SHOTS,
-  label: 'Shots',
+  labelKey: 'page.shots.title',
   path: SHOTS_SEGMENT,
 };
 
 const AUDIO_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.AUDIO,
-  label: 'Audio',
+  labelKey: 'page.audio.title',
   path: AUDIO_SEGMENT,
 };
 
 const TIMELINE_STAGE: ProductionStageDefinition = {
   id: PRODUCTION_STAGE_ID.TIMELINE,
-  label: 'Timeline',
+  labelKey: 'page.timeline.title',
   path: TIMELINE_SEGMENT,
 };
 

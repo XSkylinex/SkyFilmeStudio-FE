@@ -1,10 +1,15 @@
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import type { FC } from 'react';
 import { createRoutesStub } from 'react-router-dom';
 import { screen } from '@testing-library/react';
 import { renderInStore } from '../../render-in-store';
 import { Breadcrumbs } from '@/shell/breadcrumbs';
 
-const routeHandle = (title: string): { title: string } => ({ title });
+const routeHandle = (
+  titleKey: TranslationKey,
+): { titleKey: TranslationKey } => ({
+  titleKey,
+});
 
 const renderAt = (initialEntry: string): void => {
   const Stub = createRoutesStub([
@@ -14,18 +19,18 @@ const renderAt = (initialEntry: string): void => {
       children: [
         {
           path: 'projects/:projectId',
-          handle: routeHandle('Project'),
+          handle: routeHandle('route.project'),
           children: [
             {
               path: 'assets',
-              handle: routeHandle('Assets'),
+              handle: routeHandle('page.assets.title'),
               Component: (() => null) as FC,
             },
           ],
         },
         {
           path: 'system',
-          handle: routeHandle('System'),
+          handle: routeHandle('page.system.title'),
           Component: (() => null) as FC,
         },
       ],

@@ -23,11 +23,11 @@ export const Breadcrumbs: FC = () => {
             <li key={crumb.pathname} className="breadcrumbs__item">
               {isCurrent ? (
                 <span className="breadcrumbs__current" aria-current="page">
-                  {crumb.title}
+                  {translate(crumb.titleKey)}
                 </span>
               ) : (
                 <Link className="breadcrumbs__link" to={crumb.pathname}>
-                  {crumb.title}
+                  {translate(crumb.titleKey)}
                 </Link>
               )}
             </li>

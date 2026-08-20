@@ -1,3 +1,4 @@
+import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 import { screen } from '@testing-library/react';
 import { renderInStore } from '../../../render-in-store';
 import { RouteHydrateFallback } from '@/shell/routes/route-hydrate-fallback';
@@ -7,7 +8,9 @@ describe('RouteHydrateFallback', () => {
     renderInStore(<RouteHydrateFallback />);
 
     expect(
-      screen.getByRole('status', { name: 'Loading this page' }),
+      screen.getByRole('status', {
+        name: EN_CATALOGUE['shell.loadingPage'],
+      }),
     ).toBeInTheDocument();
   });
 

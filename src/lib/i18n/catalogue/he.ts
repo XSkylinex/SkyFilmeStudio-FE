@@ -94,6 +94,12 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'connection.reconnecting.description':
     'מתחבר מחדש ל-orchestrator. עד שהחיבור יחזור, ייתכן שהתקדמות הרינדור תפגר מאחור.',
 
+  'shell.skipToMain': 'דילוג לתוכן הראשי',
+  'route.project': 'פרויקט',
+  'route.production': 'הפקה',
+  'page.designSystem.title': 'מערכת העיצוב',
+  'productionStage.screenplay': 'תסריט',
+  'productionStage.musicPlan': 'תוכנית מוזיקלית',
   'shell.showNavigation': 'הצגת הניווט',
   'shell.hideNavigation': 'הסתרת הניווט',
   'shell.primaryNavigation': 'ראשי',

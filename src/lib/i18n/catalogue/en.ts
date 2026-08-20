@@ -94,6 +94,12 @@ export const EN_CATALOGUE = {
   'connection.reconnecting.description':
     'Reconnecting to the orchestrator. Render progress may be behind until this recovers.',
 
+  'shell.skipToMain': 'Skip to main content',
+  'route.project': 'Project',
+  'route.production': 'Production',
+  'page.designSystem.title': 'Design system',
+  'productionStage.screenplay': 'Screenplay',
+  'productionStage.musicPlan': 'Music plan',
   'shell.showNavigation': 'Show navigation',
   'shell.hideNavigation': 'Hide navigation',
   'shell.primaryNavigation': 'Primary',

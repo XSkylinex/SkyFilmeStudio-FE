@@ -29,7 +29,9 @@ export const ProductionNav: FC<ProductionNavProps> = ({
           className="production-nav__stage"
           end
         >
-          <span className="production-nav__stage-label">{stage.label}</span>
+          <span className="production-nav__stage-label">
+            {translate(stage.labelKey)}
+          </span>
           <span className="production-nav__stage-state">
             <Badge
               tone={PRODUCTION_STAGE_STATE_TONE[stage.state]}
