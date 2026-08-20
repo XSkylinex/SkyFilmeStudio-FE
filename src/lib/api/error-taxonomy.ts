@@ -74,4 +74,8 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.CAPABILITY_NOT_BENCHMARKED',
   },
+  MEDIA_TOOL_UNAVAILABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MEDIA_TOOL_UNAVAILABLE',
+  },
 };

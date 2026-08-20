@@ -37,6 +37,8 @@ export const EN_CATALOGUE = {
     'No provider on this machine can run this job, so nothing was queued. A worker advertising this capability has to be set up first.',
   'error.CAPABILITY_NOT_BENCHMARKED':
     'A provider could run this, but nothing has measured its limits on this hardware. Until a benchmark exists, an untested duration or profile is a guess rather than a capability.',
+  'error.MEDIA_TOOL_UNAVAILABLE':
+    'The FFmpeg build on this machine cannot do what this step needs \u2014 either it is not on the path, or the build that was found has no encoder, filter or muxer for it. This is a setup fault: the same request will fail the same way until FFmpeg is replaced.',
 
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
