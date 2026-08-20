@@ -20,7 +20,11 @@ export const ErrorState: FC<ErrorStateProps> = ({
       {description ? (
         <p className="error-state__description">{description}</p>
       ) : null}
-      {detail ? <code className="error-state__detail">{detail}</code> : null}
+      {detail ? (
+        <code className="error-state__detail" dir="ltr">
+          {detail}
+        </code>
+      ) : null}
       {action ? <div className="error-state__action">{action}</div> : null}
     </div>
   );
