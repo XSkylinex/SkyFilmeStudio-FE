@@ -1,0 +1,44 @@
+@layer features {
+  .disk-gate-panel__verdict {
+    margin: 0;
+    font-weight: var(--font-weight-medium);
+
+    &[data-passed='false'] {
+      color: var(--tone-danger-fg);
+    }
+  }
+
+  .disk-gate-panel__figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  .disk-gate-panel__figure {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-inline-start: var(--space-3);
+    border-inline-start: 2px solid var(--color-border-subtle);
+
+    & dt {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-xs);
+    }
+
+    & dd {
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+      font-weight: var(--font-weight-medium);
+    }
+
+    &[data-shortfall='true'] {
+      border-inline-start-color: var(--tone-danger-border);
+
+      & dd {
+        color: var(--tone-danger-fg);
+      }
+    }
+  }
+}
