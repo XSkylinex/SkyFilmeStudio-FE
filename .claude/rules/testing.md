@@ -85,10 +85,14 @@ test that passes on broken code is worse than no test because it reads as covera
 
 ## Mocking
 
-- **Mock the network at the HTTP boundary** (MSW or Vitest's fetch mocking), not by stubbing the query
-  hooks. Stubbing hooks tests the mock. **MSW is not installed yet** — it lands in `plan/04` with the
-  first real fetcher, because until BE-01 publishes a contract there is nothing to mock and no way to
-  prove a handler works.
+- **Mock the network at the HTTP boundary** with MSW (2.15.0, installed by `plan/04`), not by stubbing
+  the query hooks. Stubbing hooks tests the mock. `test/lib/api/msw-server.ts` is the per-file server
+  helper; it sets `onUnhandledRequest: 'error'`, so a request to any host you did not declare fails
+  the test.
+- **A component that translates reads the Redux store**, so render it through
+  `test/render-in-store.tsx` rather than RTL's bare `render`. That helper re-wraps `rerender` as well;
+  without that a rerender drops the provider and the component silently remounts, which presents as an
+  effect that "did not fire".
 - **Mock responses are built from the shared Zod schema** — parse the fixture through the real schema
   in a test helper. A hand-written fixture that no longer matches the contract is how a green suite
   ships a broken page.

@@ -1,11 +1,8 @@
 import type { FC } from 'react';
 import { Button } from '@/lib/components/button';
 import { ErrorState } from '@/lib/components/error-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import type { FatalErrorViewProps } from './fatal-error-view.interface';
-
-const FATAL_ERROR_VIEW_TITLE = 'Local AI Studio hit an unrecoverable error';
-const FATAL_ERROR_VIEW_DEFAULT_DESCRIPTION =
-  'Reload the app. If this keeps happening, check that the orchestrator is still running.';
 
 const handleReload = (): void => {
   window.location.reload();
@@ -14,17 +11,21 @@ const handleReload = (): void => {
 export const FatalErrorView: FC<FatalErrorViewProps> = ({
   detail,
   description,
-}) => (
-  <div className="fatal-boundary">
-    <ErrorState
-      title={FATAL_ERROR_VIEW_TITLE}
-      description={description ?? FATAL_ERROR_VIEW_DEFAULT_DESCRIPTION}
-      detail={detail}
-      action={
-        <Button variant="primary" size="md" onClick={handleReload}>
-          Reload
-        </Button>
-      }
-    />
-  </div>
-);
+}) => {
+  const translate = useTranslate();
+
+  return (
+    <div className="fatal-boundary">
+      <ErrorState
+        title={translate('error.fatalTitle')}
+        description={description ?? translate('error.fatalDescription')}
+        detail={detail}
+        action={
+          <Button variant="primary" size="md" onClick={handleReload}>
+            {translate('error.reload')}
+          </Button>
+        }
+      />
+    </div>
+  );
+};

@@ -1,0 +1,11 @@
+@layer features {
+  .interface-language-select {
+    flex-shrink: 0;
+    inline-size: fit-content;
+    min-inline-size: 9rem;
+  }
+
+  .interface-language-select .field {
+    gap: var(--space-1);
+  }
+}

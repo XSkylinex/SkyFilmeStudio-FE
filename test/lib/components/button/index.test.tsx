@@ -1,10 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { Button } from '@/lib/components/button';
 
 describe('Button', () => {
   it('defaults to type="button", so it never submits an enclosing form by accident', () => {
-    render(
+    renderInStore(
       <Button variant="primary" size="md">
         Approve
       </Button>,
@@ -17,7 +18,7 @@ describe('Button', () => {
   });
 
   it('honours an explicit type', () => {
-    render(
+    renderInStore(
       <Button variant="primary" size="md" type="submit">
         Save
       </Button>,
@@ -30,7 +31,7 @@ describe('Button', () => {
   });
 
   it('carries the variant and size the caller chose', () => {
-    render(
+    renderInStore(
       <Button variant="danger" size="sm">
         Reject
       </Button>,
@@ -44,7 +45,7 @@ describe('Button', () => {
   it('stays disabled exactly as the caller decided, owning no submitting state of its own', async () => {
     const user = userEvent.setup();
     const handleClick = vi.fn<() => void>();
-    render(
+    renderInStore(
       <Button variant="primary" size="md" disabled onClick={handleClick}>
         Approve
       </Button>,
@@ -59,7 +60,7 @@ describe('Button', () => {
   it('calls the caller-supplied handler when enabled', async () => {
     const user = userEvent.setup();
     const handleClick = vi.fn<() => void>();
-    render(
+    renderInStore(
       <Button variant="primary" size="md" onClick={handleClick}>
         Approve
       </Button>,
@@ -70,7 +71,7 @@ describe('Button', () => {
   });
 
   it('forwards aria-describedby, so a wrapping Tooltip actually describes it', () => {
-    render(
+    renderInStore(
       <>
         <Button variant="primary" size="md" aria-describedby="tip-approve">
           Approve

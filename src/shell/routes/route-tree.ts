@@ -1,3 +1,4 @@
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import { replace } from 'react-router-dom';
 import type { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 import { AppShell } from '@/shell/app-shell';
@@ -45,7 +46,7 @@ import {
   productionPlanPath,
 } from './routes.constants';
 
-const routeHandle = (title: string): RouteHandle => ({ title });
+const routeHandle = (titleKey: TranslationKey): RouteHandle => ({ titleKey });
 
 const resolveProductionIndexRedirect = ({
   params,
@@ -70,7 +71,7 @@ const productionRoutes: RouteObject[] = [
     path: PLAN_SEGMENT,
     Component: PlannerPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Plan'),
+    handle: routeHandle('page.planner.title'),
   },
   {
     path: STORYBOARD_SEGMENT,
@@ -80,13 +81,13 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Storyboard'),
+    handle: routeHandle('page.storyboard.title'),
   },
   {
     path: QUEUE_SEGMENT,
     Component: RenderQueuePage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Render queue'),
+    handle: routeHandle('page.renderQueue.title'),
   },
   {
     path: SHOTS_SEGMENT,
@@ -96,7 +97,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Shots'),
+    handle: routeHandle('page.shots.title'),
   },
   {
     path: `${SHOTS_SEGMENT}/:${SHOT_ID_PARAM}`,
@@ -106,7 +107,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Shot review'),
+    handle: routeHandle('page.shotReview.title'),
   },
   {
     path: AUDIO_SEGMENT,
@@ -116,7 +117,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Audio'),
+    handle: routeHandle('page.audio.title'),
   },
   {
     path: TIMELINE_SEGMENT,
@@ -126,7 +127,7 @@ const productionRoutes: RouteObject[] = [
       })),
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Timeline'),
+    handle: routeHandle('page.timeline.title'),
   },
 ];
 
@@ -135,61 +136,61 @@ const projectRoutes: RouteObject[] = [
     index: true,
     Component: DashboardPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Dashboard'),
+    handle: routeHandle('page.dashboard.title'),
   },
   {
     path: ASSETS_SEGMENT,
     Component: AssetsPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Assets'),
+    handle: routeHandle('page.assets.title'),
   },
   {
     path: SUBJECTS_SEGMENT,
     Component: SubjectsPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Subjects'),
+    handle: routeHandle('page.subjects.title'),
   },
   {
     path: `${SUBJECTS_SEGMENT}/:${SUBJECT_ID_PARAM}`,
     Component: SubjectReviewPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Subject review'),
+    handle: routeHandle('page.subjectReview.title'),
   },
   {
     path: STYLES_SEGMENT,
     Component: StylesPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Styles'),
+    handle: routeHandle('page.styles.title'),
   },
   {
     path: VOICES_SEGMENT,
     Component: VoicesPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Voices'),
+    handle: routeHandle('page.voices.title'),
   },
   {
     path: LOCATIONS_SEGMENT,
     Component: LocationsPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Locations'),
+    handle: routeHandle('page.locations.title'),
   },
   {
     path: PROPS_SEGMENT,
     Component: PropsPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Props'),
+    handle: routeHandle('page.props.title'),
   },
   {
     path: PRODUCTIONS_SEGMENT,
     Component: ProductionListPage,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Productions'),
+    handle: routeHandle('page.productions.title'),
   },
   {
     path: `${PRODUCTIONS_SEGMENT}/:${PRODUCTION_ID_PARAM}`,
     Component: ProductionShell,
     ErrorBoundary: RouteErrorBoundary,
-    handle: routeHandle('Production'),
+    handle: routeHandle('route.production'),
     children: productionRoutes,
   },
 ];
@@ -204,7 +205,7 @@ export const routeTree: RouteObject[] = [
         index: true,
         Component: ProjectListPage,
         ErrorBoundary: RouteErrorBoundary,
-        handle: routeHandle('Projects'),
+        handle: routeHandle('page.projects.title'),
       },
       {
         path: DESIGN_SYSTEM_SEGMENT,
@@ -214,25 +215,25 @@ export const routeTree: RouteObject[] = [
           })),
         HydrateFallback: RouteHydrateFallback,
         ErrorBoundary: RouteErrorBoundary,
-        handle: routeHandle('Design system'),
+        handle: routeHandle('page.designSystem.title'),
       },
       {
         path: `${PROJECTS_SEGMENT}/:${PROJECT_ID_PARAM}`,
         ErrorBoundary: RouteErrorBoundary,
-        handle: routeHandle('Project'),
+        handle: routeHandle('route.project'),
         children: projectRoutes,
       },
       {
         path: SYSTEM_SEGMENT,
         Component: SystemPage,
         ErrorBoundary: RouteErrorBoundary,
-        handle: routeHandle('System'),
+        handle: routeHandle('page.system.title'),
       },
       {
         path: '*',
         Component: NotFoundPage,
         ErrorBoundary: RouteErrorBoundary,
-        handle: routeHandle('Page not found'),
+        handle: routeHandle('page.notFound.title'),
       },
     ],
   },

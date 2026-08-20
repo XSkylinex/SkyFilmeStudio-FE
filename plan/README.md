@@ -42,7 +42,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 | 02 | [Design system & tokens](02-design-system.md) | 01 | — | done 2026-08-17 |
 | 03 | [App shell, routing & boundaries](03-app-shell.md) | 02 | — | done 2026-08-17 |
 | 04 | [Data layer — contracts, queries, store](04-data-layer.md) | 03 | **BE-01** | **done 2026-08-20** · seam complete; covers the 4 endpoints the orchestrator serves. `POST /render-jobs`, capabilities, error codes over HTTP and the socket are all blocked on the backend — see the phase file |
-| 05 | [Realtime bridge](05-realtime.md) | 04 | **BE-23** | not started |
+| 05 | [Realtime bridge](05-realtime.md) | 04 | **BE-23** | **blocked: BE-23 not started** — no `*.gateway.ts`, no websocket dependency and no realtime event schema in the shared contract, all checked 2026-08-20. Its own decision 1 is "follow the backend"; there is nothing yet to follow |
 | 06 | [Project dashboard & system status](06-dashboard.md) | 05 | BE-04, BE-11 | not started |
 | 07 | [Asset ingestion & subject review](07-assets-and-subjects.md) | 06 | BE-11, BE-12 | not started |
 | 08 | [Style, voice, location & prop studio](08-style-studio.md) | 07 | BE-13 | not started |
@@ -52,7 +52,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 | 12 | [Shot review](12-shot-review.md) | 11 | BE-19, BE-20 | not started |
 | 13 | [Audio & music](13-audio.md) | 09 | BE-21 | not started |
 | 14 | [Timeline & final production](14-timeline-and-final.md) | 12, 13 | BE-22 | not started |
-| 15 | [Internationalisation & RTL](15-i18n-and-rtl.md) | 03 | — | not started |
+| 15 | [Internationalisation & RTL](15-i18n-and-rtl.md) | 03 | — | **done 2026-08-20** · taken out of order because 05 is blocked and 15 needs no backend. 102 keys in English and Hebrew, direction switches without a reload, zero physical CSS properties found |
 | 16 | [Accessibility & performance](16-a11y-and-performance.md) | all UI phases | — | not started |
 | 17 | [Test suite & acceptance](17-acceptance.md) | all | BE-26 | not started |
 

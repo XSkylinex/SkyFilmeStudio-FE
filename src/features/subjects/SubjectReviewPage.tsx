@@ -1,10 +1,15 @@
 import type { FC } from 'react';
 import { EmptyState } from '@/lib/components/empty-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
 
-export const SubjectReviewPage: FC = () => (
-  <EmptyState
-    title="Subject review"
-    description="Compare a subject's candidate reference images and approve the ones that define it. Not connected to the orchestrator yet."
-    headingLevel={1}
-  />
-);
+export const SubjectReviewPage: FC = () => {
+  const translate = useTranslate();
+
+  return (
+    <EmptyState
+      title={translate('page.subjectReview.title')}
+      description={translate('page.subjectReview.description')}
+      headingLevel={1}
+    />
+  );
+};

@@ -1,5 +1,14 @@
-import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
-import { ROUTE_ERROR_DEFAULT_MESSAGE } from '@/shell/route-error.constants';
+import { StudioError } from '@/lib/api/studio-error';
+import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
+import { translate } from '@/lib/i18n/helpers/translate';
+import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
+import type { RouteErrorView } from '@/shell/interfaces/route-error-view';
+
+const describeInEnglish = (view: RouteErrorView): string =>
+  composeRouteErrorDescription(view, (key, values) =>
+    translate(EN_CATALOGUE, key, values),
+  );
+
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 
 describe('resolveRouteErrorView', () => {
@@ -33,8 +42,8 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe(
-      'The orchestrator responded with 507: disk full',
+    expect(describeInEnglish(view)).toBe(
+      `${EN_CATALOGUE['error.status'].replace('{status}', '507')} (disk full)`,
     );
   });
 
@@ -62,7 +71,7 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe('The orchestrator is restarting');
+    expect(describeInEnglish(view)).toBe('The orchestrator is restarting');
   });
 
   it('flags a typed or messaged Response as not an unknown error', () => {
@@ -84,7 +93,7 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence);
+    expect(describeInEnglish(view)).toBe(EN_CATALOGUE['error.DISK_SPACE_LOW']);
   });
 
   it('falls back to the default message for a code this build has never heard of', () => {
@@ -95,7 +104,9 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe(ROUTE_ERROR_DEFAULT_MESSAGE);
+    expect(describeInEnglish(view)).toBe(
+      EN_CATALOGUE['error.unrecognisedCode'],
+    );
     expect(view.detail).toBe('A_CODE_FROM_A_NEWER_BACKEND');
   });
 
@@ -103,5 +114,44 @@ describe('resolveRouteErrorView', () => {
     const view = resolveRouteErrorView(new Error('boom'));
 
     expect(view.isUnknownError).toBe(true);
+  });
+});
+
+describe('resolveRouteErrorView, given a StudioError the data layer threw', () => {
+  it('renders the code its own sentence, rather than treating it as an unknown throw', () => {
+    const view = resolveRouteErrorView(
+      new StudioError({
+        kind: 'HTTP',
+        messageKey: 'error.DISK_SPACE_LOW',
+        code: 'DISK_SPACE_LOW',
+        status: 507,
+        detail: '3 GB required',
+      }),
+    );
+
+    expect(view.isUnknownError).toBe(false);
+    expect(view.detail).toBe('DISK_SPACE_LOW');
+    expect(describeInEnglish(view)).toBe(
+      `${EN_CATALOGUE['error.DISK_SPACE_LOW']} (3 GB required)`,
+    );
+  });
+
+  it('fills the status into a refusal that carried no typed code', () => {
+    const view = resolveRouteErrorView(
+      new StudioError({
+        kind: 'HTTP',
+        messageKey: 'error.status',
+        messageValues: { status: 500 },
+        status: 500,
+      }),
+    );
+
+    expect(describeInEnglish(view)).toBe(
+      EN_CATALOGUE['error.status'].replace('{status}', '500'),
+    );
+  });
+
+  it('still treats an ordinary Error as unknown', () => {
+    expect(resolveRouteErrorView(new Error('boom')).isUnknownError).toBe(true);
   });
 });

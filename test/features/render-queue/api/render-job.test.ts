@@ -108,7 +108,7 @@ describe('renderJobQueryOptions polling against a failed request', () => {
   it('stops polling a job the orchestrator says does not exist, instead of asking every fifteen seconds forever', () => {
     const notFound = new StudioError({
       kind: 'HTTP',
-      sentence: 'gone',
+      messageKey: 'error.network',
       status: 404,
     });
 
@@ -118,7 +118,7 @@ describe('renderJobQueryOptions polling against a failed request', () => {
   it('keeps polling when the orchestrator is merely down, because that recovers', () => {
     const unreachable = new StudioError({
       kind: 'NETWORK',
-      sentence: 'not answering',
+      messageKey: 'error.network',
     });
 
     expect(refetchInterval(buildFailedQuery(unreachable))).toBe(

@@ -1,49 +1,58 @@
 import type { UIMatch } from 'react-router-dom';
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import { resolveBreadcrumbs } from '@/shell/helpers/resolve-breadcrumbs';
 
-const match = (pathname: string, title?: string): UIMatch =>
+const match = (pathname: string, titleKey?: TranslationKey): UIMatch =>
   ({
     id: pathname,
     pathname,
     params: {},
     data: undefined,
-    handle: title === undefined ? undefined : { title },
+    handle: titleKey === undefined ? undefined : { titleKey },
   }) as UIMatch;
 
 describe('resolveBreadcrumbs', () => {
   it('builds the trail from the matches that name themselves', () => {
     const trail = resolveBreadcrumbs([
       match('/'),
-      match('/projects/p1', 'Project'),
-      match('/projects/p1/productions/pr1', 'Production'),
-      match('/projects/p1/productions/pr1/plan', 'Plan'),
+      match('/projects/p1', 'route.project'),
+      match('/projects/p1/productions/pr1', 'route.production'),
+      match('/projects/p1/productions/pr1/plan', 'page.planner.title'),
     ]);
 
     expect(trail).toStrictEqual([
-      { title: 'Project', pathname: '/projects/p1' },
-      { title: 'Production', pathname: '/projects/p1/productions/pr1' },
-      { title: 'Plan', pathname: '/projects/p1/productions/pr1/plan' },
+      { titleKey: 'route.project', pathname: '/projects/p1' },
+      {
+        titleKey: 'route.production',
+        pathname: '/projects/p1/productions/pr1',
+      },
+      {
+        titleKey: 'page.planner.title',
+        pathname: '/projects/p1/productions/pr1/plan',
+      },
     ]);
   });
 
   it('drops the root match, which the primary navigation already reaches', () => {
     const trail = resolveBreadcrumbs([
-      match('/', 'Projects'),
-      match('/system', 'System'),
+      match('/', 'page.projects.title'),
+      match('/system', 'page.system.title'),
     ]);
 
-    expect(trail).toStrictEqual([{ title: 'System', pathname: '/system' }]);
+    expect(trail).toStrictEqual([
+      { titleKey: 'page.system.title', pathname: '/system' },
+    ]);
   });
 
   it('keeps one crumb per path, so a layout and its index do not both appear', () => {
     const trail = resolveBreadcrumbs([
       match('/'),
-      match('/projects/p1', 'Project'),
-      match('/projects/p1', 'Dashboard'),
+      match('/projects/p1', 'route.project'),
+      match('/projects/p1', 'page.dashboard.title'),
     ]);
 
     expect(trail).toStrictEqual([
-      { title: 'Dashboard', pathname: '/projects/p1' },
+      { titleKey: 'page.dashboard.title', pathname: '/projects/p1' },
     ]);
   });
 
@@ -51,11 +60,11 @@ describe('resolveBreadcrumbs', () => {
     const trail = resolveBreadcrumbs([
       match('/'),
       { ...match('/projects/p1'), handle: { notATitle: 1 } } as UIMatch,
-      match('/projects/p1/assets', 'Assets'),
+      match('/projects/p1/assets', 'page.assets.title'),
     ]);
 
     expect(trail).toStrictEqual([
-      { title: 'Assets', pathname: '/projects/p1/assets' },
+      { titleKey: 'page.assets.title', pathname: '/projects/p1/assets' },
     ]);
   });
 });

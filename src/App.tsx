@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { Provider } from 'react-redux';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { DocumentLanguage } from '@/shell/document-language';
 import { FatalBoundary } from '@/shell/fatal-boundary';
 import { createQueryClient } from '@/lib/query/query-client';
 import { routeTree } from '@/shell/routes/route-tree';
@@ -13,6 +14,7 @@ const queryClient = createQueryClient();
 export const App: FC = () => (
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
+      <DocumentLanguage />
       <FatalBoundary>
         <RouterProvider router={router} />
       </FatalBoundary>

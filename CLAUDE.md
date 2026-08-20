@@ -12,9 +12,11 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 
 ## Status, honestly
 
-**`plan/00`–`plan/01` are done (2026-08-15), `plan/02`–`plan/03` (2026-08-17), and `plan/04` — the
-data layer — on 2026-08-20. `plan/05`, the realtime bridge, is next and is blocked on **BE-23**:
-the backend has no WebSocket gateway yet, confirmed by search rather than assumed.**
+**`plan/00`–`plan/01` are done (2026-08-15), `plan/02`–`plan/03` (2026-08-17), `plan/04` and
+`plan/15` on 2026-08-20. `plan/05`, the realtime bridge, is **blocked on BE-23** — the backend has
+no gateway, no websocket dependency and no realtime event schema, all checked rather than assumed —
+so `plan/15` was taken out of order because it is the only remaining phase with no backend
+dependency at all. `plan/06` is next and needs BE-04 and BE-11.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
@@ -41,6 +43,19 @@ here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fe
 `StudioError` taxonomy covering all eighteen `ERROR_CODE` values, and the loopback-only base URL;
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps six contract enums onto
 `StatusTone`, which is the mapping FE-02 deferred to this phase.
+
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **102 keys in English and
+Hebrew**, where English is the source of truth and Hebrew is `Record<TranslationKey, string>` so a
+missing translation is a compile error. The interface language lives in the shell slice, persists to
+`localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`
+with `dir` from a record's own language field, which is how a Hebrew production reads correctly inside
+an English UI. The error-taxonomy sentences moved into the catalogue; `StudioError` carries a
+`messageKey` and resolves its own `message` in English so logs stay one language while the UI follows
+the reader.
+
+**Never use `:dir()` in this repo.** It is outside the browser floor, and Lightning CSS lowers it to a
+`:lang()` list — which keys off language rather than direction and so breaks the exact case this
+product needs. Use `[dir='rtl']`. `.claude/rules/css.md` carries the measurement.
 
 **But no screen fetches anything yet.** Every page is still an `EmptyState`, and the shell's three
 fixtures — the production stage sets, the error-code sentences and the offline-mode payload — are
@@ -155,6 +170,7 @@ src/lib/interfaces/       types more than one component uses
 src/lib/api/              the one fetch wrapper, the base URL, StudioError and the taxonomy
 src/lib/query/            the QueryClient and its retry policy
 src/lib/status-tone/      contract enums mapped onto StatusTone
+src/lib/i18n/             the typed catalogue, the translate hook, direction from a language tag
 src/features/<f>/api/     one file per query: key factory + fetcher, colocated with the feature
 src/assets/               SVG artwork, mirroring src/; never inlined in JSX
 src/styles/               layers.css, reset.css, tokens.css

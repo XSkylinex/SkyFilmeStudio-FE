@@ -1,10 +1,15 @@
 import type { FC } from 'react';
 import { EmptyState } from '@/lib/components/empty-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
 
-export const ShotReviewPage: FC = () => (
-  <EmptyState
-    title="Shot review"
-    description="Compare a rendered shot against its reference and decide whether it stands. Not connected to the orchestrator yet."
-    headingLevel={1}
-  />
-);
+export const ShotReviewPage: FC = () => {
+  const translate = useTranslate();
+
+  return (
+    <EmptyState
+      title={translate('page.shotReview.title')}
+      description={translate('page.shotReview.description')}
+      headingLevel={1}
+    />
+  );
+};

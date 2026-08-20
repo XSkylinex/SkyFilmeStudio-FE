@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { SubjectsPage } from '@/features/subjects/SubjectsPage';
 
 describe('SubjectsPage', () => {
   it('renders the subjects empty state', () => {
-    render(<SubjectsPage />);
+    renderInStore(<SubjectsPage />);
 
     expect(
       screen.getByRole('heading', { name: 'Subjects', level: 1 }),

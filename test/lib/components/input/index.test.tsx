@@ -1,18 +1,19 @@
 import type { ChangeEventHandler } from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { Input } from '@/lib/components/input';
 import { Field } from '@/lib/components/field';
 
 describe('Input', () => {
   it('defaults to type="text"', () => {
-    render(<Input placeholder="Seed" />);
+    renderInStore(<Input placeholder="Seed" />);
 
     expect(screen.getByPlaceholderText('Seed')).toHaveAttribute('type', 'text');
   });
 
   it('renders the type the caller chose', () => {
-    render(<Input type="number" placeholder="Duration" />);
+    renderInStore(<Input type="number" placeholder="Duration" />);
 
     expect(screen.getByPlaceholderText('Duration')).toHaveAttribute(
       'type',
@@ -21,7 +22,7 @@ describe('Input', () => {
   });
 
   it('reflects the caller-controlled value', () => {
-    render(
+    renderInStore(
       <Input
         value="42"
         onChange={vi.fn<ChangeEventHandler<HTMLInputElement>>()}
@@ -35,7 +36,7 @@ describe('Input', () => {
   it('calls onChange with what the caller typed', async () => {
     const user = userEvent.setup();
     const handleChange = vi.fn<ChangeEventHandler<HTMLInputElement>>();
-    render(
+    renderInStore(
       <Input defaultValue="" onChange={handleChange} placeholder="Seed" />,
     );
 
@@ -45,7 +46,7 @@ describe('Input', () => {
   });
 
   it('composes with Field, taking its generated id, aria-describedby and aria-invalid', () => {
-    render(
+    renderInStore(
       <Field label="Seed" error="Must be a whole number">
         <Input />
       </Field>,

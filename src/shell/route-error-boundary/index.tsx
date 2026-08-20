@@ -1,21 +1,22 @@
 import type { FC } from 'react';
 import { useRouteError } from 'react-router-dom';
 import { ErrorState } from '@/lib/components/error-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
+import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import './route-error-boundary.css';
 
-const ROUTE_ERROR_BOUNDARY_TITLE = "This page couldn't load";
-
 export const RouteErrorBoundary: FC = () => {
   const error = useRouteError();
-  const { detail, description } = resolveRouteErrorView(error);
+  const translate = useTranslate();
+  const view = resolveRouteErrorView(error);
 
   return (
     <div className="route-error-boundary">
       <ErrorState
-        title={ROUTE_ERROR_BOUNDARY_TITLE}
-        description={description}
-        detail={detail}
+        title={translate('error.pageTitle')}
+        description={composeRouteErrorDescription(view, translate)}
+        detail={view.detail}
       />
     </div>
   );

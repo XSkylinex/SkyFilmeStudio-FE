@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { LocationsPage } from '@/features/locations/LocationsPage';
 
 describe('LocationsPage', () => {
   it('renders the locations empty state', () => {
-    render(<LocationsPage />);
+    renderInStore(<LocationsPage />);
 
     expect(
       screen.getByRole('heading', { name: 'Locations', level: 1 }),

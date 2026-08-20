@@ -1,10 +1,11 @@
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { ProductionNav } from '@/shell/production-nav';
 
 describe('ProductionNav', () => {
   it('shows no screenplay stage for a MUSIC_DRIVEN production', () => {
-    render(
+    renderInStore(
       <MemoryRouter initialEntries={['/plan']}>
         <ProductionNav mode="MUSIC_DRIVEN" stageStates={{}} />
       </MemoryRouter>,
@@ -15,7 +16,7 @@ describe('ProductionNav', () => {
   });
 
   it('shows a screenplay stage, not a music-plan one, for a SCREENPLAY production', () => {
-    render(
+    renderInStore(
       <MemoryRouter initialEntries={['/plan']}>
         <ProductionNav mode="SCREENPLAY" stageStates={{}} />
       </MemoryRouter>,
@@ -26,7 +27,7 @@ describe('ProductionNav', () => {
   });
 
   it('marks the stage matching the current location as the current page', () => {
-    render(
+    renderInStore(
       <MemoryRouter initialEntries={['/storyboard']}>
         <ProductionNav mode="SCREENPLAY" stageStates={{}} />
       </MemoryRouter>,
@@ -38,7 +39,7 @@ describe('ProductionNav', () => {
   });
 
   it("renders each stage's state as real text through the Badge primitive, not colour alone", () => {
-    render(
+    renderInStore(
       <MemoryRouter initialEntries={['/plan']}>
         <ProductionNav
           mode="SCREENPLAY"
@@ -52,7 +53,7 @@ describe('ProductionNav', () => {
   });
 
   it('does not mark the Shots stage as current while reviewing one specific shot, which is a different page', () => {
-    render(
+    renderInStore(
       <MemoryRouter initialEntries={['/shots/shot-1']}>
         <ProductionNav mode="SCREENPLAY" stageStates={{}} />
       </MemoryRouter>,
@@ -64,7 +65,7 @@ describe('ProductionNav', () => {
   });
 
   it('renders every stage as a link a keyboard user can reach', () => {
-    render(
+    renderInStore(
       <MemoryRouter initialEntries={['/plan']}>
         <ProductionNav mode="SCREENPLAY" stageStates={{}} />
       </MemoryRouter>,

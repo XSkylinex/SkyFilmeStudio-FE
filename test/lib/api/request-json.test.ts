@@ -1,7 +1,7 @@
+import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 import { http, HttpResponse } from 'msw';
 import { ERROR_CODE, systemModeSchema } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
-import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
 import { requestJson } from '@/lib/api/request-json';
 import { buildSystemMode } from '../../fixtures/system-mode.fixture';
 import { mockOrchestratorServer } from './msw-server';
@@ -57,7 +57,7 @@ describe('requestJson', () => {
       kind: 'HTTP',
       code: ERROR_CODE.DISK_SPACE_LOW,
       status: 500,
-      message: ERROR_CODE_GUIDANCE[ERROR_CODE.DISK_SPACE_LOW].sentence,
+      message: EN_CATALOGUE['error.DISK_SPACE_LOW'],
     });
   });
 

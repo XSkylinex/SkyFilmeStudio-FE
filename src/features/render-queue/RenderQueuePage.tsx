@@ -1,10 +1,15 @@
 import type { FC } from 'react';
 import { EmptyState } from '@/lib/components/empty-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
 
-export const RenderQueuePage: FC = () => (
-  <EmptyState
-    title="Render queue"
-    description="Every render job for this production and how far each one has progressed. Not connected to the orchestrator yet."
-    headingLevel={1}
-  />
-);
+export const RenderQueuePage: FC = () => {
+  const translate = useTranslate();
+
+  return (
+    <EmptyState
+      title={translate('page.renderQueue.title')}
+      description={translate('page.renderQueue.description')}
+      headingLevel={1}
+    />
+  );
+};

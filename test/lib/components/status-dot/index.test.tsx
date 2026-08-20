@@ -1,10 +1,10 @@
-import { render } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import { StatusDot } from '@/lib/components/status-dot';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
 import type { StatusTone } from '@/lib/interfaces/status-tone';
 
 const renderDot = (tone: StatusTone): Element | null => {
-  const { container } = render(<StatusDot tone={tone} />);
+  const { container } = renderInStore(<StatusDot tone={tone} />);
   return container.querySelector('.status-dot');
 };
 

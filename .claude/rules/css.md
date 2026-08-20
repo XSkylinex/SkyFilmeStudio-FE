@@ -171,6 +171,31 @@ Two traps that produce an invisible icon with a fully green gate:
   Check the same way regardless: a resolved reference, of either shape, is fine; a broken path is
   silent.
 
+## Never `:dir()` — the build turns it into a language test
+
+Measured 2026-08-20 by building a two-line stylesheet and reading `dist/assets/*.css`. Lightning CSS
+lowers `:dir(rtl)` rather than passing it through, and what it lowers to is not equivalent:
+
+```css
+/* written */   .x:dir(rtl) { … }
+/* emitted */   .x:is(:lang(ae),:lang(ar),…,:lang(he),…,:lang(yi)) { … }
+```
+
+That selector matches on **language**, not direction. In this product those are deliberately
+different things: a Hebrew dialogue line marked `dir="rtl"` inside an English UI would not match it,
+and an element tagged `lang="he"` that renders LTR would. `:dir()` therefore compiles into exactly
+the "Hebrew mode" conflation `plan/15` names as its first trap.
+
+`:dir()` is also outside the floor on its own account —
+`dir-pseudo  widely  OUTSIDE floor | blocked by: chrome 120, chrome_android 120, edge 120` — but the
+lowering is the reason to avoid it, not the support. **Use `[dir='rtl']`**, which is emitted
+untouched and keys off the attribute that actually carries direction.
+
+The corollary: direction-dependent styling belongs on the attribute, and everything else belongs in
+logical properties, which need no direction selector at all. `src/**/*.css` currently contains **zero**
+physical `margin-left`/`padding-right`/bare `left:`/`right:` declarations and no `scaleX(`; keep it
+that way, because retrofitting them across a finished UI is the week `plan/15` exists to avoid.
+
 ## `@supports` is not always a valid gate
 
 Before assuming `@supports` makes a risky feature safe, ask what the failure mode actually is:

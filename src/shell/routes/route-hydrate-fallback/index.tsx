@@ -1,16 +1,19 @@
 import type { FC } from 'react';
 import { Skeleton } from '@/lib/components/skeleton';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import './route-hydrate-fallback.css';
 
-const ROUTE_HYDRATE_FALLBACK_LABEL = 'Loading this page';
+export const RouteHydrateFallback: FC = () => {
+  const translate = useTranslate();
 
-export const RouteHydrateFallback: FC = () => (
-  <output
-    className="route-hydrate-fallback"
-    aria-label={ROUTE_HYDRATE_FALLBACK_LABEL}
-  >
-    <Skeleton shape="rect" />
-    <Skeleton shape="text" />
-    <Skeleton shape="text" />
-  </output>
-);
+  return (
+    <output
+      className="route-hydrate-fallback"
+      aria-label={translate('shell.loadingPage')}
+    >
+      <Skeleton shape="rect" />
+      <Skeleton shape="text" />
+      <Skeleton shape="text" />
+    </output>
+  );
+};

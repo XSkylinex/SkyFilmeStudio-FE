@@ -1,3 +1,5 @@
+import type { InterfaceLanguage } from '@/lib/i18n/interfaces/interface-language';
+
 export type Theme = 'light' | 'dark' | 'system';
 
 export interface PanelLayout {
@@ -9,6 +11,7 @@ export interface ShellState {
   panelLayout: PanelLayout;
   theme: Theme;
   navCollapsed: boolean;
+  interfaceLanguage: InterfaceLanguage;
 }
 
 export interface ShellSliceRootState {

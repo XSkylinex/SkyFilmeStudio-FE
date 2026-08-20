@@ -1,10 +1,15 @@
 import type { FC } from 'react';
 import { EmptyState } from '@/lib/components/empty-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
 
-export const ProjectListPage: FC = () => (
-  <EmptyState
-    title="Projects"
-    description="Every Local AI Studio project on this machine. Not connected to the orchestrator yet."
-    headingLevel={1}
-  />
-);
+export const ProjectListPage: FC = () => {
+  const translate = useTranslate();
+
+  return (
+    <EmptyState
+      title={translate('page.projects.title')}
+      description={translate('page.projects.description')}
+      headingLevel={1}
+    />
+  );
+};

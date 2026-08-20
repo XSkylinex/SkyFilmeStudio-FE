@@ -2,7 +2,7 @@ import { isRouteHandle } from '@/shell/helpers/is-route-handle';
 
 describe('isRouteHandle', () => {
   it('accepts a handle carrying a string title', () => {
-    expect(isRouteHandle({ title: 'Plan' })).toBe(true);
+    expect(isRouteHandle({ titleKey: 'Plan' })).toBe(true);
   });
 
   it('rejects a handle with no title', () => {

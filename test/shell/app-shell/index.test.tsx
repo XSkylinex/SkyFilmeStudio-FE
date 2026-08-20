@@ -194,7 +194,7 @@ describe('AppShell', () => {
           {
             index: true,
             Component: () => <p>home</p>,
-            handle: { title: 'Projects' },
+            handle: { titleKey: 'page.projects.title' },
           },
         ],
       },

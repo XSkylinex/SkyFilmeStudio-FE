@@ -1,5 +1,6 @@
 import { createRoutesStub } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { ProductionShell } from '@/shell/production-shell';
 
 describe('ProductionShell', () => {
@@ -12,7 +13,9 @@ describe('ProductionShell', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/projects/proj-1/productions/prod-1']} />);
+    renderInStore(
+      <Stub initialEntries={['/projects/proj-1/productions/prod-1']} />,
+    );
 
     expect(screen.getByRole('navigation')).toBeInTheDocument();
     expect(screen.getByText('storyboard content')).toBeInTheDocument();
@@ -27,7 +30,9 @@ describe('ProductionShell', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/projects/proj-1/productions/prod-1']} />);
+    renderInStore(
+      <Stub initialEntries={['/projects/proj-1/productions/prod-1']} />,
+    );
 
     expect(screen.queryByText('In review')).not.toBeInTheDocument();
     expect(screen.queryByText('Pending')).not.toBeInTheDocument();

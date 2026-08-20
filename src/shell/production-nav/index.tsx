@@ -1,9 +1,10 @@
 import type { FC } from 'react';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import { NavLink } from 'react-router-dom';
 import { Badge } from '@/lib/components/badge';
 import { resolveProductionStages } from '@/shell/helpers/resolve-production-stages';
 import {
-  PRODUCTION_STAGE_STATE_LABEL,
+  PRODUCTION_STAGE_STATE_LABEL_KEY,
   PRODUCTION_STAGE_STATE_TONE,
 } from '@/shell/navigation.constants';
 import type { ProductionNavProps } from './production-nav.interface';
@@ -13,10 +14,14 @@ export const ProductionNav: FC<ProductionNavProps> = ({
   mode,
   stageStates,
 }) => {
+  const translate = useTranslate();
   const stages = resolveProductionStages(mode, stageStates);
 
   return (
-    <nav className="production-nav" aria-label="Production stages">
+    <nav
+      className="production-nav"
+      aria-label={translate('shell.productionStages')}
+    >
       {stages.map((stage) => (
         <NavLink
           key={stage.id}
@@ -24,11 +29,13 @@ export const ProductionNav: FC<ProductionNavProps> = ({
           className="production-nav__stage"
           end
         >
-          <span className="production-nav__stage-label">{stage.label}</span>
+          <span className="production-nav__stage-label">
+            {translate(stage.labelKey)}
+          </span>
           <span className="production-nav__stage-state">
             <Badge
               tone={PRODUCTION_STAGE_STATE_TONE[stage.state]}
-              label={PRODUCTION_STAGE_STATE_LABEL[stage.state]}
+              label={translate(PRODUCTION_STAGE_STATE_LABEL_KEY[stage.state])}
             />
           </span>
         </NavLink>

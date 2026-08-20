@@ -1,16 +1,14 @@
 import { parseRouteErrorPayload } from './parse-route-error-payload';
 import { toRouteErrorResponse } from './to-route-error-response';
 import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
-import { ROUTE_ERROR_DEFAULT_MESSAGE } from '../route-error.constants';
+import { StudioError } from '@/lib/api/studio-error';
 import type { ErrorCodeGuidance } from '@/lib/api/api.interface';
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import type { RouteErrorPayload } from '../interfaces/route-error-payload';
 import type { RouteErrorResponse } from '../interfaces/route-error-response';
 import type { RouteErrorView } from '../interfaces/route-error-view';
 
 const GUIDANCE_BY_CODE: Record<string, ErrorCodeGuidance> = ERROR_CODE_GUIDANCE;
-
-const GENERIC_ROUTE_ERROR_DESCRIPTION =
-  'Something failed while rendering this page. The rest of Local AI Studio is unaffected.';
 
 const CIRCULAR_REFERENCE_MARKER = '[Circular]';
 
@@ -54,17 +52,25 @@ const describeUnknownError = (error: unknown): string => {
   }
 };
 
-const describeRouteErrorPayload = (payload: RouteErrorPayload): string => {
+interface PayloadDescription {
+  descriptionKey?: TranslationKey | undefined;
+  descriptionDetail?: string | undefined;
+}
+
+const describeRouteErrorPayload = (
+  payload: RouteErrorPayload,
+): PayloadDescription => {
   if (!payload.code) {
-    return payload.message ?? ROUTE_ERROR_DEFAULT_MESSAGE;
+    return payload.message
+      ? { descriptionDetail: payload.message }
+      : { descriptionKey: 'error.unrecognisedCode' };
   }
 
-  const baseDescription =
-    GUIDANCE_BY_CODE[payload.code]?.sentence ?? ROUTE_ERROR_DEFAULT_MESSAGE;
-
-  return payload.message
-    ? `${baseDescription} (${payload.message})`
-    : baseDescription;
+  return {
+    descriptionKey:
+      GUIDANCE_BY_CODE[payload.code]?.messageKey ?? 'error.unrecognisedCode',
+    descriptionDetail: payload.message,
+  };
 };
 
 const resolveRouteErrorResponseView = (
@@ -76,7 +82,7 @@ const resolveRouteErrorResponseView = (
   if (payload) {
     return {
       detail: payload.code ?? statusText ?? `HTTP_${errorResponse.status}`,
-      description: describeRouteErrorPayload(payload),
+      ...describeRouteErrorPayload(payload),
       isUnknownError: false,
     };
   }
@@ -86,14 +92,26 @@ const resolveRouteErrorResponseView = (
 
   return {
     detail: statusText ?? `HTTP_${errorResponse.status}`,
-    description: rawBody
-      ? `The orchestrator responded with ${errorResponse.status}: ${rawBody}`
-      : `The orchestrator responded with ${errorResponse.status}${statusText ? ` ${statusText}` : ''}.`,
+    descriptionKey: 'error.status',
+    descriptionValues: { status: errorResponse.status },
+    descriptionDetail: rawBody || statusText,
     isUnknownError: false,
   };
 };
 
+const resolveStudioErrorView = (error: StudioError): RouteErrorView => ({
+  detail: error.code ?? error.status?.toString() ?? error.kind,
+  descriptionKey: error.messageKey,
+  descriptionValues: error.messageValues,
+  descriptionDetail: error.detail,
+  isUnknownError: false,
+});
+
 export const resolveRouteErrorView = (error: unknown): RouteErrorView => {
+  if (error instanceof StudioError) {
+    return resolveStudioErrorView(error);
+  }
+
   const errorResponse = toRouteErrorResponse(error);
   if (errorResponse) {
     return resolveRouteErrorResponseView(errorResponse);
@@ -103,14 +121,14 @@ export const resolveRouteErrorView = (error: unknown): RouteErrorView => {
   if (payload) {
     return {
       detail: payload.code ?? describeUnknownError(error),
-      description: describeRouteErrorPayload(payload),
+      ...describeRouteErrorPayload(payload),
       isUnknownError: false,
     };
   }
 
   return {
     detail: describeUnknownError(error),
-    description: GENERIC_ROUTE_ERROR_DESCRIPTION,
+    descriptionKey: 'error.routeGeneric',
     isUnknownError: true,
   };
 };

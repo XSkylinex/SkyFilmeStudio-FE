@@ -1,6 +1,7 @@
-import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
+import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 import { createRoutesStub } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { RouteErrorBoundary } from '@/shell/route-error-boundary';
 
 describe('RouteErrorBoundary', () => {
@@ -16,10 +17,10 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(
-      await screen.findByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+      await screen.findByText(EN_CATALOGUE['error.DISK_SPACE_LOW']),
     ).toBeInTheDocument();
     expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
   });
@@ -36,7 +37,7 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(await screen.findByText('SOME_FUTURE_CODE')).toBeInTheDocument();
     expect(
@@ -58,10 +59,10 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(
-      await screen.findByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+      await screen.findByText(EN_CATALOGUE['error.DISK_SPACE_LOW']),
     ).toBeInTheDocument();
     expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
   });
@@ -81,7 +82,7 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(await screen.findByText(/disk full/i)).toBeInTheDocument();
   });
@@ -98,11 +99,11 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     const description = await screen.findByText(/orchestrator/i);
     expect(description.textContent).toBe(
-      'The orchestrator responded with 500.',
+      EN_CATALOGUE['error.status'].replace('{status}', '500'),
     );
   });
 
@@ -121,7 +122,7 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     const description = await screen.findByText(/orchestrator is restarting/i);
     expect(description.textContent).toBe('The orchestrator is restarting');
@@ -145,7 +146,7 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(
       await screen.findByText(/2\.1 GB free on \/Volumes\/Media/),
@@ -167,10 +168,10 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(
-      screen.getByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+      screen.getByText(EN_CATALOGUE['error.DISK_SPACE_LOW']),
     ).toBeInTheDocument();
     expect(screen.getByText('DISK_SPACE_LOW')).toBeInTheDocument();
     expect(screen.queryByText('[object Object]')).not.toBeInTheDocument();
@@ -193,7 +194,7 @@ describe('RouteErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(screen.getByText("This page couldn't load")).toBeInTheDocument();
     expect(screen.getByText('boom')).toBeInTheDocument();

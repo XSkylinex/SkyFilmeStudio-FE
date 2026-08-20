@@ -1,3 +1,4 @@
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import type { StatusTone } from '@/lib/interfaces/status-tone';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
 import type { ProductionStageId } from './interfaces/production-stage-id';
@@ -39,10 +40,10 @@ export const PRODUCTION_STAGE_STATE_TONE = {
   blocked: STATUS_TONE.WARNING,
 } satisfies Record<ProductionStageState, StatusTone>;
 
-export const PRODUCTION_STAGE_STATE_LABEL = {
-  unknown: 'Not yet verified',
-  pending: 'Pending',
-  in_review: 'In review',
-  approved: 'Approved',
-  blocked: 'Blocked',
-} satisfies Record<ProductionStageState, string>;
+export const PRODUCTION_STAGE_STATE_LABEL_KEY = {
+  unknown: 'stage.unknown',
+  pending: 'stage.pending',
+  in_review: 'stage.in_review',
+  approved: 'stage.approved',
+  blocked: 'stage.blocked',
+} satisfies Record<ProductionStageState, TranslationKey>;
