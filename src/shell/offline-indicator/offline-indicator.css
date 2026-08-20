@@ -54,21 +54,6 @@
       --offline-indicator-border: var(--tone-success-border);
     }
 
-    &[data-mode='lan-workers'] {
-      --offline-indicator-fg: var(--tone-attention-fg);
-      --offline-indicator-bg: var(--tone-attention-bg);
-      --offline-indicator-border: var(--tone-attention-border);
-      border-width: 2px;
-      border-style: dashed;
-
-      &::before {
-        background: repeating-conic-gradient(
-          var(--offline-indicator-fg) 0deg 90deg,
-          transparent 90deg 180deg
-        );
-      }
-    }
-
     &[data-mode='remote'] {
       --offline-indicator-fg: var(--tone-danger-fg);
       --offline-indicator-bg: var(--tone-danger-bg);
@@ -97,6 +82,13 @@
           transparent 90deg 180deg
         );
       }
+    }
+
+    &[data-lan-workers='true'] {
+      --offline-indicator-border: var(--tone-attention-border);
+      border-width: 2px;
+      border-style: dashed;
+      box-shadow: inset 0 0 0 1px var(--tone-attention-border);
     }
   }
 }
