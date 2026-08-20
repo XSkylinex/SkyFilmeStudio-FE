@@ -82,10 +82,10 @@ describe('SystemReadiness', () => {
     renderInApp(<SystemReadiness />);
 
     expect(
-      await screen.findByText(
-        /refuse to start: this disk is short by 47.0 GB/i,
-      ),
+      await screen.findByText(/This disk is short by:/i),
     ).toBeInTheDocument();
+    const shortfall = screen.getByText('47.0 GB');
+    expect(shortfall).toHaveAttribute('dir', 'ltr');
   });
 
   it('does not mention the disk at all while the gate passes', async () => {

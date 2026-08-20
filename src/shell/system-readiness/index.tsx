@@ -85,9 +85,10 @@ export const SystemReadiness: FC<SystemReadinessProps> = ({
       </p>
       {data && !data.diskGate.passed ? (
         <p className="system-readiness__shortfall">
-          {translate('readiness.diskShortfall', {
-            shortfall: formatBytes(data.diskGate.shortfallBytes),
-          })}
+          {translate('readiness.diskShortfall')}{' '}
+          <span className="system-readiness__notation" dir="ltr">
+            {formatBytes(data.diskGate.shortfallBytes)}
+          </span>
         </p>
       ) : null}
       {data ? (

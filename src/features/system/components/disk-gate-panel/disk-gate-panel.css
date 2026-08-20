@@ -8,6 +8,10 @@
     }
   }
 
+  .disk-gate-panel__notation {
+    font-variant-numeric: tabular-nums;
+  }
+
   .disk-gate-panel__figures {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
@@ -29,7 +33,6 @@
 
     & dd {
       margin: 0;
-      font-variant-numeric: tabular-nums;
       font-weight: var(--font-weight-medium);
     }
 

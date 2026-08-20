@@ -130,7 +130,7 @@ export const EN_CATALOGUE = {
   'readiness.rerunning': 'Re-running',
   'readiness.error.title': 'Preflight could not be read',
   'readiness.diskShortfall':
-    'A render will refuse to start: this disk is short by {shortfall}.',
+    'A render will refuse to start. This disk is short by:',
 
   'system.mode.title': 'Operating mode',
   'system.mode.localOnly': 'Local-only generation',
@@ -163,7 +163,7 @@ export const EN_CATALOGUE = {
 
   'system.models.title': 'Models',
   'system.models.summary': '{ready} of {total} models have every file on disk',
-  'system.models.missingTotal': 'Still to fetch: {bytes}',
+  'system.models.missingTotal': 'Still to fetch:',
   'system.models.root': 'Models folder',
   'system.models.license': 'Licence',
   'system.models.size': 'Size',

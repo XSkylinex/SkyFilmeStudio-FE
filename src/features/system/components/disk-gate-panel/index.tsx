@@ -39,17 +39,26 @@ export const DiskGatePanel: FC<SystemSectionProps> = ({ headingLevel }) => {
             className="disk-gate-panel__verdict"
             data-passed={data.diskGate.passed}
           >
-            {data.diskGate.passed
-              ? translate('system.disk.passed')
-              : translate('readiness.diskShortfall', {
-                  shortfall: formatBytes(data.diskGate.shortfallBytes),
-                })}
+            {data.diskGate.passed ? (
+              translate('system.disk.passed')
+            ) : (
+              <>
+                {translate('readiness.diskShortfall')}{' '}
+                <span className="disk-gate-panel__notation" dir="ltr">
+                  {formatBytes(data.diskGate.shortfallBytes)}
+                </span>
+              </>
+            )}
           </p>
           <dl className="disk-gate-panel__figures">
             {DISK_GATE_FIGURES.map((figure) => (
               <div className="disk-gate-panel__figure" key={figure.labelKey}>
                 <dt>{translate(figure.labelKey)}</dt>
-                <dd>{formatBytes(figure.read(data.diskGate))}</dd>
+                <dd>
+                  <span className="disk-gate-panel__notation" dir="ltr">
+                    {formatBytes(figure.read(data.diskGate))}
+                  </span>
+                </dd>
               </div>
             ))}
             {data.diskGate.shortfallBytes > 0 ? (
@@ -59,7 +68,11 @@ export const DiskGatePanel: FC<SystemSectionProps> = ({ headingLevel }) => {
                 key="shortfall"
               >
                 <dt>{translate('system.disk.shortfall')}</dt>
-                <dd>{formatBytes(data.diskGate.shortfallBytes)}</dd>
+                <dd>
+                  <span className="disk-gate-panel__notation" dir="ltr">
+                    {formatBytes(data.diskGate.shortfallBytes)}
+                  </span>
+                </dd>
               </div>
             ) : null}
           </dl>

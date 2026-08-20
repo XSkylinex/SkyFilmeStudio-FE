@@ -129,7 +129,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'readiness.rerun': 'הרץ בדיקות מחדש',
   'readiness.rerunning': 'מריץ מחדש',
   'readiness.error.title': 'לא ניתן לקרוא את הבדיקות המקדימות',
-  'readiness.diskShortfall': 'רינדור יסרב להתחיל: חסרים בדיסק הזה {shortfall}.',
+  'readiness.diskShortfall': 'רינדור יסרב להתחיל. חסרים בדיסק הזה:',
 
   'system.mode.title': 'מצב הפעלה',
   'system.mode.localOnly': 'יצירה מקומית בלבד',
@@ -162,7 +162,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'system.models.title': 'מודלים',
   'system.models.summary':
     'ל-{ready} מתוך {total} מודלים כל הקבצים נמצאים בדיסק',
-  'system.models.missingTotal': 'נותר להוריד: {bytes}',
+  'system.models.missingTotal': 'נותר להוריד:',
   'system.models.root': 'תיקיית המודלים',
   'system.models.license': 'רישיון',
   'system.models.size': 'גודל',

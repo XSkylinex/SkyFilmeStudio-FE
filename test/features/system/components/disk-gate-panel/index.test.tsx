@@ -33,9 +33,25 @@ describe('DiskGatePanel', () => {
 
     expect(
       await screen.findByText(
-        'A render will refuse to start: this disk is short by 47.0 GB.',
+        /A render will refuse to start\. This disk is short by:/,
       ),
     ).toBeInTheDocument();
+  });
+
+  it('gives every byte figure its own left-to-right direction, so a Hebrew page does not print the unit before the number', async () => {
+    orchestratorReports(
+      buildPreflightReport({ passed: false, diskGate: FAILING_GATE }),
+    );
+
+    renderInApp(<DiskGatePanel />);
+
+    const free = await screen.findByText('8.0 GB');
+    expect(free).toHaveAttribute('dir', 'ltr');
+    expect(
+      screen
+        .getAllByText('47.0 GB')
+        .every((node) => node.getAttribute('dir') === 'ltr'),
+    ).toBe(true);
   });
 
   it('shows every figure the gate is computed from, so the shortfall can be argued with', async () => {
