@@ -1,12 +1,13 @@
 import { parseRouteErrorPayload } from './parse-route-error-payload';
 import { toRouteErrorResponse } from './to-route-error-response';
-import {
-  ROUTE_ERROR_CODE_MESSAGE,
-  ROUTE_ERROR_DEFAULT_MESSAGE,
-} from '../route-error-messages.fixture';
+import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
+import { ROUTE_ERROR_DEFAULT_MESSAGE } from '../route-error.constants';
+import type { ErrorCodeGuidance } from '@/lib/api/api.interface';
 import type { RouteErrorPayload } from '../interfaces/route-error-payload';
 import type { RouteErrorResponse } from '../interfaces/route-error-response';
 import type { RouteErrorView } from '../interfaces/route-error-view';
+
+const GUIDANCE_BY_CODE: Record<string, ErrorCodeGuidance> = ERROR_CODE_GUIDANCE;
 
 const GENERIC_ROUTE_ERROR_DESCRIPTION =
   'Something failed while rendering this page. The rest of Local AI Studio is unaffected.';
@@ -59,7 +60,7 @@ const describeRouteErrorPayload = (payload: RouteErrorPayload): string => {
   }
 
   const baseDescription =
-    ROUTE_ERROR_CODE_MESSAGE[payload.code] ?? ROUTE_ERROR_DEFAULT_MESSAGE;
+    GUIDANCE_BY_CODE[payload.code]?.sentence ?? ROUTE_ERROR_DEFAULT_MESSAGE;
 
   return payload.message
     ? `${baseDescription} (${payload.message})`
