@@ -21,6 +21,7 @@ export const RTL_PRIMARY_SUBTAGS: ReadonlySet<string> = new Set([
   'fa',
   'glk',
   'he',
+  'iw',
   'ku',
   'mzn',
   'nqo',
@@ -30,4 +31,20 @@ export const RTL_PRIMARY_SUBTAGS: ReadonlySet<string> = new Set([
   'ug',
   'ur',
   'yi',
+]);
+
+export const RTL_SCRIPT_SUBTAGS: ReadonlySet<string> = new Set([
+  'adlm',
+  'arab',
+  'hebr',
+  'nkoo',
+  'rohg',
+  'syrc',
+  'thaa',
+  'yezi',
+]);
+
+export const LTR_SCRIPT_SUBTAGS: ReadonlySet<string> = new Set([
+  'cyrl',
+  'latn',
 ]);

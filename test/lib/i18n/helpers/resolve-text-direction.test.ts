@@ -25,4 +25,21 @@ describe('resolveTextDirection', () => {
     expect(resolveTextDirection('fa')).toBe('rtl');
     expect(resolveTextDirection('ur')).toBe('rtl');
   });
+
+  it('lets a script subtag overrule the language, since a language can be written either way', () => {
+    expect(resolveTextDirection('yi-Latn')).toBe('ltr');
+    expect(resolveTextDirection('he-Latn')).toBe('ltr');
+    expect(resolveTextDirection('az-Arab')).toBe('rtl');
+    expect(resolveTextDirection('pa-Arab')).toBe('rtl');
+  });
+
+  it('reads the deprecated code for Hebrew, which the contract still accepts', () => {
+    expect(resolveTextDirection('iw')).toBe('rtl');
+    expect(resolveTextDirection('iw-IL')).toBe('rtl');
+  });
+
+  it('is not confused by a region that happens to be four characters of something else', () => {
+    expect(resolveTextDirection('zh-Hant')).toBe('ltr');
+    expect(resolveTextDirection('ar-EG')).toBe('rtl');
+  });
 });
