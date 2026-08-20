@@ -1,3 +1,4 @@
+import { StudioError } from '@/lib/api/studio-error';
 import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 import { translate } from '@/lib/i18n/helpers/translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
@@ -113,5 +114,44 @@ describe('resolveRouteErrorView', () => {
     const view = resolveRouteErrorView(new Error('boom'));
 
     expect(view.isUnknownError).toBe(true);
+  });
+});
+
+describe('resolveRouteErrorView, given a StudioError the data layer threw', () => {
+  it('renders the code its own sentence, rather than treating it as an unknown throw', () => {
+    const view = resolveRouteErrorView(
+      new StudioError({
+        kind: 'HTTP',
+        messageKey: 'error.DISK_SPACE_LOW',
+        code: 'DISK_SPACE_LOW',
+        status: 507,
+        detail: '3 GB required',
+      }),
+    );
+
+    expect(view.isUnknownError).toBe(false);
+    expect(view.detail).toBe('DISK_SPACE_LOW');
+    expect(describeInEnglish(view)).toBe(
+      `${EN_CATALOGUE['error.DISK_SPACE_LOW']} (3 GB required)`,
+    );
+  });
+
+  it('fills the status into a refusal that carried no typed code', () => {
+    const view = resolveRouteErrorView(
+      new StudioError({
+        kind: 'HTTP',
+        messageKey: 'error.status',
+        messageValues: { status: 500 },
+        status: 500,
+      }),
+    );
+
+    expect(describeInEnglish(view)).toBe(
+      EN_CATALOGUE['error.status'].replace('{status}', '500'),
+    );
+  });
+
+  it('still treats an ordinary Error as unknown', () => {
+    expect(resolveRouteErrorView(new Error('boom')).isUnknownError).toBe(true);
   });
 });

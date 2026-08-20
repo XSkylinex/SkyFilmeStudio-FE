@@ -1,6 +1,7 @@
 import { parseRouteErrorPayload } from './parse-route-error-payload';
 import { toRouteErrorResponse } from './to-route-error-response';
 import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
+import { StudioError } from '@/lib/api/studio-error';
 import type { ErrorCodeGuidance } from '@/lib/api/api.interface';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import type { RouteErrorPayload } from '../interfaces/route-error-payload';
@@ -98,7 +99,19 @@ const resolveRouteErrorResponseView = (
   };
 };
 
+const resolveStudioErrorView = (error: StudioError): RouteErrorView => ({
+  detail: error.code ?? error.status?.toString() ?? error.kind,
+  descriptionKey: error.messageKey,
+  descriptionValues: error.messageValues,
+  descriptionDetail: error.detail,
+  isUnknownError: false,
+});
+
 export const resolveRouteErrorView = (error: unknown): RouteErrorView => {
+  if (error instanceof StudioError) {
+    return resolveStudioErrorView(error);
+  }
+
   const errorResponse = toRouteErrorResponse(error);
   if (errorResponse) {
     return resolveRouteErrorResponseView(errorResponse);
