@@ -160,8 +160,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'system.disk.passed': 'יש מספיק מקום פנוי כדי שרינדור יתחיל.',
 
   'system.models.title': 'מודלים',
-  'system.models.summary':
-    'ל-{ready} מתוך {total} מודלים כל הקבצים נמצאים בדיסק',
+  'system.models.summary': 'הקבצים של {ready} מתוך {total} מודלים נמצאים בדיסק',
   'system.models.missingTotal': 'נותר להוריד:',
   'system.models.root': 'תיקיית המודלים',
   'system.models.license': 'רישיון',
