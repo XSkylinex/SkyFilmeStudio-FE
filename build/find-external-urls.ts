@@ -1,3 +1,5 @@
+import { isLoopbackHost } from '../src/lib/api/helpers/is-loopback-host.ts';
+
 const URL_PATTERN = /\bhttps?:\/\/[^\s"'`\\)<>]+/gi;
 
 const NON_FETCHING_URL_PREFIXES = [
@@ -19,17 +21,6 @@ const TEMPLATE_SPAN = /\$\{[^}]*\}/g;
 const REGISTRABLE_CHARACTER = /[a-z0-9]/i;
 const SCHEME_SEPARATOR = '://';
 const AUTHORITY_TERMINATORS = ['/', '?', '#'];
-
-const LOOPBACK_IPV4_PREFIX = '127.';
-const LOOPBACK_IPV6_HOSTNAME = '[::1]';
-const LOOPBACK_HOSTNAME = 'localhost';
-const LOOPBACK_HOSTNAME_SUFFIX = '.localhost';
-
-const isLoopbackHostname = (hostname: string): boolean =>
-  hostname === LOOPBACK_HOSTNAME ||
-  hostname.endsWith(LOOPBACK_HOSTNAME_SUFFIX) ||
-  hostname === LOOPBACK_IPV6_HOSTNAME ||
-  hostname.startsWith(LOOPBACK_IPV4_PREFIX);
 
 const readAuthority = (url: string): string => {
   const afterScheme = url.slice(
@@ -66,7 +57,7 @@ export const findExternalUrls = (source: string): string[] => {
     }
 
     try {
-      if (!isLoopbackHostname(new URL(url).hostname)) {
+      if (!isLoopbackHost(new URL(url).hostname)) {
         external.add(url);
       }
     } catch {

