@@ -1,0 +1,76 @@
+@layer features {
+  .preflight-checks-panel__note {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .preflight-checks-panel__skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .preflight-checks-panel__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .preflight-checks-panel__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+    padding-inline-start: var(--space-3);
+    border-inline-start: 2px solid var(--color-border-subtle);
+
+    &[data-status='PASS'] {
+      border-inline-start-color: var(--tone-success-border);
+    }
+
+    &[data-status='FAIL'] {
+      border-inline-start-color: var(--tone-danger-border);
+    }
+
+    &[data-status='NOT_APPLICABLE'] {
+      border-inline-start-color: var(--tone-neutral-border);
+    }
+
+    &[data-status='NOT_IMPLEMENTED'] {
+      border-inline-start-color: var(--tone-stale-border);
+    }
+  }
+
+  .preflight-checks-panel__check-id {
+    margin-inline-end: auto;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+  }
+
+  .preflight-checks-panel__detail {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-base);
+  }
+
+  .preflight-checks-panel__guidance {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-base);
+  }
+
+  .preflight-checks-panel__error-code {
+    margin-inline-start: var(--space-1);
+    font-family: var(--font-mono);
+  }
+}
