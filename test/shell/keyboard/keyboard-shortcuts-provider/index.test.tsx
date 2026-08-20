@@ -1,5 +1,6 @@
 import type { FC } from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
 import { useKeyboardShortcut } from '@/shell/keyboard/use-keyboard-shortcut';
@@ -31,7 +32,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   it('calls the registered handler when its key is pressed', async () => {
     const handleApprove = vi.fn<() => void>();
     const user = userEvent.setup();
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <ApproveProbe onApprove={handleApprove} />
       </KeyboardShortcutsProvider>,
@@ -45,7 +46,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   it('does not fire while focus is inside a text input', async () => {
     const handleApprove = vi.fn<() => void>();
     const user = userEvent.setup();
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <input aria-label="Prompt" />
         <ApproveProbe onApprove={handleApprove} />
@@ -61,7 +62,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   it('does not fire while focus is inside a textarea', async () => {
     const handleApprove = vi.fn<() => void>();
     const user = userEvent.setup();
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <textarea aria-label="Notes" />
         <ApproveProbe onApprove={handleApprove} />
@@ -76,7 +77,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
 
   it('does not fire when a modifier key is held, so it never hijacks a browser shortcut', () => {
     const handleApprove = vi.fn<() => void>();
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <ApproveProbe onApprove={handleApprove} />
       </KeyboardShortcutsProvider>,
@@ -94,7 +95,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
     const handleApproveSecond = vi.fn<() => void>();
     const user = userEvent.setup();
 
-    const { rerender } = render(
+    const { rerender } = renderInStore(
       <KeyboardShortcutsProvider>
         <ApproveProbe onApprove={handleApproveFirst} />
       </KeyboardShortcutsProvider>,
@@ -116,7 +117,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
 
   it('opens a keyboard-shortcuts help dialog listing every registered shortcut on "?"', async () => {
     const user = userEvent.setup();
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <p>page content</p>
       </KeyboardShortcutsProvider>,
@@ -135,7 +136,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   });
 
   it('prevents the browser default for a key it recognises, so Space cannot also scroll or click a focused button', () => {
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <ApproveProbe onApprove={vi.fn<() => void>()} />
       </KeyboardShortcutsProvider>,
@@ -153,7 +154,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   it('does not let a/r reach the page behind the open shortcuts-help dialog', async () => {
     const handleApprove = vi.fn<() => void>();
     const user = userEvent.setup();
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <ApproveProbe onApprove={handleApprove} />
       </KeyboardShortcutsProvider>,
@@ -170,7 +171,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   });
 
   it('does not prevent Space when nothing subscribes to toggle-playback, so the page can still scroll', () => {
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <p>page content</p>
       </KeyboardShortcutsProvider>,
@@ -183,7 +184,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   });
 
   it('does not prevent ArrowRight or "a" when nothing subscribes to either', () => {
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <p>page content</p>
       </KeyboardShortcutsProvider>,
@@ -211,7 +212,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
       return <button type="button">Play</button>;
     };
 
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <TogglePlaybackProbe />
       </KeyboardShortcutsProvider>,
@@ -241,7 +242,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
     };
     const user = userEvent.setup();
 
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <NextPreviousProbe />
       </KeyboardShortcutsProvider>,
@@ -258,7 +259,7 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
   it('documents the arrow keys in reading order under dir="rtl", matching what they actually dispatch', async () => {
     document.documentElement.dir = 'rtl';
     const user = userEvent.setup();
-    render(
+    renderInStore(
       <KeyboardShortcutsProvider>
         <p>page content</p>
       </KeyboardShortcutsProvider>,

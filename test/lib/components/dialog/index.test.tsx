@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import { Dialog } from '@/lib/components/dialog';
 
 beforeAll(() => {
@@ -26,7 +27,7 @@ afterEach(() => {
 
 describe('Dialog', () => {
   it('calls showModal when open becomes true', () => {
-    const { rerender } = render(
+    const { rerender } = renderInStore(
       <Dialog
         open={false}
         title="Approve keyframe"
@@ -50,7 +51,7 @@ describe('Dialog', () => {
   });
 
   it('calls close when open becomes false', () => {
-    const { rerender } = render(
+    const { rerender } = renderInStore(
       <Dialog open title="Approve keyframe" onClose={vi.fn<() => void>()}>
         <p>Body</p>
       </Dialog>,
@@ -76,7 +77,7 @@ describe('Dialog', () => {
   it('guards showModal on the element’s own open property, so a StrictMode double-invoke does not throw', () => {
     const showModalSpy = vi.spyOn(HTMLDialogElement.prototype, 'showModal');
 
-    render(
+    renderInStore(
       <StrictMode>
         <Dialog open title="Approve keyframe" onClose={vi.fn<() => void>()}>
           <p>Body</p>
@@ -89,7 +90,7 @@ describe('Dialog', () => {
 
   it('calls onClose exactly once for one Escape press, which fires cancel then close', () => {
     const handleClose = vi.fn<() => void>();
-    render(
+    renderInStore(
       <Dialog open title="Approve keyframe" onClose={handleClose}>
         <p>Body</p>
       </Dialog>,
@@ -106,7 +107,7 @@ describe('Dialog', () => {
 
   it('calls onClose on the native close event, so the open prop cannot desync', () => {
     const handleClose = vi.fn<() => void>();
-    render(
+    renderInStore(
       <Dialog open title="Approve keyframe" onClose={handleClose}>
         <p>Body</p>
       </Dialog>,
@@ -120,7 +121,7 @@ describe('Dialog', () => {
 
   it('does not call onClose when the parent closed it by flipping the open prop', () => {
     const handleClose = vi.fn<() => void>();
-    const { rerender } = render(
+    const { rerender } = renderInStore(
       <Dialog open title="Approve keyframe" onClose={handleClose}>
         <p>Body</p>
       </Dialog>,
@@ -136,7 +137,7 @@ describe('Dialog', () => {
   });
 
   it('uses the title as the accessible name, via aria-labelledby', () => {
-    render(
+    renderInStore(
       <Dialog open title="Approve keyframe" onClose={vi.fn<() => void>()}>
         <p>Body</p>
       </Dialog>,
@@ -148,7 +149,7 @@ describe('Dialog', () => {
   });
 
   it('defaults its title to a level-2 heading', () => {
-    render(
+    renderInStore(
       <Dialog open title="Approve keyframe" onClose={vi.fn<() => void>()}>
         <p>Body</p>
       </Dialog>,
@@ -160,7 +161,7 @@ describe('Dialog', () => {
   });
 
   it('renders its title at the heading level the caller chose', () => {
-    render(
+    renderInStore(
       <Dialog
         open
         title="Approve keyframe"
@@ -177,7 +178,7 @@ describe('Dialog', () => {
   });
 
   it('renders the footer only when given', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = renderInStore(
       <Dialog open title="Approve keyframe" onClose={vi.fn<() => void>()}>
         <p>Body</p>
       </Dialog>,

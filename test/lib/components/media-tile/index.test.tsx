@@ -1,9 +1,10 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import { MediaTile } from '@/lib/components/media-tile';
 
 describe('MediaTile', () => {
   it('reserves its box from the ratio alone when there is nothing to show yet', () => {
-    const { container } = render(<MediaTile alt="Keyframe candidate" />);
+    const { container } = renderInStore(<MediaTile alt="Keyframe candidate" />);
     const tile = container.querySelector('.media-tile');
 
     expect(tile).toHaveAttribute('data-ratio', '16:9');
@@ -13,7 +14,7 @@ describe('MediaTile', () => {
   });
 
   it('reserves a non-default ratio the same way, before any image exists', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <MediaTile alt="Keyframe candidate" ratio="9:16" />,
     );
 
@@ -24,7 +25,7 @@ describe('MediaTile', () => {
   });
 
   it('starts loading and shows the shared Skeleton, not an invented shimmer', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <MediaTile src="data:image/png;base64,AAAA" alt="Keyframe candidate" />,
     );
     const tile = container.querySelector('.media-tile');
@@ -34,7 +35,7 @@ describe('MediaTile', () => {
   });
 
   it('marks the image lazy and async-decoded', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <MediaTile src="data:image/png;base64,AAAA" alt="Keyframe candidate" />,
     );
     const image = container.querySelector('img');
@@ -44,7 +45,7 @@ describe('MediaTile', () => {
   });
 
   it('does not measure or reserve from image dimensions, only from the ratio prop', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <MediaTile src="data:image/png;base64,AAAA" alt="Keyframe candidate" />,
     );
     const image = container.querySelector('img');
@@ -54,7 +55,7 @@ describe('MediaTile', () => {
   });
 
   it('goes ready once the image decodes, dropping the skeleton', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <MediaTile src="data:image/png;base64,AAAA" alt="Keyframe candidate" />,
     );
     const image = container.querySelector('img');
@@ -72,7 +73,7 @@ describe('MediaTile', () => {
   });
 
   it('goes to failed on a decode error and renders legible text, not a broken-image glyph', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <MediaTile src="data:image/png;base64,broken" alt="Keyframe candidate" />,
     );
     const image = container.querySelector('img');
@@ -89,7 +90,7 @@ describe('MediaTile', () => {
   });
 
   it('resets to loading when src changes, so a recycled grid cell drops the previous outcome', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = renderInStore(
       <MediaTile src="data:image/png;base64,one" alt="First keyframe" />,
     );
     const firstImage = container.querySelector('img');
@@ -117,7 +118,7 @@ describe('MediaTile', () => {
   });
 
   it('drops back to empty when a later src is removed entirely', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = renderInStore(
       <MediaTile src="data:image/png;base64,one" alt="First keyframe" />,
     );
 
@@ -129,7 +130,7 @@ describe('MediaTile', () => {
   });
 
   it('shows the caption only when one is given', () => {
-    const { container, rerender } = render(
+    const { container, rerender } = renderInStore(
       <MediaTile alt="Keyframe candidate" />,
     );
 

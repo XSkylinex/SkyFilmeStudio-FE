@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { ApprovalControls } from '@/lib/components/approval-controls';
 import type { RegenerationModeOption } from '@/lib/components/approval-controls/approval-controls.interface';
@@ -38,7 +39,7 @@ describe('ApprovalControls', () => {
     const user = userEvent.setup();
     const handleApprove = vi.fn<() => void>();
     const handleReject = vi.fn<() => void>();
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={handleApprove}
         onReject={handleReject}
@@ -59,7 +60,7 @@ describe('ApprovalControls', () => {
     const user = userEvent.setup();
     const handleApprove = vi.fn<() => void>();
     const handleReject = vi.fn<() => void>();
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={handleApprove}
         onReject={handleReject}
@@ -78,7 +79,7 @@ describe('ApprovalControls', () => {
 
   it('leaves every control exactly as disabled as it was before the click, since only the server may change that', async () => {
     const user = userEvent.setup();
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={noop}
         onReject={noop}
@@ -102,7 +103,7 @@ describe('ApprovalControls', () => {
   });
 
   it('disables every control, decision and regeneration alike, while pending', () => {
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={noop}
         onReject={noop}
@@ -119,7 +120,7 @@ describe('ApprovalControls', () => {
   });
 
   it('disables only the decision once the shot is decided, leaving regeneration open', () => {
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={noop}
         onReject={noop}
@@ -140,7 +141,7 @@ describe('ApprovalControls', () => {
   });
 
   it('renders one control per regeneration mode, each with its own accessible name', () => {
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={noop}
         onReject={noop}
@@ -162,7 +163,7 @@ describe('ApprovalControls', () => {
   it('names exactly which mode ran when a regeneration control is clicked', async () => {
     const user = userEvent.setup();
     const handleRegenerate = vi.fn<(modeId: string) => void>();
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={noop}
         onReject={noop}
@@ -179,7 +180,7 @@ describe('ApprovalControls', () => {
   });
 
   it('renders no regeneration control at all when there are no modes, never a fallback Retry', () => {
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={noop}
         onReject={noop}
@@ -195,7 +196,7 @@ describe('ApprovalControls', () => {
   });
 
   it('exposes each mode description as the accessible description, kept apart from the name', () => {
-    render(
+    renderInStore(
       <ApprovalControls
         onApprove={noop}
         onReject={noop}

@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import { ErrorState } from '@/lib/components/error-state';
 
 describe('ErrorState', () => {
   it('renders the title as a heading', () => {
-    render(<ErrorState title="Render failed" />);
+    renderInStore(<ErrorState title="Render failed" />);
 
     expect(
       screen.getByRole('heading', { name: 'Render failed' }),
@@ -11,7 +12,7 @@ describe('ErrorState', () => {
   });
 
   it('defaults to a level-2 heading, so it slots under a page title', () => {
-    render(<ErrorState title="Render failed" />);
+    renderInStore(<ErrorState title="Render failed" />);
 
     expect(
       screen.getByRole('heading', { name: 'Render failed', level: 2 }),
@@ -19,7 +20,7 @@ describe('ErrorState', () => {
   });
 
   it('renders at the heading level the caller chose, so it can sit under a panel heading', () => {
-    render(<ErrorState title="Render failed" headingLevel={3} />);
+    renderInStore(<ErrorState title="Render failed" headingLevel={3} />);
 
     expect(
       screen.getByRole('heading', { name: 'Render failed', level: 3 }),
@@ -27,7 +28,7 @@ describe('ErrorState', () => {
   });
 
   it('keeps the technical detail separate from the human description', () => {
-    render(
+    renderInStore(
       <ErrorState
         title="Render failed"
         description="The GPU ran out of memory partway through this shot."
@@ -46,7 +47,7 @@ describe('ErrorState', () => {
   });
 
   it('renders neither description nor detail when not given', () => {
-    const { container } = render(<ErrorState title="Render failed" />);
+    const { container } = renderInStore(<ErrorState title="Render failed" />);
 
     expect(
       container.querySelector('.error-state__description'),
@@ -57,7 +58,7 @@ describe('ErrorState', () => {
   });
 
   it('does not use role="alert", since this renders as part of a page region', () => {
-    const { container } = render(<ErrorState title="Render failed" />);
+    const { container } = renderInStore(<ErrorState title="Render failed" />);
 
     expect(container.querySelector('.error-state')).not.toHaveAttribute(
       'role',
@@ -66,7 +67,7 @@ describe('ErrorState', () => {
   });
 
   it('renders the action only when given', () => {
-    render(
+    renderInStore(
       <ErrorState
         title="Render failed"
         action={<button type="button">Retry with the same seed</button>}

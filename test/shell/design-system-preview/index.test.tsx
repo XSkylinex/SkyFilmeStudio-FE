@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { DesignSystemPreview } from '@/shell/design-system-preview';
 
@@ -50,7 +51,7 @@ const SHOT_STATE_NAMES = [
 
 describe('DesignSystemPreview', () => {
   it('groups the gallery under readable headings', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     expect(screen.getByRole('heading', { name: 'Tones' })).toBeInTheDocument();
     expect(
@@ -74,7 +75,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('shows every one of the ten presentational tones as its own badge', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     TONE_LABELS.forEach((label) => {
       expect(screen.getByText(label)).toBeInTheDocument();
@@ -82,7 +83,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('names all twelve job states from the authority, not a paraphrase', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     JOB_STATE_NAMES.forEach((name) => {
       expect(screen.getByText(name)).toBeInTheDocument();
@@ -90,7 +91,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('names all fifteen shot states from the authority', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     SHOT_STATE_NAMES.forEach((name) => {
       expect(screen.getByText(name)).toBeInTheDocument();
@@ -98,7 +99,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('never lets an advisory AUTO_QC pass borrow the human-approved tone', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     const autoQcTone = screen
       .getByText('AUTO_QC')
@@ -115,7 +116,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('renders determinate progress bars at several values and one indeterminate bar', () => {
-    const { container } = render(<DesignSystemPreview />);
+    const { container } = renderInStore(<DesignSystemPreview />);
 
     const determinate = container.querySelectorAll(
       '.progress-bar[aria-valuenow]',
@@ -129,7 +130,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('renders a skeleton in every shape', () => {
-    const { container } = render(<DesignSystemPreview />);
+    const { container } = renderInStore(<DesignSystemPreview />);
 
     expect(
       container.querySelector('.skeleton[data-shape="text"]'),
@@ -143,7 +144,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('shows every button variant at both sizes, in full unabbreviated words', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     ['Primary', 'Secondary', 'Ghost', 'Danger'].forEach((variant) => {
       ['small', 'medium'].forEach((size) => {
@@ -155,7 +156,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('gives every icon button an accessible name, since the icon itself is decorative', () => {
-    const { container } = render(<DesignSystemPreview />);
+    const { container } = renderInStore(<DesignSystemPreview />);
     const iconButtons = container.querySelectorAll('[data-shape="icon"]');
 
     expect(iconButtons.length).toBeGreaterThan(0);
@@ -165,7 +166,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('links the errored field to its error text through aria-describedby', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     const seedControl = screen.getByLabelText('Seed');
     expect(seedControl).toHaveAttribute('aria-invalid', 'true');
@@ -177,7 +178,7 @@ describe('DesignSystemPreview', () => {
   });
 
   it('links the hinted field to its hint text, not its error, since it has none', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     const durationControl = screen.getByLabelText('Duration');
     expect(durationControl).not.toHaveAttribute('aria-invalid');
@@ -189,14 +190,14 @@ describe('DesignSystemPreview', () => {
   });
 
   it('never claims the fixture duration options were measured on real hardware', () => {
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     expect(screen.queryByText(/^measured/i)).not.toBeInTheDocument();
   });
 
   it('changes the standalone select value when the user picks a different option', async () => {
     const user = userEvent.setup();
-    render(<DesignSystemPreview />);
+    renderInStore(<DesignSystemPreview />);
 
     const selects = screen.getAllByRole('combobox');
     const standaloneSelect = selects[selects.length - 1];

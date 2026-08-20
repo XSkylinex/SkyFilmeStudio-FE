@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
 
 describe('DashboardPage', () => {
   it('renders the dashboard empty state', () => {
-    render(<DashboardPage />);
+    renderInStore(<DashboardPage />);
 
     expect(
       screen.getByRole('heading', { name: 'Dashboard', level: 1 }),

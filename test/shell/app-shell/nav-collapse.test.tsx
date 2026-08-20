@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 import { Provider } from 'react-redux';
 import { createRoutesStub } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { AppShell } from '@/shell/app-shell';
 import { createStore } from '@/shell/store';
@@ -30,7 +31,7 @@ const renderShell = (): void => {
     },
   ]);
 
-  render(
+  renderInStore(
     <Provider store={createStore()}>
       <Stub initialEntries={['/']} />
     </Provider>,

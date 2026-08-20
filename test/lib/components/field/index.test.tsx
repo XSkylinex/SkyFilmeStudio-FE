@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import { Field } from '@/lib/components/field';
 
 describe('Field', () => {
   it('associates its label with the control, so querying by label finds the control', () => {
-    render(
+    renderInStore(
       <Field label="Seed">
         <input />
       </Field>,
@@ -13,7 +14,7 @@ describe('Field', () => {
   });
 
   it('uses the caller-supplied id instead of generating one', () => {
-    render(
+    renderInStore(
       <Field label="Seed" id="seed-input">
         <input />
       </Field>,
@@ -23,7 +24,7 @@ describe('Field', () => {
   });
 
   it('links the hint through aria-describedby', () => {
-    render(
+    renderInStore(
       <Field label="Duration" hint="Seconds, from the capability payload">
         <input />
       </Field>,
@@ -38,7 +39,7 @@ describe('Field', () => {
   });
 
   it('sets aria-invalid and links the error text when errored', () => {
-    render(
+    renderInStore(
       <Field label="Duration" error="Exceeds the tested maximum">
         <input />
       </Field>,
@@ -54,7 +55,7 @@ describe('Field', () => {
   });
 
   it('does not mark a hint-only field as invalid', () => {
-    render(
+    renderInStore(
       <Field label="Duration" hint="Seconds">
         <input />
       </Field>,
@@ -66,7 +67,7 @@ describe('Field', () => {
   });
 
   it('describes the control by both hint and error when both are present', () => {
-    render(
+    renderInStore(
       <Field label="Duration" hint="Seconds" error="Too long">
         <input />
       </Field>,

@@ -1,9 +1,9 @@
-import { render } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import { Skeleton } from '@/lib/components/skeleton';
 
 describe('Skeleton', () => {
   it('hides itself from assistive tech, since the owning region announces loading', () => {
-    const { container } = render(<Skeleton shape="text" />);
+    const { container } = renderInStore(<Skeleton shape="text" />);
 
     expect(container.querySelector('.skeleton')).toHaveAttribute(
       'aria-hidden',
@@ -12,7 +12,7 @@ describe('Skeleton', () => {
   });
 
   it('carries its shape on data-shape', () => {
-    const { container } = render(<Skeleton shape="circle" />);
+    const { container } = renderInStore(<Skeleton shape="circle" />);
 
     expect(container.querySelector('.skeleton')).toHaveAttribute(
       'data-shape',

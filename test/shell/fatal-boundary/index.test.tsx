@@ -1,5 +1,6 @@
 import type { FC } from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { FatalBoundary } from '@/shell/fatal-boundary';
 
@@ -9,7 +10,7 @@ const Bomb: FC = () => {
 
 describe('FatalBoundary', () => {
   it('renders its children when nothing has thrown', () => {
-    render(
+    renderInStore(
       <FatalBoundary>
         <p>Local AI Studio</p>
       </FatalBoundary>,
@@ -26,7 +27,7 @@ describe('FatalBoundary', () => {
     vi.stubGlobal('location', { reload: reloadSpy });
     const user = userEvent.setup();
 
-    render(
+    renderInStore(
       <FatalBoundary>
         <Bomb />
       </FatalBoundary>,

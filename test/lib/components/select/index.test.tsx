@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { Select } from '@/lib/components/select';
 import { Field } from '@/lib/components/field';
@@ -12,7 +13,7 @@ const DURATION_OPTIONS = [
 
 describe('Select', () => {
   it('renders every option the caller passed, by full label text', () => {
-    render(
+    renderInStore(
       <Select
         options={DURATION_OPTIONS}
         value="4"
@@ -29,7 +30,7 @@ describe('Select', () => {
   });
 
   it('reflects the caller-controlled value', () => {
-    render(
+    renderInStore(
       <Select
         options={DURATION_OPTIONS}
         value="8"
@@ -43,7 +44,7 @@ describe('Select', () => {
   it('calls onChange with the newly picked value, never the previous one', async () => {
     const user = userEvent.setup();
     const handleChange = vi.fn<ChangeHandler>();
-    render(
+    renderInStore(
       <Select options={DURATION_OPTIONS} value="4" onChange={handleChange} />,
     );
 
@@ -52,7 +53,7 @@ describe('Select', () => {
   });
 
   it('never advertises a duration the capability payload did not include', () => {
-    render(
+    renderInStore(
       <Select
         options={DURATION_OPTIONS}
         value="4"
@@ -66,7 +67,7 @@ describe('Select', () => {
   });
 
   it('composes with Field, taking its generated id and aria-describedby', () => {
-    render(
+    renderInStore(
       <Field label="Duration" hint="From the capability payload">
         <Select
           options={DURATION_OPTIONS}
@@ -82,7 +83,7 @@ describe('Select', () => {
   });
 
   it('composes with Field, taking its generated id, aria-describedby and aria-invalid', () => {
-    render(
+    renderInStore(
       <Field label="Duration" error="Exceeds the tested maximum">
         <Select
           options={DURATION_OPTIONS}

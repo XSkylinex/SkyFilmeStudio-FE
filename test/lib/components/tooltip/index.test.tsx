@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import { Tooltip } from '@/lib/components/tooltip';
 
 describe('Tooltip', () => {
   it('keeps the tip text in the DOM without any hover or focus', () => {
-    render(
+    renderInStore(
       <Tooltip label="Measured on this hardware profile">
         <button type="button">Duration</button>
       </Tooltip>,
@@ -15,7 +16,7 @@ describe('Tooltip', () => {
   });
 
   it('describes the child through aria-describedby, pointing at the tip', () => {
-    render(
+    renderInStore(
       <Tooltip label="Measured on this hardware profile">
         <button type="button">Duration</button>
       </Tooltip>,
@@ -31,7 +32,7 @@ describe('Tooltip', () => {
   });
 
   it('merges with an aria-describedby the child already carries', () => {
-    render(
+    renderInStore(
       <Tooltip label="Measured on this hardware profile">
         <button type="button" aria-describedby="existing-hint">
           Duration

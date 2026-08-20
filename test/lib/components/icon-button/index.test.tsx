@@ -1,11 +1,12 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { Icon } from '@/lib/components/icon';
 import { IconButton } from '@/lib/components/icon-button';
 
 describe('IconButton', () => {
   it('exposes the required label as its accessible name, since the icon carries none', () => {
-    render(
+    renderInStore(
       <IconButton variant="ghost" size="sm" label="Cancel render">
         <Icon name="close" />
       </IconButton>,
@@ -17,7 +18,7 @@ describe('IconButton', () => {
   });
 
   it('defaults to type="button"', () => {
-    render(
+    renderInStore(
       <IconButton variant="primary" size="md" label="Retake">
         <Icon name="close" />
       </IconButton>,
@@ -30,7 +31,7 @@ describe('IconButton', () => {
   });
 
   it('carries the variant and size the caller chose', () => {
-    render(
+    renderInStore(
       <IconButton variant="danger" size="sm" label="Reject">
         <Icon name="close" />
       </IconButton>,
@@ -42,7 +43,7 @@ describe('IconButton', () => {
   });
 
   it('renders Button in its icon shape rather than a second button of its own', () => {
-    render(
+    renderInStore(
       <IconButton variant="ghost" size="md" label="Cancel render">
         <Icon name="close" />
       </IconButton>,
@@ -56,7 +57,7 @@ describe('IconButton', () => {
   it('does not call the handler while disabled', async () => {
     const user = userEvent.setup();
     const handleClick = vi.fn<() => void>();
-    render(
+    renderInStore(
       <IconButton
         variant="primary"
         size="md"
@@ -73,7 +74,7 @@ describe('IconButton', () => {
   });
 
   it('forwards aria-describedby, so a wrapping Tooltip actually describes it', () => {
-    render(
+    renderInStore(
       <>
         <IconButton
           variant="ghost"

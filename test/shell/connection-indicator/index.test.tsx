@@ -1,11 +1,12 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { ConnectionIndicator } from '@/shell/connection-indicator';
 import { ConnectionStateProvider } from '@/shell/connection-indicator/connection-state-provider';
 import { ConnectionStateContext } from '@/shell/connection-indicator/connection-state.context';
 import type { ConnectionState } from '@/shell/connection-indicator/connection-indicator.interface';
 
 const renderWithState = (connectionState: ConnectionState): void => {
-  render(
+  renderInStore(
     <ConnectionStateContext.Provider
       value={{
         connectionState,
@@ -19,13 +20,13 @@ const renderWithState = (connectionState: ConnectionState): void => {
 
 describe('ConnectionIndicator', () => {
   it('throws a clear error when rendered without a ConnectionStateProvider', () => {
-    expect(() => render(<ConnectionIndicator />)).toThrow(
+    expect(() => renderInStore(<ConnectionIndicator />)).toThrow(
       /ConnectionStateProvider/,
     );
   });
 
   it('carries the current state on data-state', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <ConnectionStateContext.Provider
         value={{
           connectionState: 'open',
@@ -62,7 +63,7 @@ describe('ConnectionIndicator', () => {
     const labels = new Set<string>();
 
     states.forEach((state) => {
-      const { unmount, container } = render(
+      const { unmount, container } = renderInStore(
         <ConnectionStateContext.Provider
           value={{
             connectionState: state,
@@ -83,7 +84,7 @@ describe('ConnectionIndicator', () => {
   });
 
   it('starts unknown rather than claiming a connection attempt that has not happened', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       <ConnectionStateProvider>
         <ConnectionIndicator />
       </ConnectionStateProvider>,

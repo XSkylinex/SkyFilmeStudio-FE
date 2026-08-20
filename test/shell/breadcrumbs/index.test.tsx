@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { createRoutesStub } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import { Breadcrumbs } from '@/shell/breadcrumbs';
 
 const routeHandle = (title: string): { title: string } => ({ title });
@@ -31,7 +32,7 @@ const renderAt = (initialEntry: string): void => {
     },
   ]);
 
-  render(<Stub initialEntries={[initialEntry]} />);
+  renderInStore(<Stub initialEntries={[initialEntry]} />);
 };
 
 describe('Breadcrumbs', () => {
@@ -57,7 +58,7 @@ describe('Breadcrumbs', () => {
   });
 
   it('renders nothing at the root, rather than a trail of one', () => {
-    const { container } = render(
+    const { container } = renderInStore(
       (() => {
         const Stub = createRoutesStub([
           { path: '/', Component: Breadcrumbs, children: [] },
