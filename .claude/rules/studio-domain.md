@@ -102,8 +102,25 @@ a language. The same applies here:
 - no `textHebrew`-shaped prop, no `isHebrew` boolean, no RTL-specific component;
 - dialogue text carries its own `language`, and the component renders `dir` from that value;
 - the *interface* language and the *production* language are two different things. A Hebrew production
-  reviewed in an English UI must render RTL dialogue inside an LTR shell correctly. Use
-  `dir="auto"` on user text, logical CSS properties everywhere, and never mirror by hand.
+  reviewed in an English UI must render RTL dialogue inside an LTR shell correctly.
+
+**The mechanism landed in FE-15 (2026-08-20); use it rather than rebuilding it.**
+
+- **Every user-visible string is a catalogue key.** `src/lib/i18n/catalogue/en.ts` is the source of
+  truth and `he.ts` is `Record<TranslationKey, string>`, so a string added in one language and not the
+  other does not compile. Reach for `useTranslate()` in a component; a helper that cannot call a hook
+  returns a key and lets its caller translate.
+- **Wrap user content in `ContentText`**, which renders `<bdi>` with `dir` resolved from that record's
+  own language field and `dir="auto"` when the field is absent. `<bdi>` is the isolation; never
+  hand-place directional characters.
+- **Never `:dir()`** — the build lowers it to a `:lang()` list and so conflates interface language
+  with content direction, which is this exact rule inverted. `[dir='rtl']` and logical properties.
+- **Identifiers are never translated:** error *codes*, model ids, workflow ids, file paths, hashes,
+  provenance fields. Translating them breaks copy-paste and search. Neither is technical notation —
+  `00:20:00`, `24 fps`, `48 kHz`, `−16 LUFS` are notation, and localising a timecode makes a
+  production tool harder to read, not easier.
+- **A backend-authored message is passed through, not translated.** It is not ours to translate, and
+  it arrives in whatever language the orchestrator wrote it.
 
 ## Where this is enforced
 

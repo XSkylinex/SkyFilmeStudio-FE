@@ -159,9 +159,16 @@ prose is weaker evidence than the type next to it.
   own rolldown filter and the plugin already skips `node_modules`, so it needs no `include`.
 - **`resolve.tsconfigPaths: true` is set, and it is verified.** It defaults to `false` (confirmed in
   the `.d.ts`, `@default false`); `plan/00` turned it on 2026-08-15 and proved it on *both* resolvers,
-  which was the condition for choosing it: `@/App` resolves in `yarn build` and in `yarn test`. There
-  is no `resolve.alias` anywhere and there must not be one — `paths` in `tsconfig.app.json` is the
-  single source of truth, and `vitest.config.ts` inherits it by `mergeConfig`-ing `vite.config.ts`.
+  which was the condition for choosing it: `@/App` resolves in `yarn build` and in `yarn test`. **`paths`
+  in `tsconfig.app.json` is the single source of truth for `@/`, and must stay so** — do not add a
+  `resolve.alias` for it, in either config; `vitest.config.ts` inherits the resolution by
+  `mergeConfig`-ing `vite.config.ts`.
+  **Corrected 2026-08-20: `vite.config.ts` does now carry one `resolve.alias` entry**, and an earlier
+  version of this line said there must never be one anywhere. It maps the bare specifier
+  `sky-filme-studio-be/contracts` to the backend's source, because that package's `exports` map sends
+  every bundler to a gitignored CommonJS `dist/` while `tsc` reads its source — types and runtime
+  would otherwise disagree. Different concern, no second definition of `@/`;
+  `plan/04-data-layer.md` carries the measurement.
   `src/main.tsx` imports `@/App` deliberately rather than `./App.tsx`, so every build exercises the
   alias instead of leaving it proven once and then untested.
 
@@ -176,9 +183,10 @@ worst place to run a release candidate.
 the `test` block, so the React Compiler pass and the `@/` alias have exactly one definition. A second
 copy is the drift that makes `typecheck` pass while `test` fails on the same import.
 
-**MSW is not installed.** The decision to mock at the HTTP boundary stands, but it lands in FE-04
-with the first real fetcher — until BE-01 publishes a contract there is nothing to mock and no way to
-prove a handler works.
+**MSW 2.15.0 is installed**, added by FE-04 with the first real fetcher. Mock at the HTTP boundary,
+never by stubbing query hooks. `test/lib/api/msw-server.ts` wires a per-file server with
+`onUnhandledRequest: 'error'`, so a request to an unexpected host fails the test rather than passing
+silently — which is a local-only guarantee as much as a testing one.
 
 ## Yarn 4
 
