@@ -115,6 +115,23 @@ export const EN_CATALOGUE = {
   'stage.approved': 'Approved',
   'stage.blocked': 'Blocked',
 
+  'readiness.title': 'Readiness',
+  'readiness.unknown.label': 'Not yet verified',
+  'readiness.unknown.description':
+    'The orchestrator has not reported preflight results yet. Nothing here says this machine can or cannot render.',
+  'readiness.ready.label': 'Ready to render',
+  'readiness.ready.description':
+    'Every preflight check passed and there is room on disk for a render to start.',
+  'readiness.blocked.label': '{failed} of {total} checks did not pass',
+  'readiness.blocked.description':
+    'A production render will refuse to start until these are resolved. A check that did not run is not a check that passed.',
+  'readiness.checkedAt': 'Checked {time}',
+  'readiness.rerun': 'Re-run checks',
+  'readiness.rerunning': 'Re-running',
+  'readiness.error.title': 'Preflight could not be read',
+  'readiness.diskShortfall':
+    'A render will refuse to start: this disk is short by {shortfall}.',
+
   'page.notFound.title': 'Page not found',
   'page.notFound.description':
     'Nothing in Local AI Studio matches this address.',

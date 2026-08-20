@@ -115,6 +115,22 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'stage.approved': 'מאושר',
   'stage.blocked': 'חסום',
 
+  'readiness.title': 'מוכנות',
+  'readiness.unknown.label': 'טרם אומת',
+  'readiness.unknown.description':
+    'האורקסטרטור עדיין לא דיווח על תוצאות preflight. שום דבר כאן לא אומר שהמחשב הזה יכול או לא יכול לרנדר.',
+  'readiness.ready.label': 'מוכן לרינדור',
+  'readiness.ready.description':
+    'כל בדיקות ה-preflight עברו ויש מקום בדיסק כדי להתחיל רינדור.',
+  'readiness.blocked.label': '{failed} מתוך {total} בדיקות לא עברו',
+  'readiness.blocked.description':
+    'רינדור הפקה יסרב להתחיל עד שאלה ייפתרו. בדיקה שלא רצה אינה בדיקה שעברה.',
+  'readiness.checkedAt': 'נבדק {time}',
+  'readiness.rerun': 'הרץ בדיקות מחדש',
+  'readiness.rerunning': 'מריץ מחדש',
+  'readiness.error.title': 'לא ניתן לקרוא את ה-preflight',
+  'readiness.diskShortfall': 'רינדור יסרב להתחיל: חסרים בדיסק הזה {shortfall}.',
+
   'page.notFound.title': 'הדף לא נמצא',
   'page.notFound.description': 'שום דבר ב-Local AI Studio לא תואם לכתובת הזו.',
   'page.projects.title': 'פרויקטים',
