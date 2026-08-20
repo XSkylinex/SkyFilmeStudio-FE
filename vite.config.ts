@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import babel from '@rolldown/plugin-babel';
@@ -11,5 +12,13 @@ export default defineConfig({
   ],
   resolve: {
     tsconfigPaths: true,
+    alias: {
+      'sky-filme-studio-be/contracts': fileURLToPath(
+        new URL(
+          './node_modules/sky-filme-studio-be/src/contracts/index.ts',
+          import.meta.url,
+        ),
+      ),
+    },
   },
 });
