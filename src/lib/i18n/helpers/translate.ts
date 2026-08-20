@@ -6,7 +6,11 @@ import type {
 } from '@/lib/i18n/interfaces/catalogue';
 
 export const translate = (
-  catalogue: Catalogue,
+  catalogue: Catalogue | undefined,
   key: TranslationKey,
   values?: TranslationValues,
-): string => interpolate(catalogue[key], values);
+): string => {
+  const template = catalogue?.[key];
+
+  return template === undefined ? key : interpolate(template, values);
+};
