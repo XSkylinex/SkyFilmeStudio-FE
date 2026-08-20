@@ -12,6 +12,8 @@ import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { ConnectionStateProvider } from '@/shell/connection-indicator/connection-state-provider';
 import { ConnectionIndicator } from '@/shell/connection-indicator';
 import { OfflineIndicator } from '@/shell/offline-indicator';
+import { InterfaceLanguageSelect } from '@/shell/interface-language-select';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
 import { RouteTitle } from '@/shell/route-title';
 import { Breadcrumbs } from '@/shell/breadcrumbs';
@@ -38,6 +40,7 @@ export const AppShell: FC = () => {
   const navCollapsed = useAppSelector(selectNavCollapsed);
   const dispatch = useAppDispatch();
   const navLinks = resolveAppShellNavLinks(projectId);
+  const translate = useTranslate();
 
   return (
     <ConnectionStateProvider>
@@ -52,7 +55,7 @@ export const AppShell: FC = () => {
             data-pending={isNavigating}
           >
             <ProgressBar
-              label="Loading page"
+              label={translate('shell.loadingPage')}
               tone={STATUS_TONE.ACTIVE}
               indeterminate
             />
@@ -68,24 +71,27 @@ export const AppShell: FC = () => {
               aria-controls={APP_SHELL_NAV_ID}
               onClick={() => dispatch(navCollapsedToggled())}
             >
-              {navCollapsed ? 'Show navigation' : 'Hide navigation'}
+              {navCollapsed
+                ? translate('shell.showNavigation')
+                : translate('shell.hideNavigation')}
             </Button>
             <nav
               className="app-shell__nav"
               id={APP_SHELL_NAV_ID}
-              aria-label="Primary"
+              aria-label={translate('shell.primaryNavigation')}
               data-collapsed={navCollapsed}
             >
               <ul className="app-shell__nav-list">
                 {navLinks.map((link) => (
                   <li key={link.to}>
                     <NavLink className="app-shell__nav-link" to={link.to} end>
-                      {link.label}
+                      {translate(link.labelKey)}
                     </NavLink>
                   </li>
                 ))}
               </ul>
             </nav>
+            <InterfaceLanguageSelect />
             <OfflineIndicator />
             <ConnectionIndicator />
           </header>

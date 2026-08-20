@@ -1,5 +1,6 @@
 import type { StatusTone } from '@/lib/interfaces/status-tone';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import type { ConnectionState } from './connection-indicator.interface';
 
 export const CONNECTION_STATE = {
@@ -21,21 +22,18 @@ export const CONNECTION_STATE_TONE = {
   reconnecting: STATUS_TONE.WARNING,
 } satisfies Record<ConnectionState, StatusTone>;
 
-export const CONNECTION_STATE_LABEL = {
-  unknown: 'Not yet verified',
-  connecting: 'Connecting',
-  open: 'Connected',
-  closed: 'Disconnected',
-  reconnecting: 'Reconnecting',
-} satisfies Record<ConnectionState, string>;
+export const CONNECTION_STATE_LABEL_KEY = {
+  unknown: 'connection.unknown.label',
+  connecting: 'connection.connecting.label',
+  open: 'connection.open.label',
+  closed: 'connection.closed.label',
+  reconnecting: 'connection.reconnecting.label',
+} satisfies Record<ConnectionState, TranslationKey>;
 
-export const CONNECTION_STATE_DESCRIPTION = {
-  unknown:
-    'No connection to the orchestrator has been attempted yet. Do not treat this as a working connection.',
-  connecting: 'Connecting to the orchestrator.',
-  open: 'Connected to the orchestrator. Render progress updates live.',
-  closed:
-    'The live connection to the orchestrator is down. On this machine that usually means the orchestrator process stopped, and any render in progress stopped with it.',
-  reconnecting:
-    'Reconnecting to the orchestrator. Render progress may be behind until this recovers.',
-} satisfies Record<ConnectionState, string>;
+export const CONNECTION_STATE_DESCRIPTION_KEY = {
+  unknown: 'connection.unknown.description',
+  connecting: 'connection.connecting.description',
+  open: 'connection.open.description',
+  closed: 'connection.closed.description',
+  reconnecting: 'connection.reconnecting.description',
+} satisfies Record<ConnectionState, TranslationKey>;

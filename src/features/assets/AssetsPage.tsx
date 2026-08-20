@@ -1,10 +1,15 @@
 import type { FC } from 'react';
 import { EmptyState } from '@/lib/components/empty-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
 
-export const AssetsPage: FC = () => (
-  <EmptyState
-    title="Assets"
-    description="The source footage, images and audio brought into this project. Not connected to the orchestrator yet."
-    headingLevel={1}
-  />
-);
+export const AssetsPage: FC = () => {
+  const translate = useTranslate();
+
+  return (
+    <EmptyState
+      title={translate('page.assets.title')}
+      description={translate('page.assets.description')}
+      headingLevel={1}
+    />
+  );
+};

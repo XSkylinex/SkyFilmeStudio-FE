@@ -15,8 +15,8 @@ export const resolveAppShellNavLinks = (
   projectId: string | null,
 ): readonly AppShellNavLink[] => {
   const globalLinks: AppShellNavLink[] = [
-    { to: projectListPath(), label: 'Projects' },
-    { to: systemPath(), label: 'System' },
+    { to: projectListPath(), labelKey: 'page.projects.title' },
+    { to: systemPath(), labelKey: 'page.system.title' },
   ];
 
   if (!projectId) {
@@ -25,12 +25,12 @@ export const resolveAppShellNavLinks = (
 
   return [
     ...globalLinks,
-    { to: projectAssetsPath(projectId), label: 'Assets' },
-    { to: projectSubjectsPath(projectId), label: 'Subjects' },
-    { to: projectStylesPath(projectId), label: 'Styles' },
-    { to: projectVoicesPath(projectId), label: 'Voices' },
-    { to: projectLocationsPath(projectId), label: 'Locations' },
-    { to: projectPropsPath(projectId), label: 'Props' },
-    { to: productionListPath(projectId), label: 'Productions' },
+    { to: projectAssetsPath(projectId), labelKey: 'page.assets.title' },
+    { to: projectSubjectsPath(projectId), labelKey: 'page.subjects.title' },
+    { to: projectStylesPath(projectId), labelKey: 'page.styles.title' },
+    { to: projectVoicesPath(projectId), labelKey: 'page.voices.title' },
+    { to: projectLocationsPath(projectId), labelKey: 'page.locations.title' },
+    { to: projectPropsPath(projectId), labelKey: 'page.props.title' },
+    { to: productionListPath(projectId), labelKey: 'page.productions.title' },
   ];
 };

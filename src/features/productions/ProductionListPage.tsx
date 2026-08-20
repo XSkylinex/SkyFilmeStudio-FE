@@ -1,10 +1,15 @@
 import type { FC } from 'react';
 import { EmptyState } from '@/lib/components/empty-state';
+import { useTranslate } from '@/lib/i18n/use-translate';
 
-export const ProductionListPage: FC = () => (
-  <EmptyState
-    title="Productions"
-    description="Every production in this project, from screenplay to final cut. Not connected to the orchestrator yet."
-    headingLevel={1}
-  />
-);
+export const ProductionListPage: FC = () => {
+  const translate = useTranslate();
+
+  return (
+    <EmptyState
+      title={translate('page.productions.title')}
+      description={translate('page.productions.description')}
+      headingLevel={1}
+    />
+  );
+};
