@@ -1,20 +1,20 @@
 import type { FC } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { Badge } from '@/lib/components/badge';
+import { systemModeQueryOptions } from '@/shell/api/system-mode.query';
 import { resolveOfflineIndicatorView } from './helpers/resolve-offline-indicator-view';
 import {
   OFFLINE_INDICATOR_FACT_DESCRIPTION_KEY,
   OFFLINE_INDICATOR_HEADLINE_LABEL_KEY,
   OFFLINE_INDICATOR_HEADLINE_TONE,
 } from './offline-indicator.constants';
-import type { OfflineIndicatorProps } from './offline-indicator.interface';
 import './offline-indicator.css';
 
-export const OfflineIndicator: FC<OfflineIndicatorProps> = ({
-  offlineMode,
-}) => {
+export const OfflineIndicator: FC = () => {
   const translate = useTranslate();
-  const { headline, facts } = resolveOfflineIndicatorView(offlineMode);
+  const { data } = useQuery(systemModeQueryOptions());
+  const { headline, facts } = resolveOfflineIndicatorView(data);
   const description = facts
     .map((fact) => translate(OFFLINE_INDICATOR_FACT_DESCRIPTION_KEY[fact]))
     .join(' ');

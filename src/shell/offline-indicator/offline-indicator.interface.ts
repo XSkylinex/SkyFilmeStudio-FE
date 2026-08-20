@@ -10,10 +10,6 @@ export type OfflineIndicatorHeadline =
 
 export type OfflineIndicatorFact = OfflineIndicatorHeadline | 'lan-workers';
 
-export interface OfflineIndicatorProps {
-  offlineMode?: OfflineMode | undefined;
-}
-
 export interface OfflineIndicatorView {
   readonly headline: OfflineIndicatorHeadline;
   readonly facts: readonly OfflineIndicatorFact[];
