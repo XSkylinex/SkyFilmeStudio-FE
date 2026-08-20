@@ -40,7 +40,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 | 00 | [Toolchain & repository hardening](00-toolchain.md) | — | — | done 2026-08-15 |
 | 01 | [Document shell & app identity](01-document-shell.md) | 00 | — | done 2026-08-15 |
 | 02 | [Design system & tokens](02-design-system.md) | 01 | — | done 2026-08-17 |
-| 03 | [App shell, routing & boundaries](03-app-shell.md) | 02 | — | not started |
+| 03 | [App shell, routing & boundaries](03-app-shell.md) | 02 | — | done 2026-08-17 |
 | 04 | [Data layer — contracts, queries, store](04-data-layer.md) | 03 | **BE-01** | not started |
 | 05 | [Realtime bridge](05-realtime.md) | 04 | **BE-23** | not started |
 | 06 | [Project dashboard & system status](06-dashboard.md) | 05 | BE-04, BE-11 | not started |

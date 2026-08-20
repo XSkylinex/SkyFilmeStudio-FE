@@ -12,6 +12,8 @@ export interface ButtonProps {
   disabled?: boolean | undefined;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   'aria-label'?: string | undefined;
+  'aria-expanded'?: boolean | undefined;
+  'aria-controls'?: string | undefined;
   'aria-describedby'?: string | undefined;
   children: ReactNode;
 }

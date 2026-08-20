@@ -1,4 +1,16 @@
 import type { FC } from 'react';
-import { DesignSystemPreview } from '@/shell/design-system-preview';
+import { Provider } from 'react-redux';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { FatalBoundary } from '@/shell/fatal-boundary';
+import { routeTree } from '@/shell/routes/route-tree';
+import { store } from '@/shell/store';
 
-export const App: FC = () => <DesignSystemPreview />;
+const router = createBrowserRouter(routeTree);
+
+export const App: FC = () => (
+  <Provider store={store}>
+    <FatalBoundary>
+      <RouterProvider router={router} />
+    </FatalBoundary>
+  </Provider>
+);

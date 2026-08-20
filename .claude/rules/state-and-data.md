@@ -48,6 +48,46 @@ it yet**. That is editor state, and it is a different value with a different nam
 
 ## Redux Toolkit
 
+**The store landed in FE-03, not FE-04** (2026-08-17, the user's call). The split above is unchanged
+— this is a timing decision, not a re-litigation. It exists so the shell stops passing state through
+props and every later feature has a slice to attach to.
+
+```text
+src/shell/store/index.ts               configureStore, and the per-store listener wiring
+src/shell/store/hooks.ts               useAppDispatch / useAppSelector, typed
+src/shell/store/store.interface.ts     RootState / AppDispatch
+src/shell/shell.slice.ts               the shell's own slice and its selectors
+```
+
+**No HTTP client is installed.** `axios` was added alongside the store and removed again on
+2026-08-18: nothing imported it, and nothing could — the data layer is FE-04 and FE-04 is blocked on
+BE-01. The rule it leaves behind is the part worth keeping: when a client does arrive it sits
+**under** TanStack Query, never beside it. A component that imports one directly is the bug this
+arrangement exists to prevent.
+
+Four things about the shell slice worth copying rather than re-deriving:
+
+- **A selector types against the smallest state it needs** (`{ shell: ShellState }`), not `RootState`.
+  Not because of a cycle — there is none — but because a selector that names the whole root state
+  couples every slice to every other, and the narrow shape is structurally assignable so a `RootState`
+  argument still satisfies it. When FE-04 adds a slice, a selector reading a shape that no longer
+  exists fails loudly at its call site.
+- **`RootState` is derived, never hand-written**: `ReturnType<typeof store.getState>`. Annotating
+  `createStore` with `ReturnType<typeof configureStore>` erases the store's generics — `getState()`
+  becomes `unknown` and thunks stop type-checking — which forces a hand-maintained `RootState` that
+  silently drifts from the reducer map. Leave the return type inferred.
+- **Persistence is a listener, not a reducer.** Writing `localStorage` inside a reducer makes it
+  impure and untestable, so `createListenerMiddleware` watches the action and writes afterwards. The
+  listener factory lives in `store/shell-persistence.listener.ts` and is created **per store**, not
+  registered once at module scope — a shared instance would let an isolated test store write for the
+  singleton.
+- **The read is separate from the listener, and guarded.** It runs at module scope in the slice's
+  `initialState`, so it is the *read* that must never throw: a browser with storage blocked falls
+  back to the default rather than failing to boot. That guard took the entire shell down once when it
+  was missing, and it is load-bearing for the whole test suite — Node 26's experimental
+  `localStorage` global shadows jsdom's and is absent without `--localstorage-file`, so
+  `globalThis.localStorage` is `undefined` under Vitest.
+
 - Slices are per feature and colocated: `src/features/<feature>/<feature>.slice.ts`.
 - **No thunks that fetch.** Fetching is TanStack Query's job. A thunk in this app is for coordinating
   editor state across slices, and most of the time you do not need one.

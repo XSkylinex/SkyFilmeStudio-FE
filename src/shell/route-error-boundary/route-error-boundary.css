@@ -1,0 +1,13 @@
+@layer features {
+  .route-error-boundary {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    padding-block: var(--space-6);
+    padding-inline: var(--space-4);
+
+    & > * {
+      max-inline-size: var(--size-md);
+    }
+  }
+}

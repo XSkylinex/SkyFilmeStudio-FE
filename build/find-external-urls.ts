@@ -3,7 +3,12 @@ const URL_PATTERN = /\bhttps?:\/\/[^\s"'`\\)<>]+/gi;
 const NON_FETCHING_URL_PREFIXES = [
   'http://www.w3.org/',
   'https://react.dev/errors/',
+  'https://reactrouter.com/en/main/',
+  'https://redux.js.org/Errors',
+  'https://redux-toolkit.js.org/Errors',
 ];
+
+const NON_FETCHING_EXACT_URLS = ['https://bit.ly/3cXEKWf'];
 
 const LOOPBACK_IPV4_PREFIX = '127.';
 const LOOPBACK_IPV6_HOSTNAME = '[::1]';
@@ -26,7 +31,10 @@ export const findExternalUrls = (source: string): string[] => {
   const external = new Set<string>();
 
   for (const url of matches) {
-    if (NON_FETCHING_URL_PREFIXES.some((prefix) => url.startsWith(prefix))) {
+    if (
+      NON_FETCHING_EXACT_URLS.includes(url) ||
+      NON_FETCHING_URL_PREFIXES.some((prefix) => url.startsWith(prefix))
+    ) {
       continue;
     }
 
