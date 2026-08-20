@@ -4,10 +4,8 @@ import './styles/layers.css';
 import './styles/reset.css';
 import './styles/tokens.css';
 import { App } from '@/App';
-import {
-  DEFAULT_DOCUMENT_DIRECTION,
-  DEFAULT_INTERFACE_LANGUAGE,
-} from '@/shell/document-language.constants';
+import { readStoredInterfaceLanguage } from '@/lib/i18n/helpers/read-stored-interface-language';
+import { resolveTextDirection } from '@/lib/i18n/helpers/resolve-text-direction';
 import { applyDocumentLanguage } from '@/shell/helpers/apply-document-language';
 
 const ROOT_ELEMENT_ID = 'root';
@@ -20,7 +18,9 @@ if (!container) {
   );
 }
 
-applyDocumentLanguage(DEFAULT_INTERFACE_LANGUAGE, DEFAULT_DOCUMENT_DIRECTION);
+const bootLanguage = readStoredInterfaceLanguage();
+
+applyDocumentLanguage(bootLanguage, resolveTextDirection(bootLanguage));
 
 createRoot(container).render(
   <StrictMode>
