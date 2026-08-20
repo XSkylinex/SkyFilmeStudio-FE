@@ -5,21 +5,20 @@ import { DEFAULT_RETRY_COUNT } from '@/lib/query/query.constants';
 const buildHttpError = (status: number): StudioError =>
   new StudioError({
     kind: 'HTTP',
-    sentence: 'The orchestrator refused this request.',
+    messageKey: 'error.network',
     status,
   });
 
 const buildContractError = (): StudioError =>
   new StudioError({
     kind: 'CONTRACT',
-    sentence:
-      'The orchestrator answered with a shape this build does not recognise.',
+    messageKey: 'error.network',
   });
 
 const buildNetworkError = (): StudioError =>
   new StudioError({
     kind: 'NETWORK',
-    sentence: 'The orchestrator is not answering.',
+    messageKey: 'error.network',
   });
 
 describe('shouldRetryRequest', () => {
@@ -52,7 +51,7 @@ describe('shouldRetryRequest', () => {
   it('never retries a reply that was not JSON, since the same path will answer the same way', () => {
     const malformed = new StudioError({
       kind: 'MALFORMED',
-      sentence: 'not json',
+      messageKey: 'error.network',
       status: 200,
     });
 

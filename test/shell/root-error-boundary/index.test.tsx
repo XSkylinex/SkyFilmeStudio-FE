@@ -1,6 +1,7 @@
-import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
+import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 import { createRoutesStub } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderInStore } from '../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { RootErrorBoundary } from '@/shell/root-error-boundary';
 
@@ -23,7 +24,7 @@ describe('RootErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(
       screen.getByText('Local AI Studio hit an unrecoverable error'),
@@ -54,11 +55,11 @@ describe('RootErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(await screen.findByText('DISK_SPACE_LOW')).toBeInTheDocument();
     expect(
-      screen.getByText(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence),
+      screen.getByText(EN_CATALOGUE['error.DISK_SPACE_LOW']),
     ).toBeInTheDocument();
 
     consoleErrorSpy.mockRestore();
@@ -79,7 +80,7 @@ describe('RootErrorBoundary', () => {
       },
     ]);
 
-    render(<Stub initialEntries={['/']} />);
+    renderInStore(<Stub initialEntries={['/']} />);
 
     expect(
       screen.getByText(

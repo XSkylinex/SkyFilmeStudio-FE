@@ -1,5 +1,13 @@
-import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
-import { ROUTE_ERROR_DEFAULT_MESSAGE } from '@/shell/route-error.constants';
+import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
+import { translate } from '@/lib/i18n/helpers/translate';
+import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
+import type { RouteErrorView } from '@/shell/interfaces/route-error-view';
+
+const describeInEnglish = (view: RouteErrorView): string =>
+  composeRouteErrorDescription(view, (key, values) =>
+    translate(EN_CATALOGUE, key, values),
+  );
+
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 
 describe('resolveRouteErrorView', () => {
@@ -33,8 +41,8 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe(
-      'The orchestrator responded with 507: disk full',
+    expect(describeInEnglish(view)).toBe(
+      `${EN_CATALOGUE['error.status'].replace('{status}', '507')} (disk full)`,
     );
   });
 
@@ -62,7 +70,7 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe('The orchestrator is restarting');
+    expect(describeInEnglish(view)).toBe('The orchestrator is restarting');
   });
 
   it('flags a typed or messaged Response as not an unknown error', () => {
@@ -84,7 +92,7 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe(ERROR_CODE_GUIDANCE.DISK_SPACE_LOW.sentence);
+    expect(describeInEnglish(view)).toBe(EN_CATALOGUE['error.DISK_SPACE_LOW']);
   });
 
   it('falls back to the default message for a code this build has never heard of', () => {
@@ -95,7 +103,9 @@ describe('resolveRouteErrorView', () => {
       internal: false,
     });
 
-    expect(view.description).toBe(ROUTE_ERROR_DEFAULT_MESSAGE);
+    expect(describeInEnglish(view)).toBe(
+      EN_CATALOGUE['error.unrecognisedCode'],
+    );
     expect(view.detail).toBe('A_CODE_FROM_A_NEWER_BACKEND');
   });
 

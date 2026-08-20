@@ -49,8 +49,7 @@ export const requestJson = async <T>(
 
     throw new StudioError({
       kind: 'NETWORK',
-      sentence:
-        'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
+      messageKey: 'error.network',
       cause,
     });
   }
@@ -62,10 +61,11 @@ export const requestJson = async <T>(
 
     throw new StudioError({
       kind: 'HTTP',
-      sentence:
+      messageKey:
         code === undefined
-          ? `The orchestrator refused this request with status ${response.status}.`
-          : ERROR_CODE_GUIDANCE[code].sentence,
+          ? 'error.status'
+          : ERROR_CODE_GUIDANCE[code].messageKey,
+      messageValues: { status: response.status },
       code,
       status: response.status,
       detail,
@@ -75,8 +75,7 @@ export const requestJson = async <T>(
   if (!body.isJson) {
     throw new StudioError({
       kind: 'MALFORMED',
-      sentence:
-        'Something other than the orchestrator answered this request: the reply was not JSON. Check that this path reaches the orchestrator rather than the page server.',
+      messageKey: 'error.malformed',
       status: response.status,
       detail: response.headers.get('Content-Type') ?? undefined,
     });
@@ -87,8 +86,7 @@ export const requestJson = async <T>(
   if (!parsed.success) {
     throw new StudioError({
       kind: 'CONTRACT',
-      sentence:
-        'The orchestrator answered with a shape this build does not recognise. The two halves are on different contract versions.',
+      messageKey: 'error.contract',
       status: response.status,
       detail: parsed.error.issues
         .map((issue) => `${issue.path.join('.') || '(root)'}: ${issue.message}`)
