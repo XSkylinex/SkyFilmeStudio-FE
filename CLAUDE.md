@@ -165,13 +165,14 @@ The browser floor is not a preference — it is what Vite's default `build.targe
 ```
 src/                      the app (today: App, main.tsx, shell/, lib/, assets/, styles/)
 src/shell/                app frame; writes <html lang>/<html dir> at boot; holds the preview gallery
+src/shell/api/            the installation-status queries: system mode, preflight, model setup
 src/lib/components/       the shared primitives, one folder per component
 src/lib/interfaces/       types more than one component uses
 src/lib/api/              the one fetch wrapper, the base URL, StudioError and the taxonomy
 src/lib/query/            the QueryClient and its retry policy
 src/lib/status-tone/      contract enums mapped onto StatusTone
 src/lib/i18n/             the typed catalogue, the translate hook, direction from a language tag
-src/features/<f>/api/     one file per query: key factory + fetcher, colocated with the feature
+src/features/<f>/api/     one file per query for that feature's own project or production data
 src/assets/               SVG artwork, mirroring src/; never inlined in JSX
 src/styles/               layers.css, reset.css, tokens.css
 test/                     tests, mirroring src/ — nothing under src/ is a test
