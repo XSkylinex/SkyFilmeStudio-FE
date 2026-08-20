@@ -12,9 +12,9 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 
 ## Status, honestly
 
-**`plan/00` and `plan/01` are done (2026-08-15). `plan/02` is built and under review — its
-primitives all exist and the gate is green, but a review found defects that are being fixed, so do
-not report it as done until `plan/02-design-system.md` says so.**
+**`plan/00`–`plan/01` are done (2026-08-15), `plan/02`–`plan/03` (2026-08-17), and `plan/04` — the
+data layer — on 2026-08-20. `plan/05`, the realtime bridge, is next and is blocked on **BE-23**:
+the backend has no WebSocket gateway yet, confirmed by search rather than assumed.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
@@ -28,9 +28,36 @@ it contributes no styles of its own (`icon-button` composes `button` and so has 
 `approval-controls`. `src/shell/design-system-preview/` renders all of them and is the only place
 any of it can be looked at.
 
-But there are still **no features, no router and no data layer** — `src/features/` does not exist,
-and `App.tsx` renders the preview gallery. Anything in `.claude/rules/` describing `src/features/**`
-is describing the target, not the present. Do not report structure that does not exist yet.
+FE-03 added the app shell: `react-router-dom@7.18.2`, the full route tree in `src/shell/routes/`,
+and shell chrome under `src/shell/` — `app-shell`, `production-shell`, `production-nav`,
+`route-error-boundary`, `root-error-boundary`, `fatal-boundary`, `offline-indicator`,
+`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` now holds eighteen
+route-level page stubs; the preview gallery lives at `/design-system`.
+
+FE-04 built the seam to the orchestrator. `package.json` depends on
+`sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
+`sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
+here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
+`StudioError` taxonomy covering all eighteen `ERROR_CODE` values, and the loopback-only base URL;
+`src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps six contract enums onto
+`StatusTone`, which is the mapping FE-02 deferred to this phase.
+
+**But no screen fetches anything yet.** Every page is still an `EmptyState`, and the shell's three
+fixtures — the production stage sets, the error-code sentences and the offline-mode payload — are
+still fixtures, which is why the offline indicator continues to read **"Not yet verified"**. Wiring
+the first real consumer is FE-06.
+
+**Four things are blocked on the backend, and the plan file names each precisely.** `POST /render-jobs`
+validates against a DTO that is not exported through `./contracts`, so the submit mutation cannot be
+typed without hand-writing a wire type; there is no capability endpoint, so capability-driven pickers
+have no source; no exception filter exists, so no `errorCode` ever reaches the client; and there is no
+socket. Do not report structure or capability that does not exist yet.
+
+Two things FE-03 established that later phases inherit. **The router is v7, not v8** —
+`react-router-dom` has never published an 8.x and is a re-export shim over `react-router@7.18.2`, so
+v8 documentation is the wrong documentation here. And **`route.lazy` resolves before render**, so
+`<Suspense>` never fires for a lazy route; loading state comes from `HydrateFallback` on a cold deep
+link and `useNavigation()` on same-session navigation.
 
 Two things FE-02 established that later phases inherit rather than re-decide: state colours ship as
 **CSS tokens only** — components take a presentational `StatusTone`, and the state→tone mapping is
@@ -86,7 +113,9 @@ Use `yarn`, never `npm` or `npx`: `~/.npm/_cacache` on this machine is root-owne
 | React | 19.2.8 | React Compiler **on** via `@rolldown/plugin-babel` + `reactCompilerPreset()` |
 | Vite | 8.2.1 | Rolldown + Oxc; esbuild is an *optional* peer and is **not installed** |
 | oxlint | 1.78.0 | 9 plugins, 11 rules. **Type-aware mode is ON** — `oxlint-tsgolint@7.0.2001` installed |
-| Vitest | 4.1.10 | jsdom 30.0.1, RTL 16.3.2, jest-dom 7.0.1. **MSW is deferred to FE-04** |
+| Vitest | 4.1.10 | jsdom 30.0.1, RTL 16.3.2, jest-dom 7.0.1, MSW 2.15.0 |
+| Zod | 4.4.3 | pinned exactly, **identical to the backend's pin**; a major split makes two `z.infer`s |
+| TanStack Query | 5.101.4 | server state only; Redux Toolkit 2.12.0 holds uncommitted edits |
 | Prettier | 3.9.6 | backend's config verbatim; `*.md` and `.claude/` are ignored |
 
 **ESLint is not an option on this stack.** Measured in the backend repo on 2026-08-14 with
@@ -123,6 +152,10 @@ src/                      the app (today: App, main.tsx, shell/, lib/, assets/, 
 src/shell/                app frame; writes <html lang>/<html dir> at boot; holds the preview gallery
 src/lib/components/       the shared primitives, one folder per component
 src/lib/interfaces/       types more than one component uses
+src/lib/api/              the one fetch wrapper, the base URL, StudioError and the taxonomy
+src/lib/query/            the QueryClient and its retry policy
+src/lib/status-tone/      contract enums mapped onto StatusTone
+src/features/<f>/api/     one file per query: key factory + fetcher, colocated with the feature
 src/assets/               SVG artwork, mirroring src/; never inlined in JSX
 src/styles/               layers.css, reset.css, tokens.css
 test/                     tests, mirroring src/ — nothing under src/ is a test
