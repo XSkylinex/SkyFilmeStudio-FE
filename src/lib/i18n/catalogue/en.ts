@@ -155,6 +155,16 @@ export const EN_CATALOGUE = {
   'projects.language': 'Primary language',
   'projects.open': 'Open {title}',
 
+  'captureGuide.title': 'Capture guide',
+  'captureGuide.intro':
+    'Advice for photographing a subject, not a checklist to complete. Every view below is optional, and a missing one is not an error — a car has no expression sheet.',
+  'captureGuide.views': 'Recommended views',
+  'captureGuide.advice': 'Capture advice',
+  'captureGuide.hide': 'Hide the capture guide',
+  'captureGuide.show': 'Show the capture guide',
+  'captureGuide.error.title': 'The capture guide could not be read',
+
+
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',
   'readiness.unknown.description':

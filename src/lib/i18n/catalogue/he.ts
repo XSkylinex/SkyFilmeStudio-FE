@@ -155,6 +155,16 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'projects.language': 'שפה ראשית',
   'projects.open': 'פתח את {title}',
 
+  'captureGuide.title': 'מדריך צילום',
+  'captureGuide.intro':
+    'עצות לצילום נושא, לא רשימה שיש להשלים. כל זווית למטה היא רשות, וזווית חסרה אינה שגיאה — למכונית אין דף הבעות.',
+  'captureGuide.views': 'זוויות מומלצות',
+  'captureGuide.advice': 'עצות צילום',
+  'captureGuide.hide': 'הסתרת מדריך הצילום',
+  'captureGuide.show': 'הצגת מדריך הצילום',
+  'captureGuide.error.title': 'לא ניתן היה לקרוא את מדריך הצילום',
+
+
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',
   'readiness.unknown.description':
