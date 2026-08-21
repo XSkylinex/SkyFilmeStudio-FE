@@ -2,6 +2,10 @@ import type { FC } from 'react';
 import { screen } from '@testing-library/react';
 import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { createStore } from '@/shell/store';
+import { characterShortcutsEnabledSet } from '@/shell/shell.slice';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
 import { useKeyboardShortcut } from '@/shell/keyboard/use-keyboard-shortcut';
 
@@ -274,5 +278,47 @@ describe('KeyboardShortcutsProvider + useKeyboardShortcut', () => {
     expect(leftArrowRow).toHaveTextContent('Go to the next shot');
 
     document.documentElement.dir = 'ltr';
+  });
+  it('stops answering single-key shortcuts once the reader turns them off', async () => {
+    const handleApprove = vi.fn<() => void>();
+    const user = userEvent.setup();
+    const store = createStore();
+    store.dispatch(characterShortcutsEnabledSet(false));
+
+    render(
+      <Provider store={store}>
+        <KeyboardShortcutsProvider>
+          <ApproveProbe onApprove={handleApprove} />
+        </KeyboardShortcutsProvider>
+      </Provider>,
+    );
+
+    await user.keyboard('a');
+
+    expect(handleApprove).not.toHaveBeenCalled();
+  });
+
+  it('keeps arrow shortcuts working when single keys are off, since the criterion exempts them', async () => {
+    const handleNext = vi.fn<() => void>();
+    const user = userEvent.setup();
+    const store = createStore();
+    store.dispatch(characterShortcutsEnabledSet(false));
+
+    const NextProbe: FC = () => {
+      useKeyboardShortcut('next-shot', handleNext);
+      return <p>next probe mounted</p>;
+    };
+
+    render(
+      <Provider store={store}>
+        <KeyboardShortcutsProvider>
+          <NextProbe />
+        </KeyboardShortcutsProvider>
+      </Provider>,
+    );
+
+    await user.keyboard('{ArrowRight}');
+
+    expect(handleNext).toHaveBeenCalledOnce();
   });
 });

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { readStoredNavCollapsed } from '@/shell/helpers/read-stored-nav-collapsed';
+import { readStoredCharacterShortcutsEnabled } from '@/shell/helpers/read-stored-character-shortcuts-enabled';
 import { readStoredInterfaceLanguage } from '@/lib/i18n/helpers/read-stored-interface-language';
 import {
   DEFAULT_PANEL_LAYOUT,
@@ -19,6 +20,7 @@ const initialState: ShellState = {
   theme: DEFAULT_THEME,
   navCollapsed: readStoredNavCollapsed(),
   interfaceLanguage: readStoredInterfaceLanguage(),
+  characterShortcutsEnabled: readStoredCharacterShortcutsEnabled(),
 };
 
 export const shellSlice = createSlice({
@@ -37,6 +39,9 @@ export const shellSlice = createSlice({
     interfaceLanguageSet: (state, action: PayloadAction<InterfaceLanguage>) => {
       state.interfaceLanguage = action.payload;
     },
+    characterShortcutsEnabledSet: (state, action: PayloadAction<boolean>) => {
+      state.characterShortcutsEnabled = action.payload;
+    },
   },
 });
 
@@ -45,6 +50,7 @@ export const {
   themeSet,
   navCollapsedToggled,
   interfaceLanguageSet,
+  characterShortcutsEnabledSet,
 } = shellSlice.actions;
 
 export const selectPanelLayout = (state: ShellSliceRootState): PanelLayout =>
@@ -59,3 +65,7 @@ export const selectNavCollapsed = (state: ShellSliceRootState): boolean =>
 export const selectInterfaceLanguage = (
   state: ShellSliceRootState,
 ): InterfaceLanguage => state.shell.interfaceLanguage;
+
+export const selectCharacterShortcutsEnabled = (
+  state: ShellSliceRootState,
+): boolean => state.shell.characterShortcutsEnabled;

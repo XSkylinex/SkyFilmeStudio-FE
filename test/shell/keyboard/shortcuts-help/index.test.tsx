@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { createStore } from '@/shell/store';
 import { interfaceLanguageSet } from '@/shell/shell.slice';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
+import { ShortcutsHelpButton } from '@/shell/keyboard/shortcuts-help-button';
+import { characterShortcutsEnabledSet } from '@/shell/shell.slice';
 
 beforeAll(() => {
   if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
@@ -67,5 +69,27 @@ describe('ShortcutsHelp', () => {
     expect(screen.getByText('רווח').closest('strong')).not.toHaveAttribute(
       'dir',
     );
+  });
+  it('is still reachable by button once single-key shortcuts are off', async () => {
+    const store = createStore();
+    store.dispatch(characterShortcutsEnabledSet(false));
+    const user = userEvent.setup();
+
+    render(
+      <Provider store={store}>
+        <KeyboardShortcutsProvider>
+          <ShortcutsHelpButton />
+        </KeyboardShortcutsProvider>
+      </Provider>,
+    );
+
+    await user.keyboard('?');
+    expect(screen.queryByText('Go to the next shot')).not.toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole('button', { name: 'Keyboard shortcuts' }),
+    );
+
+    expect(screen.getByText(/Go to the next shot/)).toBeInTheDocument();
   });
 });

@@ -1,0 +1,14 @@
+@layer features {
+  .shortcuts-help__toggle {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center;
+    margin-block-start: var(--space-4);
+  }
+
+  .shortcuts-help__toggle-description {
+    margin-block-start: var(--space-1);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+}

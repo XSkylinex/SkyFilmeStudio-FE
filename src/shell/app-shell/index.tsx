@@ -17,6 +17,7 @@ import { useTranslate } from '@/lib/i18n/use-translate';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
 import { RouteTitle } from '@/shell/route-title';
 import { RouteFocus } from '@/shell/route-focus';
+import { ShortcutsHelpButton } from '@/shell/keyboard/shortcuts-help-button';
 import { Breadcrumbs } from '@/shell/breadcrumbs';
 import { resolveCurrentRouteParam } from '@/shell/helpers/resolve-current-route-param';
 import {
@@ -93,6 +94,7 @@ export const AppShell: FC = () => {
                 ))}
               </ul>
             </nav>
+            <ShortcutsHelpButton />
             <InterfaceLanguageSelect />
             <OfflineIndicator />
             <ConnectionIndicator />

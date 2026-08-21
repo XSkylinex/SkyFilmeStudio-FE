@@ -22,4 +22,5 @@ export interface KeyboardShortcutsContextValue {
     id: ShortcutId,
     listener: ShortcutListener,
   ) => () => void;
+  readonly openShortcutsHelp: () => void;
 }

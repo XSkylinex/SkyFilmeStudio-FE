@@ -137,6 +137,9 @@ export const EN_CATALOGUE = {
   'shortcuts.toggleComparison': 'Toggle the reference comparison view',
   'shortcuts.showHelp': 'Show this list of keyboard shortcuts',
   'shortcuts.key.space': 'Space',
+  'shortcuts.singleKey.label': 'Single-key shortcuts',
+  'shortcuts.singleKey.description':
+    'Approve, reject and playback answer a single letter with no modifier held. Turn this off if a key you meant to type is making decisions.',
 
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',

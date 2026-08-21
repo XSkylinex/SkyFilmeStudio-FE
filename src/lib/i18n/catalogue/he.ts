@@ -137,6 +137,9 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'shortcuts.toggleComparison': 'הצגה או הסתרה של תצוגת ההשוואה',
   'shortcuts.showHelp': 'הצגת רשימת קיצורי המקלדת',
   'shortcuts.key.space': 'רווח',
+  'shortcuts.singleKey.label': 'קיצורי מקש בודד',
+  'shortcuts.singleKey.description':
+    'אישור, דחייה והפעלה מגיבים לאות בודדת ללא מקש עזר. כבה זאת אם מקש שהתכוונת להקליד מקבל החלטות.',
 
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',
