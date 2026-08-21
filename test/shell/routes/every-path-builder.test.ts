@@ -4,6 +4,7 @@ import * as routes from '@/shell/routes/routes.constants';
 
 const PROJECT_ID = 'proj-1';
 const PRODUCTION_ID = 'prod-1';
+const ASSET_ID = 'asset-1';
 const SUBJECT_ID = 'subj-1';
 const SHOT_ID = 'shot-1';
 
@@ -13,6 +14,7 @@ const everyBuiltPath: Record<string, string> = {
   systemPath: routes.systemPath(),
   projectDashboardPath: routes.projectDashboardPath(PROJECT_ID),
   projectAssetsPath: routes.projectAssetsPath(PROJECT_ID),
+  projectAssetPath: routes.projectAssetPath(PROJECT_ID, ASSET_ID),
   projectSubjectsPath: routes.projectSubjectsPath(PROJECT_ID),
   subjectReviewPath: routes.subjectReviewPath(PROJECT_ID, SUBJECT_ID),
   projectStylesPath: routes.projectStylesPath(PROJECT_ID),

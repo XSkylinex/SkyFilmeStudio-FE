@@ -7,6 +7,7 @@ export const PROJECTS_SEGMENT = 'projects';
 export const PROJECT_ID_PARAM = 'projectId';
 
 export const ASSETS_SEGMENT = 'assets';
+export const ASSET_ID_PARAM = 'assetId';
 export const SUBJECTS_SEGMENT = 'subjects';
 export const SUBJECT_ID_PARAM = 'subjectId';
 export const STYLES_SEGMENT = 'styles';
@@ -36,6 +37,9 @@ export const projectDashboardPath = (projectId: string): string =>
 
 export const projectAssetsPath = (projectId: string): string =>
   `${projectDashboardPath(projectId)}/${ASSETS_SEGMENT}`;
+
+export const projectAssetPath = (projectId: string, assetId: string): string =>
+  `${projectAssetsPath(projectId)}/${assetId}`;
 
 export const projectSubjectsPath = (projectId: string): string =>
   `${projectDashboardPath(projectId)}/${SUBJECTS_SEGMENT}`;

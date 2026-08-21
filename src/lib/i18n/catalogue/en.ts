@@ -189,6 +189,46 @@ export const EN_CATALOGUE = {
   'assets.origin.DERIVED': 'Derived',
   'assets.privacy.PROJECT_PRIVATE': 'Project private',
   'assets.privacy.EXPORTABLE': 'Exportable',
+  'assetDetail.error.title': 'This asset could not be read',
+  'assetDetail.loading': 'Loading this asset',
+  'assetDetail.invalidAsset.title': 'That is not an asset id',
+  'assetDetail.invalidAsset.description':
+    'The address carries something the orchestrator would refuse. Open the asset from the library rather than editing the URL.',
+  'assetDetail.back': 'Back to the asset library',
+  'assetDetail.identity.title': 'What this file is',
+  'assetDetail.field.path': 'Path in the project:',
+  'assetDetail.field.type': 'Type:',
+  'assetDetail.field.origin': 'Origin:',
+  'assetDetail.field.privacy': 'Privacy class:',
+  'assetDetail.field.mimeType': 'Media type:',
+  'assetDetail.field.sha256': 'SHA-256:',
+  'assetDetail.field.captured': 'Captured:',
+  'assetDetail.field.added': 'Added to the project:',
+  'assetDetail.exportable':
+    'This asset is marked exportable, which means it may leave this machine in a delivery. Everything else stays in the project.',
+  'assetDetail.probe.title': 'What the orchestrator recorded',
+  'assetDetail.probe.empty':
+    'The orchestrator recorded no metadata for this asset.',
+  'assetDetail.probe.unpublished':
+    'These are read exactly as the orchestrator wrote them. The shared contract types this as a free-form object, so nothing here is interpreted or given a unit.',
+  'assetDetail.proxy.title': 'Scrub proxy',
+  'assetDetail.proxy.absent.title': 'No proxy yet',
+  'assetDetail.proxy.absent.description':
+    'Nothing played. A proxy is produced by a queued job, so the usual reason is that the job has not run yet. That is not an error, and the original is untouched either way.',
+  'assetDetail.proxy.unsupported':
+    'The orchestrator generates a scrub proxy for video only. This asset is not video, so there is nothing to play.',
+  'assetDetail.proxy.label': 'Scrub proxy of {path}',
+  'assetDetail.proxy.retry': 'Look for the proxy again',
+  'assetDetail.proxy.purpose':
+    'This is a generated proxy for scrubbing, not the original file. Judge framing and timing here, not grain.',
+  'assetDetail.proxy.mayBeAbsent':
+    'If nothing plays, the proxy job may not have produced a file yet. The orchestrator publishes no way to ask whether one exists, so this player cannot tell you in advance.',
+  'assetDetail.derived.title': 'Derived assets',
+  'assetDetail.derived.unavailable':
+    'The orchestrator publishes no way to ask what was derived from an asset, so this cannot be listed yet. That is a missing endpoint, not an empty result.',
+  'assetDetail.subjects.title': 'Subjects that reference this',
+  'assetDetail.subjects.unavailable':
+    'Subjects are not served by the orchestrator yet, so nothing can be listed here. That is a missing endpoint, not an empty result.',
 
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',
@@ -298,6 +338,7 @@ export const EN_CATALOGUE = {
   'page.assets.title': 'Assets',
   'page.assets.description':
     'The source footage, images and audio brought into this project. Not connected to the orchestrator yet.',
+  'page.assetDetail.title': 'Asset',
   'page.subjects.title': 'Subjects',
   'page.subjects.description':
     'The recurring people, characters and objects this project has identified for review. Not connected to the orchestrator yet.',

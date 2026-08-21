@@ -64,6 +64,7 @@ describe('routeTree', () => {
       .sort((a, b) => (a ?? '').localeCompare(b ?? ''));
 
     expect(lazyPaths).toEqual([
+      'assets/:assetId',
       'audio',
       'design-system',
       'shots',

@@ -1,0 +1,19 @@
+@layer features {
+  .asset-detail-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .asset-detail-page__back {
+    align-self: start;
+    color: var(--color-accent);
+    font-size: var(--font-size-sm);
+  }
+
+  .asset-detail-page__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-xl);
+  }
+}
