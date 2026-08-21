@@ -25,6 +25,10 @@ const everyPath: Record<string, string> = {
   projects: API_PATH.projects(),
   captureGuide: API_PATH.captureGuide(),
   projectAssets: API_PATH.projectAssets(SAMPLE_PROJECT_ID),
+  projectAsset: API_PATH.projectAsset(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_SOURCE_ASSET_ID,
+  ),
   projectAssetThumbnail: API_PATH.projectAssetThumbnail(
     SAMPLE_PROJECT_ID,
     SAMPLE_SOURCE_ASSET_ID,
