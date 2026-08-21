@@ -17,7 +17,6 @@ import { PropsPage } from '@/features/props/PropsPage';
 import { ProductionListPage } from '@/features/productions/ProductionListPage';
 import { PlannerPage } from '@/features/planner/PlannerPage';
 import { RenderQueuePage } from '@/features/render-queue/RenderQueuePage';
-import { SystemPage } from '@/features/system/SystemPage';
 import { NotFoundPage } from './not-found-page';
 import { RouteHydrateFallback } from './route-hydrate-fallback';
 import type { RouteHandle } from '@/shell/interfaces/route-handle';
@@ -225,7 +224,11 @@ export const routeTree: RouteObject[] = [
       },
       {
         path: SYSTEM_SEGMENT,
-        Component: SystemPage,
+        lazy: () =>
+          import('@/features/system/SystemPage').then((routeModule) => ({
+            Component: routeModule.SystemPage,
+          })),
+        HydrateFallback: RouteHydrateFallback,
         ErrorBoundary: RouteErrorBoundary,
         handle: routeHandle('page.system.title'),
       },
