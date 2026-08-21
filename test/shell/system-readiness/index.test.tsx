@@ -157,4 +157,36 @@ describe('SystemReadiness', () => {
 
     expect(await screen.findByText(/^Checked .*2026/)).toBeInTheDocument();
   });
+  it('announces the verdict politely once it settles, so it is not a silent visual swap', async () => {
+    orchestratorReports(
+      buildPreflightReport({
+        passed: false,
+        checks: [
+          check('DATABASE_HEALTHY', 'PASS'),
+          check('MEDIA_TOOLS_PRESENT', 'FAIL'),
+        ],
+      }),
+    );
+
+    renderInApp(<SystemReadiness />);
+
+    const live = await screen.findByRole('status');
+    expect(live).toHaveTextContent('Not yet verified');
+
+    await screen.findByText('1 of 2 checks did not pass');
+
+    expect(screen.getByRole('status')).toHaveTextContent(
+      '1 of 2 checks did not pass',
+    );
+  });
+
+  it('announces a preflight failure assertively, because it is not an ordinary update', async () => {
+    server.use(http.get(API_PATH.preflight(), () => HttpResponse.error()));
+
+    renderInApp(<SystemReadiness />);
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Preflight could not be read',
+    );
+  });
 });

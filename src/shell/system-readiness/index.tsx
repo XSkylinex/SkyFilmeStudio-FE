@@ -57,7 +57,7 @@ export const SystemReadiness: FC<SystemReadinessProps> = ({
     const view = resolveRouteErrorView(error);
 
     return (
-      <div className="system-readiness" data-state="unknown">
+      <div className="system-readiness" data-state="unknown" role="alert">
         <ErrorState
           title={translate('readiness.error.title')}
           description={composeRouteErrorDescription(view, translate)}
@@ -75,13 +75,15 @@ export const SystemReadiness: FC<SystemReadinessProps> = ({
         <Heading className="system-readiness__title">
           {translate('readiness.title')}
         </Heading>
-        <Badge
-          tone={SYSTEM_READINESS_TONE[state]}
-          label={translate(SYSTEM_READINESS_LABEL_KEY[state], {
-            failed,
-            total,
-          })}
-        />
+        <output className="system-readiness__announcement">
+          <Badge
+            tone={SYSTEM_READINESS_TONE[state]}
+            label={translate(SYSTEM_READINESS_LABEL_KEY[state], {
+              failed,
+              total,
+            })}
+          />
+        </output>
         {rerunControl}
       </div>
       <p className="system-readiness__description">
