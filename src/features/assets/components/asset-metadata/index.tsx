@@ -32,8 +32,8 @@ export const AssetMetadata: FC<AssetMetadataProps> = ({ metadata }) => {
           <dl className="asset-metadata__entries">
             {entries.map((entry) => (
               <div className="asset-metadata__entry" key={entry.key}>
-                <dt className="asset-metadata__key" dir="ltr">
-                  {entry.key}
+                <dt className="asset-metadata__key">
+                  <span dir="ltr">{entry.key}</span>
                 </dt>
                 <dd className="asset-metadata__value">
                   <ContentText>{entry.described}</ContentText>

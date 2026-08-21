@@ -41,9 +41,13 @@ describe('AssetMetadata', () => {
     expect(value).toHaveAttribute('dir', 'auto');
   });
 
-  it('keeps a machine-written key left-to-right whatever the interface language', () => {
+  it('keeps a machine-written key left-to-right on an inline element, not the block', () => {
     renderInApp(<AssetMetadata metadata={{ codec: 'h264' }} />);
 
-    expect(screen.getByText('codec')).toHaveAttribute('dir', 'ltr');
+    const key = screen.getByText('codec');
+
+    expect(key.tagName).toBe('SPAN');
+    expect(key).toHaveAttribute('dir', 'ltr');
+    expect(key.closest('dt')).not.toHaveAttribute('dir');
   });
 });

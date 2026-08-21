@@ -40,7 +40,6 @@
   }
 
   .asset-metadata__key {
-    display: inline-block;
     overflow-wrap: anywhere;
     color: var(--color-text-secondary);
     font-family: var(--font-mono);
