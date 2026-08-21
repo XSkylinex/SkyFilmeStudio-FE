@@ -1,7 +1,7 @@
 # FE-07 — Asset ingestion & subject review
 
 > **Depends on:** 06 · **Blocks:** 08 · **Backend needs:** BE-11, BE-12 · **Plan authority:** §12, §27.3, §39
-> **Status:** not started
+> **Status:** partly done 2026-08-21
 
 ## Goal
 
@@ -93,7 +93,96 @@ Raw photos · canonical versions · expression sheets (where applicable) · voic
 at a size where identity drift is visible. **Do not shrink the comparison to fit a tidy grid** — the
 whole purpose of this screen is seeing a difference.
 
+## What the orchestrator actually serves, 2026-08-21
+
+BE-11 published its HTTP surface during this phase's session. Read off its source on the
+`be-11-projects-and-assets` branch, not off its status table:
+
+| Route | Returns | Usable here? |
+| ----- | ------- | ------------ |
+| `GET /capture-guide` | `CaptureGuide` | **yes** |
+| `GET /projects/:projectId/assets` | `Page<SourceAsset>` | **yes** |
+| `GET .../:assetId/thumbnail` | `image/jpeg` stream | **yes** — a URL needs no type |
+| `GET .../:assetId/proxy` | `video/mp4` stream | yes, unused until a player exists |
+| `GET .../:assetId` | `SourceAsset` | yes, unused until a detail view exists |
+| `POST .../upload` | `AssetIngestionResult` | **no** |
+| `POST .../import` | `AssetIngestionResult` | **no** |
+
+**The line between those two groups is the `exports` map, not the route table.** The package
+publishes only `./contracts`. `captureGuideSchema` and `sourceAssetSchema` are under
+`src/contracts/`; `uploadAssetQuerySchema`, `importAssetFromPathRequestSchema` and
+`AssetIngestionResult` are under `src/projects/`, so this repo cannot import them and both import
+transports stay unwired. Hand-typing them is the single thing `state-and-data.md` forbids outright.
+
+BE-12 has entities on disk but no controller, so subjects, canonical sets and Subject Review have no
+endpoint at all.
+
+## Decisions
+
+| # | Decision | Answer |
+| - | -------- | ------ |
+| 1 | Import UX | **Both**, as recommended — and **neither is built**, because neither request shape is published. Recorded rather than half-built: a form with nowhere to post is worse than an honest sentence. |
+| 2 | Capture guide | **Optional side panel**, as recommended. Collapsed by default and it fetches nothing until opened. |
+| 3 | Canonical approval | **Per set version**, as recommended — unbuilt, waiting on BE-12. |
+
+## What landed
+
+- **The asset library is real.** Type, origin, privacy class, capture date and immutability, in a
+  grid whose every box is reserved before its image arrives.
+- **Proxies only.** Each tile requests the thumbnail endpoint; an asset that cannot have one asks for
+  no image rather than a URL that will 404.
+- **`EXPORTABLE` is visually distinct from `PROJECT_PRIVATE`**, because that field is what may leave
+  the machine.
+- **The capture guide is offered and never required.** The contract makes that unrepresentable —
+  `bypassable` is `z.literal(true)` and every view's `optional` is too — and the panel does not undo
+  it.
+- **The route parameter is validated on the page**, so a hand-edited URL produces a sentence instead
+  of a request the orchestrator would refuse.
+
+## What the browser found that the gate could not
+
+**Backend-authored English inside a Hebrew page moved its own full stops.** `Diffuse, even lighting.`
+rendered as `.Diffuse, even lighting`, and `…are read against.` as `.against` — a sentence-final
+period is a bidi-neutral and takes the *paragraph's* direction, not the run's. This is the same
+defect FE-06 measured as `8.0 GB` becoming `GB 8.0`, one level up: there it was notation, here it is
+a whole sentence the orchestrator wrote.
+
+The fix is `ContentText` with no language, which gives each string a `<bdi dir="auto">` that infers
+direction from its own first strong character. **The rule to carry forward: passing a
+backend-authored message through untranslated is not the same as dropping it into the paragraph — it
+still needs isolating.** `yarn typecheck`, `yarn lint` and 697 tests were all green while this was
+on screen.
+
 ## Verification
+
+```bash
+yarn typecheck && yarn lint && yarn test && yarn build
+```
+
+2026-08-21: typecheck clean, lint clean, **697 tests across 123 files**, build clean,
+`format:check` clean.
+
+Loaded in Chrome against a stub serving the three endpoints, because none of the below is visible to
+the gate:
+
+- four assets render with reserved boxes; the audio asset requests no thumbnail and says so;
+- the capture guide is closed on arrival and issues no request until opened;
+- with the interface in Hebrew the page mirrors, the asset paths stay `dir="ltr"` in monospace, the
+  capture date is Hebrew through `Intl`, and the guide's own sentences stay English **and** keep
+  their punctuation.
+
+## What is not built, and what each waits for
+
+| Box | Waits for |
+| --- | --------- |
+| Both import transports, with real progress | **BE-11 to publish its request shapes** — the endpoints exist |
+| `TEXT_ONLY_NO_VISUAL_SOURCE` as a first-class path | the same; it is an ingestion mode on an import that cannot be sent |
+| Virtualised grid, second page onward | nothing external — the first page is 50 items and `nextCursor` is carried but unused |
+| Filters by type, origin, capture date, subject, privacy | subject filtering needs **BE-12**; the rest is unbuilt |
+| Asset detail: metadata, SHA-256, probe results, derived assets | a detail route, unbuilt |
+| Subject registration, `immutableTraits`, canonical sets, Subject Review | **BE-12**, which has entities but no controller |
+
+## Original verification checklist
 
 ```bash
 yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
@@ -110,17 +199,18 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 
 ## Done when
 
-- [ ] both import transports, with real progress
-- [ ] `TEXT_ONLY_NO_VISUAL_SOURCE` is a visible first-class path
-- [ ] the grid uses proxies, is virtualised, and reserves every box
-- [ ] originals are immutable in the UI; derived work is versioned
-- [ ] the capture guide is optional, dismissible, and does not mark missing views as errors
-- [ ] subject registration covers all ten types and assumes neither a face nor speech
-- [ ] `immutableTraits` capture is guided toward specific, checkable statements
-- [ ] canonical approval is per set version, with visible lineage
-- [ ] the unapproved-set render block is clearly surfaced
-- [ ] canonical anchors are visible on every derived generation
-- [ ] the comparison view is large enough to judge drift
+- [ ] both import transports, with real progress — **blocked: request shapes not published**
+- [ ] `TEXT_ONLY_NO_VISUAL_SOURCE` is a visible first-class path — **same blocker**
+- [x] the grid uses proxies and reserves every box — **not virtualised**; the first page is 50
+      items and nothing accumulates yet
+- [x] originals are immutable in the UI — nothing here edits anything, and `immutable` is shown
+- [x] the capture guide is optional, dismissible, and does not mark missing views as errors
+- [ ] subject registration covers all ten types and assumes neither a face nor speech — **BE-12**
+- [ ] `immutableTraits` capture is guided toward specific, checkable statements — **BE-12**
+- [ ] canonical approval is per set version, with visible lineage — **BE-12**
+- [ ] the unapproved-set render block is clearly surfaced — **BE-12**
+- [ ] canonical anchors are visible on every derived generation — **BE-12**
+- [ ] the comparison view is large enough to judge drift — **BE-12**
 
 ## Traps
 
