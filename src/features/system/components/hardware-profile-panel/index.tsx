@@ -7,6 +7,7 @@ import { preflightQueryOptions } from '@/shell/api/preflight.query';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { SystemPanel } from '@/features/system/components/system-panel';
+import { nextHeadingLevel } from '@/features/system/helpers/next-heading-level';
 import type { SystemSectionProps } from '@/features/system/interfaces/system-section';
 import './hardware-profile-panel.css';
 
@@ -27,7 +28,7 @@ export const HardwareProfilePanel: FC<SystemSectionProps> = ({
           title={translate('readiness.error.title')}
           description={composeRouteErrorDescription(errorView, translate)}
           detail={errorView.detail}
-          headingLevel={headingLevel}
+          headingLevel={nextHeadingLevel(headingLevel)}
         />
       ) : null}
 
@@ -48,7 +49,7 @@ export const HardwareProfilePanel: FC<SystemSectionProps> = ({
         <ErrorState
           title={translate('system.hardware.unknown.title')}
           description={translate('system.hardware.unknown.description')}
-          headingLevel={headingLevel}
+          headingLevel={nextHeadingLevel(headingLevel)}
         />
       ) : null}
     </SystemPanel>

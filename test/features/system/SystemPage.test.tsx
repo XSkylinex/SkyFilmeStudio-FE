@@ -11,7 +11,7 @@ import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
 const requests: string[] = [];
 
-mockOrchestratorServer(
+const server = mockOrchestratorServer(
   http.get(API_PATH.preflight(), () => {
     requests.push(API_PATH.preflight());
 
@@ -99,6 +99,45 @@ describe('SystemPage', () => {
       expect(requests).toContain(API_PATH.preflight());
       expect(requests).toContain(API_PATH.modelSetup());
     });
+  });
+
+  it('keeps one heading per panel when every request fails, instead of repeating an h2', async () => {
+    server.use(
+      http.get(
+        API_PATH.preflight(),
+        () => new HttpResponse(null, { status: 503 }),
+      ),
+      http.get(
+        API_PATH.modelSetup(),
+        () => new HttpResponse(null, { status: 503 }),
+      ),
+      http.get(
+        API_PATH.systemMode(),
+        () => new HttpResponse(null, { status: 503 }),
+      ),
+    );
+
+    renderInApp(<SystemPage />);
+    await screen.findAllByText('Preflight could not be read');
+
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(
+      screen
+        .getAllByRole('heading', { level: 2 })
+        .map((node) => node.textContent),
+    ).toEqual([
+      'Preflight could not be read',
+      'Hardware profile',
+      'Disk',
+      'Operating mode',
+      'Memory and pressure',
+      'Runtimes',
+      'Preflight',
+      'Models',
+    ]);
+    expect(screen.getAllByRole('heading', { level: 3 }).length).toBeGreaterThan(
+      0,
+    );
   });
 
   it('no longer claims the page is not connected to the orchestrator, because it is', () => {

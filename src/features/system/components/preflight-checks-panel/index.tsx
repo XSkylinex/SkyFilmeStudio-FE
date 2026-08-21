@@ -11,6 +11,7 @@ import { preflightQueryOptions } from '@/shell/api/preflight.query';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { SystemPanel } from '@/features/system/components/system-panel';
+import { nextHeadingLevel } from '@/features/system/helpers/next-heading-level';
 import type { SystemSectionProps } from '@/features/system/interfaces/system-section';
 import { PREFLIGHT_STATUS_LABEL_KEY } from './preflight-checks-panel.constants';
 import './preflight-checks-panel.css';
@@ -32,7 +33,7 @@ export const PreflightChecksPanel: FC<SystemSectionProps> = ({
           title={translate('readiness.error.title')}
           description={composeRouteErrorDescription(errorView, translate)}
           detail={errorView.detail}
-          headingLevel={headingLevel}
+          headingLevel={nextHeadingLevel(headingLevel)}
         />
       ) : null}
 
