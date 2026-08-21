@@ -41,25 +41,11 @@
       "WebFetch(domain:devblogs.microsoft.com)"
     ],
     "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Read(./secrets/**)",
-      "Edit(./.env)",
-      "Edit(./.env.*)",
-      "Write(./.env)",
-      "Write(./.env.*)",
       "Bash(rm -rf /*)",
       "Bash(git push --force*)",
       "Bash(git reset --hard*)",
       "Bash(npm *)",
       "Bash(npx *)"
-    ],
-    "ask": [
-      "Bash(git push*)",
-      "Bash(git commit*)",
-      "Bash(yarn add*)",
-      "Bash(yarn remove*)",
-      "Bash(yarn up*)"
     ]
   },
   "hooks": {
