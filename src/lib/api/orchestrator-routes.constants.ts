@@ -1,6 +1,7 @@
 export const ORCHESTRATOR_ROUTE_PREFIXES = [
   '/system',
   '/preflight',
+  '/projects',
   '/render-jobs',
 ] satisfies readonly string[];
 

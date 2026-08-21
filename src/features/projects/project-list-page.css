@@ -1,0 +1,39 @@
+@layer features {
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .project-list__title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-heading);
+  }
+
+  .project-list__loading {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .project-list__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project-list__placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-4);
+    padding-inline: var(--space-4);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+}

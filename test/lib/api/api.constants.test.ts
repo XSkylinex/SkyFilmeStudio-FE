@@ -10,6 +10,7 @@ const everyPath: Record<string, string> = {
   systemMode: API_PATH.systemMode(),
   preflight: API_PATH.preflight(),
   modelSetup: API_PATH.modelSetup(),
+  projects: API_PATH.projects(),
   renderJob: API_PATH.renderJob(SAMPLE_RENDER_JOB_ID),
 };
 

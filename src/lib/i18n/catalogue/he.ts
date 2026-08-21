@@ -141,6 +141,20 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'shortcuts.singleKey.description':
     'אישור, דחייה והפעלה מגיבים לאות בודדת ללא מקש עזר. כבה זאת אם מקש שהתכוונת להקליד מקבל החלטות.',
 
+  'projects.loading': 'טוען פרויקטים',
+  'projects.error.title': 'לא ניתן היה לקרוא את רשימת הפרויקטים',
+  'projects.empty.title': 'אין עדיין פרויקטים',
+  'projects.empty.description':
+    'שום דבר לא נוצר במכשיר הזה. יצירת פרויקט אינה מחוברת בגרסה הזו — המתזמר מקבל אותה, אך מבנה הבקשה שהוא מאמת מולו אינו מפורסם בחוזה המשותף.',
+  'projects.created': 'נוצר {date}',
+  'projects.kind.SERIES': 'סדרה',
+  'projects.kind.STANDALONE': 'עצמאי',
+  'projects.kind.MUSIC': 'מוזיקה',
+  'projects.kind.EXPERIMENTAL': 'ניסיוני',
+  'projects.kind.CUSTOM': 'מותאם',
+  'projects.language': 'שפה ראשית',
+  'projects.open': 'פתח את {title}',
+
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',
   'readiness.unknown.description':

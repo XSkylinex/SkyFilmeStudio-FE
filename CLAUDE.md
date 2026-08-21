@@ -15,10 +15,13 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 **`plan/00`–`plan/01` are done (2026-08-15), `plan/02`–`plan/03` (2026-08-17), `plan/04` and
 `plan/15` on 2026-08-20, `plan/06` is **partly done** (2026-08-21) and `plan/16` is **partly done**
 (2026-08-21). `plan/05`, the realtime bridge, is **blocked on BE-23** — no gateway, no websocket
-dependency, no realtime event schema. `plan/07` is **blocked on BE-11**, which has started, moved to
-`be-11-projects-and-assets` and appended two error codes to the shared taxonomy, but still publishes
-four controllers and five routes and serves nothing for projects, assets or subjects. That is why 16
-was taken out of order: it is the only phase left that needs no backend at all.**
+dependency, no realtime event schema. **BE-11 published its HTTP surface on 2026-08-21** —
+`/projects`, `/projects/:projectId/assets` and `/capture-guide` — so the project list is now real
+and `plan/07`'s asset half is unblocked. What a
+screen can consume is decided by the backend's `exports` map, not its route table: `Project` and
+`Page<T>` are under `src/contracts/`, but the create/patch DTOs and `ProjectStorageUsage` are not,
+so project **creation** and per-project storage remain blocked on a missing export rather than a
+missing endpoint.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
