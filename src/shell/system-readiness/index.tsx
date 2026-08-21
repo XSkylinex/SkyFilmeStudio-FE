@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Badge } from '@/lib/components/badge';
 import { Button } from '@/lib/components/button';
 import { ErrorState } from '@/lib/components/error-state';
@@ -7,7 +7,11 @@ import { HEADING_TAG } from '@/lib/heading-level.constants';
 import { formatBytes } from '@/lib/format/format-bytes';
 import { formatDateTime } from '@/lib/format/format-date-time';
 import { useTranslate } from '@/lib/i18n/use-translate';
-import { preflightQueryOptions } from '@/shell/api/preflight.query';
+import { modelSetupQueryKey } from '@/shell/api/model-setup.query';
+import {
+  preflightQueryKey,
+  preflightQueryOptions,
+} from '@/shell/api/preflight.query';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { selectInterfaceLanguage } from '@/shell/shell.slice';
@@ -28,9 +32,8 @@ export const SystemReadiness: FC<SystemReadinessProps> = ({
 }) => {
   const translate = useTranslate();
   const interfaceLanguage = useAppSelector(selectInterfaceLanguage);
-  const { data, error, isFetching, refetch } = useQuery(
-    preflightQueryOptions(),
-  );
+  const queryClient = useQueryClient();
+  const { data, error, isFetching } = useQuery(preflightQueryOptions());
   const Heading = HEADING_TAG[headingLevel];
   const { state, failed, total } = resolveSystemReadiness(data);
 
@@ -40,7 +43,8 @@ export const SystemReadiness: FC<SystemReadinessProps> = ({
       size="sm"
       disabled={isFetching}
       onClick={() => {
-        void refetch();
+        void queryClient.invalidateQueries({ queryKey: preflightQueryKey() });
+        void queryClient.invalidateQueries({ queryKey: modelSetupQueryKey() });
       }}
     >
       {isFetching

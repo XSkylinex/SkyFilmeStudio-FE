@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { API_PATH } from '@/lib/api/api.constants';
 import { SystemPage } from '@/features/system/SystemPage';
 import { renderInApp } from '../../render-in-app';
@@ -8,15 +9,25 @@ import { buildPreflightReport } from '../../fixtures/preflight-report.fixture';
 import { buildSystemMode } from '../../fixtures/system-mode.fixture';
 import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
+const requests: string[] = [];
+
 mockOrchestratorServer(
-  http.get(API_PATH.preflight(), () =>
-    HttpResponse.json(buildPreflightReport({})),
-  ),
-  http.get(API_PATH.modelSetup(), () =>
-    HttpResponse.json(buildModelSetupReport()),
-  ),
+  http.get(API_PATH.preflight(), () => {
+    requests.push(API_PATH.preflight());
+
+    return HttpResponse.json(buildPreflightReport({}));
+  }),
+  http.get(API_PATH.modelSetup(), () => {
+    requests.push(API_PATH.modelSetup());
+
+    return HttpResponse.json(buildModelSetupReport());
+  }),
   http.get(API_PATH.systemMode(), () => HttpResponse.json(buildSystemMode())),
 );
+
+beforeEach(() => {
+  requests.length = 0;
+});
 
 describe('SystemPage', () => {
   it('keeps its own page heading', () => {
@@ -71,6 +82,23 @@ describe('SystemPage', () => {
       screen.getByRole('button', { name: 'Re-run checks' }),
     ).toBeInTheDocument();
     expect(screen.queryAllByRole('link')).toHaveLength(0);
+  });
+
+  it('re-reads the model setup as well as preflight, because the orchestrator recomputes both', async () => {
+    const user = userEvent.setup();
+    renderInApp(<SystemPage />);
+    await screen.findByText('Ready to render');
+    await waitFor(() => {
+      expect(requests).toContain(API_PATH.modelSetup());
+    });
+    requests.length = 0;
+
+    await user.click(screen.getByRole('button', { name: 'Re-run checks' }));
+
+    await waitFor(() => {
+      expect(requests).toContain(API_PATH.preflight());
+      expect(requests).toContain(API_PATH.modelSetup());
+    });
   });
 
   it('no longer claims the page is not connected to the orchestrator, because it is', () => {
