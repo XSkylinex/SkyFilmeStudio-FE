@@ -470,8 +470,9 @@ rather than "pick a new name".
 
 Two properties of the filter that the client depends on. A status at or above 500 replaces `message`
 with a generic server-fault sentence **but still sends the real `code`**, so the code is the
-trustworthy field and the message is not. And the filter maps only eight of the twenty-one codes
-below 500 — everything else arrives as a plain `500`.
+trustworthy field and the message is not. And the filter maps only eight of the twenty-one codes at
+all, of which just **four** land below 500 — three `400`s and a `409`. The other four are three
+`503`s and a `507`, and the thirteen it does not map arrive as a plain `500`.
 
 **That second property is why the retry policy had to change with the reader.** `isPermanentFailure`
 knew only the 4xx band, so **seventeen of the twenty-one codes were retried twice** — thirteen
@@ -490,9 +491,19 @@ identical HTTP request.** It does not start a new generation, so "a fresh attemp
 not a property it can exploit; a second `GET` of a job that already failed returns the same failure.
 Checked against the backend rather than reasoned about:
 
-- `GPU_OFFLOAD_THRASHING`, `OUTPUT_DECODE_FAILED` and `OUTPUT_DURATION_INVALID` sit in the *same*
-  adapter failure-mapping list as `MPS_OUT_OF_MEMORY` and `MODEL_FILE_MISSING`
-  (`plan/06-provider-abstraction.md` §7).
+- `OUTPUT_DECODE_FAILED` sits in the *same* adapter failure-mapping list as `MPS_OUT_OF_MEMORY` and
+  `MODEL_FILE_MISSING` — `src/generation/constants/runtime-failure-patterns.ts`.
+
+  **Corrected 2026-08-22, before this PR merged.** The first version of this bullet also named
+  `GPU_OFFLOAD_THRASHING` and `OUTPUT_DURATION_INVALID`, citing `plan/06-provider-abstraction.md` §7.
+  Both were wrong, and wrong in the way this repo keeps warning about: **§7 is a taxonomy paragraph
+  listing codes an adapter is meant to map one day, not an implemented list.** Checked against the
+  code instead — `OUTPUT_DURATION_INVALID` is in a different list entirely
+  (`src/media/constants/ffmpeg-failure-patterns.ts`, which contains no out-of-memory code), and
+  `GPU_OFFLOAD_THRASHING` appears in *no* failure-mapping list anywhere in the backend's `src/`. The
+  same phase file says why, at `plan/06-provider-abstraction.md` §"not done": neither code "is
+  something a runtime prints", and pattern-matching stderr for them "would produce confident wrong
+  answers".
 - `CHARACTER_IDENTITY_FAILURE` is the only `CREATIVE` code in `classify-failure.ts`, and the backend
   retries it with a **new seed** — its own comment says everything else "retries the same spec". Even
   the backend does not believe an identical retry fixes it.
@@ -509,6 +520,24 @@ The cost is real and worth naming: a future code that *is* retryable — a queue
 shape — will inherit permanence silently, with no per-code slot forcing anyone to choose. That is the
 trade, taken because a uniform column implies a judgement that was never exercised. The evidence
 above is here so the next person does not have to re-derive it.
+
+**One helper now answers two questions, and the second one it answers wrongly.**
+`isPermanentFailure` feeds both `shouldRetryRequest` — "is an immediate retry pointless" — and
+`render-job.query.ts`'s `refetchInterval`, which is "should this job ever be asked about again". The
+rule *"re-asking the identical question gets the identical answer"* is true of the request and **not
+of the world.** `DISK_SPACE_LOW` is the case that will actually happen: the user frees 40 GB while
+watching the render, the condition is gone, and nothing asks again. Read out of
+`@tanstack/query-core@5.101.4` rather than assumed — with `retry` false and `refetchInterval` false,
+`query.state.error` is never cleared by the query's own machinery; recovery needs a window refocus, a
+remount or an explicit invalidate. **A render monitor left open and focused never recovers**, and
+with `plan/05` blocked on BE-23 the poll is the only channel there is.
+
+Not reachable today, which is why it is recorded rather than fixed: `GET /render-jobs/:id` throws
+only a `404` or a validation `400`, both already permanent by the status band, and a database fault
+is a plain Nest `500` carrying no code. It becomes reachable the moment that route can raise a
+`StudioError`. The fix belongs with **FE-11**, which is the phase that owns the queue and the only
+place the two questions can be separated with a screen to test against. `state-and-data.md`
+deliberately couples them today, so splitting them is a decision, not a tidy-up.
 
 `presentation` was deliberately not reused for any of this. It answers "may this message
 auto-dismiss", which is a question about a toast, and `PROMPT_SCHEMA_INVALID` is `TRANSIENT` by that
