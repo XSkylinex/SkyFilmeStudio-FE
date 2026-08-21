@@ -12,6 +12,10 @@ export const isPermanentFailure = (error: unknown): boolean => {
     return true;
   }
 
+  if (error.code !== undefined) {
+    return true;
+  }
+
   return (
     error.status !== undefined &&
     error.status >= CLIENT_ERROR_FLOOR &&
