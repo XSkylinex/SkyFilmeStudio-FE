@@ -38,13 +38,40 @@ describe('requestJson', () => {
     });
   });
 
-  it('maps a 500 carrying a known errorCode to its HTTP kind and guidance sentence', async () => {
+  it("maps the orchestrator's own error envelope to its guidance sentence", async () => {
     server.use(
       http.get(SYSTEM_MODE_PATH, () =>
         HttpResponse.json(
           {
-            errorCode: ERROR_CODE.DISK_SPACE_LOW,
-            errorDetail: 'Only 2GB free on the project volume.',
+            statusCode: 507,
+            code: ERROR_CODE.DISK_SPACE_LOW,
+            message: 'Only 2 GB free on the project volume.',
+          },
+          { status: 507 },
+        ),
+      ),
+    );
+
+    await expect(
+      requestJson(SYSTEM_MODE_PATH, systemModeSchema),
+    ).rejects.toMatchObject({
+      kind: 'HTTP',
+      code: ERROR_CODE.DISK_SPACE_LOW,
+      status: 507,
+      detail: 'Only 2 GB free on the project volume.',
+      message: EN_CATALOGUE['error.DISK_SPACE_LOW'],
+    });
+  });
+
+  it('prefers our own sentence to the generic one a server fault sends', async () => {
+    server.use(
+      http.get(SYSTEM_MODE_PATH, () =>
+        HttpResponse.json(
+          {
+            statusCode: 500,
+            code: ERROR_CODE.MPS_OUT_OF_MEMORY,
+            message:
+              'The Studio failed to complete the request. The server log carries the detail.',
           },
           { status: 500 },
         ),
@@ -55,9 +82,32 @@ describe('requestJson', () => {
       requestJson(SYSTEM_MODE_PATH, systemModeSchema),
     ).rejects.toMatchObject({
       kind: 'HTTP',
-      code: ERROR_CODE.DISK_SPACE_LOW,
-      status: 500,
-      message: EN_CATALOGUE['error.DISK_SPACE_LOW'],
+      code: ERROR_CODE.MPS_OUT_OF_MEMORY,
+      message: EN_CATALOGUE['error.MPS_OUT_OF_MEMORY'],
+    });
+  });
+
+  it('surfaces the issues behind a validation failure rather than its constant message', async () => {
+    server.use(
+      http.get(SYSTEM_MODE_PATH, () =>
+        HttpResponse.json(
+          {
+            statusCode: 400,
+            message: 'Validation failed',
+            errors: [{ path: ['limit'], message: 'Invalid input' }],
+          },
+          { status: 400 },
+        ),
+      ),
+    );
+
+    await expect(
+      requestJson(SYSTEM_MODE_PATH, systemModeSchema),
+    ).rejects.toMatchObject({
+      kind: 'HTTP',
+      code: undefined,
+      status: 400,
+      detail: 'limit: Invalid input',
     });
   });
 

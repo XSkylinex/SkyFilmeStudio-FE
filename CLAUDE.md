@@ -90,9 +90,17 @@ socket. Model `compatibility`
 lives on `ModelManifestEntry` and `/preflight/models` returns `ModelSetupReport`, which has no such
 field, so `/system` says what "files present" does *not* mean rather than showing a classification it
 cannot see. `POST /render-jobs` still validates against a DTO that is not exported through
-`./contracts`; no exception filter exists, so no `errorCode` reaches the client over HTTP; and there
-is no socket. **Do not report structure or capability that does not exist yet** — the two panels with
-no data source say so on screen rather than rendering an empty value.
+`./contracts`, and there is no socket. **Do not report structure or capability that does not exist
+yet** — the two panels with no data source say so on screen rather than rendering an empty value.
+
+**The exception filter now exists, and FE-04's envelope was a guess that turned out wrong.** BE-11
+landed a global `StudioErrorFilter`, so a typed failure finally reaches the browser as
+`{ statusCode, code, message }`. This repo was reading `errorCode`/`errorDetail` — plausible, because
+`PreflightCheck` really does carry a field called `errorCode`, just not on the HTTP envelope — so all
+twenty-one codes fell through to the status-only sentence. `plan/04-data-layer.md` had predicted this
+in writing, naming `{ code }` as a likely shape and noting the gate would stay green either way. It
+did. The lesson is narrower than "verify assumptions": **a guessed wire shape needs a test that fails
+when the guess is wrong, and a test written from the same guess is not that test.**
 
 FE-07 made the asset library real — a project's source assets through **thumbnails only**, every box
 reserved before its image arrives, with `EXPORTABLE` visually distinct from `PROJECT_PRIVATE`

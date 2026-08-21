@@ -1,3 +1,6 @@
+import { ERROR_CODE } from 'sky-filme-studio-be/contracts';
+import type { ErrorCode } from 'sky-filme-studio-be/contracts';
+import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
 import { StudioError } from '@/lib/api/studio-error';
 import { shouldRetryRequest } from '@/lib/query/helpers/should-retry-request';
 import { DEFAULT_RETRY_COUNT } from '@/lib/query/query.constants';
@@ -19,6 +22,14 @@ const buildNetworkError = (): StudioError =>
   new StudioError({
     kind: 'NETWORK',
     messageKey: 'error.network',
+  });
+
+const buildCodedError = (code: ErrorCode, status: number): StudioError =>
+  new StudioError({
+    kind: 'HTTP',
+    messageKey: ERROR_CODE_GUIDANCE[code].messageKey,
+    code,
+    status,
   });
 
 describe('shouldRetryRequest', () => {
@@ -65,5 +76,16 @@ describe('shouldRetryRequest', () => {
     );
 
     expect(shouldRetryRequest(0, aborted)).toBe(false);
+  });
+
+  it.each(Object.values(ERROR_CODE))(
+    '%s is not retried, because the orchestrator already classified it',
+    (code) => {
+      expect(shouldRetryRequest(0, buildCodedError(code, 500))).toBe(false);
+    },
+  );
+
+  it('falls back to the status band when the failure carries no code', () => {
+    expect(shouldRetryRequest(0, buildHttpError(503))).toBe(true);
   });
 });

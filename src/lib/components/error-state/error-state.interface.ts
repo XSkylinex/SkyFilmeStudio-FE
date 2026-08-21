@@ -3,8 +3,8 @@ import type { HeadingLevel } from '@/lib/interfaces/heading-level';
 
 export interface ErrorStateProps {
   title: string;
-  description?: string;
-  detail?: string;
+  description?: ReactNode;
+  detail?: string | undefined;
   action?: ReactNode;
   headingLevel?: HeadingLevel | undefined;
 }

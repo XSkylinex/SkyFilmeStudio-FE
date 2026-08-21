@@ -1,7 +1,9 @@
 import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ERROR_CODE } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
+import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 import { CaptureGuidePanel } from '@/features/assets/components/capture-guide-panel';
 import { renderInApp } from '../../../../render-in-app';
 import { buildCaptureGuide } from '../../../../fixtures/capture-guide.fixture';
@@ -85,5 +87,35 @@ describe('CaptureGuidePanel', () => {
 
     expect(advice.tagName).toBe('BDI');
     expect(advice).toHaveAttribute('dir', 'auto');
+  });
+
+  it('names the code when the orchestrator refuses, rather than only the status', async () => {
+    server.use(
+      http.get(API_PATH.captureGuide(), () =>
+        HttpResponse.json(
+          {
+            statusCode: 507,
+            code: ERROR_CODE.DISK_SPACE_LOW,
+            message: 'Only 2 GB free on the project volume.',
+          },
+          { status: 507 },
+        ),
+      ),
+    );
+    const user = userEvent.setup();
+
+    renderInApp(<CaptureGuidePanel />);
+    await user.click(
+      screen.getByRole('button', { name: 'Show the capture guide' }),
+    );
+
+    const chip = await screen.findByText(ERROR_CODE.DISK_SPACE_LOW);
+
+    expect(chip.tagName).toBe('CODE');
+    expect(
+      screen.getByText((content) =>
+        content.includes(EN_CATALOGUE['error.DISK_SPACE_LOW']),
+      ),
+    ).toBeInTheDocument();
   });
 });

@@ -1,5 +1,7 @@
 import { errorCodeSchema } from 'sky-filme-studio-be/contracts';
 import type { ErrorCode } from 'sky-filme-studio-be/contracts';
+import { describeIssues } from '@/lib/api/helpers/describe-issues';
+import { isRecord } from '@/lib/helpers/is-record';
 
 export interface ErrorBody {
   code: ErrorCode | undefined;
@@ -25,15 +27,14 @@ const readString = (value: unknown): string | undefined => {
 };
 
 export const readErrorBody = (body: unknown): ErrorBody => {
-  if (typeof body !== 'object' || body === null) {
+  if (!isRecord(body)) {
     return { code: undefined, detail: readString(body) };
   }
 
-  const record = body as Record<string, unknown>;
-  const parsedCode = errorCodeSchema.safeParse(record['errorCode']);
+  const parsedCode = errorCodeSchema.safeParse(body['code']);
 
   return {
     code: parsedCode.success ? parsedCode.data : undefined,
-    detail: readString(record['errorDetail']) ?? readString(record['message']),
+    detail: describeIssues(body['errors']) ?? readString(body['message']),
   };
 };

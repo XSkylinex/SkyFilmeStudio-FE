@@ -136,3 +136,14 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 - **Dispatching per socket message.** The classic INP collapse, and this is the page it happens on.
 - **A silent claim pause.** Indistinguishable from broken.
 - **A generic error message.** The taxonomy exists so this page can be useful.
+- **A poll that stops for good on a condition that clears.** Left for this phase by FE-04
+  (2026-08-22). `isPermanentFailure` answers two questions with one helper — "is an immediate retry
+  pointless", which feeds `shouldRetryRequest`, and "should this job ever be asked about again",
+  which feeds this page's `refetchInterval`. Since 2026-08-22 any failure carrying an orchestrator
+  code answers *yes* to both, and the second answer is wrong for a code like `DISK_SPACE_LOW`: the
+  user frees 40 GB, the condition is gone, and nothing asks again. Measured against
+  `@tanstack/query-core@5.101.4` — with retry and refetch both off, only a window refocus, a remount
+  or an explicit invalidate clears the error, so **a monitor left open and focused never recovers.**
+  Not reachable while `GET /render-jobs/:id` can only throw a 404 or a validation 400; reachable the
+  moment it can raise a `StudioError`. This is the phase with a screen to separate them against —
+  see `plan/04-data-layer.md`, "The envelope was a guess".

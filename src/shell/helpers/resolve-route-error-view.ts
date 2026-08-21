@@ -100,7 +100,7 @@ const resolveRouteErrorResponseView = (
 };
 
 const resolveStudioErrorView = (error: StudioError): RouteErrorView => ({
-  detail: error.code ?? error.status?.toString() ?? error.kind,
+  detail: error.code ?? error.status?.toString(),
   descriptionKey: error.messageKey,
   descriptionValues: error.messageValues,
   descriptionDetail: error.detail,

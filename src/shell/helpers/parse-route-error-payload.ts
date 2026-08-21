@@ -1,7 +1,5 @@
+import { isRecord } from '@/lib/helpers/is-record';
 import type { RouteErrorPayload } from '../interfaces/route-error-payload';
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !(value instanceof Error);
 
 const toRecord = (data: unknown): Record<string, unknown> | null => {
   if (isRecord(data)) {

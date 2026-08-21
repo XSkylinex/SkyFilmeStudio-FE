@@ -1,13 +1,21 @@
+import { render } from '@testing-library/react';
 import { StudioError } from '@/lib/api/studio-error';
 import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 import { translate } from '@/lib/i18n/helpers/translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import type { RouteErrorView } from '@/shell/interfaces/route-error-view';
 
-const describeInEnglish = (view: RouteErrorView): string =>
-  composeRouteErrorDescription(view, (key, values) =>
-    translate(EN_CATALOGUE, key, values),
+const describeInEnglish = (view: RouteErrorView): string => {
+  const { container } = render(
+    <>
+      {composeRouteErrorDescription(view, (key, values) =>
+        translate(EN_CATALOGUE, key, values),
+      )}
+    </>,
   );
+
+  return container.textContent ?? '';
+};
 
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 
