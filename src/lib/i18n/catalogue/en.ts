@@ -141,6 +141,20 @@ export const EN_CATALOGUE = {
   'shortcuts.singleKey.description':
     'Approve, reject and playback answer a single letter with no modifier held. Turn this off if a key you meant to type is making decisions.',
 
+  'projects.loading': 'Loading projects',
+  'projects.error.title': 'The project list could not be read',
+  'projects.empty.title': 'No projects yet',
+  'projects.empty.description':
+    'Nothing has been created on this machine. Creating a project is not wired up in this build yet — the orchestrator accepts it, but the request shape it validates against is not published through the shared contract.',
+  'projects.created': 'Created {date}',
+  'projects.kind.SERIES': 'Series',
+  'projects.kind.STANDALONE': 'Standalone',
+  'projects.kind.MUSIC': 'Music',
+  'projects.kind.EXPERIMENTAL': 'Experimental',
+  'projects.kind.CUSTOM': 'Custom',
+  'projects.language': 'Primary language',
+  'projects.open': 'Open {title}',
+
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',
   'readiness.unknown.description':
