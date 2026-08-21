@@ -1,144 +1,164 @@
 # FE-16 — Accessibility & performance
 
 > **Depends on:** all UI phases · **Blocks:** 17 · **Backend needs:** — · **Plan authority:** §39, §48
-> **Status:** not started
+> **Status:** partly done 2026-08-21
 
 ## Goal
 
 The console is usable by keyboard and screen reader, honours reduced motion for real, and stays
 responsive while a render queue streams updates for four hours.
 
+## Why this phase ran now, out of order
+
+Every phase from 07 to 14 is gated on a backend phase that has not published an endpoint. Re-checked
+against the orchestrator's own source on 2026-08-21, not against its status table: it serves four
+controllers and five routes, and there is no gateway. `domain/project.ts` and `domain/subject.ts`
+exist as schemas, so the shapes are known, but nothing serves them — FE-07 needs BE-11 and BE-12,
+and BE-11 had moved to a branch mid-session without publishing a controller.
+
+16 is the only phase left that needs no backend, which is the same reason 15 was taken early.
+
+The half of this phase that could run is worth running early rather than late. `jsx-a11y` has been
+on since FE-00 and reports nothing; every defect below is one it structurally cannot see, and each
+one found now is found against seventeen primitives and three real screens rather than against
+fourteen more phases of them. Three of the fixes — the shortcut provider, the approval control and
+the border token — are inherited unchanged by FE-10 and FE-12, so they are cheaper here than there.
+
 ## Decisions
 
-| # | Decision | Options | Recommendation |
-| - | -------- | ------- | -------------- |
-| 1 | Conformance target | WCAG 2.2 AA vs "reasonable" | **AA as the working target.** It is a single-user local tool, so nobody is auditing it — which is exactly why picking a target is what makes the work happen. |
-| 2 | Live-region strategy | announce everything vs announce decisions | **Announce decisions.** See below; this is the trap. |
-| 3 | Perf budget | none vs measured thresholds | **Measured.** INP ≤ 200 ms and CLS ≤ 0.1 at the 75th percentile, on the two pages that will fail them. |
+| # | Decision | Answer |
+| - | -------- | ------ |
+| 1 | Conformance target | **WCAG 2.2 AA**, as recommended. It is what makes 1.4.11 and 2.1.4 below binding rather than opinions. |
+| 2 | Live-region strategy | **Announce decisions**, as recommended. The readiness verdict is announced; the 60-second poll behind it is not. |
+| 3 | Perf budget | **Measured** — but INP and CLS could not be measured at all this phase. See below. |
 
-## Accessibility
+## What landed
 
-### 1. There is no automated net until phase 00
+**The automated net was checked before anything was assumed.** `plan/README.md` said accessibility
+had no automated net; that is stale. `.oxlintrc.json` has carried `jsx-a11y` since FE-00, and the
+plugin reports nothing on `src/` — not only in the default `correctness` category but with
+`pedantic`, `style` and `suspicious` added too. So the net is on and green, and everything below is
+what it cannot reach.
 
-`.oxlintrc.json` ships three plugins and two rules; `jsx-a11y` is added in phase 00. If that did not
-happen, nothing has been catching a missing label — check before assuming coverage.
+### Accessibility
 
-`jsx-a11y` catches attributes. It does not catch focus order, a dialog that does not trap focus, or a
-live region that announces sixty times a second. Those are found by using the app the way someone who
-cannot use a mouse would.
+- **A navigation now moves focus.** `grep -rn "focus(" src` returned nothing before this phase.
+  Activating a nav link changed the URL, the heading and the title, and left focus on the link.
+  `RouteFocus` moves it to the `<main>` the skip link has always targeted, skipping the first paint
+  so a cold deep link is not hijacked.
+- **`.app-shell__main` got the design system's focus ring.** It was the one focusable element in the
+  shell with no `:focus-visible` rule, and it is now the element a keyboard user lands on constantly.
+- **Single-key shortcuts can be turned off** — WCAG 2.2 SC 2.1.4, Level A. `a`, `r`, `c`, space and
+  `?` were bound on `window` with no modifier, no off switch and no scoping. Arrow keys stay live
+  when the toggle is off, because the criterion exempts them.
+- **The shortcuts dialog is reachable without a shortcut.** Turning `?` off would otherwise strand
+  the control that turns it back on, so the header carries a visible `Keyboard shortcuts` button.
+- **Approval controls name what they decide.** `contextLabel` is required, so FE-10 and FE-12 cannot
+  render a card without answering it.
+- **The readiness verdict announces.** `<output>` for the verdict, `role="alert"` for a preflight
+  that could not be read.
+- **The preview stopped nesting a second `<main>`** inside the shell's.
+- **Control borders clear 3:1** — WCAG 2.2 SC 1.4.11. Measured in Chrome by resolving each token to
+  sRGB; the old border was 1.27:1 in light and 1.57:1 in dark, and the raised fill is 1.06:1 against
+  the page, so the border was carrying the whole job at a quarter of the required contrast. The
+  table is in `.claude/rules/css.md`.
 
-### 2. Keyboard
+### The i18n debt this phase turned up
 
-Every workflow completable without a mouse — especially the two that are used at speed:
+Not the subject of the phase, but found by it and fixed rather than filed: `ApprovalControls`,
+`Toast`, `MediaTile` and the whole keyboard-shortcuts dialog rendered hardcoded English. All four
+predate FE-15, whose migration went through the shell and the pages without reaching the primitive
+layer. Fourteen of the twenty-one keys this branch adds are that debt being paid — two approval
+verbs, three strings across `Toast` and `MediaTile`, and nine for the shortcuts dialog. The
+catalogue went from 183 keys to 204; the other seven are new copy, five for the features below and
+two for error codes the backend appended mid-session.
 
-- **storyboard review**: next/previous, toggle comparison, approve, reject;
-- **shot review**: the same, plus play/pause and frame stepping.
+Worth recording *how* they were nearly missed. A grep for capitalised text between JSX tags finds
+`ApprovalControls` and nothing else, because the other three sit in a prop, a ternary and a
+`const`. The sweep that finds all of them looks for capitalised **string literals**.
 
-Visible focus everywhere. Focus trapped in dialogs and returned on close. Skip links to the main
-region. No keyboard trap in the media players.
+### Performance
 
-### 3. Screen reader
+- **`/system` is lazy.** It was the only statically imported route with real weight. Entry chunk
+  531.05 kB → 516.30 kB, and 7.43 kB of CSS left with it.
+- **Nothing leaks.** `src/` contains zero `createObjectURL`, zero timers, zero observers, zero
+  sockets, and its two `addEventListener` calls both have matching removals in a cleanup.
+- **The compiler is genuinely on and clean.** Zero `react/react-compiler` violations, zero
+  suppressions, and zero `useMemo` / `useCallback` / `memo` in `src/` or `test/`. The entry chunk
+  contains 213 `_c(n)` memo-cache calls, which is the compiler emitting rather than being configured.
 
-Real labels on **`ApprovalControls`** — "Approve shot 12 of scene 3", not "Approve". The buttons look
-identical across two hundred cards and context is the only difference.
+## What this phase could not do, and what each waits for
 
-Tables get proper semantics; virtualised rows still need correct row/column relationships. Icon-only
-buttons get accessible names. Images that convey information get descriptions; decorative ones get
-`alt=""`.
+**Every remaining box needs a screen that does not exist.** This is not a scoping choice.
 
-**The QC distinction must survive being read aloud.** "Automated check passed" and "approved by you"
-are different states (§27.2), and a screen-reader user who hears only "passed" has lost the gate.
+| Box | Waits for |
+| --- | --------- |
+| Keyboard-completable storyboard and shot review | FE-10, FE-12 |
+| Live regions on the render queue | FE-11, and FE-05 for the socket |
+| Reduced motion in the React layer — autoplay, looping playback | FE-12 |
+| Contrast against real media | FE-07 for a real asset to put behind a panel |
+| Queue re-render rate bounded by the flush rate | FE-05 + FE-11 |
+| Contact-sheet CLS and memory over a long session | FE-10 |
+| Media code out of the entry chunk | FE-11 to FE-14 |
 
-### 4. Live regions — the trap
+The last one is worth stating precisely, because it currently looks satisfied and is not.
+`TimelinePage`, `AudioPage`, `ShotReviewPage`, `StoryboardPage` and `ShotsPage` are all `EmptyState`
+stubs, and `src/` contains no `<video>`, no `<audio>` and no `<canvas>`. The box is vacuously true,
+so it stays unticked.
 
-The render queue updates continuously. A naive `aria-live="polite"` on it will announce every progress
-tick and make the page **unusable** with a screen reader.
+Decision 3 has the same shape. INP and CLS are the two metrics `plan/16` says will fail, on the two
+pages it names — the render queue and the storyboard. Both are stubs and there is no socket, so
+there is nothing to profile. Measuring them on this build would produce a number that means nothing.
 
-Announce **decisions and transitions**, not progress:
+## Two findings recorded rather than fixed
 
-```text
-announce:      "Shot 12 render failed: out of memory"   "Storyboard approved"
-                "Queue paused: memory pressure"
-do not announce: percentage ticks, elapsed seconds, per-frame updates
-```
-
-Progress belongs in a `progressbar` role with `aria-valuenow`, which assistive tech polls rather than
-announces.
-
-### 5. Reduced motion, honoured properly
-
-`prefers-reduced-motion: reduce` must damp CSS transitions **and** be honoured by the React layer:
-autoplaying shot previews, looping playback in shot review, and any animated progress indicator.
-
-A media app that damps one keyframe while autoplaying every preview has honoured half the query. The
-tokens are in phase 02; the React side is here.
-
-### 6. Contrast
-
-Panels sit over media. Check the token pairings against real content — a contrast ratio measured
-against a flat background is not the ratio a user sees over a bright frame.
-
-## Performance
-
-### 7. The two pages that will fail
-
-**Render queue (INP).** Hundreds of rows, continuous socket traffic. Phase 05 buffers and flushes;
-phase 11 virtualises. **Measure it**: run 50 jobs and profile re-renders over ten seconds. It should
-track the flush rate, not the message rate.
-
-**Storyboard / contact sheets (CLS + memory).** Two hundred `MediaTile`s. Every box reserved with
-`aspect-ratio`; every image a proxy, never a master. Watch memory across a long review session — leaked
-object URLs and undisposed video elements are the realistic failure.
-
-### 8. Bundle
-
-The entry chunk must not contain video players, waveform rendering or timeline canvas code. Verify in
-the build output, not by intention. `Some chunks are larger than 500 kB` from `vite build` is usually a
-genuine signal here that a lazy boundary was lost.
-
-### 9. React Compiler
-
-The compiler is on. A `react/react-compiler` error means a component **silently stopped being
-optimised** — it is a performance regression reported as a lint error. Fix the purity violation; never
-suppress it.
-
-No `useMemo`, `useCallback` or `memo` — they fight the compiler.
-
-### 10. Long sessions
-
-This app is open for hours. Check: no unbounded query cache growth, no leaked socket listeners on route
-changes, no accumulating object URLs, no video elements left attached after navigation.
+- **Status-tone borders fail 3:1 against their own fill** on seven of ten tones in light and eight in
+  dark. Left alone deliberately: every tone pairs its border with a text label and a `StatusDot`, so
+  the border is not the only carrier of the state, and restyling ten tones is FE-02's territory.
+- **The render queue is eagerly in the entry chunk while the storyboard is lazy** — an inversion,
+  since the queue is the page `plan/16` names for INP. It is a stub with nothing to split today;
+  FE-11 has to make it lazy when it fills it.
 
 ## Verification
 
 ```bash
-yarn typecheck && yarn lint && yarn test && yarn build && yarn preview
+yarn typecheck && yarn lint && yarn test && yarn build
 ```
 
-Then, with the app running and real data:
+Real output, 2026-08-21: typecheck clean, lint clean, **665 tests across 118 files**, build clean.
+`yarn format:check` clean.
 
-- complete storyboard review and shot review **by keyboard only**;
-- run a screen reader over the queue during an active render — it must remain usable;
-- confirm "automated pass" and "human approved" are distinguishable aurally;
-- enable reduced motion → previews stop autoplaying, not just transitions;
-- profile the queue under 50 jobs → re-render count bounded by the flush rate;
-- load a 200-cell contact sheet → **CLS effectively zero**, memory stable across ten minutes;
-- read the build output → media code is not in the entry chunk;
-- navigate away from shot review ten times → no listener or memory growth.
+What the gate did not tell us, and was checked by loading the app in Chrome against the dev server:
+
+- after clicking a nav link, `document.activeElement.id` is `app-shell-main`; on a fresh load of the
+  same URL it is `<body>`;
+- `:focus-visible` does **not** match on `main` after a mouse-driven navigation, so no ring is
+  painted around the whole page, and `focus({ focusVisible: true })` renders `solid 2px` at `-2px`;
+- with single-key shortcuts off, `?` does nothing and the header button still opens the dialog; the
+  choice survives a reload;
+- the dialog uses `showModal()`, traps focus, closes on a real Escape and restores focus to its
+  trigger — checked because it was the most likely defect, and it was already correct;
+- control borders measure 3.29:1 against their actual rendered background in dark mode.
 
 ## Done when
 
-- [ ] `jsx-a11y` is active and clean
-- [ ] every workflow is keyboard-completable, with visible focus and correct dialog focus handling
-- [ ] approval controls have contextual accessible names
-- [ ] live regions announce decisions, not progress; progress uses `progressbar`
-- [ ] the automated-pass vs human-approved distinction survives being read aloud
-- [ ] reduced motion is honoured in CSS **and** in the React layer, including autoplay
-- [ ] contrast checked against real media, not a flat background
-- [ ] queue re-render rate measured and bounded
-- [ ] contact-sheet CLS ≈ 0, memory stable over a long session
-- [ ] media code is out of the entry chunk, verified in the build
-- [ ] no `react/react-compiler` errors, and no suppressions
+- [x] `jsx-a11y` is active and clean — verified across four categories, not assumed
+- [x] the shell's own focus handling is correct: navigation moves focus, the skip-link target has a
+      ring, and the first paint is left alone
+- [x] character-key shortcuts satisfy SC 2.1.4, with the off switch reachable without a shortcut
+- [x] approval controls have contextual accessible names, enforced by a required prop
+- [x] live regions announce decisions, not progress; progress uses `progressbar`
+- [x] control boundaries satisfy SC 1.4.11, measured rather than eyeballed
+- [x] reduced motion is honoured in CSS — every transition in `src/` uses a duration token, and the
+      three keyframe loops each also set `animation: none`
+- [x] no `react/react-compiler` errors, and no suppressions
+- [ ] every workflow is keyboard-completable — **FE-10, FE-12**
+- [ ] the automated-pass vs human-approved distinction survives being read aloud — **FE-12**
+- [ ] reduced motion is honoured in the React layer, including autoplay — **FE-12**
+- [ ] contrast checked against real media, not a flat background — **FE-07**
+- [ ] queue re-render rate measured and bounded — **FE-05, FE-11**
+- [ ] contact-sheet CLS ≈ 0, memory stable over a long session — **FE-10**
+- [ ] media code is out of the entry chunk, verified in the build — **FE-11 to FE-14**
 
 ## Traps
 
@@ -148,3 +168,7 @@ Then, with the app running and real data:
 - **Measuring performance on an idle page.** LCP is trivially fine on localhost; INP and CLS are what
   fail, and only under load.
 - **Suppressing a compiler error.** It is a silent perf regression, not a style complaint.
+- **Reading a green `yarn lint` as accessibility coverage.** It was green before this phase and every
+  defect fixed here was already present.
+- **Trusting `oklch()` lightness as contrast.** Two tokens one percent apart in `L` are not one
+  percent apart in ratio. Resolve to sRGB in the browser and compute.
