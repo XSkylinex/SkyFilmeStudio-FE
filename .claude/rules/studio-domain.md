@@ -119,6 +119,14 @@ a language. The same applies here:
   provenance fields. Translating them breaks copy-paste and search. Neither is technical notation —
   `00:20:00`, `24 fps`, `48 kHz`, `−16 LUFS` are notation, and localising a timecode makes a
   production tool harder to read, not easier.
+- **Notation gets `dir="ltr"` on an inline element of its own, and a translated sentence never
+  interpolates it.** Measured in FE-06: `8.0 GB` inside `<html dir="rtl">` renders as `GB 8.0`,
+  because the digits and the unit resolve to two separate runs and the neutral between them takes the
+  paragraph's direction. Two things follow. **Inline, not block** — putting `dir` on the `<dd>` fixed
+  the order and moved the value to the opposite edge from its own label, because `dir` sets alignment
+  too. And **not inside a sentence** — `interpolate` returns a string, so a substituted value cannot
+  be given an element, and the same reordering happens where it is harder to see. A key that needs a
+  figure ends in a colon and the figure is rendered beside it.
 - **A backend-authored message is passed through, not translated.** It is not ours to translate, and
   it arrives in whatever language the orchestrator wrote it.
 
