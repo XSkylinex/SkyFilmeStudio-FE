@@ -1,0 +1,15 @@
+@layer features {
+  .assets-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .assets-page__title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-heading);
+  }
+}

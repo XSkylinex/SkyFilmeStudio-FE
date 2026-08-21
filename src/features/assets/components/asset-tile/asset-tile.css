@@ -1,0 +1,33 @@
+@layer features {
+  .asset-tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-raised);
+  }
+
+  .asset-tile__path {
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+  }
+
+  .asset-tile__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .asset-tile__captured,
+  .asset-tile__immutable {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+}
