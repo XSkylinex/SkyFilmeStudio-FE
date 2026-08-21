@@ -121,6 +121,9 @@ export const EN_CATALOGUE = {
 
   'approval.approve': 'Approve',
   'approval.reject': 'Reject',
+  'mediaTile.failed': 'Failed to load',
+  'mediaTile.empty': 'No image yet',
+  'toast.dismiss': 'Dismiss',
 
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',

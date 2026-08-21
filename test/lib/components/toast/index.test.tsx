@@ -3,6 +3,10 @@ import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { Toast } from '@/lib/components/toast';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { createStore } from '@/shell/store';
+import { interfaceLanguageSet } from '@/shell/shell.slice';
 
 describe('Toast', () => {
   it('announces politely by default, via role="status"', () => {
@@ -56,5 +60,21 @@ describe('Toast', () => {
     await user.click(screen.getByRole('button', { name: 'Dismiss' }));
 
     expect(handleDismiss).toHaveBeenCalledTimes(1);
+  });
+  it('translates the dismiss label, which is the only name that button has', () => {
+    const store = createStore();
+    store.dispatch(interfaceLanguageSet('he'));
+
+    render(
+      <Provider store={store}>
+        <Toast
+          tone={STATUS_TONE.SUCCESS}
+          title="Shot approved"
+          onDismiss={() => {}}
+        />
+      </Provider>,
+    );
+
+    expect(screen.getByRole('button', { name: 'סגור' })).toBeInTheDocument();
   });
 });
