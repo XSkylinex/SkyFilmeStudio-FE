@@ -10,10 +10,17 @@ export const formatBytes = (bytes: number): string => {
     return `${magnitude} ${FALLBACK_UNIT}`;
   }
 
-  const step = Math.min(
+  const largestStep = BYTE_UNITS.length - 1;
+  const naturalStep = Math.min(
     Math.floor(Math.log(magnitude) / Math.log(UNIT_STEP)),
-    BYTE_UNITS.length - 1,
+    largestStep,
   );
+  const roundsUpAUnit =
+    naturalStep < largestStep &&
+    Number(
+      (magnitude / UNIT_STEP ** naturalStep).toFixed(SCALED_FRACTION_DIGITS),
+    ) >= UNIT_STEP;
+  const step = roundsUpAUnit ? naturalStep + 1 : naturalStep;
   const unit = BYTE_UNITS[step] ?? FALLBACK_UNIT;
   const scaled = magnitude / UNIT_STEP ** step;
 

@@ -14,6 +14,7 @@ import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view'
 import { SystemPanel } from '@/features/system/components/system-panel';
 import { nextHeadingLevel } from '@/features/system/helpers/next-heading-level';
 import type { SystemSectionProps } from '@/features/system/interfaces/system-section';
+import { formatArgv } from './helpers/format-argv';
 import {
   MODEL_FILE_STATUS_LABEL_KEY,
   MODEL_ROLE_LABEL_KEY,
@@ -174,7 +175,7 @@ export const ModelSetupPanel: FC<SystemSectionProps> = ({ headingLevel }) => {
                     <p className="model-setup-panel__download">
                       {translate('system.models.noDownload')}{' '}
                       <code className="model-setup-panel__code" dir="ltr">
-                        {entry.downloadArgv.join(' ')}
+                        {formatArgv(entry.downloadArgv)}
                       </code>
                     </p>
                   ) : null}

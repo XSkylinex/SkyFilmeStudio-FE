@@ -14,6 +14,12 @@ describe('formatBytes', () => {
     expect(formatBytes(2_500_000_000_000)).toBe('2.5 TB');
   });
 
+  it('steps up a unit rather than printing a figure of 1000, which reads as the wrong scale', () => {
+    expect(formatBytes(999_999)).toBe('1.0 MB');
+    expect(formatBytes(999_999_999_999)).toBe('1.0 TB');
+    expect(formatBytes(999_949)).toBe('999.9 kB');
+  });
+
   it('keeps the largest unit it knows rather than inventing one', () => {
     expect(formatBytes(9_000_000_000_000_000)).toBe('9.0 PB');
   });

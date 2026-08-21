@@ -21,7 +21,7 @@
 
   .system-page__panels {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
     align-items: start;
     gap: var(--space-4);
   }

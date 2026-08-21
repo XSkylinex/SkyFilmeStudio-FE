@@ -69,7 +69,8 @@ describe('DashboardPage', () => {
       await screen.findByText('Nothing in this project is wired up yet'),
     ).toBeInTheDocument();
     expect(screen.getByText(/serves no project data yet/)).toBeInTheDocument();
-    expect(screen.queryByText('0')).not.toBeInTheDocument();
+    expect(screen.queryAllByRole('list')).toHaveLength(0);
+    expect(screen.queryAllByRole('table')).toHaveLength(0);
   });
 
   it('no longer claims the page is not connected to the orchestrator, because it is', () => {
