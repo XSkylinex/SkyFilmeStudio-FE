@@ -139,7 +139,10 @@ export const ModelSetupPanel: FC<SystemSectionProps> = ({ headingLevel }) => {
                   <p className="model-setup-panel__files-heading">
                     {translate('system.models.files')}
                   </p>
-                  <ul className="model-setup-panel__files">
+                  <ul
+                    className="model-setup-panel__files"
+                    aria-label={translate('system.models.files')}
+                  >
                     {entry.files.map((file) => (
                       <li
                         className="model-setup-panel__file"

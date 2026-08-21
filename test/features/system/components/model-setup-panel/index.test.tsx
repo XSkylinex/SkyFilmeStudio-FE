@@ -82,12 +82,68 @@ const fieldRow = (label: string): HTMLElement => {
 };
 
 describe('ModelSetupPanel', () => {
+  it('never claims a hash was checked, because this endpoint only stats the file', async () => {
+    orchestratorReports(buildModelSetupReport());
+
+    renderInApp(<ModelSetupPanel />);
+
+    expect(
+      await screen.findByText(/at the size the manifest declares/),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/nothing here reads a hash/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/MODEL_HASHES_MATCH preflight check is what does/),
+    ).toBeInTheDocument();
+  });
+
+  it('does not call a present but wrong-sized file missing', async () => {
+    orchestratorReports(
+      buildModelSetupReport({
+        ready: false,
+        totalMissingBytes: 8_000_000_000,
+        models: [
+          {
+            id: modelManifestIdSchema.parse('ltx-2.5-distilled'),
+            role: 'VIDEO',
+            upstreamRepo: 'lightricks/ltx-video',
+            license: 'openrail-m',
+            totalBytes: 8_000_000_000,
+            missingBytes: 8_000_000_000,
+            ready: false,
+            files: [
+              {
+                relativePath: projectRelativePathSchema.parse(
+                  'video/ltx-2.5-distilled/model.safetensors',
+                ),
+                bytes: 8_000_000_000,
+                status: 'SIZE_MISMATCH',
+                detail: 'On disk, but not the size the manifest declares.',
+              },
+            ],
+            downloadArgv: [
+              'huggingface-cli',
+              'download',
+              'lightricks/ltx-video',
+            ],
+          },
+        ],
+      }),
+    );
+
+    renderInApp(<ModelSetupPanel />);
+
+    expect(await screen.findByText('Wrong size')).toBeInTheDocument();
+    expect(screen.getByText('Files not ready')).toBeInTheDocument();
+    expect(screen.queryByText('Files missing')).not.toBeInTheDocument();
+    expect(screen.queryByText(/Still to fetch/)).not.toBeInTheDocument();
+  });
+
   it('never presents files-present as benchmarked, and shows the caveat alongside it', async () => {
     orchestratorReports(buildModelSetupReport());
 
     renderInApp(<ModelSetupPanel />);
 
-    expect(await screen.findByText('Files present')).toBeInTheDocument();
+    expect(await screen.findByText('Files ready')).toBeInTheDocument();
     expect(
       screen.getByText(/does not mean the model has been benchmarked/),
     ).toBeInTheDocument();
@@ -123,7 +179,7 @@ describe('ModelSetupPanel', () => {
 
     renderInApp(<ModelSetupPanel />);
 
-    await screen.findByText('Files missing');
+    await screen.findByText('Files not ready');
 
     expect(screen.queryAllByRole('button')).toHaveLength(0);
     expect(screen.queryAllByRole('link')).toHaveLength(0);
@@ -181,7 +237,7 @@ describe('ModelSetupPanel', () => {
     expect(
       await screen.findByText('The model setup report could not be read'),
     ).toBeInTheDocument();
-    expect(screen.queryByText('Files present')).not.toBeInTheDocument();
-    expect(screen.queryByText('Files missing')).not.toBeInTheDocument();
+    expect(screen.queryByText('Files ready')).not.toBeInTheDocument();
+    expect(screen.queryByText('Files not ready')).not.toBeInTheDocument();
   });
 });

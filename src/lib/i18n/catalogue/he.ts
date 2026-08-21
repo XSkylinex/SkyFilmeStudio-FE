@@ -161,16 +161,16 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
 
   'system.models.title': 'מודלים',
   'system.models.summary': 'הקבצים של {ready} מתוך {total} מודלים נמצאים בדיסק',
-  'system.models.missingTotal': 'נותר להוריד:',
+  'system.models.missingTotal': 'להורדה או להחלפה:',
   'system.models.root': 'תיקיית המודלים',
   'system.models.license': 'רישיון',
   'system.models.size': 'גודל',
-  'system.models.missing': 'חסר',
+  'system.models.missing': 'להורדה או להחלפה',
   'system.models.upstream': 'מאגר מקור',
-  'system.models.filesPresent': 'הקבצים נמצאים',
-  'system.models.filesMissing': 'חסרים קבצים',
+  'system.models.filesPresent': 'הקבצים מוכנים',
+  'system.models.filesMissing': 'הקבצים אינם מוכנים',
   'system.models.readyMeaning':
-    '"הקבצים נמצאים" אומר שכל קובץ יושב בדיסק ותואם למניפסט. זה לא אומר שהמודל עבר benchmark על החומרה הזו — האורקסטרטור עדיין לא מפרסם את הסיווג הזה, ולכן אין לקרוא שום דבר כאן כ"נבדק".',
+    '"הקבצים מוכנים" אומר שכל קובץ יושב בדיסק בגודל שהמניפסט מצהיר עליו. זה לא אומר שהקובץ תקין: שום דבר כאן לא קורא hash, ובדיקת ה-preflight ‏MODEL_HASHES_MATCH היא זו שעושה זאת. זה גם לא אומר שהמודל עבר benchmark על החומרה הזו — האורקסטרטור עדיין לא מפרסם את הסיווג הזה, ולכן אין לקרוא שום דבר כאן כ"נבדק".',
   'system.models.noDownload':
     'Local AI Studio לעולם אינו מוריד מודל. יש להריץ את זה בעצמכם:',
   'system.models.files': 'קבצים',

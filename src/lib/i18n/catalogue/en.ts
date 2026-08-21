@@ -163,16 +163,16 @@ export const EN_CATALOGUE = {
 
   'system.models.title': 'Models',
   'system.models.summary': '{ready} of {total} models have every file on disk',
-  'system.models.missingTotal': 'Still to fetch:',
+  'system.models.missingTotal': 'To fetch or replace:',
   'system.models.root': 'Models folder',
   'system.models.license': 'Licence',
   'system.models.size': 'Size',
-  'system.models.missing': 'Missing',
+  'system.models.missing': 'To fetch or replace',
   'system.models.upstream': 'Upstream repository',
-  'system.models.filesPresent': 'Files present',
-  'system.models.filesMissing': 'Files missing',
+  'system.models.filesPresent': 'Files ready',
+  'system.models.filesMissing': 'Files not ready',
   'system.models.readyMeaning':
-    'Files present means every file is on disk and matches the manifest. It does not mean the model has been benchmarked on this hardware — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
+    'Files ready means every file is on disk at the size the manifest declares. It does not mean the file is intact: nothing here reads a hash, and the MODEL_HASHES_MATCH preflight check is what does. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
   'system.models.noDownload':
     'Local AI Studio never downloads a model. Run this yourself:',
   'system.models.files': 'Files',
