@@ -1,8 +1,7 @@
+import { isRecord } from '@/lib/helpers/is-record';
+
 const ISSUE_SEPARATOR = '; ';
 const ROOT_PATH = '(root)';
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null;
 
 const describeIssue = (value: unknown): string | undefined => {
   if (!isRecord(value)) {

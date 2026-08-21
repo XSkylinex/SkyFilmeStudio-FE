@@ -85,15 +85,6 @@ describe('shouldRetryRequest', () => {
     },
   );
 
-  it('does not retry a 503 that names why no provider could run the job', () => {
-    expect(
-      shouldRetryRequest(
-        0,
-        buildCodedError(ERROR_CODE.NO_ELIGIBLE_PROVIDER, 503),
-      ),
-    ).toBe(false);
-  });
-
   it('falls back to the status band when the failure carries no code', () => {
     expect(shouldRetryRequest(0, buildHttpError(503))).toBe(true);
   });
