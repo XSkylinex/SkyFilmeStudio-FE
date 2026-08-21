@@ -184,6 +184,13 @@ ready model, one wholly missing model and one with a hash mismatch:
 - `dir="rtl"`: the whole page mirrors, every byte figure and command reads left-to-right in place, and
   the backend's English sentences keep their punctuation.
 
+**Not looked at: a narrow window.** The browser connection was lost before the responsive case could
+be loaded, so the `minmax(min(22rem, 100%), 1fr)` change in the three grids is reasoned from the
+stylesheet and the floor check, not measured. The arithmetic says the old rule only overflows once
+the content column is under about 352 px — a very narrow window or a heavily zoomed page, which is
+narrower than the commit message for that change implies. The fix is right and costs nothing; the
+severity in that message is overstated. Check it in a browser before FE-16 claims responsiveness.
+
 ## Done when
 
 - [x] the dashboard answers "what is waiting for me" **for the machine**; the project half is BE-11
