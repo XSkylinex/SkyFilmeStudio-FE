@@ -1,9 +1,12 @@
 # FE-04 — Data layer: contracts, queries, store
 
 > **Depends on:** 03 · **Blocks:** 05+ · **Backend needs:** **BE-01** · **Plan authority:** §40, §42, §57
-> **Status:** done 2026-08-20 — the seam is complete and proven. Its *coverage* is four
-> endpoints, because four is what the orchestrator serves. See "What the orchestrator serves
-> today" before assuming a query is missing by oversight.
+> **Status:** done 2026-08-20, **error envelope corrected 2026-08-22.** The seam is complete and
+> proven. Its *coverage* was four endpoints on the day it closed, because four is what the
+> orchestrator served; see "What the orchestrator serves today" before assuming a query is missing by
+> oversight. The one thing this phase got *wrong* rather than left undone was the HTTP error envelope,
+> which it guessed and flagged as a guess — BE-11's exception filter made the real shape observable and
+> the guess was wrong. See "The envelope was a guess, and the guess was wrong".
 
 ## Goal
 
@@ -135,6 +138,11 @@ four controllers and **no WebSocket gateway**. Port 5556, bound to `127.0.0.1`.
    returns Nest's default `{statusCode, message, error}` with no `errorCode` field. The taxonomy here
    is complete and exhaustively tested against `ERROR_CODE`, and `readErrorBody` picks the code up the
    moment one is sent — but today every failure lands on the status-only sentence.
+
+   **Closed 2026-08-22, and the second half of that sentence was wrong.** BE-11 landed
+   `src/common/filters/studio-error.filter.ts`, registered globally through `APP_FILTER` in
+   `app.module.ts`. `readErrorBody` did *not* pick the code up, because it was reading a field name
+   this phase invented. See "The envelope was a guess, and the guess was wrong" below.
 4. **No socket.** Confirmed by search: no `*.gateway.ts` anywhere in the backend. FE-05 waits on
    BE-23, as the plan table already says. The render-job query therefore polls on a floor with no
    accelerator yet, which is the degraded mode the design was built for rather than a gap.
@@ -422,6 +430,132 @@ that makes it real, rather than widening this phase. And the error envelope
 filter to define one; if it eventually emits `{ code }` or `{ error: { code } }`, nothing here
 matches and the gate stays green regardless.
 
+## The envelope was a guess, and the guess was wrong
+
+Closed 2026-08-22. **The paragraph directly above predicted this failure exactly** — it named
+`{ code }` as a likely shape, and it said the gate would stay green regardless. Both held.
+
+The orchestrator now has a global exception filter, so a typed failure finally reaches the browser.
+It emits `{ statusCode, code, message }`. This phase read `errorCode` and `errorDetail`, which the
+backend has never sent under any name, so **all twenty-one codes fell through to the status-only
+sentence**: `The orchestrator refused this request with status 507.` where the taxonomy had a
+sentence naming the disk and the remedy. That is the failure
+`.claude/rules/state-and-data.md` describes as wasting an hour of someone's evening, arriving by a
+different route than the generic string it warns about.
+
+Three envelopes reach the client, not one, and the reader has to survive all three:
+
+| Source | Body | Carries a code |
+| ------ | ---- | -------------- |
+| `StudioErrorFilter` | `{ statusCode, code, message }` | yes |
+| Nest's built-in `HttpException` | `{ statusCode, message, error }` | no |
+| `nestjs-zod` `ZodValidationException` | `{ statusCode, message: 'Validation failed', errors }` | no |
+
+The third is its own small trap: `message` is the constant `Validation failed`, and everything a
+person could act on is in `errors`, an array of Zod issues. Reading `message` shows the user a
+sentence with no information in it.
+
+**This repo already had the right answer written down, in the other reader.** There are two places
+that read an HTTP error body, both from this phase, and they disagreed:
+
+| Reader | Path it serves | Reads |
+| ------ | -------------- | ----- |
+| `src/lib/api/helpers/read-error-body.ts` | every query, through the fetch wrapper | `errorCode` / `errorDetail` |
+| `src/shell/helpers/parse-route-error-payload.ts` | a router `ErrorResponse` | `code` / `message` |
+
+The shell's reader was right, and it was right by accident of being written against React Router's
+shape rather than against the guess. The one that runs on every request was wrong. Two readers of one
+wire format is the defect underneath the field name, and it is why the fix is "make them agree"
+rather than "pick a new name".
+
+Two properties of the filter that the client depends on. A status at or above 500 replaces `message`
+with a generic server-fault sentence **but still sends the real `code`**, so the code is the
+trustworthy field and the message is not. And the filter maps only eight of the twenty-one codes
+below 500 — everything else arrives as a plain `500`.
+
+**That second property is why the retry policy had to change with the reader.** `isPermanentFailure`
+knew only the 4xx band, so **seventeen of the twenty-one codes were retried twice** — thirteen
+unmapped ones arriving as a plain `500`, plus the three `503`s and `DISK_SPACE_LOW` at `507`. On this
+product that is two more multi-minute GPU attempts that fail identically, against a rule this repo
+had already written down in words: "The out-of-memory codes never say 'try again'." The app was
+saying it anyway, just not out loud.
+
+**The rule the codes support is simpler than the one first written here, and getting it wrong is
+worth recording.** The first attempt added a per-code `retry` axis to `ErrorCodeGuidance`, on the
+theory that a code describing *what a generation attempt produced* — clipping, silence, a failed
+decode — could succeed on a second try, while a code describing the machine could not.
+
+That theory does not survive contact with what `shouldRetryRequest` actually does. **It re-issues the
+identical HTTP request.** It does not start a new generation, so "a fresh attempt might differ" is
+not a property it can exploit; a second `GET` of a job that already failed returns the same failure.
+Checked against the backend rather than reasoned about:
+
+- `GPU_OFFLOAD_THRASHING`, `OUTPUT_DECODE_FAILED` and `OUTPUT_DURATION_INVALID` sit in the *same*
+  adapter failure-mapping list as `MPS_OUT_OF_MEMORY` and `MODEL_FILE_MISSING`
+  (`plan/06-provider-abstraction.md` §7).
+- `CHARACTER_IDENTITY_FAILURE` is the only `CREATIVE` code in `classify-failure.ts`, and the backend
+  retries it with a **new seed** — its own comment says everything else "retries the same spec". Even
+  the backend does not believe an identical retry fixes it.
+- `AUDIO_SILENT` and `AUDIO_CLIPPING` are thresholds on a *measurement* of an already-written file —
+  "silence and clipping are measured, then named". Re-measuring the same file gives the same numbers.
+
+So all twenty-one are permanent, and a `Record<ErrorCode, …>` column holding one value twenty-one
+times would be structure recording no decision — which is the thing `CLAUDE.md` tells this repo not
+to ship. The rule is stated directly instead: **a failure carrying an orchestrator error code is
+permanent, because the orchestrator classified it and re-asking the identical question gets the
+identical answer.** One line, and it reads as what it is.
+
+The cost is real and worth naming: a future code that *is* retryable — a queue-full or worker-busy
+shape — will inherit permanence silently, with no per-code slot forcing anyone to choose. That is the
+trade, taken because a uniform column implies a judgement that was never exercised. The evidence
+above is here so the next person does not have to re-derive it.
+
+`presentation` was deliberately not reused for any of this. It answers "may this message
+auto-dismiss", which is a question about a toast, and `PROMPT_SCHEMA_INVALID` is `TRANSIENT` by that
+measure while being permanently failing. Two questions; the second one now has no field at all
+because it needs none.
+
+**What is still not published, and why the compiler could not have caught this.** `StudioErrorBody`
+is declared inside the filter, not in `src/contracts/`, so the `./contracts` export does not carry it
+and this repo cannot infer the envelope the way it infers every domain type. That is the whole
+explanation. This phase proved — twice, once deliberately and once for real when the backend appended
+two codes mid-session — that a contract change breaks `yarn typecheck` here immediately. **The
+mechanism worked; it simply does not reach this.** `ErrorCode` is in the contract, so the twenty-one
+*values* were guarded exhaustively. The envelope that carries one is not, so the *field name* was
+guarded by nothing at all, and the taxonomy was keyed off a field that never arrived.
+
+The lesson generalises past this bug: the compile-time guard is exactly as wide as `src/contracts/`,
+and everything this app reads off the wire from outside it — the error envelope today, the project
+create and asset import DTOs still — is held by tests or by nothing. Here it is tests, written
+against the backend's own real-HTTP e2e assertions rather than against another guess. That is
+strictly weaker than the compiler, and it is worth saying so out loud rather than letting a green
+gate imply otherwise. The backend fix is one line in `src/contracts/`; until then a rename of `code`
+breaks this silently again.
+
+### What actually changes on screen
+
+Mapped 2026-08-22 by reading every render site. Every API error in this app funnels through one
+mapper — `resolveRouteErrorView` — into `ErrorState`, and eleven screens use it: both error
+boundaries, the readiness strip, the project list, the asset library, the capture guide and the five
+system panels. So this is not invisible plumbing. On ten of the eleven the user now sees the code's
+own sentence instead of `The orchestrator refused this request with status 500.`, and the `<code>`
+chip carries `DISK_SPACE_LOW` instead of `500`.
+
+Three things that mapping turned up, none of which this phase invented:
+
+- **`detail: error.code ?? error.status ?? error.kind`** means a network failure — no code, no status
+  — puts the literal string `NETWORK` in the chip. Harmless while the chip only ever held a number;
+  actively misleading the moment real codes land beside it, because `NETWORK` then reads as a
+  twenty-second error code. Fixed here, since this phase is what makes it wrong.
+- **`presentation` still has no consumer.** Nothing in `src/` reads `TRANSIENT`/`PERSISTENT`; there is
+  no toast queue, no provider and no auto-dismiss timer anywhere, and `Toast` is imported only by the
+  design-system preview. The field is a decision recorded early for a mechanism that does not exist.
+  That is a real gap, but it needs the toast wiring, not this phase.
+- **`FatalBoundary` flattens a `StudioError` to `error.message`,** losing code, status, detail and
+  kind. Left alone deliberately: it is the last-resort boundary, its job is to render something rather
+  than the right thing, and widening it here would mean touching a boundary this phase has no other
+  reason to open.
+
 ## Done when
 
 - [x] every wire type is inferred from the backend contract; none is hand-written
@@ -434,14 +568,19 @@ matches and the gate stays green regardless.
 - [ ] **blocked** — no optimistic update on any approval-class mutation: no approval endpoint exists
 - [ ] **blocked** — renders return `renderJobId`; idempotency keys sent; controls gate on server
       state: `POST /render-jobs` validates against a DTO outside the `./contracts` export
-- [x] every backend error code maps to an actionable sentence — all eighteen, held exhaustive by
-      `Record<ErrorCode, ErrorCodeGuidance>` and by a test that compares its keys to `ERROR_CODE`
+- [x] every backend error code maps to an actionable sentence — eighteen when this phase closed,
+      **twenty-one** as of 2026-08-22, held exhaustive by `Record<ErrorCode, ErrorCodeGuidance>` and by
+      a test that compares its keys to `ERROR_CODE`
+- [x] **a code the orchestrator sends actually arrives** — added 2026-08-22, once BE-11's exception
+      filter made one reachable. The reader takes `code` from the real envelope, survives all three
+      the backend can produce, and the retry policy stops repeating a failure the orchestrator
+      classified as permanent
 - [x] Redux holds only uncommitted intent; `localStorage` holds only preferences — unchanged from
       FE-03; this phase added no slice and no stored value
 - [ ] **blocked** — pickers derive from the capability payload: nothing serves `providerCapabilitySchema`
 - [x] fixtures parse through the real schemas
 
-Nine of twelve. The three unticked boxes are not deferred work in this repo — each needs a backend
+Ten of thirteen. The three unticked boxes are not deferred work in this repo — each needs a backend
 endpoint that does not exist, and each is named with its remedy under "What the orchestrator serves
 today". Ticking them would mean building against a shape nobody serves, which is this phase's first
 trap.
