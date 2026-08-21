@@ -436,6 +436,7 @@ export const DesignSystemPreview: FC = () => {
         <h2>Approval controls</h2>
         <div className="design-system-preview__grid">
           <ApprovalControls
+            contextLabel="Shot 12 of scene 3"
             onApprove={handleApprovalControlsAction}
             onReject={handleApprovalControlsAction}
             regenerationModes={REGENERATION_MODE_SHOWCASE}
@@ -444,6 +445,7 @@ export const DesignSystemPreview: FC = () => {
             decided={false}
           />
           <ApprovalControls
+            contextLabel="Shot 13 of scene 3"
             onApprove={handleApprovalControlsAction}
             onReject={handleApprovalControlsAction}
             regenerationModes={REGENERATION_MODE_SHOWCASE}
@@ -452,6 +454,7 @@ export const DesignSystemPreview: FC = () => {
             decided={false}
           />
           <ApprovalControls
+            contextLabel="Shot 14 of scene 3"
             onApprove={handleApprovalControlsAction}
             onReject={handleApprovalControlsAction}
             regenerationModes={REGENERATION_MODE_SHOWCASE}

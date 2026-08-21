@@ -6,6 +6,7 @@ import type { ApprovalControlsProps } from './approval-controls.interface';
 import './approval-controls.css';
 
 export const ApprovalControls: FC<ApprovalControlsProps> = ({
+  contextLabel,
   onApprove,
   onReject,
   regenerationModes,
@@ -24,6 +25,9 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
           variant="primary"
           size="md"
           disabled={decisionDisabled}
+          aria-label={translate('approval.approveContext', {
+            context: contextLabel,
+          })}
           onClick={onApprove}
         >
           {translate('approval.approve')}
@@ -32,6 +36,9 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
           variant="danger"
           size="md"
           disabled={decisionDisabled}
+          aria-label={translate('approval.rejectContext', {
+            context: contextLabel,
+          })}
           onClick={onReject}
         >
           {translate('approval.reject')}
@@ -48,6 +55,10 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
                   variant="secondary"
                   size="sm"
                   disabled={pending}
+                  aria-label={translate('approval.regenerateContext', {
+                    mode: mode.label,
+                    context: contextLabel,
+                  })}
                   aria-describedby={descriptionId}
                   onClick={() => onRegenerate(mode.id)}
                 >

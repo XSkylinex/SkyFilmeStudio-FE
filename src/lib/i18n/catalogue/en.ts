@@ -121,6 +121,9 @@ export const EN_CATALOGUE = {
 
   'approval.approve': 'Approve',
   'approval.reject': 'Reject',
+  'approval.approveContext': 'Approve {context}',
+  'approval.rejectContext': 'Reject {context}',
+  'approval.regenerateContext': '{mode} for {context}',
   'mediaTile.failed': 'Failed to load',
   'mediaTile.empty': 'No image yet',
   'toast.dismiss': 'Dismiss',

@@ -121,6 +121,9 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
 
   'approval.approve': 'אשר',
   'approval.reject': 'דחה',
+  'approval.approveContext': 'אשר {context}',
+  'approval.rejectContext': 'דחה {context}',
+  'approval.regenerateContext': '{mode} עבור {context}',
   'mediaTile.failed': 'הטעינה נכשלה',
   'mediaTile.empty': 'אין תמונה עדיין',
   'toast.dismiss': 'סגור',

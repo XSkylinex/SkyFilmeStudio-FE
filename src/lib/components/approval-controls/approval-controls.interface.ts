@@ -5,6 +5,7 @@ export interface RegenerationModeOption {
 }
 
 export interface ApprovalControlsProps {
+  contextLabel: string;
   onApprove: () => void;
   onReject: () => void;
   regenerationModes: RegenerationModeOption[];
