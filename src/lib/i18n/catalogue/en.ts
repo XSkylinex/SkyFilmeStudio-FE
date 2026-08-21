@@ -155,6 +155,41 @@ export const EN_CATALOGUE = {
   'projects.language': 'Primary language',
   'projects.open': 'Open {title}',
 
+  'captureGuide.title': 'Capture guide',
+  'captureGuide.intro':
+    'Advice for photographing a subject, not a checklist to complete. Every view below is optional, and a missing one is not an error — a car has no expression sheet.',
+  'captureGuide.views': 'Recommended views',
+  'captureGuide.advice': 'Capture advice',
+  'captureGuide.hide': 'Hide the capture guide',
+  'captureGuide.show': 'Show the capture guide',
+  'captureGuide.error.title': 'The capture guide could not be read',
+
+  'assets.title': 'Source assets',
+  'assets.loading': 'Loading source assets',
+  'assets.error.title': 'The asset list could not be read',
+  'assets.empty.title': 'No source assets yet',
+  'assets.empty.description':
+    'Nothing has been imported into this project. Importing is not wired up in this build yet — the orchestrator accepts both an upload and a point-at-a-path import, but neither request shape is published through the shared contract.',
+  'assets.invalidProject.title': 'That is not a project id',
+  'assets.invalidProject.description':
+    'The address carries something the orchestrator would refuse. Open the project from the project list rather than editing the URL.',
+  'assets.thumbnailAlt': 'Thumbnail of {path}',
+  'assets.immutable': 'Original, never edited in place',
+  'assets.captured': 'Captured:',
+  'assets.type.IMAGE': 'Image',
+  'assets.type.VIDEO': 'Video',
+  'assets.type.AUDIO': 'Audio',
+  'assets.type.DRAWING': 'Drawing',
+  'assets.type.RENDER_3D': '3D render',
+  'assets.type.DOCUMENT': 'Document',
+  'assets.type.OTHER': 'Other',
+  'assets.origin.CAMERA_CAPTURE': 'Camera capture',
+  'assets.origin.IMPORTED': 'Imported',
+  'assets.origin.LOCALLY_GENERATED': 'Locally generated',
+  'assets.origin.DERIVED': 'Derived',
+  'assets.privacy.PROJECT_PRIVATE': 'Project private',
+  'assets.privacy.EXPORTABLE': 'Exportable',
+
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',
   'readiness.unknown.description':

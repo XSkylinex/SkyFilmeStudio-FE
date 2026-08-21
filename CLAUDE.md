@@ -13,15 +13,16 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 ## Status, honestly
 
 **`plan/00`–`plan/01` are done (2026-08-15), `plan/02`–`plan/03` (2026-08-17), `plan/04` and
-`plan/15` on 2026-08-20, `plan/06` is **partly done** (2026-08-21) and `plan/16` is **partly done**
+`plan/15` on 2026-08-20, and `plan/06`, `plan/07` and `plan/16` are all **partly done**
 (2026-08-21). `plan/05`, the realtime bridge, is **blocked on BE-23** — no gateway, no websocket
 dependency, no realtime event schema. **BE-11 published its HTTP surface on 2026-08-21** —
 `/projects`, `/projects/:projectId/assets` and `/capture-guide` — so the project list is now real
-and `plan/07`'s asset half is unblocked. What a
-screen can consume is decided by the backend's `exports` map, not its route table: `Project` and
+and `plan/07`'s asset half is real. What a screen can consume is decided by the backend's
+`exports` map, not its route table: `Project` and
 `Page<T>` are under `src/contracts/`, but the create/patch DTOs and `ProjectStorageUsage` are not,
 so project **creation** and per-project storage remain blocked on a missing export rather than a
-missing endpoint.**
+missing endpoint. The same line runs through `plan/07`: the asset library and the capture guide are
+real, while both import transports have endpoints whose request shapes are not published.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
@@ -81,15 +82,30 @@ to compute its own answer from three of the same booleans with a different prece
 and the backend genuinely disagreed whenever LAN workers and strict offline were both on. One source
 of truth, and a test that hands the component a contradictory payload.
 
-**What is still not real, and why.** Every project-scoped screen — the project list, creation,
-subjects, locations, productions, reusable libraries, per-project storage — has no endpoint at all:
-BE-11 has not started and waits on BE-10. Memory and pressure need the socket. Model `compatibility`
+**What is still not real, and why.** Superseded in part on 2026-08-21: the project list and the
+asset library *are* real now, because BE-11 published. What remains unbuilt is project creation,
+per-project storage, subjects, locations, productions and reusable libraries — creation and storage
+on an unpublished request shape, the rest on **BE-12** and **BE-13**. Memory and pressure need the
+socket. Model `compatibility`
 lives on `ModelManifestEntry` and `/preflight/models` returns `ModelSetupReport`, which has no such
 field, so `/system` says what "files present" does *not* mean rather than showing a classification it
 cannot see. `POST /render-jobs` still validates against a DTO that is not exported through
 `./contracts`; no exception filter exists, so no `errorCode` reaches the client over HTTP; and there
 is no socket. **Do not report structure or capability that does not exist yet** — the two panels with
 no data source say so on screen rather than rendering an empty value.
+
+FE-07 made the asset library real — a project's source assets through **thumbnails only**, every box
+reserved before its image arrives, with `EXPORTABLE` visually distinct from `PROJECT_PRIVATE`
+because that field is what may leave the machine. `/capture-guide` is offered and never required:
+the contract makes a mandatory guide unrepresentable, since `bypassable` is `z.literal(true)` and
+every view's `optional` is too.
+
+**The lesson it added to the bidi rule: passing a backend-authored message through untranslated is
+not the same as dropping it into the paragraph.** Measured in Chrome with the interface in Hebrew,
+`Diffuse, even lighting.` rendered as `.Diffuse, even lighting` — a sentence-final period is a
+bidi-neutral and takes the paragraph's direction, not the run's. That is FE-06's `GB 8.0` one level
+up, on a whole sentence rather than on notation. `ContentText` with no language gives each string a
+`<bdi dir="auto">`; the gate was fully green while the defect was on screen.
 
 FE-16 was taken out of order, because 07–14 are all backend-gated and it needs no backend. **The
 lesson worth carrying is that `yarn lint` was green before it and after it.** `jsx-a11y` has been on

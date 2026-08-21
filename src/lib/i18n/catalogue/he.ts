@@ -155,6 +155,41 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'projects.language': 'שפה ראשית',
   'projects.open': 'פתח את {title}',
 
+  'captureGuide.title': 'מדריך צילום',
+  'captureGuide.intro':
+    'עצות לצילום נושא, לא רשימה שיש להשלים. כל זווית למטה היא רשות, וזווית חסרה אינה שגיאה — למכונית אין דף הבעות.',
+  'captureGuide.views': 'זוויות מומלצות',
+  'captureGuide.advice': 'עצות צילום',
+  'captureGuide.hide': 'הסתרת מדריך הצילום',
+  'captureGuide.show': 'הצגת מדריך הצילום',
+  'captureGuide.error.title': 'לא ניתן היה לקרוא את מדריך הצילום',
+
+  'assets.title': 'נכסי מקור',
+  'assets.loading': 'טוען נכסי מקור',
+  'assets.error.title': 'לא ניתן היה לקרוא את רשימת הנכסים',
+  'assets.empty.title': 'אין עדיין נכסי מקור',
+  'assets.empty.description':
+    'שום דבר לא יובא לפרויקט הזה. הייבוא אינו מחובר בגרסה הזו — המתזמר מקבל גם העלאה וגם ייבוא מנתיב מקומי, אך אף אחד ממבני הבקשה אינו מפורסם בחוזה המשותף.',
+  'assets.invalidProject.title': 'זה אינו מזהה פרויקט',
+  'assets.invalidProject.description':
+    'הכתובת מכילה ערך שהמתזמר היה דוחה. פתח את הפרויקט מתוך רשימת הפרויקטים במקום לערוך את הכתובת.',
+  'assets.thumbnailAlt': 'תמונה ממוזערת של {path}',
+  'assets.immutable': 'מקור, לעולם לא נערך במקום',
+  'assets.captured': 'צולם:',
+  'assets.type.IMAGE': 'תמונה',
+  'assets.type.VIDEO': 'וידאו',
+  'assets.type.AUDIO': 'אודיו',
+  'assets.type.DRAWING': 'רישום',
+  'assets.type.RENDER_3D': 'רינדור תלת-ממד',
+  'assets.type.DOCUMENT': 'מסמך',
+  'assets.type.OTHER': 'אחר',
+  'assets.origin.CAMERA_CAPTURE': 'צילום במצלמה',
+  'assets.origin.IMPORTED': 'מיובא',
+  'assets.origin.LOCALLY_GENERATED': 'נוצר מקומית',
+  'assets.origin.DERIVED': 'נגזר',
+  'assets.privacy.PROJECT_PRIVATE': 'פרטי לפרויקט',
+  'assets.privacy.EXPORTABLE': 'ניתן לייצוא',
+
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',
   'readiness.unknown.description':

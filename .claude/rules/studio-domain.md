@@ -129,6 +129,13 @@ a language. The same applies here:
   figure ends in a colon and the figure is rendered beside it.
 - **A backend-authored message is passed through, not translated.** It is not ours to translate, and
   it arrives in whatever language the orchestrator wrote it.
+- **Passing it through is not the same as dropping it into the paragraph — it still needs
+  isolating.** Measured in FE-07: the capture guide's `Diffuse, even lighting.` rendered as
+  `.Diffuse, even lighting` inside `<html dir="rtl">`, because a sentence-final period is a
+  bidi-neutral and takes the *paragraph's* direction rather than its own run's. Wrap it in
+  `ContentText` with no `language`, which is `<bdi dir="auto">` and infers direction from the
+  string's own first strong character. This is the `8.0 GB` case one level up: there the run was
+  notation, here it is a whole sentence, and the mechanism is identical.
 
 ## Where this is enforced
 
