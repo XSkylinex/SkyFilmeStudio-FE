@@ -40,6 +40,10 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'error.MEDIA_TOOL_UNAVAILABLE':
     'ה-FFmpeg שמותקן במחשב הזה לא יכול לבצע את מה שהשלב הזה דורש — או שהוא לא נמצא ב-path, או שהבנייה שנמצאה חסרה את ה-encoder, ה-filter או ה-muxer שנדרשים. זו תקלה בהתקנה: אותה בקשה תיכשל בדיוק באותו אופן עד שיוחלף FFmpeg.',
 
+  'error.SOURCE_ASSET_IMMUTABLE':
+    'לא ניתן לערוך קובץ מקור שיובא. המקורות נשמרים בדיוק כפי שהגיעו וכל שינוי יוצר גרסה נגזרת חדשה, ולכן יש לבצע זאת כנכס נגזר ולא כעריכה.',
+  'error.IMPORT_PATH_REJECTED':
+    'הנתיב נדחה משום שהוא מוביל אל מחוץ לאחסון של הפרויקט הזה, ושום דבר לא יובא. בחר קובץ בתוך תיקיית הפרויקט, או העתק אותו לשם תחילה.',
   'error.network':
     'ה-orchestrator לא עונה. זה התהליך שמריץ כל רינדור, ולכן שום דבר לא יכול להתחיל עד שהוא יחזור.',
   'error.malformed':
@@ -114,6 +118,28 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'stage.in_review': 'בסקירה',
   'stage.approved': 'מאושר',
   'stage.blocked': 'חסום',
+
+  'approval.approve': 'אשר',
+  'approval.reject': 'דחה',
+  'approval.approveContext': 'אשר {context}',
+  'approval.rejectContext': 'דחה {context}',
+  'approval.regenerateContext': '{mode} עבור {context}',
+  'mediaTile.failed': 'הטעינה נכשלה',
+  'mediaTile.empty': 'אין תמונה עדיין',
+  'toast.dismiss': 'סגור',
+
+  'shortcuts.title': 'קיצורי מקלדת',
+  'shortcuts.nextShot': 'מעבר לשוט הבא',
+  'shortcuts.previousShot': 'מעבר לשוט הקודם',
+  'shortcuts.approve': 'אישור הפריט בסקירה',
+  'shortcuts.reject': 'דחיית הפריט בסקירה',
+  'shortcuts.togglePlayback': 'הפעלה או השהיה של הסרטון הנוכחי',
+  'shortcuts.toggleComparison': 'הצגה או הסתרה של תצוגת ההשוואה',
+  'shortcuts.showHelp': 'הצגת רשימת קיצורי המקלדת',
+  'shortcuts.key.space': 'רווח',
+  'shortcuts.singleKey.label': 'קיצורי מקש בודד',
+  'shortcuts.singleKey.description':
+    'אישור, דחייה והפעלה מגיבים לאות בודדת ללא מקש עזר. כבה זאת אם מקש שהתכוונת להקליד מקבל החלטות.',
 
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',

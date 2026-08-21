@@ -12,6 +12,7 @@ export interface ShellState {
   theme: Theme;
   navCollapsed: boolean;
   interfaceLanguage: InterfaceLanguage;
+  characterShortcutsEnabled: boolean;
 }
 
 export interface ShellSliceRootState {

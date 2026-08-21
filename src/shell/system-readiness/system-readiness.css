@@ -23,6 +23,10 @@
     }
   }
 
+  .system-readiness__announcement {
+    display: flex;
+  }
+
   .system-readiness__headline {
     display: flex;
     flex-wrap: wrap;

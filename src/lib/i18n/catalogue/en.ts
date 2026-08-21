@@ -40,6 +40,10 @@ export const EN_CATALOGUE = {
   'error.MEDIA_TOOL_UNAVAILABLE':
     'The FFmpeg build on this machine cannot do what this step needs \u2014 either it is not on the path, or the build that was found has no encoder, filter or muxer for it. This is a setup fault: the same request will fail the same way until FFmpeg is replaced.',
 
+  'error.SOURCE_ASSET_IMMUTABLE':
+    'An imported original cannot be edited in place. Originals are kept exactly as they arrived and every change becomes a new derived version, so this has to be redone as a derived asset rather than an edit.',
+  'error.IMPORT_PATH_REJECTED':
+    "That path was refused because it resolves outside this project's own storage, and nothing was imported. Pick a file inside the project folder, or copy it in first.",
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
@@ -114,6 +118,28 @@ export const EN_CATALOGUE = {
   'stage.in_review': 'In review',
   'stage.approved': 'Approved',
   'stage.blocked': 'Blocked',
+
+  'approval.approve': 'Approve',
+  'approval.reject': 'Reject',
+  'approval.approveContext': 'Approve {context}',
+  'approval.rejectContext': 'Reject {context}',
+  'approval.regenerateContext': '{mode} for {context}',
+  'mediaTile.failed': 'Failed to load',
+  'mediaTile.empty': 'No image yet',
+  'toast.dismiss': 'Dismiss',
+
+  'shortcuts.title': 'Keyboard shortcuts',
+  'shortcuts.nextShot': 'Go to the next shot',
+  'shortcuts.previousShot': 'Go to the previous shot',
+  'shortcuts.approve': 'Approve the item in review',
+  'shortcuts.reject': 'Reject the item in review',
+  'shortcuts.togglePlayback': 'Play or pause the current video',
+  'shortcuts.toggleComparison': 'Toggle the reference comparison view',
+  'shortcuts.showHelp': 'Show this list of keyboard shortcuts',
+  'shortcuts.key.space': 'Space',
+  'shortcuts.singleKey.label': 'Single-key shortcuts',
+  'shortcuts.singleKey.description':
+    'Approve, reject and playback answer a single letter with no modifier held. Turn this off if a key you meant to type is making decisions.',
 
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',

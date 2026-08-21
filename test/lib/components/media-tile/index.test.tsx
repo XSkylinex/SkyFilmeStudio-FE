@@ -1,6 +1,10 @@
 import { fireEvent } from '@testing-library/react';
 import { renderInStore } from '../../../render-in-store';
 import { MediaTile } from '@/lib/components/media-tile';
+import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { createStore } from '@/shell/store';
+import { interfaceLanguageSet } from '@/shell/shell.slice';
 
 describe('MediaTile', () => {
   it('reserves its box from the ratio alone when there is nothing to show yet', () => {
@@ -143,5 +147,17 @@ describe('MediaTile', () => {
     expect(container.querySelector('.media-tile__caption')).toHaveTextContent(
       'Scene 4, take 2',
     );
+  });
+  it('translates its fallback copy, so an RTL gallery is not dotted with English', () => {
+    const store = createStore();
+    store.dispatch(interfaceLanguageSet('he'));
+
+    const { getByText } = render(
+      <Provider store={store}>
+        <MediaTile alt="Keyframe candidate" />
+      </Provider>,
+    );
+
+    expect(getByText('אין תמונה עדיין')).toBeInTheDocument();
   });
 });

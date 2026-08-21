@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { useState } from 'react';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import { Skeleton } from '@/lib/components/skeleton';
 import type {
   MediaTileLoadState,
@@ -17,6 +18,7 @@ export const MediaTile: FC<MediaTileProps> = ({
   ratio = '16:9',
   caption,
 }) => {
+  const translate = useTranslate();
   const [loadState, setLoadState] = useState<MediaTileLoadState>(() =>
     resolveMediaTileLoadState(src),
   );
@@ -43,7 +45,9 @@ export const MediaTile: FC<MediaTileProps> = ({
       {loadState === 'loading' ? <Skeleton shape="rect" /> : null}
       {loadState === 'empty' || loadState === 'failed' ? (
         <div className="media-tile__fallback">
-          {loadState === 'failed' ? 'Failed to load' : 'No image yet'}
+          {translate(
+            loadState === 'failed' ? 'mediaTile.failed' : 'mediaTile.empty',
+          )}
         </div>
       ) : null}
       {caption ? <p className="media-tile__caption">{caption}</p> : null}

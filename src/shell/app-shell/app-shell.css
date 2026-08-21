@@ -102,6 +102,11 @@
     min-block-size: 0;
     overflow-y: auto;
     padding: var(--space-5);
+
+    &:focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: calc(var(--focus-ring-offset) * -1);
+    }
   }
 
   .app-shell__navigation-progress {

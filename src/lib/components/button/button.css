@@ -2,7 +2,7 @@
   .button {
     --button-bg: var(--color-surface-raised);
     --button-fg: var(--color-text);
-    --button-border: var(--color-border);
+    --button-border: var(--color-border-control);
 
     box-sizing: border-box;
     display: inline-flex;
@@ -97,7 +97,7 @@
     &[data-variant='secondary'] {
       --button-bg: var(--color-surface-raised);
       --button-fg: var(--color-text);
-      --button-border: var(--color-border);
+      --button-border: var(--color-border-control);
     }
 
     &[data-variant='ghost'] {

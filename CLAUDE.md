@@ -13,12 +13,12 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 ## Status, honestly
 
 **`plan/00`–`plan/01` are done (2026-08-15), `plan/02`–`plan/03` (2026-08-17), `plan/04` and
-`plan/15` on 2026-08-20, and `plan/06` is **partly done** (2026-08-21). `plan/05`, the realtime
-bridge, is **blocked on BE-23** — the backend has no gateway, no websocket dependency and no realtime
-event schema, all re-checked 2026-08-21 rather than assumed — so `plan/15` was taken out of order and
-`plan/06` was built past it, because its installation half needs only BE-04, which has landed.
-`plan/07` is next and needs BE-11, which has not started and itself waits on BE-10, the
-dual-workstation benchmark.**
+`plan/15` on 2026-08-20, `plan/06` is **partly done** (2026-08-21) and `plan/16` is **partly done**
+(2026-08-21). `plan/05`, the realtime bridge, is **blocked on BE-23** — no gateway, no websocket
+dependency, no realtime event schema. `plan/07` is **blocked on BE-11**, which has started, moved to
+`be-11-projects-and-assets` and appended two error codes to the shared taxonomy, but still publishes
+four controllers and five routes and serves nothing for projects, assets or subjects. That is why 16
+was taken out of order: it is the only phase left that needs no backend at all.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
@@ -42,7 +42,7 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — nineteen as of 2026-08-21,
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — twenty-one as of 2026-08-21,
 read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` on the backend's
 `be-10-benchmark` branch, which is one ahead of its master — and the loopback-only base URL;
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
@@ -50,8 +50,9 @@ read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` on the back
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **183 keys in English and
-Hebrew** — 109 when FE-15 closed, and FE-06 added the system screen's copy. English is the source of
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **204 keys in English and
+Hebrew** — 109 when FE-15 closed, FE-06 added the system screen's copy, and FE-16 paid off the
+primitive layer FE-15's migration never reached. English is the source of
 truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
 The interface language lives in the shell slice, persists to
 `localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`
@@ -86,6 +87,27 @@ cannot see. `POST /render-jobs` still validates against a DTO that is not export
 `./contracts`; no exception filter exists, so no `errorCode` reaches the client over HTTP; and there
 is no socket. **Do not report structure or capability that does not exist yet** — the two panels with
 no data source say so on screen rather than rendering an empty value.
+
+FE-16 was taken out of order, because 07–14 are all backend-gated and it needs no backend. **The
+lesson worth carrying is that `yarn lint` was green before it and after it.** `jsx-a11y` has been on
+since FE-00 and reports nothing on `src/` even at `pedantic`; every defect FE-16 fixed was live in a
+green tree and was found by loading the app. A navigation left focus on the link that was clicked;
+`a`, `r`, `c`, space and `?` were bound on `window` with no modifier and no off switch, which is a
+Level A failure of WCAG 2.2 SC 2.1.4; and `--color-border` was at **1.27:1** in light and 1.57:1 in
+dark where SC 1.4.11 asks for 3:1, with the raised fill at 1.06:1 so the border was carrying the
+whole job of showing where a control was.
+
+Three things from it that later phases inherit rather than re-decide. **`ApprovalControls` requires
+`contextLabel`** — not `subject`, which is a domain entity here — so a review screen cannot render
+two hundred buttons all named "Approve". **A control's border is `--color-border-control` and a
+panel's is `--color-border`**; only the first is held to 3:1, and `.claude/rules/css.md` carries the
+measured table. And **single-key shortcuts have an off switch reachable without a shortcut**, since
+turning `?` off would otherwise strand the control that turns it back on.
+
+Everything else in `plan/16` needs a screen that does not exist — storyboard, shot review, the
+render queue — and the phase file names which phase each unticked box waits for rather than leaving
+them blank. In particular "media code is out of the entry chunk" is **vacuously** true today and
+stays unticked: there is no `<video>`, `<audio>` or `<canvas>` anywhere in `src/`.
 
 Two things FE-03 established that later phases inherit. **The router is v7, not v8** —
 `react-router-dom` has never published an 8.x and is a re-export shim over `react-router@7.18.2`, so

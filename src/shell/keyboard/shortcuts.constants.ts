@@ -14,36 +14,36 @@ export const SHORTCUT_REGISTRY: readonly ShortcutDefinition[] = [
   {
     id: SHORTCUT_ID.NEXT_SHOT,
     key: 'ArrowRight',
-    description: 'Go to the next shot',
+    descriptionKey: 'shortcuts.nextShot',
   },
   {
     id: SHORTCUT_ID.PREVIOUS_SHOT,
     key: 'ArrowLeft',
-    description: 'Go to the previous shot',
+    descriptionKey: 'shortcuts.previousShot',
   },
   {
     id: SHORTCUT_ID.APPROVE,
     key: 'a',
-    description: 'Approve the item in review',
+    descriptionKey: 'shortcuts.approve',
   },
   {
     id: SHORTCUT_ID.REJECT,
     key: 'r',
-    description: 'Reject the item in review',
+    descriptionKey: 'shortcuts.reject',
   },
   {
     id: SHORTCUT_ID.TOGGLE_PLAYBACK,
     key: ' ',
-    description: 'Play or pause the current video',
+    descriptionKey: 'shortcuts.togglePlayback',
   },
   {
     id: SHORTCUT_ID.TOGGLE_REFERENCE_COMPARISON,
     key: 'c',
-    description: 'Toggle the reference comparison view',
+    descriptionKey: 'shortcuts.toggleComparison',
   },
   {
     id: SHORTCUT_ID.SHOW_SHORTCUTS_HELP,
     key: '?',
-    description: 'Show this list of keyboard shortcuts',
+    descriptionKey: 'shortcuts.showHelp',
   },
 ];

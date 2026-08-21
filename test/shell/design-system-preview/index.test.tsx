@@ -208,4 +208,9 @@ describe('DesignSystemPreview', () => {
     await user.selectOptions(standaloneSelect, '8 seconds');
     expect(standaloneSelect).toHaveValue('8');
   });
+  it('adds no main landmark of its own, since the app shell owns the only one', () => {
+    const { container } = renderInStore(<DesignSystemPreview />);
+
+    expect(container.querySelector('main')).toBeNull();
+  });
 });

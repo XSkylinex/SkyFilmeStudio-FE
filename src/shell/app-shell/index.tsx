@@ -16,6 +16,8 @@ import { InterfaceLanguageSelect } from '@/shell/interface-language-select';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
 import { RouteTitle } from '@/shell/route-title';
+import { RouteFocus } from '@/shell/route-focus';
+import { ShortcutsHelpButton } from '@/shell/keyboard/shortcuts-help-button';
 import { Breadcrumbs } from '@/shell/breadcrumbs';
 import { resolveCurrentRouteParam } from '@/shell/helpers/resolve-current-route-param';
 import {
@@ -46,6 +48,7 @@ export const AppShell: FC = () => {
     <ConnectionStateProvider>
       <KeyboardShortcutsProvider>
         <RouteTitle />
+        <RouteFocus />
         <div className="app-shell">
           <a className="app-shell__skip-link" href={`#${APP_SHELL_MAIN_ID}`}>
             {translate('shell.skipToMain')}
@@ -91,6 +94,7 @@ export const AppShell: FC = () => {
                 ))}
               </ul>
             </nav>
+            <ShortcutsHelpButton />
             <InterfaceLanguageSelect />
             <OfflineIndicator />
             <ConnectionIndicator />

@@ -44,7 +44,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 | 04 | [Data layer — contracts, queries, store](04-data-layer.md) | 03 | **BE-01** | **done 2026-08-20** · seam complete; covers the 4 endpoints the orchestrator serves. `POST /render-jobs`, capabilities, error codes over HTTP and the socket are all blocked on the backend — see the phase file |
 | 05 | [Realtime bridge](05-realtime.md) | 04 | **BE-23** | **blocked: BE-23 not started** — no `*.gateway.ts`, no websocket dependency and no realtime event schema in the shared contract, all re-checked 2026-08-21. Its own decision 1 is "follow the backend"; there is nothing yet to follow |
 | 06 | [Project dashboard & system status](06-dashboard.md) | 05 | BE-04, BE-11 | **partly done 2026-08-21** · the installation half is real — `/system` and the dashboard's readiness strip read the three endpoints the orchestrator actually serves, and these are the first screens in this app that fetch anything. Projects, creation, reusable libraries and per-project storage are blocked on **BE-11** and **BE-13**, neither started; memory and runtimes on **BE-23**. The phase file names which backend phase each unchecked box waits for |
-| 07 | [Asset ingestion & subject review](07-assets-and-subjects.md) | 06 | BE-11, BE-12 | not started |
+| 07 | [Asset ingestion & subject review](07-assets-and-subjects.md) | 06 | BE-11, BE-12 | **blocked: BE-11 has no HTTP surface** — re-checked 2026-08-21 against the orchestrator's source, not its status table. It has moved to `be-11-projects-and-assets` and appended `SOURCE_ASSET_IMMUTABLE` and `IMPORT_PATH_REJECTED` to the taxonomy, but still serves four controllers and five routes; nothing serves `domain/project.ts` or `domain/subject.ts`. Building this against fixtures would mean a whole screen of structure that does not exist |
 | 08 | [Style, voice, location & prop studio](08-style-studio.md) | 07 | BE-13 | not started |
 | 09 | [Screenplay & production planner](09-planner.md) | 06 | BE-15 | not started |
 | 10 | [Storyboard review](10-storyboard.md) | 09 | BE-18 | not started |
@@ -53,7 +53,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 | 13 | [Audio & music](13-audio.md) | 09 | BE-21 | not started |
 | 14 | [Timeline & final production](14-timeline-and-final.md) | 12, 13 | BE-22 | not started |
 | 15 | [Internationalisation & RTL](15-i18n-and-rtl.md) | 03 | — | **done 2026-08-20** · taken out of order because 05 is blocked and 15 needs no backend. the mechanism is complete and both catalogues are full — 102 keys at the time, 183 after FE-06 — direction switches without a reload, zero physical CSS properties found |
-| 16 | [Accessibility & performance](16-a11y-and-performance.md) | all UI phases | — | not started |
+| 16 | [Accessibility & performance](16-a11y-and-performance.md) | all UI phases | — | **partly done 2026-08-21** · taken out of order because 07–14 are all backend-gated and 16 needs no backend. Everything the current surface allows is done and measured: focus on navigation, SC 2.1.4 single-key shortcuts, SC 1.4.11 control contrast, contextual approval names, a live region for the readiness verdict. Every remaining box needs a screen that does not exist — the phase file names which phase each one waits for |
 | 17 | [Test suite & acceptance](17-acceptance.md) | all | BE-26 | not started |
 
 ## Phases 15 and 16 are not "polish"
@@ -63,8 +63,15 @@ phase 15 must already use logical properties, because retrofitting them across a
 week of work and a permanent source of regressions. Phase 15 is where the *interface* language
 mechanism and the direction switch land — not where the CSS gets fixed.
 
-**Accessibility has no automated net today.** `.oxlintrc.json` ships three plugins and two rules;
-`jsx-a11y` is not among them until phase 00 adds it. Until then nothing catches a missing label.
+**Accessibility's automated net is real but shallow.** Corrected 2026-08-21 — an earlier version of
+this line said `jsx-a11y` was not enabled. It has been on since phase 00 landed: `.oxlintrc.json`
+ships nine plugins and eleven rules, and measured in FE-16 the plugin reports nothing on `src/` even
+with `pedantic`, `style` and `suspicious` added to the default `correctness` category.
+
+That is the point rather than the reassurance. `jsx-a11y` reads attributes. It does not know that a
+navigation left focus on the link that was clicked, that a single-letter shortcut fires approve from
+anywhere on the page, or that a border is at a quarter of the contrast its own criterion asks for.
+All three were live in a green tree, and FE-16 found them by using the app.
 
 ## What the backend must have published first
 

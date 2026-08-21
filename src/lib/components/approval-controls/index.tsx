@@ -1,10 +1,12 @@
 import type { FC } from 'react';
 import { useId } from 'react';
 import { Button } from '@/lib/components/button';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import type { ApprovalControlsProps } from './approval-controls.interface';
 import './approval-controls.css';
 
 export const ApprovalControls: FC<ApprovalControlsProps> = ({
+  contextLabel,
   onApprove,
   onReject,
   regenerationModes,
@@ -12,6 +14,7 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
   pending,
   decided,
 }) => {
+  const translate = useTranslate();
   const descriptionBaseId = useId();
   const decisionDisabled = pending || decided;
 
@@ -22,17 +25,23 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
           variant="primary"
           size="md"
           disabled={decisionDisabled}
+          aria-label={translate('approval.approveContext', {
+            context: contextLabel,
+          })}
           onClick={onApprove}
         >
-          Approve
+          {translate('approval.approve')}
         </Button>
         <Button
           variant="danger"
           size="md"
           disabled={decisionDisabled}
+          aria-label={translate('approval.rejectContext', {
+            context: contextLabel,
+          })}
           onClick={onReject}
         >
-          Reject
+          {translate('approval.reject')}
         </Button>
       </div>
       {regenerationModes.length > 0 ? (
@@ -46,6 +55,10 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
                   variant="secondary"
                   size="sm"
                   disabled={pending}
+                  aria-label={translate('approval.regenerateContext', {
+                    mode: mode.label,
+                    context: contextLabel,
+                  })}
                   aria-describedby={descriptionId}
                   onClick={() => onRegenerate(mode.id)}
                 >

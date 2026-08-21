@@ -57,7 +57,7 @@ describe('routeTree', () => {
     expect(flatRoutes.every((route) => route.hasErrorBoundary)).toBe(true);
   });
 
-  it('keeps every media-heavy route, plus the design-system gallery, lazy with a skeleton HydrateFallback', () => {
+  it('keeps the media-heavy routes, the gallery and the system screen out of the entry chunk', () => {
     const lazyRoutes = flatRoutes.filter((route) => route.isLazy);
     const lazyPaths = lazyRoutes
       .map((route) => route.path)
@@ -69,6 +69,7 @@ describe('routeTree', () => {
       'shots',
       'shots/:shotId',
       'storyboard',
+      'system',
       'timeline',
     ]);
     expect(lazyRoutes.every((route) => route.hasHydrateFallback)).toBe(true);

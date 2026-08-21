@@ -33,9 +33,13 @@
       oklch(93% 0.004 264),
       oklch(25% 0.012 264)
     );
+    --color-border-control: light-dark(
+      oklch(62% 0.008 264),
+      oklch(52% 0.018 264)
+    );
     --color-border-strong: light-dark(
-      oklch(78% 0.01 264),
-      oklch(44% 0.018 264)
+      oklch(48% 0.012 264),
+      oklch(66% 0.02 264)
     );
 
     /* accent */
