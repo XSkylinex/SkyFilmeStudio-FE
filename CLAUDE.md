@@ -42,15 +42,18 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering all nineteen `ERROR_CODE` values, and the loopback-only base URL;
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — nineteen as of 2026-08-21,
+read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` on the backend's
+`be-10-benchmark` branch, which is one ahead of its master — and the loopback-only base URL;
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
 `StatusTone` — six from FE-04 and model file status from FE-06 — which is the mapping FE-02 deferred
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
 FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **183 keys in English and
-Hebrew** (109 when FE-15 closed; FE-06 added the system screen's copy), where English is the source of truth and Hebrew is `Record<TranslationKey, string>` so a
-missing translation is a compile error. The interface language lives in the shell slice, persists to
+Hebrew** — 109 when FE-15 closed, and FE-06 added the system screen's copy. English is the source of
+truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
+The interface language lives in the shell slice, persists to
 `localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`
 with `dir` from a record's own language field, which is how a Hebrew production reads correctly inside
 an English UI. The error-taxonomy sentences moved into the catalogue; `StudioError` carries a
