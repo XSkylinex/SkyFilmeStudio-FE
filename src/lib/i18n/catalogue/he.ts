@@ -203,9 +203,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'assetDetail.back': 'חזרה לספריית הנכסים',
   'assetDetail.identity.title': 'מה הקובץ הזה',
   'assetDetail.field.path': 'נתיב בפרויקט:',
-  'assetDetail.field.type': 'סוג:',
-  'assetDetail.field.origin': 'מקור:',
-  'assetDetail.field.privacy': 'סיווג פרטיות:',
   'assetDetail.field.mimeType': 'סוג מדיה:',
   'assetDetail.field.sha256': 'טביעת אצבע SHA-256:',
   'assetDetail.field.captured': 'צולם:',
@@ -219,15 +216,14 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'assetDetail.proxy.title': 'תצוגת עבודה',
   'assetDetail.proxy.absent.title': 'אין עדיין תצוגת עבודה',
   'assetDetail.proxy.absent.description':
-    'שום דבר לא נוגן. תצוגת עבודה נוצרת על ידי משימה בתור, ולכן הסיבה הרגילה היא שהמשימה טרם רצה. זו אינה שגיאה, והמקור נשאר ללא שינוי בכל מקרה.',
+    'למתזמר עדיין אין תצוגת עבודה לנכס הזה. תצוגה נוצרת על ידי משימה בתור, ולכן המשמעות היא שהמשימה טרם רצה. זו אינה שגיאה, והמקור נשאר ללא שינוי בכל מקרה.',
   'assetDetail.proxy.unsupported':
     'המתזמר מייצר תצוגת עבודה עבור וידאו בלבד. הנכס הזה אינו וידאו, ולכן אין מה לנגן.',
   'assetDetail.proxy.label': 'תצוגת עבודה של {path}',
-  'assetDetail.proxy.retry': 'חפש שוב את תצוגת העבודה',
+  'assetDetail.proxy.retry': 'שאל שוב',
+  'assetDetail.proxy.error.title': 'לא ניתן היה לברר אם קיימת תצוגת עבודה',
   'assetDetail.proxy.purpose':
     'זוהי תצוגת עבודה שנוצרה לצורך ניווט, ולא הקובץ המקורי. שפוט כאן קומפוזיציה ותזמון, לא איכות תמונה.',
-  'assetDetail.proxy.mayBeAbsent':
-    'אם שום דבר לא מתנגן, ייתכן שמשימת התצוגה טרם הפיקה קובץ. המתזמר אינו מפרסם דרך לשאול אם קיימת תצוגה, ולכן הנגן אינו יכול לומר זאת מראש.',
   'assetDetail.derived.title': 'נכסים נגזרים',
   'assetDetail.derived.unavailable':
     'המתזמר אינו מפרסם דרך לשאול מה נגזר מנכס, ולכן לא ניתן להציג זאת עדיין. זו נקודת קצה חסרה, לא תוצאה ריקה.',
