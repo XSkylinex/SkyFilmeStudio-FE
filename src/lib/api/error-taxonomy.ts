@@ -86,4 +86,16 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.IMPORT_PATH_REJECTED',
   },
+  SUBJECT_NOT_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SUBJECT_NOT_APPROVED',
+  },
+  CANONICAL_SET_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.CANONICAL_SET_IMMUTABLE',
+  },
+  CANONICAL_ANCHOR_REQUIRED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.CANONICAL_ANCHOR_REQUIRED',
+  },
 };
