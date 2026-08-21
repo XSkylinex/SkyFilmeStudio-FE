@@ -206,6 +206,15 @@ and pin to LTR. A formatted date is *translated output*, so it already matches t
 language and must inherit the paragraph's direction. This was live in `AssetTile` since FE-07 and was
 copied into the new detail view before being caught by looking at it.
 
+**Swept repo-wide rather than fixed only where it was seen**, because a half-fixed bidi bug is worse
+than an obvious one. The two formatters in `src/lib/format/` fall on opposite sides and both are now
+right: `formatBytes` is hand-rolled ASCII — `` `${scaled.toFixed(1)} ${unit}` `` with units from a
+literal array, no `Intl` and no locale — so it is genuinely notation and its five `dir="ltr"` call
+sites are correct; that is FE-06's `8.0 GB` case, and removing them would reintroduce it.
+`formatDateTime` is `Intl.DateTimeFormat(language, …)` and has five call sites: two interpolate it
+into a translated sentence with no wrapper at all, which is right, and the three that wrapped it are
+the ones fixed here.
+
 **An `onError` on `<video>` is not a reliable signal that a proxy is missing.** Measured in Chrome on
 the running app: with `preload="metadata"` and a `src` that answers `502`, the element sat at
 `networkState: LOADING`, `readyState: HAVE_NOTHING` and **`error: null` indefinitely** — no `error`
