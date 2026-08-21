@@ -1,6 +1,7 @@
 import type { ZodType } from 'zod';
 import { getApiBaseUrl } from '@/lib/api/api-base-url';
 import { ERROR_CODE_GUIDANCE } from '@/lib/api/error-taxonomy';
+import { describeIssues } from '@/lib/api/helpers/describe-issues';
 import { isAbortError } from '@/lib/api/helpers/is-abort-error';
 import { readErrorBody } from '@/lib/api/helpers/read-error-body';
 import { StudioError } from '@/lib/api/studio-error';
@@ -88,9 +89,7 @@ export const requestJson = async <T>(
       kind: 'CONTRACT',
       messageKey: 'error.contract',
       status: response.status,
-      detail: parsed.error.issues
-        .map((issue) => `${issue.path.join('.') || '(root)'}: ${issue.message}`)
-        .join('; '),
+      detail: describeIssues(parsed.error.issues),
     });
   }
 

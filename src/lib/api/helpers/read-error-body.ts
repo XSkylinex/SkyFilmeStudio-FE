@@ -1,5 +1,6 @@
 import { errorCodeSchema } from 'sky-filme-studio-be/contracts';
 import type { ErrorCode } from 'sky-filme-studio-be/contracts';
+import { describeIssues } from '@/lib/api/helpers/describe-issues';
 
 export interface ErrorBody {
   code: ErrorCode | undefined;
@@ -30,10 +31,10 @@ export const readErrorBody = (body: unknown): ErrorBody => {
   }
 
   const record = body as Record<string, unknown>;
-  const parsedCode = errorCodeSchema.safeParse(record['errorCode']);
+  const parsedCode = errorCodeSchema.safeParse(record['code']);
 
   return {
     code: parsedCode.success ? parsedCode.data : undefined,
-    detail: readString(record['errorDetail']) ?? readString(record['message']),
+    detail: describeIssues(record['errors']) ?? readString(record['message']),
   };
 };
