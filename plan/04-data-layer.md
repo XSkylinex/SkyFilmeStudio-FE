@@ -541,7 +541,17 @@ system panels. So this is not invisible plumbing. On ten of the eleven the user 
 own sentence instead of `The orchestrator refused this request with status 500.`, and the `<code>`
 chip carries `DISK_SPACE_LOW` instead of `500`.
 
-Three things that mapping turned up, none of which this phase invented:
+Four things that mapping turned up, none of which this phase invented:
+
+- **The orchestrator's message was being dropped into the paragraph unisolated.**
+  `composeRouteErrorDescription` returned `${sentence} (${detail})` as one flat string and
+  `ErrorState` renders `description` as plain text — so an English backend sentence sat inside a
+  Hebrew paragraph with nothing around it. This is FE-07's bug again, and worse: the parentheses are
+  bidi-neutrals as well as the full stop. Pre-existing, but this branch is what makes it fire, since
+  until now no code arrived and the taxonomy sentence never ran. The composer returns a node now and
+  the detail goes in `ContentText`; the parentheses stay outside, because they belong to the
+  surrounding sentence and should mirror with it. **The gate was green through all of it, in a repo
+  whose rules file already carried the lesson in writing.**
 
 - **`detail: error.code ?? error.status ?? error.kind`** means a network failure — no code, no status
   — puts the literal string `NETWORK` in the chip. Harmless while the chip only ever held a number;
