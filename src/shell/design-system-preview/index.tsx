@@ -180,7 +180,7 @@ export const DesignSystemPreview: FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
-    <main className="design-system-preview">
+    <div className="design-system-preview">
       <h1>Design system preview</h1>
 
       <section className="design-system-preview__section">
@@ -461,6 +461,6 @@ export const DesignSystemPreview: FC = () => {
           />
         </div>
       </section>
-    </main>
+    </div>
   );
 };
