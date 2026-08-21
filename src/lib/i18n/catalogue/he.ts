@@ -189,6 +189,45 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'assets.origin.DERIVED': 'נגזר',
   'assets.privacy.PROJECT_PRIVATE': 'פרטי לפרויקט',
   'assets.privacy.EXPORTABLE': 'ניתן לייצוא',
+  'assetDetail.error.title': 'לא ניתן היה לקרוא את הנכס הזה',
+  'assetDetail.loading': 'טוען את הנכס',
+  'assetDetail.invalidAsset.title': 'זה אינו מזהה נכס',
+  'assetDetail.invalidAsset.description':
+    'הכתובת מכילה ערך שהמתזמר היה דוחה. פתח את הנכס מתוך הספרייה במקום לערוך את הכתובת.',
+  'assetDetail.back': 'חזרה לספריית הנכסים',
+  'assetDetail.identity.title': 'מה הקובץ הזה',
+  'assetDetail.field.path': 'נתיב בפרויקט:',
+  'assetDetail.field.type': 'סוג:',
+  'assetDetail.field.origin': 'מקור:',
+  'assetDetail.field.privacy': 'סיווג פרטיות:',
+  'assetDetail.field.mimeType': 'סוג מדיה:',
+  'assetDetail.field.sha256': 'טביעת אצבע SHA-256:',
+  'assetDetail.field.captured': 'צולם:',
+  'assetDetail.field.added': 'נוסף לפרויקט:',
+  'assetDetail.exportable':
+    'הנכס הזה מסומן כניתן לייצוא, כלומר הוא עשוי לצאת מהמחשב הזה במסגרת תוצר. כל השאר נשאר בתוך הפרויקט.',
+  'assetDetail.probe.title': 'מה שהמתזמר רשם',
+  'assetDetail.probe.empty': 'המתזמר לא רשם נתונים עבור הנכס הזה.',
+  'assetDetail.probe.unpublished':
+    'הערכים נקראים בדיוק כפי שהמתזמר כתב אותם. החוזה המשותף מגדיר זאת כאובייקט חופשי, ולכן שום דבר כאן אינו מפורש ואינו מקבל יחידה.',
+  'assetDetail.proxy.title': 'תצוגת עבודה',
+  'assetDetail.proxy.absent.title': 'אין עדיין תצוגת עבודה',
+  'assetDetail.proxy.absent.description':
+    'שום דבר לא נוגן. תצוגת עבודה נוצרת על ידי משימה בתור, ולכן הסיבה הרגילה היא שהמשימה טרם רצה. זו אינה שגיאה, והמקור נשאר ללא שינוי בכל מקרה.',
+  'assetDetail.proxy.unsupported':
+    'המתזמר מייצר תצוגת עבודה עבור וידאו בלבד. הנכס הזה אינו וידאו, ולכן אין מה לנגן.',
+  'assetDetail.proxy.label': 'תצוגת עבודה של {path}',
+  'assetDetail.proxy.retry': 'חפש שוב את תצוגת העבודה',
+  'assetDetail.proxy.purpose':
+    'זוהי תצוגת עבודה שנוצרה לצורך ניווט, ולא הקובץ המקורי. שפוט כאן קומפוזיציה ותזמון, לא איכות תמונה.',
+  'assetDetail.proxy.mayBeAbsent':
+    'אם שום דבר לא מתנגן, ייתכן שמשימת התצוגה טרם הפיקה קובץ. המתזמר אינו מפרסם דרך לשאול אם קיימת תצוגה, ולכן הנגן אינו יכול לומר זאת מראש.',
+  'assetDetail.derived.title': 'נכסים נגזרים',
+  'assetDetail.derived.unavailable':
+    'המתזמר אינו מפרסם דרך לשאול מה נגזר מנכס, ולכן לא ניתן להציג זאת עדיין. זו נקודת קצה חסרה, לא תוצאה ריקה.',
+  'assetDetail.subjects.title': 'נושאים שמפנים לנכס הזה',
+  'assetDetail.subjects.unavailable':
+    'נושאים אינם מוגשים על ידי המתזמר עדיין, ולכן לא ניתן להציג כאן דבר. זו נקודת קצה חסרה, לא תוצאה ריקה.',
 
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',
@@ -294,6 +333,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.assets.title': 'חומרי גלם',
   'page.assets.description':
     'צילומי המקור, התמונות והאודיו שהוכנסו לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+  'page.assetDetail.title': 'נכס',
   'page.subjects.title': 'סובייקטים',
   'page.subjects.description':
     'האנשים, הדמויות והאובייקטים החוזרים שהפרויקט הזה זיהה לסקירה. אין עדיין חיבור ל-orchestrator.',

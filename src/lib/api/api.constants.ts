@@ -12,6 +12,8 @@ export const API_PATH = {
   captureGuide: (): string => '/capture-guide',
   projectAssets: (projectId: ProjectId): string =>
     `/projects/${projectId}/assets`,
+  projectAsset: (projectId: ProjectId, assetId: SourceAssetId): string =>
+    `/projects/${projectId}/assets/${assetId}`,
   projectAssetThumbnail: (
     projectId: ProjectId,
     assetId: SourceAssetId,

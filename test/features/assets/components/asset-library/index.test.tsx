@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import {
   projectIdSchema,
   sourceAssetIdSchema,
@@ -11,6 +12,14 @@ import { buildSourceAsset } from '../../../../fixtures/source-asset.fixture';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
 const server = mockOrchestratorServer();
+
+const renderLibrary = (): void => {
+  renderInApp(
+    <MemoryRouter>
+      <AssetLibrary projectId={PROJECT_ID} />
+    </MemoryRouter>,
+  );
+};
 
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
@@ -29,7 +38,7 @@ describe('AssetLibrary', () => {
     const asset = buildSourceAsset();
     orchestratorLists([asset]);
 
-    renderInApp(<AssetLibrary projectId={PROJECT_ID} />);
+    renderLibrary();
 
     const image = await screen.findByRole('img', {
       name: `Thumbnail of ${asset.path}`,
@@ -46,7 +55,7 @@ describe('AssetLibrary', () => {
       buildSourceAsset({ type: 'AUDIO', mimeType: 'audio/wav' }),
     ]);
 
-    renderInApp(<AssetLibrary projectId={PROJECT_ID} />);
+    renderLibrary();
 
     expect(await screen.findByText('Audio')).toBeInTheDocument();
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
@@ -61,7 +70,7 @@ describe('AssetLibrary', () => {
       }),
     ]);
 
-    renderInApp(<AssetLibrary projectId={PROJECT_ID} />);
+    renderLibrary();
 
     expect(await screen.findByText('Exportable')).toBeInTheDocument();
     expect(screen.getByText('Project private')).toBeInTheDocument();
@@ -70,7 +79,7 @@ describe('AssetLibrary', () => {
   it('says there are none rather than rendering an empty grid', async () => {
     orchestratorLists([]);
 
-    renderInApp(<AssetLibrary projectId={PROJECT_ID} />);
+    renderLibrary();
 
     expect(
       await screen.findByRole('heading', { name: 'No source assets yet' }),
@@ -80,7 +89,7 @@ describe('AssetLibrary', () => {
   it('offers no import control, because nothing here can import one yet', async () => {
     orchestratorLists([]);
 
-    renderInApp(<AssetLibrary projectId={PROJECT_ID} />);
+    renderLibrary();
 
     await screen.findByRole('heading', { name: 'No source assets yet' });
 
@@ -92,7 +101,7 @@ describe('AssetLibrary', () => {
       http.get(API_PATH.projectAssets(PROJECT_ID), () => HttpResponse.error()),
     );
 
-    renderInApp(<AssetLibrary projectId={PROJECT_ID} />);
+    renderLibrary();
 
     expect(
       await screen.findByRole('heading', {

@@ -1,0 +1,77 @@
+@layer features {
+  .asset-facts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+    padding-inline: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-raised);
+  }
+
+  .asset-facts__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-lg);
+  }
+
+  .asset-facts__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .asset-facts__exportable {
+    margin: 0;
+    padding-block: var(--space-2);
+    padding-inline: var(--space-3);
+    border-inline-start: 2px solid var(--tone-attention-border);
+    border-radius: var(--radius-sm);
+    background: var(--tone-attention-bg);
+    color: var(--tone-attention-fg);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .asset-facts__fields {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .asset-facts__field {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+  }
+
+  .asset-facts__field dt {
+    color: var(--color-text-secondary);
+  }
+
+  .asset-facts__field dd {
+    margin: 0;
+    min-inline-size: 0;
+    color: var(--color-text);
+  }
+
+  .asset-facts__notation,
+  .asset-facts__checksum {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+  }
+
+  .asset-facts__checksum {
+    overflow-wrap: anywhere;
+    color: var(--color-text-secondary);
+  }
+
+  .asset-facts__immutable {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+}

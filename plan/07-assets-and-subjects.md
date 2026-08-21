@@ -1,7 +1,7 @@
 # FE-07 — Asset ingestion & subject review
 
 > **Depends on:** 06 · **Blocks:** 08 · **Backend needs:** BE-11, BE-12 · **Plan authority:** §12, §27.3, §39
-> **Status:** partly done 2026-08-21
+> **Status:** partly done 2026-08-21, **detail view added 2026-08-22**
 
 ## Goal
 
@@ -139,6 +139,109 @@ endpoint at all.
 - **The route parameter is validated on the page**, so a hand-edited URL produces a sentence instead
   of a request the orchestrator would refuse.
 
+## The detail view, 2026-08-22
+
+`GET /projects/:projectId/assets/:assetId` returns `SourceAsset`, which is fully published, so step
+1's detail view was buildable without a single hand-written type. What it shows is the whole of that
+record: path, media type, **SHA-256**, capture and ingest timestamps, the three badges, and whatever
+the orchestrator recorded in `metadataJson`.
+
+**`metadataJson` is `z.record(z.string(), z.unknown())`, and the UI is not allowed to pretend
+otherwise.** There is no published shape for a probe result, so nothing here names a unit, converts
+a number, or orders the keys by importance — it renders what was written, says on screen that the
+contract types it as free-form, and leaves interpretation to the reader. A duration rendered as
+`12.5 s` would be inventing a unit the contract does not carry.
+
+Values are wrapped in `ContentText` and keys are `dir="ltr"`. That split is FE-07's own bidi lesson
+applied one more time: a key is a machine identifier, a value is something the orchestrator wrote
+and may be in any language.
+
+### The first `<video>` in this codebase
+
+The scrub proxy is `GET …/assets/:assetId/proxy`, `video/mp4`. Three things about it are decisions
+rather than defaults.
+
+**A missing proxy is a normal state, not an error.** The endpoint 404s with "has no proxyVideo yet;
+its proxy job has not produced one", because a proxy is produced by a *queued job*. So the player
+renders an `EmptyState`, not an `ErrorState`, and it carries a control to look again — the job can
+finish while the page is open, and without that the only remedy is a reload. The wording says the
+usual cause without asserting it, because an `onError` cannot distinguish a 404 from a decode
+failure.
+
+**Nothing autoplays, and the element carries its own accessible name.** `controls` with no
+`autoplay`, and an `aria-label` naming the asset, since a bare `<video>` beside a filename has no
+name of its own.
+
+**The route is `lazy`.** This is the page that makes `plan/16`'s "media code is out of the entry
+chunk" box non-vacuous for the first time, and it would be a poor joke to land the first `<video>`
+in the entry chunk on the same day.
+
+**What is deliberately not claimed: the proxy's dimensions.** They are real — `ASSET_PROXY_MAX_WIDTH`
+and friends — but they live in `src/projects/constants/`, outside `src/contracts/`, so the package
+does not publish them. Printing `960 x 540` on screen would be exactly the "capabilities are
+advertised, not assumed" violation the rules open with. The copy says it is a proxy for scrubbing and
+stops there.
+
+**An accessibility gap this phase could not close.** `jsx-a11y(media-has-caption)` warns on the
+`<video>`, and the warning is correct: WCAG 1.2.2 wants captions on prerecorded media. There is no
+caption source — the orchestrator produces none for a source asset, and an empty `<track>` would
+assert captions exist when they do not, which is the same dishonesty as `plan/11`'s fabricated
+progress bar. **The warning is left visible rather than suppressed**, because the remedy is a backend
+capability and not a lint configuration. The delivered-video case, where this criterion really
+bites, belongs to **FE-14**.
+
+## What the browser found that the gate could not, 2026-08-22
+
+Two more, both in a tree where `yarn typecheck`, `yarn lint`, 777 tests and `yarn build` were all
+green.
+
+**A localised date was being forced left-to-right, which reversed it.** `formatDateTime` returns an
+`Intl` string, so in Hebrew it is *Hebrew* — `16 באוג׳ 2026, 13:00:00`. Wrapping that in a
+`dir="ltr"` span, the way this repo correctly wraps a path or a checksum, rendered it as
+`16 13:00:00 ,2026 באוג׳`: the day at the far left and the comma on the wrong side of the year.
+
+The distinction the rule already draws, and which FE-07 itself got wrong: **notation stays notation,
+dates follow `Intl`.** A SHA-256, a project-relative path and a media type are machine identifiers
+and pin to LTR. A formatted date is *translated output*, so it already matches the interface
+language and must inherit the paragraph's direction. This was live in `AssetTile` since FE-07 and was
+copied into the new detail view before being caught by looking at it.
+
+**Swept repo-wide rather than fixed only where it was seen**, because a half-fixed bidi bug is worse
+than an obvious one. The two formatters in `src/lib/format/` fall on opposite sides and both are now
+right: `formatBytes` is hand-rolled ASCII — `` `${scaled.toFixed(1)} ${unit}` `` with units from a
+literal array, no `Intl` and no locale — so it is genuinely notation and its five `dir="ltr"` call
+sites are correct; that is FE-06's `8.0 GB` case, and removing them would reintroduce it.
+`formatDateTime` is `Intl.DateTimeFormat(language, …)` and has five call sites: two interpolate it
+into a translated sentence with no wrapper at all, which is right, and the three that wrapped it are
+the ones fixed here.
+
+**An `onError` on `<video>` is not a reliable signal that a proxy is missing.** Measured in Chrome on
+the running app: with `preload="metadata"` and a `src` that answers `502`, the element sat at
+`networkState: LOADING`, `readyState: HAVE_NOTHING` and **`error: null` indefinitely** — no `error`
+event at three seconds or at any point after. A deliberately malformed `data:` source behaved the
+same way. So the "no proxy yet" state, which is correct when it fires, cannot be relied on to fire at
+all, and the user would sit in front of an unexplained black box.
+
+**The fix is copy, not cleverer detection.** The orchestrator publishes no way to ask whether a proxy
+exists — there is no manifest field and no HEAD-shaped endpoint — so the player says up front that a
+proxy is produced by a queued job and may not be there yet, and says plainly that it cannot tell in
+advance. A timeout that guessed "probably missing after N seconds" would be `plan/11`'s fabricated
+progress bar wearing a different hat.
+
+**What was checked and is right:** a 404 `poster` cannot fire the media `error` event — poster
+loading runs its own algorithm in the WHATWG media spec and never touches `networkState` or
+`readyState` — so pointing the poster at a thumbnail that may not exist is safe and cannot trip the
+absent state. `preload="metadata"` over loopback costs one header read and is what makes the scrub
+bar show a duration; `playsInline` is still load-bearing at this floor for iOS 16.4, which is the
+only engine that otherwise forces a fullscreen player.
+
+**What could not be checked here:** whether native `<video>` controls mirror under `dir="rtl"`. No
+primary source states the behaviour for any of the three engines at this floor, and this session had
+no real media file to render controls against — the proxy 404s without a backend. `direction: ltr`
+on the element would sidestep it, and was deliberately **not** added, because this repo does not ship
+CSS for a behaviour nobody has measured. It is a question for the first phase that has real video
+playing.
+
 ## What the browser found that the gate could not
 
 **Backend-authored English inside a Hebrew page moved its own full stops.** `Diffuse, even lighting.`
@@ -203,6 +306,11 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 - [ ] `TEXT_ONLY_NO_VISUAL_SOURCE` is a visible first-class path — **same blocker**
 - [x] the grid uses proxies and reserves every box — **not virtualised**; the first page is 50
       items and nothing accumulates yet
+- [x] the detail view shows the original's metadata, SHA-256 and probe results — added 2026-08-22
+      against `GET /projects/:projectId/assets/:assetId`, plus the **scrub proxy**, which is the
+      first `<video>` this app has ever had
+- [ ] the detail view lists derived assets and the subjects that reference it — **no endpoint for
+      either.** Derived assets have no route at all; subjects wait on **BE-12**
 - [x] originals are immutable in the UI — nothing here edits anything, and `immutable` is shown
 - [x] the capture guide is optional, dismissible, and does not mark missing views as errors
 - [ ] subject registration covers all ten types and assumes neither a face nor speech — **BE-12**

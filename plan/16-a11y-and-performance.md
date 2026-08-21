@@ -154,11 +154,22 @@ What the gate did not tell us, and was checked by loading the app in Chrome agai
 - [x] no `react/react-compiler` errors, and no suppressions
 - [ ] every workflow is keyboard-completable — **FE-10, FE-12**
 - [ ] the automated-pass vs human-approved distinction survives being read aloud — **FE-12**
-- [ ] reduced motion is honoured in the React layer, including autoplay — **FE-12**
-- [ ] contrast checked against real media, not a flat background — **FE-07**
+- [ ] reduced motion is honoured in the React layer, including autoplay — **FE-12.** The one media
+      element that exists does not autoplay, so there is nothing here for the query to damp yet; the
+      box this describes is a shot preview that plays on its own, which FE-12 introduces
+- [ ] contrast checked against real media, not a flat background — **still FE-10 or later.** FE-07's
+      detail view has a media surface now, but nothing is drawn *over* it: the player has no overlay,
+      no badge and no caption on the frame. The criterion needs a contact sheet or a shot grid with
+      chrome on top of a picture, which is **FE-10**
 - [ ] queue re-render rate measured and bounded — **FE-05, FE-11**
 - [ ] contact-sheet CLS ≈ 0, memory stable over a long session — **FE-10**
-- [ ] media code is out of the entry chunk, verified in the build — **FE-11 to FE-14**
+- [~] media code is out of the entry chunk, verified in the build — **no longer vacuous.** FE-07's
+      asset detail page (2026-08-22) is the first `<video>` in this codebase and its route is `lazy`,
+      so it builds as its own 11.35 kB chunk. Verified by grepping `dist/`: the `jsx('video', …)`
+      call is in `AssetDetailPage-*.js` and not in the entry. **The entry still contains
+      `case 'video': case 'audio':` — that is React DOM's own media event plumbing, which ships
+      whether or not the app uses media, and is not ours to move.** Remaining players are
+      **FE-11 to FE-14**
 
 ## Traps
 

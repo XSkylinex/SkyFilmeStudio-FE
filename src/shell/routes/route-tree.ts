@@ -22,6 +22,7 @@ import { RouteHydrateFallback } from './route-hydrate-fallback';
 import type { RouteHandle } from '@/shell/interfaces/route-handle';
 import {
   ASSETS_SEGMENT,
+  ASSET_ID_PARAM,
   AUDIO_SEGMENT,
   DESIGN_SYSTEM_SEGMENT,
   LOCATIONS_SEGMENT,
@@ -142,6 +143,16 @@ const projectRoutes: RouteObject[] = [
     Component: AssetsPage,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.assets.title'),
+  },
+  {
+    path: `${ASSETS_SEGMENT}/:${ASSET_ID_PARAM}`,
+    lazy: () =>
+      import('@/features/assets/AssetDetailPage').then((routeModule) => ({
+        Component: routeModule.AssetDetailPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
+    ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('page.assetDetail.title'),
   },
   {
     path: SUBJECTS_SEGMENT,
