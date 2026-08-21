@@ -233,6 +233,41 @@ taste:
 - One breakpoint set, defined once as tokens. Extend the existing `@media` blocks rather than
   scattering new widths.
 
+## A control's boundary is held to 3:1, a panel's is not
+
+WCAG 2.2 SC 1.4.11 (AA) asks for 3:1 on *the visual information required to identify a user
+interface component*. A card edge is grouping; the outline of an input is the only thing saying
+where the input is. The two are not the same token any more.
+
+- **`--color-border-control`** is the resting boundary of `Button`, `Input` and `Select`, and it is
+  the one that has to clear 3:1.
+- **`--color-border`** stays where it was and keeps drawing panels, cards, dialogs and dividers.
+- **`--color-border-strong`** is the hover step and was moved further out so hover is still visibly
+  stronger than rest — in light mode that means *darker*, in dark mode *lighter*, which is why the
+  two ends of the `light-dark()` pair move in opposite directions.
+
+Measured 2026-08-21 in Chrome on the running app, by resolving each token to sRGB through a canvas
+and computing the WCAG relative-luminance ratio — not by converting `oklch()` by hand:
+
+| pairing | light | dark |
+| ------- | ----- | ---- |
+| old `--color-border` vs canvas | 1.27 | 1.57 |
+| old `--color-border-strong` vs canvas | 1.84 | 2.57 |
+| `--color-surface-raised` vs canvas | 1.06 | 1.10 |
+| new `--color-border-control` vs raised | 3.55 | 3.29 |
+| new `--color-border-strong` vs raised | 6.34 | 5.80 |
+
+The middle row is why the first row mattered: the raised fill is 1.06 against the page, so the
+border was carrying the entire job of showing where a control was, at a quarter of the required
+contrast.
+
+Two things this deliberately does **not** claim. A `ghost` button still has a transparent border and
+is identified by its text, which is outside 1.4.11. And a disabled control keeps
+`--color-border-subtle`, because the criterion exempts inactive components.
+
+Read the ratio out of the browser, never off a swatch. `oklch()` lightness is not luminance, and two
+tokens one percent apart in `L` are not one percent apart in contrast.
+
 ## Before claiming a CSS change works
 
 `yarn build` proves it compiles, not that it renders. Run `yarn dev`, look at the component with real
