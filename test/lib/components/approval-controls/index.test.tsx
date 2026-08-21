@@ -1,4 +1,7 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { createStore } from '@/shell/store';
+import { interfaceLanguageSet } from '@/shell/shell.slice';
 import { renderInStore } from '../../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { ApprovalControls } from '@/lib/components/approval-controls';
@@ -213,5 +216,28 @@ describe('ApprovalControls', () => {
     expect(document.getElementById(describedBy as string)).toHaveTextContent(
       'Re-renders only the masked area',
     );
+  });
+  it('takes its own verbs from the catalogue, so a Hebrew UI does not keep English buttons', () => {
+    const store = createStore();
+    store.dispatch(interfaceLanguageSet('he'));
+
+    render(
+      <Provider store={store}>
+        <ApprovalControls
+          onApprove={noop}
+          onReject={noop}
+          regenerationModes={[]}
+          onRegenerate={noop}
+          pending={false}
+          decided={false}
+        />
+      </Provider>,
+    );
+
+    expect(screen.getByRole('button', { name: 'אשר' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'דחה' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Approve' }),
+    ).not.toBeInTheDocument();
   });
 });

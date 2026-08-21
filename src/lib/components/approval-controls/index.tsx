@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useId } from 'react';
 import { Button } from '@/lib/components/button';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import type { ApprovalControlsProps } from './approval-controls.interface';
 import './approval-controls.css';
 
@@ -12,6 +13,7 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
   pending,
   decided,
 }) => {
+  const translate = useTranslate();
   const descriptionBaseId = useId();
   const decisionDisabled = pending || decided;
 
@@ -24,7 +26,7 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
           disabled={decisionDisabled}
           onClick={onApprove}
         >
-          Approve
+          {translate('approval.approve')}
         </Button>
         <Button
           variant="danger"
@@ -32,7 +34,7 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
           disabled={decisionDisabled}
           onClick={onReject}
         >
-          Reject
+          {translate('approval.reject')}
         </Button>
       </div>
       {regenerationModes.length > 0 ? (

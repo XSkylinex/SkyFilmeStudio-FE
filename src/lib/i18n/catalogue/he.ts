@@ -119,6 +119,9 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'stage.approved': 'מאושר',
   'stage.blocked': 'חסום',
 
+  'approval.approve': 'אשר',
+  'approval.reject': 'דחה',
+
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',
   'readiness.unknown.description':

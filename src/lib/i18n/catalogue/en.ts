@@ -119,6 +119,9 @@ export const EN_CATALOGUE = {
   'stage.approved': 'Approved',
   'stage.blocked': 'Blocked',
 
+  'approval.approve': 'Approve',
+  'approval.reject': 'Reject',
+
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',
   'readiness.unknown.description':
