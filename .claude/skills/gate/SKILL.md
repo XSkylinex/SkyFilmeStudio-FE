@@ -10,7 +10,7 @@ Four stages, in this order. Each catches a class the others are blind to; none i
 
 ```bash
 yarn typecheck   # tsc -b, TypeScript 7 native
-yarn lint        # oxlint  (type-aware mode is OFF — see below)
+yarn lint        # oxlint, type-aware — see below
 yarn test        # vitest run
 yarn build       # tsc -b && vite build
 ```
