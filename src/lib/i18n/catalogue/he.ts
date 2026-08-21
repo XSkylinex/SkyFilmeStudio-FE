@@ -128,6 +128,16 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'mediaTile.empty': 'אין תמונה עדיין',
   'toast.dismiss': 'סגור',
 
+  'shortcuts.title': 'קיצורי מקלדת',
+  'shortcuts.nextShot': 'מעבר לשוט הבא',
+  'shortcuts.previousShot': 'מעבר לשוט הקודם',
+  'shortcuts.approve': 'אישור הפריט בסקירה',
+  'shortcuts.reject': 'דחיית הפריט בסקירה',
+  'shortcuts.togglePlayback': 'הפעלה או השהיה של הסרטון הנוכחי',
+  'shortcuts.toggleComparison': 'הצגה או הסתרה של תצוגת ההשוואה',
+  'shortcuts.showHelp': 'הצגת רשימת קיצורי המקלדת',
+  'shortcuts.key.space': 'רווח',
+
   'readiness.title': 'מוכנות',
   'readiness.unknown.label': 'טרם אומת',
   'readiness.unknown.description':

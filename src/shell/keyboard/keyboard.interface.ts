@@ -1,3 +1,5 @@
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
+
 export type ShortcutId =
   | 'next-shot'
   | 'previous-shot'
@@ -10,7 +12,7 @@ export type ShortcutId =
 export interface ShortcutDefinition {
   readonly id: ShortcutId;
   readonly key: string;
-  readonly description: string;
+  readonly descriptionKey: TranslationKey;
 }
 
 export type ShortcutListener = () => void;

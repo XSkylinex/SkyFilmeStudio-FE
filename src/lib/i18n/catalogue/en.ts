@@ -128,6 +128,16 @@ export const EN_CATALOGUE = {
   'mediaTile.empty': 'No image yet',
   'toast.dismiss': 'Dismiss',
 
+  'shortcuts.title': 'Keyboard shortcuts',
+  'shortcuts.nextShot': 'Go to the next shot',
+  'shortcuts.previousShot': 'Go to the previous shot',
+  'shortcuts.approve': 'Approve the item in review',
+  'shortcuts.reject': 'Reject the item in review',
+  'shortcuts.togglePlayback': 'Play or pause the current video',
+  'shortcuts.toggleComparison': 'Toggle the reference comparison view',
+  'shortcuts.showHelp': 'Show this list of keyboard shortcuts',
+  'shortcuts.key.space': 'Space',
+
   'readiness.title': 'Readiness',
   'readiness.unknown.label': 'Not yet verified',
   'readiness.unknown.description':

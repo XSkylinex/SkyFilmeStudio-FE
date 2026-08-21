@@ -1,27 +1,27 @@
-import { resolveShortcutDescription } from '@/shell/keyboard/helpers/resolve-shortcut-description';
+import { resolveShortcutDescriptionKey } from '@/shell/keyboard/helpers/resolve-shortcut-description';
 
-describe('resolveShortcutDescription', () => {
+describe('resolveShortcutDescriptionKey', () => {
   it('describes a directional shortcut by its own key under ltr', () => {
-    expect(resolveShortcutDescription('next-shot', 'ltr')).toBe(
-      'Go to the next shot',
+    expect(resolveShortcutDescriptionKey('next-shot', 'ltr')).toBe(
+      'shortcuts.nextShot',
     );
-    expect(resolveShortcutDescription('previous-shot', 'ltr')).toBe(
-      'Go to the previous shot',
+    expect(resolveShortcutDescriptionKey('previous-shot', 'ltr')).toBe(
+      'shortcuts.previousShot',
     );
   });
 
   it('describes what the key actually dispatches under rtl, not the ltr label', () => {
-    expect(resolveShortcutDescription('next-shot', 'rtl')).toBe(
-      'Go to the previous shot',
+    expect(resolveShortcutDescriptionKey('next-shot', 'rtl')).toBe(
+      'shortcuts.previousShot',
     );
-    expect(resolveShortcutDescription('previous-shot', 'rtl')).toBe(
-      'Go to the next shot',
+    expect(resolveShortcutDescriptionKey('previous-shot', 'rtl')).toBe(
+      'shortcuts.nextShot',
     );
   });
 
   it('leaves a non-directional shortcut unaffected by direction', () => {
-    expect(resolveShortcutDescription('approve', 'rtl')).toBe(
-      'Approve the item in review',
+    expect(resolveShortcutDescriptionKey('approve', 'rtl')).toBe(
+      'shortcuts.approve',
     );
   });
 });
