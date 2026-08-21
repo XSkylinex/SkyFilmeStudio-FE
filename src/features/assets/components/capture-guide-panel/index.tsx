@@ -18,6 +18,7 @@ export const CaptureGuidePanel: FC = () => {
     ...captureGuideQueryOptions(),
     enabled: open,
   });
+  const errorView = error ? resolveRouteErrorView(error) : undefined;
 
   return (
     <section className="capture-guide" data-open={open}>
@@ -39,13 +40,11 @@ export const CaptureGuidePanel: FC = () => {
       <p className="capture-guide__intro">{translate('captureGuide.intro')}</p>
       {open ? (
         <div className="capture-guide__body">
-          {error ? (
+          {errorView ? (
             <ErrorState
               title={translate('captureGuide.error.title')}
-              description={composeRouteErrorDescription(
-                resolveRouteErrorView(error),
-                translate,
-              )}
+              description={composeRouteErrorDescription(errorView, translate)}
+              detail={errorView.detail}
               headingLevel={3}
             />
           ) : null}
