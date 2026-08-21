@@ -1,4 +1,5 @@
 import type { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { Badge } from '@/lib/components/badge';
 import { MediaTile } from '@/lib/components/media-tile';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
@@ -6,6 +7,7 @@ import { API_PATH } from '@/lib/api/api.constants';
 import { mediaUrl } from '@/lib/api/media-url';
 import { formatDateTime } from '@/lib/format/format-date-time';
 import { useTranslate } from '@/lib/i18n/use-translate';
+import { projectAssetPath } from '@/shell/routes/routes.constants';
 import { selectInterfaceLanguage } from '@/shell/shell.slice';
 import { useAppSelector } from '@/shell/store/hooks';
 import {
@@ -26,13 +28,18 @@ export const AssetTile: FC<AssetTileProps> = ({ projectId, asset }) => {
 
   return (
     <li className="asset-tile">
-      <MediaTile
-        src={thumbnail}
-        alt={translate('assets.thumbnailAlt', { path: asset.path })}
-      />
-      <p className="asset-tile__path" dir="ltr">
-        {asset.path}
-      </p>
+      <Link
+        className="asset-tile__link"
+        to={projectAssetPath(projectId, asset.id)}
+      >
+        <MediaTile
+          src={thumbnail}
+          alt={translate('assets.thumbnailAlt', { path: asset.path })}
+        />
+        <span className="asset-tile__path" dir="ltr">
+          {asset.path}
+        </span>
+      </Link>
       <div className="asset-tile__meta">
         <Badge
           tone={STATUS_TONE.NEUTRAL}
@@ -54,9 +61,7 @@ export const AssetTile: FC<AssetTileProps> = ({ projectId, asset }) => {
       {asset.capturedAt ? (
         <p className="asset-tile__captured">
           {translate('assets.captured')}{' '}
-          <span className="asset-tile__notation" dir="ltr">
-            {formatDateTime(asset.capturedAt, interfaceLanguage)}
-          </span>
+          {formatDateTime(asset.capturedAt, interfaceLanguage)}
         </p>
       ) : null}
       {asset.immutable ? (
