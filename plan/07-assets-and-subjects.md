@@ -209,24 +209,50 @@ copied into the new detail view before being caught by looking at it.
 **Swept repo-wide rather than fixed only where it was seen**, because a half-fixed bidi bug is worse
 than an obvious one. The two formatters in `src/lib/format/` fall on opposite sides and both are now
 right: `formatBytes` is hand-rolled ASCII — `` `${scaled.toFixed(1)} ${unit}` `` with units from a
-literal array, no `Intl` and no locale — so it is genuinely notation and its five `dir="ltr"` call
-sites are correct; that is FE-06's `8.0 GB` case, and removing them would reintroduce it.
+literal array, no `Intl` and no locale — so it is genuinely notation and **its eight `dir="ltr"` call
+sites** are correct; that is FE-06's `8.0 GB` case, and removing them would reintroduce it.
 `formatDateTime` is `Intl.DateTimeFormat(language, …)` and has five call sites: two interpolate it
-into a translated sentence with no wrapper at all, which is right, and the three that wrapped it are
-the ones fixed here.
+into a translated sentence with no wrapper at all, which is right, two are new code in this phase
+that was never wrapped, and **the one that did wrap it** — `AssetTile`, since FE-07 — is the one
+fixed here.
+
+**Corrected 2026-08-22, by review, in the paragraph whose entire job was to be counted.** It first
+said "five" and "three". Both were wrong: eight and one, verified by grep against the committed tree
+rather than from memory. The substantive claim — hand-rolled ASCII on one side, `Intl` on the other —
+was right and is unchanged, which is exactly what makes the wrong count worth recording: a
+certification whose numbers are guessed certifies nothing, and this is the second time in two phases
+that a number was carried into prose without being re-counted where it was stated.
 
 **An `onError` on `<video>` is not a reliable signal that a proxy is missing.** Measured in Chrome on
-the running app: with `preload="metadata"` and a `src` that answers `502`, the element sat at
-`networkState: LOADING`, `readyState: HAVE_NOTHING` and **`error: null` indefinitely** — no `error`
-event at three seconds or at any point after. A deliberately malformed `data:` source behaved the
-same way. So the "no proxy yet" state, which is correct when it fires, cannot be relied on to fire at
-all, and the user would sit in front of an unexplained black box.
+the running app: with `preload="metadata"` and a `src` that 404s, the element sat at
+`networkState: LOADING`, `readyState: HAVE_NOTHING` and **`error: null`** — no `error` event at six
+seconds. With `preload="none"` it sat at `IDLE`/`HAVE_NOTHING`, equally silent. So the "no proxy yet"
+state cannot be reached by waiting for the element to fail.
 
-**The fix is copy, not cleverer detection.** The orchestrator publishes no way to ask whether a proxy
-exists — there is no manifest field and no HEAD-shaped endpoint — so the player says up front that a
-proxy is produced by a queued job and may not be there yet, and says plainly that it cannot tell in
-advance. A timeout that guessed "probably missing after N seconds" would be `plan/11`'s fabricated
-progress bar wearing a different hat.
+**The first version of this measurement was taken against the wrong condition, and the first version
+of the fix was worse than wrong — it was false.** Corrected 2026-08-22, by review. The original
+measurement used a `502`, which this repo's dev proxy returns when *the orchestrator is not
+listening* — a connection failure, not an absent resource. It was a `502` for a mundane reason:
+`PORT=3000` in the backend's `.env` against `ORCHESTRATOR_DEFAULT_ORIGIN` of `127.0.0.1:5556`, so
+nothing was on the port at all. Re-measured against a real `404` from a running orchestrator, the
+conclusion happens to hold — but it was not established by the first measurement, and "it turned out
+right" is not the same as "it was checked".
+
+**The claim built on it was false and shipped to users in both languages.** The copy said "the
+orchestrator publishes no way to ask whether one exists". It does: `GET …/assets/:assetId/proxy`
+answers **404 when the proxy is absent and 200 when it is present**, which the backend's own comment
+states outright, and `HEAD` on that route returns the same status with a zero-length body. The
+sentence was the load-bearing justification for the whole design, and it was wrong.
+
+**So the player asks, rather than hedging.** A query does `HEAD` on the proxy route: absent renders
+an `EmptyState` with a control to ask again, present renders the `<video>`, and a failure that is
+neither says plainly that it could not find out — which is a different sentence from "there is no
+proxy", because they are different facts. That also retires machinery the review found to be dead:
+an `attempt` counter used as a React `key` on an element that was already unmounted whenever the
+reset could run, so its only reader could never fire.
+
+A timeout that guessed "probably missing after N seconds" would still be `plan/11`'s fabricated
+progress bar wearing a different hat. Asking is not guessing.
 
 **What was checked and is right:** a 404 `poster` cannot fire the media `error` event — poster
 loading runs its own algorithm in the WHATWG media spec and never touches `networkState` or

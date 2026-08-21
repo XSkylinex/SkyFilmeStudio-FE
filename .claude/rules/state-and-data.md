@@ -69,11 +69,19 @@ src/shell/store/store.interface.ts     RootState / AppDispatch
 src/shell/shell.slice.ts               the shell's own slice and its selectors
 ```
 
-**The client is `fetch`, wrapped exactly once.** `axios` was added alongside the store on
+**The client is `fetch`, wrapped in exactly one folder.** `axios` was added alongside the store on
 2026-08-17 and removed on 2026-08-18 because nothing imported it; FE-04 did not bring it back.
-`src/lib/api/request-json.ts` is the only place in the app that calls `fetch`, and it sits **under**
+`src/lib/api/` is the only place in the app that calls `fetch`, and it sits **under**
 TanStack Query, never beside it. A component that imports it directly is the bug this arrangement
 exists to prevent.
+
+**Corrected 2026-08-22: there are two callers, not one.** `request-json.ts` remains the only one for
+a body-bearing request. `request-exists.ts` was added for a `HEAD` — asking whether the orchestrator
+has produced a file without downloading it, which is how the asset detail view knows a scrub proxy
+exists. It cannot go through `request-json`: a `HEAD` has no body to parse, and 404 is an *answer*
+there rather than a failure. The rule that matters is unchanged and is the reason both live in
+`src/lib/api/` — **no component calls `fetch`, and nothing outside this folder does either.** Add a
+third only for a verb these two genuinely cannot express.
 
 Four things about the shell slice worth copying rather than re-deriving:
 

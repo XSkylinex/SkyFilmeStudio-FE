@@ -44,6 +44,12 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'לא ניתן לערוך קובץ מקור שיובא. המקורות נשמרים בדיוק כפי שהגיעו וכל שינוי יוצר גרסה נגזרת חדשה, ולכן יש לבצע זאת כנכס נגזר ולא כעריכה.',
   'error.IMPORT_PATH_REJECTED':
     'הנתיב נדחה משום שהוא מוביל אל מחוץ לאחסון של הפרויקט הזה, ושום דבר לא יובא. בחר קובץ בתוך תיקיית הפרויקט, או העתק אותו לשם תחילה.',
+  'error.SUBJECT_NOT_APPROVED':
+    'מערך ההפניות הקנוני של הסובייקט הזה טרם אושר, ולכן אי אפשר עדיין לייצר ממנו דבר. השער הזה הוא מה שמונע רינדור ארוך שרץ מול דמות שגויה.',
+  'error.CANONICAL_SET_IMMUTABLE':
+    'המערך הקנוני הזה אושר, ולכן לא ניתן עוד לשנות אותו. מערכים מאושרים מוקפאים במכוון — הפקה שכבר נצמדה למערך הזה לא אמורה להשתנות תחתיה. שינוי פירושו גרסה חדשה.',
+  'error.CANONICAL_ANCHOR_REQUIRED':
+    'הבקשה ביקשה יצירה הנגזרת מסובייקט בלי לציין את ההפניה המאושרת שאליה היא עוגנת. בלי עוגן לא ניתן היה לייחס את הזהות שנוצרה לשום מקור.',
   'error.network':
     'ה-orchestrator לא עונה. זה התהליך שמריץ כל רינדור, ולכן שום דבר לא יכול להתחיל עד שהוא יחזור.',
   'error.malformed':
@@ -197,9 +203,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'assetDetail.back': 'חזרה לספריית הנכסים',
   'assetDetail.identity.title': 'מה הקובץ הזה',
   'assetDetail.field.path': 'נתיב בפרויקט:',
-  'assetDetail.field.type': 'סוג:',
-  'assetDetail.field.origin': 'מקור:',
-  'assetDetail.field.privacy': 'סיווג פרטיות:',
   'assetDetail.field.mimeType': 'סוג מדיה:',
   'assetDetail.field.sha256': 'טביעת אצבע SHA-256:',
   'assetDetail.field.captured': 'צולם:',
@@ -213,15 +216,14 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'assetDetail.proxy.title': 'תצוגת עבודה',
   'assetDetail.proxy.absent.title': 'אין עדיין תצוגת עבודה',
   'assetDetail.proxy.absent.description':
-    'שום דבר לא נוגן. תצוגת עבודה נוצרת על ידי משימה בתור, ולכן הסיבה הרגילה היא שהמשימה טרם רצה. זו אינה שגיאה, והמקור נשאר ללא שינוי בכל מקרה.',
+    'למתזמר עדיין אין תצוגת עבודה לנכס הזה. תצוגה נוצרת על ידי משימה בתור, ולכן המשמעות היא שהמשימה טרם רצה. זו אינה שגיאה, והמקור נשאר ללא שינוי בכל מקרה.',
   'assetDetail.proxy.unsupported':
     'המתזמר מייצר תצוגת עבודה עבור וידאו בלבד. הנכס הזה אינו וידאו, ולכן אין מה לנגן.',
   'assetDetail.proxy.label': 'תצוגת עבודה של {path}',
-  'assetDetail.proxy.retry': 'חפש שוב את תצוגת העבודה',
+  'assetDetail.proxy.retry': 'שאל שוב',
+  'assetDetail.proxy.error.title': 'לא ניתן היה לברר אם קיימת תצוגת עבודה',
   'assetDetail.proxy.purpose':
     'זוהי תצוגת עבודה שנוצרה לצורך ניווט, ולא הקובץ המקורי. שפוט כאן קומפוזיציה ותזמון, לא איכות תמונה.',
-  'assetDetail.proxy.mayBeAbsent':
-    'אם שום דבר לא מתנגן, ייתכן שמשימת התצוגה טרם הפיקה קובץ. המתזמר אינו מפרסם דרך לשאול אם קיימת תצוגה, ולכן הנגן אינו יכול לומר זאת מראש.',
   'assetDetail.derived.title': 'נכסים נגזרים',
   'assetDetail.derived.unavailable':
     'המתזמר אינו מפרסם דרך לשאול מה נגזר מנכס, ולכן לא ניתן להציג זאת עדיין. זו נקודת קצה חסרה, לא תוצאה ריקה.',

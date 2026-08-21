@@ -44,6 +44,12 @@ export const EN_CATALOGUE = {
     'An imported original cannot be edited in place. Originals are kept exactly as they arrived and every change becomes a new derived version, so this has to be redone as a derived asset rather than an edit.',
   'error.IMPORT_PATH_REJECTED':
     "That path was refused because it resolves outside this project's own storage, and nothing was imported. Pick a file inside the project folder, or copy it in first.",
+  'error.SUBJECT_NOT_APPROVED':
+    "This subject's canonical reference set has not been approved, so nothing may be generated from it yet. That gate is what stops a long render from running against the wrong likeness.",
+  'error.CANONICAL_SET_IMMUTABLE':
+    'This canonical set has been approved, so it can no longer be changed. Approved sets are frozen deliberately — a production already pinned to this one must not shift underneath it. A change means a new version.',
+  'error.CANONICAL_ANCHOR_REQUIRED':
+    'This asked for a generation derived from a subject without naming the approved reference it is anchored to. Without an anchor the identity it produced could not be traced back to anything.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
@@ -197,9 +203,6 @@ export const EN_CATALOGUE = {
   'assetDetail.back': 'Back to the asset library',
   'assetDetail.identity.title': 'What this file is',
   'assetDetail.field.path': 'Path in the project:',
-  'assetDetail.field.type': 'Type:',
-  'assetDetail.field.origin': 'Origin:',
-  'assetDetail.field.privacy': 'Privacy class:',
   'assetDetail.field.mimeType': 'Media type:',
   'assetDetail.field.sha256': 'SHA-256:',
   'assetDetail.field.captured': 'Captured:',
@@ -214,15 +217,14 @@ export const EN_CATALOGUE = {
   'assetDetail.proxy.title': 'Scrub proxy',
   'assetDetail.proxy.absent.title': 'No proxy yet',
   'assetDetail.proxy.absent.description':
-    'Nothing played. A proxy is produced by a queued job, so the usual reason is that the job has not run yet. That is not an error, and the original is untouched either way.',
+    'The orchestrator has no proxy for this asset yet. A proxy is produced by a queued job, so this means the job has not run. That is not an error, and the original is untouched either way.',
   'assetDetail.proxy.unsupported':
     'The orchestrator generates a scrub proxy for video only. This asset is not video, so there is nothing to play.',
   'assetDetail.proxy.label': 'Scrub proxy of {path}',
-  'assetDetail.proxy.retry': 'Look for the proxy again',
+  'assetDetail.proxy.retry': 'Ask again',
+  'assetDetail.proxy.error.title': 'Could not tell whether a proxy exists',
   'assetDetail.proxy.purpose':
     'This is a generated proxy for scrubbing, not the original file. Judge framing and timing here, not grain.',
-  'assetDetail.proxy.mayBeAbsent':
-    'If nothing plays, the proxy job may not have produced a file yet. The orchestrator publishes no way to ask whether one exists, so this player cannot tell you in advance.',
   'assetDetail.derived.title': 'Derived assets',
   'assetDetail.derived.unavailable':
     'The orchestrator publishes no way to ask what was derived from an asset, so this cannot be listed yet. That is a missing endpoint, not an empty result.',
