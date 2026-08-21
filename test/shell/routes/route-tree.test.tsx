@@ -4,10 +4,9 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
-import type { ReactElement } from 'react';
-import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { createStore } from '@/shell/store';
+import { http, HttpResponse } from 'msw';
+import { screen } from '@testing-library/react';
+import { API_PATH } from '@/lib/api/api.constants';
 import { routeTree } from '@/shell/routes/route-tree';
 import { NotFoundPage } from '@/shell/routes/not-found-page';
 import { RootErrorBoundary } from '@/shell/root-error-boundary';
@@ -24,6 +23,9 @@ import {
   subjectReviewPath,
   systemPath,
 } from '@/shell/routes/routes.constants';
+import { renderInApp } from '../../render-in-app';
+import { buildSystemMode } from '../../fixtures/system-mode.fixture';
+import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
 interface FlatRoute {
   path: string | undefined;
@@ -43,8 +45,9 @@ const flattenRoutes = (routes: RouteObject[]): FlatRoute[] =>
     ...(route.children ? flattenRoutes(route.children) : []),
   ]);
 
-const renderInStore = (ui: ReactElement): ReturnType<typeof render> =>
-  render(<Provider store={createStore()}>{ui}</Provider>);
+mockOrchestratorServer(
+  http.get(API_PATH.systemMode(), () => HttpResponse.json(buildSystemMode())),
+);
 
 describe('routeTree', () => {
   const flatRoutes = flattenRoutes(routeTree);
@@ -80,7 +83,7 @@ describe('routeTree', () => {
       initialEntries: [productionPath('proj-1', 'prod-1')],
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Plan', level: 1 }),
@@ -96,7 +99,7 @@ describe('routeTree', () => {
       initialIndex: 1,
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Plan', level: 1 }),
@@ -149,7 +152,7 @@ describe('the design-system gallery route', () => {
       initialEntries: ['/design-system'],
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Design system preview' }),
@@ -163,7 +166,7 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
       initialEntries: [productionStoryboardPath('proj-1', 'prod-1')],
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Storyboard', level: 1 }),
@@ -175,7 +178,7 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
       initialEntries: [productionShotsPath('proj-1', 'prod-1')],
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Shots', level: 1 }),
@@ -187,7 +190,7 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
       initialEntries: [productionShotPath('proj-1', 'prod-1', 'shot-1')],
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Shot review', level: 1 }),
@@ -199,7 +202,7 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
       initialEntries: [productionAudioPath('proj-1', 'prod-1')],
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Audio', level: 1 }),
@@ -211,7 +214,7 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
       initialEntries: [productionTimelinePath('proj-1', 'prod-1')],
     });
 
-    renderInStore(<RouterProvider router={memoryRouter} />);
+    renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
       await screen.findByRole('heading', { name: 'Timeline', level: 1 }),

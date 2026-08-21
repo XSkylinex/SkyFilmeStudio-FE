@@ -4,10 +4,10 @@ import { API_PATH } from '@/lib/api/api.constants';
 import {
   preflightQueryKey,
   preflightQueryOptions,
-} from '@/features/system/api/preflight.query';
+} from '@/shell/api/preflight.query';
 import { PREFLIGHT_STALE_TIME_MS } from '@/lib/query/query.constants';
-import { buildPreflightReport } from '../../../fixtures/preflight-report.fixture';
-import { mockOrchestratorServer } from '../../../lib/api/msw-server';
+import { buildPreflightReport } from '../../fixtures/preflight-report.fixture';
+import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
 const server = mockOrchestratorServer();
 

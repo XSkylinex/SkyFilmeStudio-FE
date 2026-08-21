@@ -13,10 +13,12 @@ This repo: <https://github.com/XSkylinex/SkyFilmeStudio-FE>.
 ## Status, honestly
 
 **`plan/00`–`plan/01` are done (2026-08-15), `plan/02`–`plan/03` (2026-08-17), `plan/04` and
-`plan/15` on 2026-08-20. `plan/05`, the realtime bridge, is **blocked on BE-23** — the backend has
-no gateway, no websocket dependency and no realtime event schema, all checked rather than assumed —
-so `plan/15` was taken out of order because it is the only remaining phase with no backend
-dependency at all. `plan/06` is next and needs BE-04 and BE-11.**
+`plan/15` on 2026-08-20, and `plan/06` is **partly done** (2026-08-21). `plan/05`, the realtime
+bridge, is **blocked on BE-23** — the backend has no gateway, no websocket dependency and no realtime
+event schema, all re-checked 2026-08-21 rather than assumed — so `plan/15` was taken out of order and
+`plan/06` was built past it, because its installation half needs only BE-04, which has landed.
+`plan/07` is next and needs BE-11, which has not started and itself waits on BE-10, the
+dual-workstation benchmark.**
 
 The starter demo is gone and the gate is real — `typecheck`, `lint`, `test` and `build` all exist,
 all pass, and each was proven to fail on a deliberately broken file. `index.html` names the product
@@ -40,13 +42,18 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering all eighteen `ERROR_CODE` values, and the loopback-only base URL;
-`src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps six contract enums onto
-`StatusTone`, which is the mapping FE-02 deferred to this phase.
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — nineteen as of 2026-08-21,
+read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` on the backend's
+`be-10-benchmark` branch, which is one ahead of its master — and the loopback-only base URL;
+`src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
+`StatusTone` — six from FE-04 and model file status from FE-06 — which is the mapping FE-02 deferred
+to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
+and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **102 keys in English and
-Hebrew**, where English is the source of truth and Hebrew is `Record<TranslationKey, string>` so a
-missing translation is a compile error. The interface language lives in the shell slice, persists to
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **183 keys in English and
+Hebrew** — 109 when FE-15 closed, and FE-06 added the system screen's copy. English is the source of
+truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
+The interface language lives in the shell slice, persists to
 `localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`
 with `dir` from a record's own language field, which is how a Hebrew production reads correctly inside
 an English UI. The error-taxonomy sentences moved into the catalogue; `StudioError` carries a
@@ -57,16 +64,28 @@ the reader.
 `:lang()` list — which keys off language rather than direction and so breaks the exact case this
 product needs. Use `[dir='rtl']`. `.claude/rules/css.md` carries the measurement.
 
-**But no screen fetches anything yet.** Every page is still an `EmptyState`, and the shell's three
-fixtures — the production stage sets, the error-code sentences and the offline-mode payload — are
-still fixtures, which is why the offline indicator continues to read **"Not yet verified"**. Wiring
-the first real consumer is FE-06.
+FE-06 made three screens real. `src/shell/api/` now owns the installation-status queries — system
+mode, preflight and the model setup report — and `src/shell/system-readiness/` renders the first
+answer this app has ever fetched: ready, or *n* of eleven checks did not pass, with the disk
+shortfall in bytes. `/system` composes seven panels from it, the project dashboard carries the same
+strip, and the header's offline badge finally asks the orchestrator what mode it is in instead of
+reading **"Not yet verified"** forever. `src/features/system/` holds the panels; `src/lib/format/`
+holds the byte and date formatters.
 
-**Four things are blocked on the backend, and the plan file names each precisely.** `POST /render-jobs`
-validates against a DTO that is not exported through `./contracts`, so the submit mutation cannot be
-typed without hand-writing a wire type; there is no capability endpoint, so capability-driven pickers
-have no source; no exception filter exists, so no `errorCode` ever reaches the client; and there is no
-socket. Do not report structure or capability that does not exist yet.
+**The offline badge takes `operatingMode` from the contract and never re-derives it.** The shell used
+to compute its own answer from three of the same booleans with a different precedence, so the header
+and the backend genuinely disagreed whenever LAN workers and strict offline were both on. One source
+of truth, and a test that hands the component a contradictory payload.
+
+**What is still not real, and why.** Every project-scoped screen — the project list, creation,
+subjects, locations, productions, reusable libraries, per-project storage — has no endpoint at all:
+BE-11 has not started and waits on BE-10. Memory and pressure need the socket. Model `compatibility`
+lives on `ModelManifestEntry` and `/preflight/models` returns `ModelSetupReport`, which has no such
+field, so `/system` says what "files present" does *not* mean rather than showing a classification it
+cannot see. `POST /render-jobs` still validates against a DTO that is not exported through
+`./contracts`; no exception filter exists, so no `errorCode` reaches the client over HTTP; and there
+is no socket. **Do not report structure or capability that does not exist yet** — the two panels with
+no data source say so on screen rather than rendering an empty value.
 
 Two things FE-03 established that later phases inherit. **The router is v7, not v8** —
 `react-router-dom` has never published an 8.x and is a re-export shim over `react-router@7.18.2`, so
@@ -165,13 +184,15 @@ The browser floor is not a preference — it is what Vite's default `build.targe
 ```
 src/                      the app (today: App, main.tsx, shell/, lib/, assets/, styles/)
 src/shell/                app frame; writes <html lang>/<html dir> at boot; holds the preview gallery
+src/shell/api/            the installation-status queries: system mode, preflight, model setup
 src/lib/components/       the shared primitives, one folder per component
 src/lib/interfaces/       types more than one component uses
 src/lib/api/              the one fetch wrapper, the base URL, StudioError and the taxonomy
 src/lib/query/            the QueryClient and its retry policy
 src/lib/status-tone/      contract enums mapped onto StatusTone
 src/lib/i18n/             the typed catalogue, the translate hook, direction from a language tag
-src/features/<f>/api/     one file per query: key factory + fetcher, colocated with the feature
+src/lib/format/           byte counts and timestamps — notation stays notation, dates follow Intl
+src/features/<f>/api/     one file per query for that feature's own project or production data
 src/assets/               SVG artwork, mirroring src/; never inlined in JSX
 src/styles/               layers.css, reset.css, tokens.css
 test/                     tests, mirroring src/ — nothing under src/ is a test

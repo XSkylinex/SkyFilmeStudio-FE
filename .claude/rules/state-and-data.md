@@ -34,9 +34,16 @@ it yet**. That is editor state, and it is a different value with a different nam
 - **Every fetcher forwards `signal`.** `queryFn: ({ signal }) => requestJson(path, schema, { signal })`.
   Without it an unmounted screen's request runs to completion, and the render-queue poll cannot be
   cancelled.
-- **Query keys are built by a factory, never inline.** One file per feature under `api/`, exporting
-  both the key and the fetcher. An inline `['shots', id]` at a call site is how invalidation silently
-  stops matching.
+- **Query keys are built by a factory, never inline.** One file per query under an `api/` folder,
+  exporting both the key and the fetcher. An inline `['shots', id]` at a call site is how
+  invalidation silently stops matching.
+- **Installation-wide status lives in `src/shell/api/`; a feature's `api/` holds that feature's own
+  project or production data.** System mode, preflight and the model setup report describe the
+  machine rather than any screen, and the shell renders the first of them persistently in the header.
+  FE-04 colocated all three under `src/features/system/api/` before anything consumed them; FE-06
+  moved them, because leaving them there meant `src/shell/` importing `src/features/` outside
+  `route-tree.ts`, and it meant the dashboard reaching sideways into the system feature for the
+  readiness strip. The render-queue's job query stays in its feature — that is production data.
 - **Invalidate on the server's word.** After a mutation resolves, invalidate the affected keys and let
   the refetch land. See `.claude/rules/studio-domain.md` — approvals get **no** optimistic update.
 - **Never poll something the socket already pushes**, and never rely only on the socket. The queue

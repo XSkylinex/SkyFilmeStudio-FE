@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import babel from '@rolldown/plugin-babel';
 import { externalUrlGuard } from './build/external-url-guard.ts';
+import { isDocumentRequest } from './build/is-document-request.ts';
 import {
   ORCHESTRATOR_DEFAULT_ORIGIN,
   ORCHESTRATOR_ROUTE_PREFIXES,
@@ -29,7 +30,12 @@ export default defineConfig({
     proxy: Object.fromEntries(
       ORCHESTRATOR_ROUTE_PREFIXES.map((prefix) => [
         prefix,
-        { target: ORCHESTRATOR_DEFAULT_ORIGIN, changeOrigin: false },
+        {
+          target: ORCHESTRATOR_DEFAULT_ORIGIN,
+          changeOrigin: false,
+          bypass: (request) =>
+            isDocumentRequest(request.headers) ? request.url : undefined,
+        },
       ]),
     ),
   },

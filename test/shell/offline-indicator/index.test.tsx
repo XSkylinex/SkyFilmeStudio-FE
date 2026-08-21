@@ -1,172 +1,172 @@
-import { screen } from '@testing-library/react';
-import { renderInStore } from '../../render-in-store';
+import { http, HttpResponse } from 'msw';
+import { screen, waitForElementToBeRemoved } from '@testing-library/react';
+import type { OperatingMode, SystemMode } from 'sky-filme-studio-be/contracts';
+import { API_PATH } from '@/lib/api/api.constants';
 import { OfflineIndicator } from '@/shell/offline-indicator';
-import type { OfflineMode } from '@/shell/offline-indicator/offline-indicator.interface';
+import { renderInApp } from '../../render-in-app';
+import { buildSystemMode } from '../../fixtures/system-mode.fixture';
+import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
-const BASE_OFFLINE_MODE: OfflineMode = {
-  localOnly: true,
-  strictOffline: false,
-  allowLanWorkers: false,
-  claudeCodeOperatorEnabled: false,
+const server = mockOrchestratorServer();
+
+const OPERATING_MODES: readonly OperatingMode[] = [
+  'LOCAL_ONLY',
+  'STRICT_OFFLINE',
+  'CLAUDE_CODE_CONTEXT_SHARING',
+  'NON_LOCAL_GENERATION_ENABLED',
+];
+
+const orchestratorReports = (systemMode: SystemMode): void => {
+  server.use(
+    http.get(API_PATH.systemMode(), () => HttpResponse.json(systemMode)),
+  );
 };
 
+const indicator = (): Element | null =>
+  document.querySelector('.offline-indicator');
+
 describe('OfflineIndicator', () => {
-  it('is visually and textually distinct between strict-offline and operator-enabled', () => {
-    const { container: strictContainer } = renderInStore(
-      <OfflineIndicator
-        offlineMode={{ ...BASE_OFFLINE_MODE, strictOffline: true }}
-      />,
-    );
-    const { container: operatorContainer } = renderInStore(
-      <OfflineIndicator
-        offlineMode={{ ...BASE_OFFLINE_MODE, claudeCodeOperatorEnabled: true }}
-      />,
+  it('reports the mode the orchestrator returns rather than a local guess', async () => {
+    orchestratorReports(
+      buildSystemMode({ operatingMode: 'CLAUDE_CODE_CONTEXT_SHARING' }),
     );
 
-    const strictMode = strictContainer.querySelector('.offline-indicator');
-    const operatorMode = operatorContainer.querySelector('.offline-indicator');
+    renderInApp(<OfflineIndicator />);
 
-    expect(strictMode).toHaveAttribute('data-mode', 'strict-offline');
-    expect(operatorMode).toHaveAttribute('data-mode', 'operator-enabled');
-    expect(strictMode?.getAttribute('data-mode')).not.toBe(
-      operatorMode?.getAttribute('data-mode'),
-    );
+    expect(
+      await screen.findByText(/can leave this machine/i),
+    ).toBeInTheDocument();
+    expect(indicator()).toHaveAttribute('data-mode', 'operator-enabled');
   });
 
-  it('says in real text, not just a tone, that context can leave the machine when the operator is enabled', () => {
-    renderInStore(
-      <OfflineIndicator
-        offlineMode={{ ...BASE_OFFLINE_MODE, claudeCodeOperatorEnabled: true }}
-      />,
-    );
+  it('is visually and textually distinct between strict-offline and operator-enabled', async () => {
+    orchestratorReports(buildSystemMode({ operatingMode: 'STRICT_OFFLINE' }));
+    renderInApp(<OfflineIndicator />);
+    expect(
+      await screen.findByText(/strict offline mode is on/i),
+    ).toBeInTheDocument();
+    const strictMode = indicator()?.getAttribute('data-mode');
 
-    expect(screen.getByText(/can leave this machine/i)).toBeInTheDocument();
+    orchestratorReports(
+      buildSystemMode({ operatingMode: 'CLAUDE_CODE_CONTEXT_SHARING' }),
+    );
+    renderInApp(<OfflineIndicator />);
+    expect(
+      await screen.findByText(/can leave this machine/i),
+    ).toBeInTheDocument();
+
+    expect(strictMode).toBe('strict-offline');
+    expect(strictMode).not.toBe('operator-enabled');
   });
 
-  it('describes strict offline on its own terms, without a blanket "nothing can leave" claim or a claim about the operator flag', () => {
-    renderInStore(
-      <OfflineIndicator
-        offlineMode={{ ...BASE_OFFLINE_MODE, strictOffline: true }}
-      />,
-    );
+  it('says nothing about the operator being disabled while describing strict offline', async () => {
+    orchestratorReports(buildSystemMode({ operatingMode: 'STRICT_OFFLINE' }));
 
-    expect(screen.getByText(/strict offline mode is on/i)).toBeInTheDocument();
+    renderInApp(<OfflineIndicator />);
+
+    expect(
+      await screen.findByText(/strict offline mode is on/i),
+    ).toBeInTheDocument();
     expect(
       screen.queryByText(/nothing about this project can leave this machine/i),
     ).not.toBeInTheDocument();
     expect(screen.queryByText(/operator is disabled/i)).not.toBeInTheDocument();
   });
 
-  it('never says the operator is disabled while the operator flag itself is enabled, even under strict offline', () => {
-    renderInStore(
-      <OfflineIndicator
-        offlineMode={{
-          ...BASE_OFFLINE_MODE,
-          strictOffline: true,
-          claudeCodeOperatorEnabled: true,
-        }}
-      />,
+  it('marks LAN workers on the element as well as in the text, so a green headline cannot read as an absolute', async () => {
+    orchestratorReports(
+      buildSystemMode({ operatingMode: 'LOCAL_ONLY', allowLanWorkers: true }),
     );
 
-    expect(screen.getByText(/can leave this machine/i)).toBeInTheDocument();
-    expect(screen.queryByText(/operator is disabled/i)).not.toBeInTheDocument();
-  });
-
-  it('reports LAN workers as a live concern even while strict offline is also on, instead of a single absolute claim', () => {
-    renderInStore(
-      <OfflineIndicator
-        offlineMode={{
-          ...BASE_OFFLINE_MODE,
-          strictOffline: true,
-          allowLanWorkers: true,
-        }}
-      />,
-    );
+    renderInApp(<OfflineIndicator />);
 
     expect(
-      screen.getByText(/render workers on the local network are allowed/i),
+      await screen.findByText(
+        /render workers on the local network are allowed/i,
+      ),
     ).toBeInTheDocument();
-    expect(screen.getByText(/strict offline mode is on/i)).toBeInTheDocument();
+    expect(indicator()).toHaveAttribute('data-mode', 'local');
+    expect(indicator()).toHaveAttribute('data-lan-workers', 'true');
   });
 
-  it('renders an unverified, non-safety-claiming mode when no offline payload has arrived yet', () => {
-    const { container } = renderInStore(<OfflineIndicator />);
+  it('claims nothing while the orchestrator has not answered yet', () => {
+    orchestratorReports(buildSystemMode({ operatingMode: 'LOCAL_ONLY' }));
 
-    expect(container.querySelector('.offline-indicator')).toHaveAttribute(
-      'data-mode',
-      'unknown',
-    );
+    renderInApp(<OfflineIndicator />);
+
+    expect(indicator()).toHaveAttribute('data-mode', 'unknown');
     expect(screen.getByText(/has not been confirmed yet/i)).toBeInTheDocument();
     expect(
       screen.queryByText(/no render or context leaves this machine/i),
     ).not.toBeInTheDocument();
   });
 
-  it('puts the same tone on the badge and the dot it carries', () => {
-    const { container } = renderInStore(
-      <OfflineIndicator
-        offlineMode={{ ...BASE_OFFLINE_MODE, strictOffline: true }}
-      />,
+  it('claims nothing when the orchestrator refuses the request either', async () => {
+    server.use(
+      http.get(
+        API_PATH.systemMode(),
+        () => new HttpResponse(null, { status: 500 }),
+      ),
     );
 
-    expect(container.querySelector('.badge')).toHaveAttribute(
-      'data-tone',
-      'success',
-    );
-    expect(container.querySelector('.status-dot')).toHaveAttribute(
-      'data-tone',
-      'success',
-    );
+    renderInApp(<OfflineIndicator />);
+
+    expect(
+      await screen.findByText(/has not been confirmed yet/i),
+    ).toBeInTheDocument();
+    expect(indicator()).toHaveAttribute('data-mode', 'unknown');
   });
 
-  it('still mentions Claude when the build is not local-only, instead of the remote fact swallowing it', () => {
-    renderInStore(
-      <OfflineIndicator
-        offlineMode={{
-          ...BASE_OFFLINE_MODE,
-          localOnly: false,
-          claudeCodeOperatorEnabled: true,
-        }}
-      />,
-    );
+  it('puts the same tone on the badge and the dot it carries', async () => {
+    orchestratorReports(buildSystemMode({ operatingMode: 'STRICT_OFFLINE' }));
 
-    expect(screen.getByText(/not running local-only/i)).toBeInTheDocument();
-    expect(screen.getByText(/can leave this machine/i)).toBeInTheDocument();
+    renderInApp(<OfflineIndicator />);
+
+    expect(
+      await screen.findByText(/strict offline mode is on/i),
+    ).toBeInTheDocument();
+    expect(document.querySelector('.badge')).toHaveAttribute(
+      'data-tone',
+      'success',
+    );
+    expect(document.querySelector('.status-dot')).toHaveAttribute(
+      'data-tone',
+      'success',
+    );
   });
 });
 
-describe('OfflineIndicator across every flag combination', () => {
-  const ALL_OFFLINE_MODE_COMBINATIONS: readonly OfflineMode[] = Array.from(
-    { length: 16 },
-    (_, bits): OfflineMode => ({
-      localOnly: (bits & 1) !== 0,
-      strictOffline: (bits & 2) !== 0,
-      allowLanWorkers: (bits & 4) !== 0,
-      claudeCodeOperatorEnabled: (bits & 8) !== 0,
-    }),
-  );
+describe('OfflineIndicator across every operating mode', () => {
+  OPERATING_MODES.forEach((operatingMode) => {
+    [false, true].forEach((allowLanWorkers) => {
+      it(`says exactly what ${operatingMode} means, and nothing another mode means, with LAN workers ${allowLanWorkers ? 'allowed' : 'refused'}`, async () => {
+        orchestratorReports(
+          buildSystemMode({ operatingMode, allowLanWorkers }),
+        );
 
-  ALL_OFFLINE_MODE_COMBINATIONS.forEach((offlineMode) => {
-    it(`shows exactly its own true flags, never one another's, for ${JSON.stringify(offlineMode)}`, () => {
-      const { container, unmount } = renderInStore(
-        <OfflineIndicator offlineMode={offlineMode} />,
-      );
-      const text = container.textContent ?? '';
+        const { container } = renderInApp(<OfflineIndicator />);
 
-      expect(text.includes('can leave this machine through Claude')).toBe(
-        offlineMode.claudeCodeOperatorEnabled,
-      );
-      expect(
-        text.includes('Render workers on the local network are allowed'),
-      ).toBe(offlineMode.allowLanWorkers);
-      expect(text.includes('Strict offline mode is on')).toBe(
-        offlineMode.strictOffline,
-      );
-      expect(text.includes('not running local-only')).toBe(
-        !offlineMode.localOnly,
-      );
+        await waitForElementToBeRemoved(() =>
+          screen.queryByText(/has not been confirmed yet/i),
+        );
+        const text = container.textContent ?? '';
 
-      unmount();
+        expect(text.includes('can leave this machine through Claude')).toBe(
+          operatingMode === 'CLAUDE_CODE_CONTEXT_SHARING',
+        );
+        expect(text.includes('Strict offline mode is on')).toBe(
+          operatingMode === 'STRICT_OFFLINE',
+        );
+        expect(text.includes('not running local-only')).toBe(
+          operatingMode === 'NON_LOCAL_GENERATION_ENABLED',
+        );
+        expect(text.includes('No render or context leaves this machine')).toBe(
+          operatingMode === 'LOCAL_ONLY',
+        );
+        expect(
+          text.includes('Render workers on the local network are allowed'),
+        ).toBe(allowLanWorkers);
+      });
     });
   });
 });

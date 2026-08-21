@@ -37,6 +37,8 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'אף ספק במחשב הזה לא יכול להריץ את המשימה הזו, ולכן שום דבר לא נכנס לתור. צריך קודם להקים worker שמפרסם את היכולת הזו.',
   'error.CAPABILITY_NOT_BENCHMARKED':
     'יש ספק שיכול להריץ את זה, אבל הגבולות שלו על החומרה הזו עדיין לא נמדדו. כל עוד אין benchmark, משך או פרופיל שלא נבדקו הם ניחוש ולא יכולת.',
+  'error.MEDIA_TOOL_UNAVAILABLE':
+    'ה-FFmpeg שמותקן במחשב הזה לא יכול לבצע את מה שהשלב הזה דורש — או שהוא לא נמצא ב-path, או שהבנייה שנמצאה חסרה את ה-encoder, ה-filter או ה-muxer שנדרשים. זו תקלה בהתקנה: אותה בקשה תיכשל בדיוק באותו אופן עד שיוחלף FFmpeg.',
 
   'error.network':
     'ה-orchestrator לא עונה. זה התהליך שמריץ כל רינדור, ולכן שום דבר לא יכול להתחיל עד שהוא יחזור.',
@@ -113,6 +115,99 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'stage.approved': 'מאושר',
   'stage.blocked': 'חסום',
 
+  'readiness.title': 'מוכנות',
+  'readiness.unknown.label': 'טרם אומת',
+  'readiness.unknown.description':
+    'האורקסטרטור עדיין לא דיווח על תוצאות הבדיקות המקדימות. שום דבר כאן לא אומר שהמחשב הזה יכול או לא יכול לרנדר.',
+  'readiness.ready.label': 'מוכן לרינדור',
+  'readiness.ready.description':
+    'כל הבדיקות המקדימות עברו ויש מקום בדיסק כדי להתחיל רינדור.',
+  'readiness.blocked.label': '{failed} מתוך {total} בדיקות לא עברו',
+  'readiness.blocked.description':
+    'רינדור הפקה יסרב להתחיל עד שאלה ייפתרו. בדיקה שלא רצה אינה בדיקה שעברה.',
+  'readiness.checkedAt': 'נבדק {time}',
+  'readiness.rerun': 'הרץ בדיקות מחדש',
+  'readiness.rerunning': 'מריץ מחדש',
+  'readiness.error.title': 'לא ניתן לקרוא את הבדיקות המקדימות',
+  'readiness.diskShortfall': 'רינדור יסרב להתחיל. חסרים בדיסק הזה:',
+
+  'system.mode.title': 'מצב הפעלה',
+  'system.mode.localOnly': 'יצירה מקומית בלבד',
+  'system.mode.strictOffline': 'מצב לא-מקוון מוחלט',
+  'system.mode.allowLanWorkers': 'עובדי רינדור ברשת המקומית',
+  'system.mode.claudeCodeOperator': 'מפעיל Claude Code',
+  'system.mode.lmStudioMcpHost': 'מארח MCP של LM Studio',
+  'system.mode.lmStudioMcpHost.description':
+    'מודל מקומי ב-LM Studio יכול להפעיל את הסטודיו דרך כלי ה-MCP שלו. זהו משטח שליטה על המחשב הזה, ולא דרך החוצה ממנו.',
+  'system.mode.error.title': 'לא ניתן לקרוא את מצב ההפעלה',
+  'system.value.on': 'פעיל',
+  'system.value.off': 'כבוי',
+
+  'system.hardware.title': 'פרופיל חומרה',
+  'system.hardware.unknown.title': 'המחשב הזה אינו תואם לאף פרופיל חומרה מוכר',
+  'system.hardware.unknown.description':
+    'בלי פרופיל, רינדורים מסרבים להתחיל — כל גבול יכולת נמדד לכל פרופיל בנפרד. צריך להוסיף פרופיל למחשב הזה לפני שמשהו ירוץ.',
+  'system.hardware.unpublished':
+    'האורקסטרטור עדיין לא מפרסם את מנוע ההאצה ואת היכולות שנמדדו לפרופיל הזה.',
+
+  'system.disk.title': 'דיסק',
+  'system.disk.free': 'מקום פנוי',
+  'system.disk.missingModels': 'קובצי מודל חסרים',
+  'system.disk.workingSpace': 'שטח עבודה שמור',
+  'system.disk.safetyHeadroom': 'מרווח ביטחון',
+  'system.disk.required': 'נדרש כדי להתחיל',
+  'system.disk.shortfall': 'חסר',
+  'system.disk.passed': 'יש מספיק מקום פנוי כדי שרינדור יתחיל.',
+
+  'system.models.title': 'מודלים',
+  'system.models.summary': 'הקבצים של {ready} מתוך {total} מודלים נמצאים בדיסק',
+  'system.models.missingTotal': 'להורדה או להחלפה:',
+  'system.models.root': 'תיקיית המודלים',
+  'system.models.license': 'רישיון',
+  'system.models.size': 'גודל',
+  'system.models.missing': 'להורדה או להחלפה',
+  'system.models.upstream': 'מאגר מקור',
+  'system.models.filesPresent': 'הקבצים מוכנים',
+  'system.models.filesMissing': 'הקבצים אינם מוכנים',
+  'system.models.readyMeaning':
+    '"הקבצים מוכנים" אומר שכל קובץ יושב בדיסק בגודל שהמניפסט מצהיר עליו. זה לא אומר שהקובץ תקין: שום דבר כאן לא קורא hash, ובדיקת ה-preflight ‏MODEL_HASHES_MATCH היא זו שעושה זאת. זה גם לא אומר שהמודל עבר benchmark על החומרה הזו — האורקסטרטור עדיין לא מפרסם את הסיווג הזה, ולכן אין לקרוא שום דבר כאן כ"נבדק".',
+  'system.models.noDownload':
+    'Local AI Studio לעולם אינו מוריד מודל. יש להריץ את זה בעצמכם:',
+  'system.models.files': 'קבצים',
+  'system.models.empty': 'המניפסט אינו מצהיר על אף מודל.',
+  'system.models.error.title': 'לא ניתן לקרוא את דוח התקנת המודלים',
+  'system.models.fileStatus.VERIFIED': 'ה-hash אומת',
+  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'קיים, ה-hash לא ידוע',
+  'system.models.fileStatus.MISSING': 'חסר',
+  'system.models.fileStatus.SIZE_MISMATCH': 'גודל שגוי',
+  'system.models.fileStatus.HASH_MISMATCH': 'אי-התאמה ב-hash',
+  'system.models.fileStatus.UNREADABLE': 'לא ניתן לקריאה',
+  'system.models.role.VIDEO': 'וידאו',
+  'system.models.role.IMAGE': 'תמונה',
+  'system.models.role.IMAGE_EDIT': 'עריכת תמונה',
+  'system.models.role.TEXT': 'טקסט',
+  'system.models.role.TTS': 'דיבור',
+  'system.models.role.MUSIC': 'מוזיקה',
+
+  'system.preflight.title': 'בדיקות מקדימות',
+  'system.preflight.status.PASS': 'עברה',
+  'system.preflight.status.FAIL': 'נכשלה',
+  'system.preflight.status.NOT_APPLICABLE': 'לא רלוונטי',
+  'system.preflight.status.NOT_IMPLEMENTED': 'לא ממומש',
+  'system.preflight.notRunNote': 'בדיקה שלא רצה אינה בדיקה שעברה.',
+
+  'system.pressure.title': 'זיכרון ועומס',
+  'system.pressure.unavailable':
+    'האורקסטרטור עדיין לא מפרסם קריאה חיה של זיכרון, VRAM או swap, ולכן אין כאן מה להציג. זו מדידה חסרה, ולא מדידה שהתקבלה בה אפס.',
+  'system.runtimes.title': 'סביבות ריצה',
+  'system.runtimes.unavailable':
+    'האורקסטרטור עדיין לא מפרסם גרסה של ComfyUI, LM Studio, FFmpeg או מסד הנתונים. הבדיקות המקדימות הן הדבר היחיד שמדווח על כך שהן עולות.',
+
+  'dashboard.projectData.title': 'שום דבר בפרויקט הזה עדיין לא מחובר',
+  'dashboard.projectData.description':
+    'נושאים, מיקומים, הפקות ונכסים לשימוש חוזר שייכים לכאן. האורקסטרטור עדיין לא מגיש נתוני פרויקט, ולכן לוח המחוונים הזה יכול לדווח רק על מה שהמחשב עצמו מסוגל לעשות.',
+  'dashboard.openSystem': 'פתח מצב מערכת',
+
   'page.notFound.title': 'הדף לא נמצא',
   'page.notFound.description': 'שום דבר ב-Local AI Studio לא תואם לכתובת הזו.',
   'page.projects.title': 'פרויקטים',
@@ -120,7 +215,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'כל פרויקטי Local AI Studio שנמצאים במחשב הזה. אין עדיין חיבור ל-orchestrator.',
   'page.dashboard.title': 'לוח בקרה',
   'page.dashboard.description':
-    'הסטטוס של הפרויקט הזה במבט אחד: חומרי גלם, סובייקטים, ספריית היצירה והפקות. אין עדיין חיבור ל-orchestrator.',
+    'מה מחכה לכם בפרויקט הזה, והאם המחשב הזה מסוגל לבצע את השלב הבא.',
   'page.assets.title': 'חומרי גלם',
   'page.assets.description':
     'צילומי המקור, התמונות והאודיו שהוכנסו לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
@@ -168,5 +263,5 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'הרצף הערוך של ההפקה הזו והייצוא הסופי. אין עדיין חיבור ל-orchestrator.',
   'page.system.title': 'מערכת',
   'page.system.description':
-    'חומרה, מודלים מותקנים, מקום בדיסק ומצב אופליין של ההתקנה הזו. אין עדיין חיבור ל-orchestrator.',
+    'פרופיל חומרה, מודלים מותקנים, מקום בדיסק, בדיקות מקדימות ומצב ההפעלה של ההתקנה הזו.',
 };

@@ -1,18 +1,16 @@
+import type { OperatingMode } from 'sky-filme-studio-be/contracts';
+
 export interface OfflineMode {
-  readonly localOnly: boolean;
-  readonly strictOffline: boolean;
+  readonly operatingMode: OperatingMode;
   readonly allowLanWorkers: boolean;
-  readonly claudeCodeOperatorEnabled: boolean;
 }
 
-export type OfflineIndicatorMode =
-  | 'unknown'
-  | 'remote'
-  | 'operator-enabled'
-  | 'lan-workers'
-  | 'strict-offline'
-  | 'local';
+export type OfflineIndicatorHeadline =
+  'unknown' | 'remote' | 'operator-enabled' | 'strict-offline' | 'local';
 
-export interface OfflineIndicatorProps {
-  offlineMode?: OfflineMode | undefined;
+export type OfflineIndicatorFact = OfflineIndicatorHeadline | 'lan-workers';
+
+export interface OfflineIndicatorView {
+  readonly headline: OfflineIndicatorHeadline;
+  readonly facts: readonly OfflineIndicatorFact[];
 }

@@ -1,12 +1,18 @@
 import type { FC } from 'react';
-import { Provider } from 'react-redux';
+import { http, HttpResponse } from 'msw';
 import { createRoutesStub } from 'react-router-dom';
 import { screen } from '@testing-library/react';
-import { renderInStore } from '../../render-in-store';
 import userEvent from '@testing-library/user-event';
 import { AppShell } from '@/shell/app-shell';
-import { createStore } from '@/shell/store';
+import { API_PATH } from '@/lib/api/api.constants';
 import { SHELL_STATE_NAV_COLLAPSED_STORAGE_KEY } from '@/shell/shell-state.constants';
+import { renderInApp } from '../../render-in-app';
+import { buildSystemMode } from '../../fixtures/system-mode.fixture';
+import { mockOrchestratorServer } from '../../lib/api/msw-server';
+
+mockOrchestratorServer(
+  http.get(API_PATH.systemMode(), () => HttpResponse.json(buildSystemMode())),
+);
 
 const HomePage: FC = () => <p>home</p>;
 
@@ -31,11 +37,7 @@ const renderShell = (): void => {
     },
   ]);
 
-  renderInStore(
-    <Provider store={createStore()}>
-      <Stub initialEntries={['/']} />
-    </Provider>,
-  );
+  renderInApp(<Stub initialEntries={['/']} />);
 };
 
 describe('the navigation collapse control', () => {

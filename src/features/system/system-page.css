@@ -1,0 +1,37 @@
+@layer features {
+  .system-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .system-page__title {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-heading);
+  }
+
+  .system-page__description {
+    margin: 0;
+    max-inline-size: 60ch;
+    color: var(--color-text-secondary);
+  }
+
+  .system-page__panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr));
+    align-items: start;
+    gap: var(--space-4);
+  }
+
+  .system-page__unpublished {
+    margin: 0;
+    padding-block: var(--space-3);
+    padding-inline: var(--space-3);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+  }
+}

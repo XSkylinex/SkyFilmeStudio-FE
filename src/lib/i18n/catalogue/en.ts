@@ -37,6 +37,8 @@ export const EN_CATALOGUE = {
     'No provider on this machine can run this job, so nothing was queued. A worker advertising this capability has to be set up first.',
   'error.CAPABILITY_NOT_BENCHMARKED':
     'A provider could run this, but nothing has measured its limits on this hardware. Until a benchmark exists, an untested duration or profile is a guess rather than a capability.',
+  'error.MEDIA_TOOL_UNAVAILABLE':
+    'The FFmpeg build on this machine cannot do what this step needs \u2014 either it is not on the path, or the build that was found has no encoder, filter or muxer for it. This is a setup fault: the same request will fail the same way until FFmpeg is replaced.',
 
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
@@ -113,6 +115,102 @@ export const EN_CATALOGUE = {
   'stage.approved': 'Approved',
   'stage.blocked': 'Blocked',
 
+  'readiness.title': 'Readiness',
+  'readiness.unknown.label': 'Not yet verified',
+  'readiness.unknown.description':
+    'The orchestrator has not reported preflight results yet. Nothing here says this machine can or cannot render.',
+  'readiness.ready.label': 'Ready to render',
+  'readiness.ready.description':
+    'Every preflight check passed and there is room on disk for a render to start.',
+  'readiness.blocked.label': '{failed} of {total} checks did not pass',
+  'readiness.blocked.description':
+    'A production render will refuse to start until these are resolved. A check that did not run is not a check that passed.',
+  'readiness.checkedAt': 'Checked {time}',
+  'readiness.rerun': 'Re-run checks',
+  'readiness.rerunning': 'Re-running',
+  'readiness.error.title': 'Preflight could not be read',
+  'readiness.diskShortfall':
+    'A render will refuse to start. This disk is short by:',
+
+  'system.mode.title': 'Operating mode',
+  'system.mode.localOnly': 'Local-only generation',
+  'system.mode.strictOffline': 'Strict offline',
+  'system.mode.allowLanWorkers': 'LAN render workers',
+  'system.mode.claudeCodeOperator': 'Claude Code operator',
+  'system.mode.lmStudioMcpHost': 'LM Studio MCP host',
+  'system.mode.lmStudioMcpHost.description':
+    'A local model in LM Studio may drive the Studio through its MCP tools. That is a control surface on this machine, not a route off it.',
+  'system.mode.error.title': 'The operating mode could not be read',
+  'system.value.on': 'On',
+  'system.value.off': 'Off',
+
+  'system.hardware.title': 'Hardware profile',
+  'system.hardware.unknown.title':
+    'This machine matches no known hardware profile',
+  'system.hardware.unknown.description':
+    'Renders refuse to start without one, because every capability limit is measured per profile. A profile has to be added for this machine before anything will run.',
+  'system.hardware.unpublished':
+    'The acceleration backend and the measured capabilities of this profile are not published by the orchestrator yet.',
+
+  'system.disk.title': 'Disk',
+  'system.disk.free': 'Free space',
+  'system.disk.missingModels': 'Missing model files',
+  'system.disk.workingSpace': 'Working space reserved',
+  'system.disk.safetyHeadroom': 'Safety headroom',
+  'system.disk.required': 'Required to start',
+  'system.disk.shortfall': 'Short by',
+  'system.disk.passed': 'There is enough free space for a render to start.',
+
+  'system.models.title': 'Models',
+  'system.models.summary': '{ready} of {total} models have every file on disk',
+  'system.models.missingTotal': 'To fetch or replace:',
+  'system.models.root': 'Models folder',
+  'system.models.license': 'Licence',
+  'system.models.size': 'Size',
+  'system.models.missing': 'To fetch or replace',
+  'system.models.upstream': 'Upstream repository',
+  'system.models.filesPresent': 'Files ready',
+  'system.models.filesMissing': 'Files not ready',
+  'system.models.readyMeaning':
+    'Files ready means every file is on disk at the size the manifest declares. It does not mean the file is intact: nothing here reads a hash, and the MODEL_HASHES_MATCH preflight check is what does. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
+  'system.models.noDownload':
+    'Local AI Studio never downloads a model. Run this yourself:',
+  'system.models.files': 'Files',
+  'system.models.empty': 'The manifest declares no models.',
+  'system.models.error.title': 'The model setup report could not be read',
+  'system.models.fileStatus.VERIFIED': 'Hash verified',
+  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'Present, hash unknown',
+  'system.models.fileStatus.MISSING': 'Missing',
+  'system.models.fileStatus.SIZE_MISMATCH': 'Wrong size',
+  'system.models.fileStatus.HASH_MISMATCH': 'Hash mismatch',
+  'system.models.fileStatus.UNREADABLE': 'Unreadable',
+  'system.models.role.VIDEO': 'Video',
+  'system.models.role.IMAGE': 'Image',
+  'system.models.role.IMAGE_EDIT': 'Image edit',
+  'system.models.role.TEXT': 'Text',
+  'system.models.role.TTS': 'Speech',
+  'system.models.role.MUSIC': 'Music',
+
+  'system.preflight.title': 'Preflight',
+  'system.preflight.status.PASS': 'Passed',
+  'system.preflight.status.FAIL': 'Failed',
+  'system.preflight.status.NOT_APPLICABLE': 'Not applicable',
+  'system.preflight.status.NOT_IMPLEMENTED': 'Not implemented',
+  'system.preflight.notRunNote':
+    'A check that did not run is not a check that passed.',
+
+  'system.pressure.title': 'Memory and pressure',
+  'system.pressure.unavailable':
+    'The orchestrator publishes no live memory, VRAM or swap reading yet, so there is nothing here. That is an absent measurement, not a measurement of zero.',
+  'system.runtimes.title': 'Runtimes',
+  'system.runtimes.unavailable':
+    'The orchestrator publishes no version for ComfyUI, LM Studio, FFmpeg or the database yet. The preflight checks are the only thing reporting on whether they start.',
+
+  'dashboard.projectData.title': 'Nothing in this project is wired up yet',
+  'dashboard.projectData.description':
+    'Subjects, locations, productions and reusable assets belong here. The orchestrator serves no project data yet, so this dashboard can only report what the machine itself is able to do.',
+  'dashboard.openSystem': 'Open system status',
+
   'page.notFound.title': 'Page not found',
   'page.notFound.description':
     'Nothing in Local AI Studio matches this address.',
@@ -121,7 +219,7 @@ export const EN_CATALOGUE = {
     'Every Local AI Studio project on this machine. Not connected to the orchestrator yet.',
   'page.dashboard.title': 'Dashboard',
   'page.dashboard.description':
-    "This project's status at a glance: assets, subjects, creative library and productions. Not connected to the orchestrator yet.",
+    'What is waiting for you in this project, and whether this machine can do the next thing.',
   'page.assets.title': 'Assets',
   'page.assets.description':
     'The source footage, images and audio brought into this project. Not connected to the orchestrator yet.',
@@ -169,7 +267,7 @@ export const EN_CATALOGUE = {
     "This production's assembled cut and final export. Not connected to the orchestrator yet.",
   'page.system.title': 'System',
   'page.system.description':
-    'Hardware, installed models, disk space and offline mode for this installation. Not connected to the orchestrator yet.',
+    'Hardware profile, installed models, disk space, preflight and the operating mode of this installation.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

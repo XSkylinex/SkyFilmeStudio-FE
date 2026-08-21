@@ -1,0 +1,49 @@
+@layer features {
+  .operating-mode-panel__resolved {
+    margin: 0;
+
+    & code {
+      display: inline-block;
+      padding-block: var(--space-1);
+      padding-inline: var(--space-2);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: var(--radius-sm);
+      background: var(--color-surface-canvas);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+    }
+  }
+
+  .operating-mode-panel__flags {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .operating-mode-panel__flag {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+    border-block-start: 1px solid var(--color-border-subtle);
+
+    &:first-child {
+      border-block-start: none;
+    }
+  }
+
+  .operating-mode-panel__flag-label {
+    margin-inline-end: auto;
+  }
+
+  .operating-mode-panel__flag-note {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+}

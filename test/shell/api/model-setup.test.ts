@@ -4,10 +4,10 @@ import { API_PATH } from '@/lib/api/api.constants';
 import {
   modelSetupQueryKey,
   modelSetupQueryOptions,
-} from '@/features/system/api/model-setup.query';
+} from '@/shell/api/model-setup.query';
 import { MODEL_SETUP_STALE_TIME_MS } from '@/lib/query/query.constants';
-import { buildModelSetupReport } from '../../../fixtures/model-setup-report.fixture';
-import { mockOrchestratorServer } from '../../../lib/api/msw-server';
+import { buildModelSetupReport } from '../../fixtures/model-setup-report.fixture';
+import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
 const server = mockOrchestratorServer();
 

@@ -1,18 +1,22 @@
-import type { FC, ReactElement } from 'react';
-import { Provider } from 'react-redux';
+import type { FC } from 'react';
+import { http, HttpResponse } from 'msw';
 import { Link, createRoutesStub } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
-import { createStore } from '@/shell/store';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AppShell } from '@/shell/app-shell';
+import { API_PATH } from '@/lib/api/api.constants';
 import {
   projectAssetsPath,
   projectListPath,
   systemPath,
 } from '@/shell/routes/routes.constants';
+import { renderInApp } from '../../render-in-app';
+import { buildSystemMode } from '../../fixtures/system-mode.fixture';
+import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
-const renderInStore = (ui: ReactElement): ReturnType<typeof render> =>
-  render(<Provider store={createStore()}>{ui}</Provider>);
+mockOrchestratorServer(
+  http.get(API_PATH.systemMode(), () => HttpResponse.json(buildSystemMode())),
+);
 
 const HomePage: FC = () => <Link to="/slow">Go slow</Link>;
 const SlowPage: FC = () => <p>slow page arrived</p>;
@@ -28,7 +32,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(<Stub initialEntries={['/']} />);
+    renderInApp(<Stub initialEntries={['/']} />);
 
     const skipLink = screen.getByRole('link', {
       name: 'Skip to main content',
@@ -46,7 +50,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(<Stub initialEntries={['/']} />);
+    renderInApp(<Stub initialEntries={['/']} />);
 
     expect(document.querySelector('.offline-indicator')).toBeInTheDocument();
     expect(document.querySelector('.connection-indicator')).toBeInTheDocument();
@@ -73,7 +77,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(<Stub initialEntries={['/']} />);
+    renderInApp(<Stub initialEntries={['/']} />);
     const progress = document.querySelector('.app-shell__navigation-progress');
     expect(progress).toHaveAttribute('data-pending', 'false');
 
@@ -97,7 +101,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(<Stub initialEntries={['/']} />);
+    renderInApp(<Stub initialEntries={['/']} />);
 
     expect(document.getElementById('app-shell-main')).toHaveAttribute(
       'tabindex',
@@ -114,7 +118,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(<Stub initialEntries={['/']} />);
+    renderInApp(<Stub initialEntries={['/']} />);
 
     expect(
       screen.getByRole('link', { name: 'Local AI Studio' }),
@@ -142,7 +146,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(<Stub initialEntries={['/projects/proj-1/assets']} />);
+    renderInApp(<Stub initialEntries={['/projects/proj-1/assets']} />);
 
     expect(screen.getByRole('link', { name: 'Assets' })).toHaveAttribute(
       'href',
@@ -173,7 +177,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(
+    renderInApp(
       <Stub
         initialEntries={['/projects/proj-1/productions/prod-1/storyboard']}
       />,
@@ -200,7 +204,7 @@ describe('AppShell', () => {
       },
     ]);
 
-    renderInStore(<Stub initialEntries={['/']} />);
+    renderInApp(<Stub initialEntries={['/']} />);
 
     expect(document.title).toBe('Projects · Local AI Studio');
   });

@@ -1,0 +1,25 @@
+@layer features {
+  .dashboard-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .dashboard-page__title {
+    margin: 0;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-heading);
+  }
+
+  .dashboard-page__description {
+    margin: 0;
+    max-inline-size: 60ch;
+    color: var(--color-text-secondary);
+  }
+
+  .dashboard-page__system-link {
+    margin: 0;
+  }
+}
