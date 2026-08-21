@@ -40,6 +40,10 @@ export const EN_CATALOGUE = {
   'error.MEDIA_TOOL_UNAVAILABLE':
     'The FFmpeg build on this machine cannot do what this step needs \u2014 either it is not on the path, or the build that was found has no encoder, filter or muxer for it. This is a setup fault: the same request will fail the same way until FFmpeg is replaced.',
 
+  'error.SOURCE_ASSET_IMMUTABLE':
+    'An imported original cannot be edited in place. Originals are kept exactly as they arrived and every change becomes a new derived version, so this has to be redone as a derived asset rather than an edit.',
+  'error.IMPORT_PATH_REJECTED':
+    "That path was refused because it resolves outside this project's own storage, and nothing was imported. Pick a file inside the project folder, or copy it in first.",
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':

@@ -78,4 +78,12 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.MEDIA_TOOL_UNAVAILABLE',
   },
+  SOURCE_ASSET_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SOURCE_ASSET_IMMUTABLE',
+  },
+  IMPORT_PATH_REJECTED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.IMPORT_PATH_REJECTED',
+  },
 };
