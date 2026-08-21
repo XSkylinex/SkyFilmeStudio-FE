@@ -191,10 +191,45 @@ the content column is under about 352 px — a very narrow window or a heavily z
 narrower than the commit message for that change implies. The fix is right and costs nothing; the
 severity in that message is overstated. Check it in a browser before FE-16 claims responsiveness.
 
+## The project list landed after BE-11 published, 2026-08-21
+
+`/` had said "Not connected to the orchestrator yet" since FE-03. BE-11 published its HTTP surface
+mid-session — `/projects` with create, list, read, storage, patch and delete, plus
+`/projects/:projectId/assets` and `/capture-guide` — and the **list** is the part this repo can
+consume, so it landed here rather than waiting for a new phase. It is the same "build the half the
+endpoints allow" split this phase already made for the installation status.
+
+**What is consumable is decided by the `exports` map, not by the route table.** `GET /projects`
+returns `Page<Project>` and both halves are under `src/contracts/`, so the list is fully typed from
+the contract. The rest of that controller is not: `createProjectRequestSchema`,
+`ProjectStorageUsage` and the patch/delete shapes all live under `src/projects/`, and the package
+publishes only `./contracts`. So project creation, per-project storage, rename and delete stay
+blocked — on a missing export, which is a smaller backend task than a missing endpoint, and worth
+naming precisely so nobody re-reads it as "BE-11 not started".
+
+The empty state therefore offers **no create control at all**, and a test asserts the page renders
+no button and no link when the list is empty. A dead button would be worse than a sentence saying
+creation is not wired.
+
+Verified in Chrome against a stub serving three projects, because this is the first screen in the
+app with real user-authored content in it:
+
+- an English interface with a Hebrew project reads the Hebrew title and description right-to-left
+  inside an LTR page;
+- switching the interface to Hebrew mirrors the shell and leaves the two English titles
+  left-to-right;
+- the language tag is notation and keeps `dir="ltr"`; the date goes through `Intl` and is Hebrew in
+  a Hebrew interface;
+- `/projects/<uuid>` still serves the app rather than the orchestrator. `/projects` is now a proxy
+  prefix **and** an app route, which is exactly the collision this phase hit with `/system`; the
+  `Sec-Fetch-Dest` bypass added then covers it, and that was re-checked rather than assumed.
+
 ## Done when
 
 - [x] the dashboard answers "what is waiting for me" **for the machine**; the project half is BE-11
-- [ ] project creation covers all five kinds; audience profile is optional — **BE-11 not started**
+- [ ] project creation covers all five kinds; audience profile is optional — **blocked on the request
+      shape, not on the endpoint.** `POST /projects` exists; `createProjectRequestSchema` lives under
+      `src/projects/dto/` and the backend publishes only `./contracts`, so this repo cannot import it
 - [x] empty states are valid states; the "real next steps" half waits for FE-07's routes to be real
 - [x] `/system` shows hardware, disk, preflight and models; memory and runtimes are named as unpublished
 - [~] model `compatibility` is shown plainly — **cannot be**; the panel says what "files present" does
