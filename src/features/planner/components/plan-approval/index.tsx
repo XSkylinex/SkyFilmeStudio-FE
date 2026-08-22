@@ -30,6 +30,10 @@ export const PlanApproval: FC<PlanApprovalProps> = ({ production }) => {
   const failure =
     approve.error === null ? null : resolveRouteErrorView(approve.error);
 
+  if (atTheGate && budget.data === undefined) {
+    return null;
+  }
+
   return (
     <section className="plan-approval">
       <h2 className="plan-approval__title">
