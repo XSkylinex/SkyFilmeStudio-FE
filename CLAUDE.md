@@ -84,7 +84,7 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **376 keys in English and
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **453 keys in English and
 Hebrew**, counted 2026-08-22 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail and subject review.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
@@ -206,6 +206,27 @@ Two things FE-02 established that later phases inherit rather than re-decide: st
 **CSS tokens only** — components take a presentational `StatusTone`, and the state→tone mapping is
 FE-04's job against the real inferred contract — and a tone's identity lives in its **border and
 dot form, not its text colour**, which `plan/02-design-system.md` records with the measurements.
+
+FE-08 made the creative library read. `/styles`, `/voices`, `/locations` and `/props` were
+`EmptyState` stubs whose descriptions said "Not connected to the orchestrator yet"; all four now read
+the orchestrator, and each carries the fact its step exists for — a style **lineage** with its
+approved head, a voice split on whether it belongs to a subject, plate coverage over the kinds a
+location actually has, and a prop's continuity rules. `src/features/{styles,voices,locations,props}/`
+hold the slices; `plan/08` records which Done-when boxes are ticked and which cannot be.
+
+**Every one of them reads and approves. None of them creates or edits.** The create and update DTOs
+are published for all five domains, so the forms are buildable and are simply not built; the empty
+states say so rather than implying otherwise.
+
+**`Page<T>` carries `nextCursor`, and an absent one means the end** — so truncation is detectable, and
+each of the four says "reads the first page only" when the server offers more. The asset library
+predates that and still shows fifty silently. Do not add a fifth silent truncation.
+
+**Two acceptance criteria in `plan/08` cannot be met and are not defects here.** There is no `NIGHT`
+plate kind — no lighting axis exists at all — so "flag a missing night plate" would mean inventing a
+vocabulary; `test/style-and-language-agnostic.test.ts` now fails on `NIGHT`, `DAY` and `DAMAGED` in
+`src/` for exactly that reason. And there is no synthesis preview route, so a voice is judged from its
+engine, model and transcript rather than from sound.
 
 ## The six rules that outrank everything else
 
