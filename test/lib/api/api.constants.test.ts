@@ -49,9 +49,15 @@ const everyPath: Record<string, string> = {
   ),
   projectSubjects: API_PATH.projectSubjects(SAMPLE_PROJECT_ID),
   projectSubject: API_PATH.projectSubject(SAMPLE_PROJECT_ID, SAMPLE_SUBJECT_ID),
+  canonicalSets: API_PATH.canonicalSets(SAMPLE_PROJECT_ID, SAMPLE_SUBJECT_ID),
   approvedCanonicalSet: API_PATH.approvedCanonicalSet(
     SAMPLE_PROJECT_ID,
     SAMPLE_SUBJECT_ID,
+  ),
+  approveCanonicalSet: API_PATH.approveCanonicalSet(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_SUBJECT_ID,
+    SAMPLE_CANONICAL_ASSET_SET_ID,
   ),
   canonicalReferences: API_PATH.canonicalReferences(
     SAMPLE_PROJECT_ID,
