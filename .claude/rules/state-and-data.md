@@ -158,6 +158,15 @@ without an ESM build would have cost 312 kB. `test/contract-source-matches-runti
 of this, including that no alias comes back — **no resolver would report that one**, since
 `import.meta.resolve` does not see Vite aliases.
 
+**Nothing may resolve the contract outside the bundler.** The published ESM keeps extensionless
+directory specifiers (`export * from './bundle'`), which Vite and Rolldown resolve and raw Node ESM
+does not. Today that is safe and checked: the only importers are `src/` and `test/`, and
+`vitest.config.ts` `mergeConfig`s `vite.config.ts` so tests resolve through Vite too. A future `node`
+script, a codegen step or an SSR path importing `sky-filme-studio-be/contracts` would fail with
+`Cannot find module './bundle'`, which reads like a broken install. The fix is the backend's — adding
+`.js` to every relative specifier under `src/contracts` — and it is offered rather than done, because
+nothing needs it yet. Ask before working around it.
+
 - **`zod` is the same version in both repos**: `4.4.3` in each `package.json` (registry latest,
   re-checked 2026-08-20). A v3/v4 split silently produces two incompatible `z.infer` shapes.
 - **Two zod copies are installed; one reaches the bundle.** The frontend uses zod's types, which
