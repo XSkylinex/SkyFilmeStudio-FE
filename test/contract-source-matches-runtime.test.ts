@@ -1,10 +1,11 @@
 import { createRequire } from 'node:module';
-import { dirname, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
-import * as viaPackageSpecifier from 'sky-filme-studio-be/contracts';
+import { readFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { ERROR_CODE } from 'sky-filme-studio-be/contracts';
 
 const CONTRACT_PACKAGE = 'sky-filme-studio-be';
 const CONTRACT_ENTRY = 'contracts';
+const ERROR_CODE_FILE = join('enums', 'error-code.ts');
 
 interface ContractPackage {
   readonly exports: Record<
@@ -22,6 +23,24 @@ const packageJsonPath = resolveFromHere.resolve(
 const conditions = (resolveFromHere(packageJsonPath) as ContractPackage)
   .exports[`./${CONTRACT_ENTRY}`];
 
+const typesPath = resolve(dirname(packageJsonPath), conditions?.types ?? '');
+
+const codesDeclaredInSource = (): string[] => {
+  const source = readFileSync(
+    join(dirname(typesPath), ERROR_CODE_FILE),
+    'utf8',
+  );
+
+  return [...source.matchAll(/^ {2}'([A-Z_]+)',$/gmu)].map(
+    ([, code]) => code ?? '',
+  );
+};
+
+const viteConfig = readFileSync(
+  resolve(process.cwd(), 'vite.config.ts'),
+  'utf8',
+);
+
 describe('the contract this app loads is the contract it typechecks', () => {
   it('publishes a types and a default condition that point at different trees', () => {
     expect(conditions?.types).toContain('/src/');
@@ -34,17 +53,15 @@ describe('the contract this app loads is the contract it typechecks', () => {
     ).toContain('/dist/');
   });
 
-  it('loads the very module typecheck reads, because vite.config.ts aliases it', async () => {
-    const typesUrl = pathToFileURL(
-      resolve(dirname(packageJsonPath), conditions?.types ?? ''),
-    ).href;
+  it('is aliased away from that trap by vite.config.ts, which load-bears', () => {
+    expect(viteConfig).toContain(`'${CONTRACT_PACKAGE}/${CONTRACT_ENTRY}'`);
+    expect(viteConfig).toContain(`${CONTRACT_PACKAGE}/src/${CONTRACT_ENTRY}`);
+  });
 
-    const fromSource = (await import(/* @vite-ignore */ typesUrl)) as Record<
-      string,
-      unknown
-    >;
+  it('serves the error codes the source declares, read as text so it cannot self-compare', () => {
+    const declared = codesDeclaredInSource();
 
-    expect(fromSource.ERROR_CODE).toBeDefined();
-    expect(viaPackageSpecifier.ERROR_CODE).toBe(fromSource.ERROR_CODE);
+    expect(declared.length).toBeGreaterThan(20);
+    expect(Object.values(ERROR_CODE).sort()).toEqual(declared.sort());
   });
 });
