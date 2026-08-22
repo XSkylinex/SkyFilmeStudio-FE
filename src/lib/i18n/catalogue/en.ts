@@ -491,7 +491,7 @@ export const EN_CATALOGUE = {
   'styles.empty.description':
     'A style profile records the palette, lighting, camera, texture and motion rules a production is generated against. This project has none, and there is no way to create one here yet.',
   'styles.pinning':
-    'A profile is a lineage and each row below is one version of it. Which version a production is pinned to is not shown, because the orchestrator publishes no route that reads a production.',
+    'A profile is a lineage and each row below is one version of it. Which version a production is pinned to is not shown: a production records the version it used, but no published route returns a production, so nothing here can read that record.',
   'styles.truncated':
     'More style profiles exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'styles.lineage.versionCount': '{count} versions',
