@@ -2,6 +2,8 @@ import type {
   CanonicalAssetSetId,
   LocationId,
   LocationPlateId,
+  ProductionId,
+  ProductionProfileId,
   ProjectId,
   PronunciationDictionaryId,
   PropId,
@@ -109,6 +111,27 @@ export const API_PATH = {
     `/projects/${projectId}/props/${propId}`,
   approveProp: (projectId: ProjectId, propId: PropId): string =>
     `/projects/${projectId}/props/${propId}/approve`,
+  productions: (projectId: ProjectId): string =>
+    `/projects/${projectId}/productions`,
+  production: (projectId: ProjectId, productionId: ProductionId): string =>
+    `/projects/${projectId}/productions/${productionId}`,
+  productionTransitions: (
+    projectId: ProjectId,
+    productionId: ProductionId,
+  ): string => `/projects/${projectId}/productions/${productionId}/transitions`,
+  productionProfiles: (projectId: ProjectId): string =>
+    `/projects/${projectId}/production-profiles`,
+  productionProfile: (
+    projectId: ProjectId,
+    productionProfileId: ProductionProfileId,
+  ): string =>
+    `/projects/${projectId}/production-profiles/${productionProfileId}`,
+  planningStages: (productionId: ProductionId): string =>
+    `/productions/${productionId}/planning/stages`,
+  planningBudget: (productionId: ProductionId): string =>
+    `/productions/${productionId}/planning/budget`,
+  planningApproval: (productionId: ProductionId): string =>
+    `/productions/${productionId}/planning/approval`,
   renderJob: (renderJobId: RenderJobId): string =>
     `/render-jobs/${renderJobId}`,
 } satisfies Record<string, (...args: never[]) => string>;
