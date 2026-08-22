@@ -39,12 +39,14 @@ const codesDeclaredInSource = (): string[] => {
 };
 
 describe('the contract this app loads is one build, not two', () => {
-  it('resolves types out of the build, never back into the source tree', () => {
-    expect(conditions?.types).toContain('/dist/');
+  it('takes types from the same compilation as the code they describe', () => {
     expect(conditions?.types).not.toContain('/src/');
+    expect(dirname(conditions?.types ?? '')).toBe(
+      dirname(conditions?.import ?? ''),
+    );
   });
 
-  it('loads the tree-shakeable build, because the CommonJS one costs 312 kB', () => {
+  it('loads the tree-shakeable build, because the CommonJS one is 312 kB heavier', () => {
     expect(conditions?.import).toContain('dist-esm');
     expect(conditions?.require).not.toContain('dist-esm');
     expect(

@@ -51,22 +51,30 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **twenty-seven as of
-2026-08-22**, six of them added in one day, four by BE-12 and two by BE-13, each one breaking
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **thirty-one as of
+2026-08-22**, ten of them added in one day: four by BE-12, two by BE-13's style work and four by its
+voice and pronunciation work, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL;
-**The compiler and the runtime read one build, and there is no alias.** `exports["./contracts"]` sends
-`types` to `dist/contracts/index.d.ts`, `import` to a tree-shakeable `dist-esm/`, and `require` to the
-CommonJS the orchestrator's own server loads. Until 2026-08-22 `types` pointed at the backend's
-*source* and a `vite.config.ts` alias dragged the runtime back to match it — which meant this repo
-compiled against a working tree and went red six times in one day on files the backend had not
-typechecked itself. `test/contract-source-matches-runtime.test.ts` pins the new arrangement, including
-that the alias does not return: **no resolver reports that**, because `import.meta.resolve` is Node's
-and cannot see a Vite alias.
+**There is no alias, and `types` and `import` come out of one compilation.**
+`exports["./contracts"]` sends both into a tree-shakeable `dist-esm/` emitted by a single `tsc`, and
+`require` to the CommonJS the orchestrator's own server loads. **That the two share a compilation is
+the invariant, not an implementation detail** — for twenty minutes on 2026-08-22 they did not, and a
+field renamed under `nest start --watch` would have moved the types while the bundle kept parsing the
+old schema, with the gate green over it. `.claude/rules/state-and-data.md` carries the detail.
 
-**The ESM build is load-bearing, not tidiness.** Measured: 465.73 kB with the old alias, **778.01 kB**
-through the CommonJS condition, 466.15 kB through ESM. Rolldown cannot tree-shake CJS.
+Until 2026-08-22 `types` pointed at the backend's *source* and a `vite.config.ts` alias dragged the
+runtime back to match it — the two were literally one file, which is why that arrangement could not
+produce this failure. It produced a different one: this repo compiled against a working tree and went
+red six times in one day on files the backend had not typechecked itself.
+`test/contract-source-matches-runtime.test.ts` pins the new arrangement, including that the alias does
+not return — **no resolver reports that**, because `import.meta.resolve` is Node's and cannot see a
+Vite alias.
+
+**The ESM build is load-bearing, not tidiness.** Measured 2026-08-22 on one tree: the alias and the ESM
+condition give a **byte-identical** bundle at 466.15 kB, and the CommonJS condition gives 778.43 kB.
+Rolldown cannot tree-shake CJS.
 
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
 `StatusTone` — six from FE-04 and model file status from FE-06 — which is the mapping FE-02 deferred
