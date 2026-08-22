@@ -8,7 +8,7 @@ import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-erro
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { styleProfilesQueryOptions } from '@/features/styles/api/style-profiles.query';
 import { groupIntoLineages } from '@/features/styles/helpers/group-into-lineages';
-import { StyleLineageCard } from '@/features/styles/components/style-lineage';
+import { StyleLineageCard } from '@/features/styles/components/style-lineage-card';
 import { STYLE_LINEAGE_SKELETON_COUNT } from '@/features/styles/styles.constants';
 import type { StyleLibraryProps } from './style-library.interface';
 import './style-library.css';
@@ -19,7 +19,7 @@ export const StyleLibrary: FC<StyleLibraryProps> = ({ projectId }) => {
     styleProfilesQueryOptions(projectId),
   );
 
-  if (error) {
+  if (error && data === undefined) {
     const view = resolveRouteErrorView(error);
 
     return (
@@ -70,7 +70,8 @@ export const StyleLibrary: FC<StyleLibraryProps> = ({ projectId }) => {
           <StyleLineageCard
             key={lineage.lineageId}
             projectId={projectId}
-            lineage={lineage}
+            lineageId={lineage.lineageId}
+            name={lineage.name}
           />
         ))}
       </ul>

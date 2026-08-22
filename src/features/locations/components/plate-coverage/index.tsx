@@ -71,11 +71,16 @@ export const PlateCoverage: FC<PlateCoverageProps> = ({
         </ul>
       )}
 
+      {data.nextCursor === undefined ? null : (
+        <p className="plate-coverage__truncated">
+          {translate('locations.plates.truncated')}
+        </p>
+      )}
+
       {uncovered.length === 0 ? null : (
         <p className="plate-coverage__suggested">
-          {translate('locations.plates.suggestedMissing', {
-            kinds: uncovered.join(', '),
-          })}
+          {translate('locations.plates.suggestedMissing')}{' '}
+          <span dir="ltr">{uncovered.join(', ')}</span>
         </p>
       )}
     </div>

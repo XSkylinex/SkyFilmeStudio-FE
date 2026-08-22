@@ -57,8 +57,8 @@ export const PronunciationDictionaries: FC<PronunciationDictionariesProps> = ({
             className="pronunciation-dictionaries__dictionary"
             key={dictionary.id}
           >
-            <h4 className="pronunciation-dictionaries__language" dir="ltr">
-              {dictionary.language}
+            <h4 className="pronunciation-dictionaries__language">
+              <span dir="ltr">{dictionary.language}</span>
             </h4>
             <PronunciationEntries
               projectId={projectId}

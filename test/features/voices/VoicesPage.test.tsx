@@ -121,17 +121,25 @@ describe('VoicesPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows a Hebrew term beside the form it normalises to', async () => {
+  it('shows a Hebrew term beside the different form it normalises to', async () => {
     orchestratorServes(
       [buildVoiceProfile()],
       [buildPronunciationDictionary()],
-      [buildPronunciationEntry({ term: 'שלום', normalisedTerm: 'שלום' })],
+      [
+        buildPronunciationEntry({
+          term: 'שלום  עולם',
+          normalisedTerm: 'שלום עולם',
+        }),
+      ],
     );
 
     renderPage();
 
-    expect(await screen.findAllByText('שלום')).toHaveLength(2);
-    expect(screen.getByText(/normalises to/)).toBeInTheDocument();
+    const label = await screen.findByText(/normalises to/);
+    const row = label.closest('li');
+
+    expect(row?.textContent).toContain('שלום  עולם');
+    expect(label.textContent).toContain('שלום עולם');
   });
 
   it('says an entry cannot be edited, because no route exists for it', async () => {

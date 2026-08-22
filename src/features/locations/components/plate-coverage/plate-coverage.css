@@ -36,6 +36,7 @@
 
   .plate-coverage__none,
   .plate-coverage__suggested,
+  .plate-coverage__truncated,
   .plate-coverage__unread {
     margin: 0;
     color: var(--color-text-secondary);

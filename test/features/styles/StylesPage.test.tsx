@@ -38,12 +38,16 @@ const renderPage = (): void => {
 const orchestratorServes = (
   items: readonly StyleProfile[],
   nextCursor?: string,
+  lineageVersions?: readonly StyleProfile[],
 ): void => {
   server.use(
     http.get(API_PATH.styleProfiles(PROJECT_ID), () =>
       HttpResponse.json(
         nextCursor === undefined ? { items } : { items, nextCursor },
       ),
+    ),
+    http.get(API_PATH.styleProfileVersions(PROJECT_ID), () =>
+      HttpResponse.json(lineageVersions ?? items),
     ),
   );
 };
@@ -61,13 +65,10 @@ describe('StylesPage', () => {
 
     renderPage();
 
-    expect(
-      await screen.findByRole('heading', { name: 'Nightfall', level: 3 }),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Versions: 2')).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { name: 'Nightfall' })).toHaveLength(
       1,
     );
-    expect(screen.getByText('2 versions')).toBeInTheDocument();
   });
 
   it('names the approved version rather than only marking one', async () => {
@@ -136,7 +137,7 @@ describe('StylesPage', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('admits it is showing one page when the server offers a next cursor', async () => {
+  it('admits a lineage may be missing when the server offers a next cursor', async () => {
     orchestratorServes(
       [buildStyleProfile({ id: LINEAGE, lineageId: LINEAGE })],
       'opaque-cursor',
@@ -145,8 +146,57 @@ describe('StylesPage', () => {
     renderPage();
 
     expect(
-      await screen.findByText(/reads the first page only/),
+      await screen.findByText(/a lineage may be missing from this list/),
     ).toBeInTheDocument();
+  });
+
+  it('reads the whole lineage, so a version off the first page still counts', async () => {
+    orchestratorServes(
+      [buildStyleProfile({ id: LINEAGE, lineageId: LINEAGE, version: 1 })],
+      'opaque-cursor',
+      [
+        buildStyleProfile({ id: LINEAGE, lineageId: LINEAGE, version: 1 }),
+        buildStyleProfile({
+          id: SECOND_VERSION,
+          lineageId: LINEAGE,
+          version: 2,
+        }),
+        buildStyleProfile({
+          id: styleProfileIdSchema.parse(
+            '44444444-4444-4444-8444-444444444444',
+          ),
+          lineageId: LINEAGE,
+          version: 3,
+          approved: true,
+        }),
+      ],
+    );
+
+    renderPage();
+
+    expect(await screen.findByText('Approved: v3')).toBeInTheDocument();
+    expect(screen.getByText('Versions: 3')).toBeInTheDocument();
+    expect(screen.queryByText('No approved version')).not.toBeInTheDocument();
+  });
+
+  it('says the lineage is unknown rather than empty when its versions fail', async () => {
+    server.use(
+      http.get(API_PATH.styleProfiles(PROJECT_ID), () =>
+        HttpResponse.json({
+          items: [buildStyleProfile({ id: LINEAGE, lineageId: LINEAGE })],
+        }),
+      ),
+      http.get(API_PATH.styleProfileVersions(PROJECT_ID), () =>
+        HttpResponse.json(null, { status: 503 }),
+      ),
+    );
+
+    renderPage();
+
+    expect(
+      await screen.findByText(/is unknown rather than none/),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('No approved version')).not.toBeInTheDocument();
   });
 
   it('does not claim a page boundary the server did not report', async () => {
@@ -158,7 +208,7 @@ describe('StylesPage', () => {
 
     await screen.findByRole('heading', { name: 'Nightfall', level: 3 });
     expect(
-      screen.queryByText(/reads the first page only/),
+      screen.queryByText(/a lineage may be missing from this list/),
     ).not.toBeInTheDocument();
   });
 });

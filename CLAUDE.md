@@ -214,17 +214,19 @@ approved head, a voice split on whether it belongs to a subject, plate coverage 
 location actually has, and a prop's continuity rules. `src/features/{styles,voices,locations,props}/`
 hold the slices; `plan/08` records which Done-when boxes are ticked and which cannot be.
 
-**Every one of them reads and approves. None of them creates or edits.** The create and update DTOs
-are published for all five domains, so the forms are buildable and are simply not built; the empty
-states say so rather than implying otherwise.
+**Every one of them reads and approves. None of them creates or edits.** Create and update DTOs are
+published for style profiles, voice profiles, locations, plates and props, so those forms are
+buildable and are simply not built. A pronunciation dictionary has a **create** DTO and no update one,
+which is the same gap as its missing `PATCH`. The empty states say so rather than implying otherwise.
 
 **`Page<T>` carries `nextCursor`, and an absent one means the end** — so truncation is detectable, and
 each of the four says "reads the first page only" when the server offers more. The asset library
 predates that and still shows fifty silently. Do not add a fifth silent truncation.
 
-**Two acceptance criteria in `plan/08` cannot be met and are not defects here.** There is no `NIGHT`
-plate kind — no lighting axis exists at all — so "flag a missing night plate" would mean inventing a
-vocabulary; `test/style-and-language-agnostic.test.ts` now fails on `NIGHT`, `DAY` and `DAMAGED` in
+**Two acceptance criteria in `plan/08` cannot be met and are not defects here.** No `NIGHT` plate kind
+is *published* — `plate-kind.ts` names a lighting variant in prose as one of §29's five minimum kinds,
+and `SUGGESTED_PLATE_KINDS` carries four, none of them it — so "flag a missing night plate" would mean
+this repo inventing the constant; `test/style-and-language-agnostic.test.ts` now fails on `NIGHT`, `DAY` and `DAMAGED` in
 `src/` for exactly that reason. And there is no synthesis preview route, so a voice is judged from its
 engine, model and transcript rather than from sound.
 

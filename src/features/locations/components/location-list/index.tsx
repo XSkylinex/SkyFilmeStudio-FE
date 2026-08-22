@@ -18,7 +18,7 @@ export const LocationList: FC<LocationListProps> = ({ projectId }) => {
     projectLocationsQueryOptions(projectId),
   );
 
-  if (error) {
+  if (error && data === undefined) {
     const view = resolveRouteErrorView(error);
 
     return (

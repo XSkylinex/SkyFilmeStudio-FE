@@ -19,7 +19,7 @@ export const VoiceList: FC<VoiceListProps> = ({ projectId }) => {
     voiceProfilesQueryOptions(projectId),
   );
 
-  if (error) {
+  if (error && data === undefined) {
     const view = resolveRouteErrorView(error);
 
     return (

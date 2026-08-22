@@ -166,4 +166,32 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.CONTINUITY_CONTEXT_REQUIRED',
   },
+  PRODUCTION_TRANSITION_INVALID: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PRODUCTION_TRANSITION_INVALID',
+  },
+  PRODUCTION_PROFILE_SECTIONS_OVERLAP: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PRODUCTION_PROFILE_SECTIONS_OVERLAP',
+  },
+  PRODUCTION_PROFILE_IN_USE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PRODUCTION_PROFILE_IN_USE',
+  },
+  PRODUCTION_RENDER_NOT_PERMITTED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PRODUCTION_RENDER_NOT_PERMITTED',
+  },
+  PLANNING_STAGE_MISSING: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PLANNING_STAGE_MISSING',
+  },
+  RUNTIME_BUDGET_OUT_OF_TOLERANCE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.RUNTIME_BUDGET_OUT_OF_TOLERANCE',
+  },
+  RUNTIME_TOLERANCE_UNDECLARED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.RUNTIME_TOLERANCE_UNDECLARED',
+  },
 };

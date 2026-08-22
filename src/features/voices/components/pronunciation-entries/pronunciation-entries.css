@@ -33,6 +33,7 @@
   }
 
   .pronunciation-entries__none,
+  .pronunciation-entries__truncated,
   .pronunciation-entries__unread {
     margin: 0;
     color: var(--color-text-secondary);

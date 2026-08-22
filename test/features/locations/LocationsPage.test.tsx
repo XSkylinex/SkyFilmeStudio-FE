@@ -98,7 +98,7 @@ describe('LocationsPage', () => {
 
     expect(await screen.findByText('WIDE_ESTABLISHING')).toBeInTheDocument();
     expect(screen.getByText('MEDIUM_LEFT')).toBeInTheDocument();
-    expect(screen.getByText('1 drafts, none approved')).toBeInTheDocument();
+    expect(screen.getByText('None approved — drafts: 1')).toBeInTheDocument();
   });
 
   it('shows a kind the orchestrator invented, not only the suggested four', async () => {
@@ -123,16 +123,29 @@ describe('LocationsPage', () => {
     renderPage();
 
     expect(
-      await screen.findByText(/Suggestions, not requirements/),
+      await screen.findByText(/suggestions, not requirements/),
     ).toBeInTheDocument();
   });
 
-  it('never claims a lighting variant is a kind the orchestrator has', async () => {
-    orchestratorServes([buildLocation()], []);
+  it('shows a lighting-variant kind as observed, never as a checklist slot', async () => {
+    orchestratorServes(
+      [buildLocation()],
+      [
+        buildLocationPlate({
+          kind: plateKindSchema.parse('NIGHT'),
+          approved: true,
+        }),
+      ],
+    );
 
     renderPage();
 
-    await screen.findByRole('heading', { name: 'The lighthouse', level: 3 });
-    expect(screen.queryByText(/\bNIGHT\b/)).not.toBeInTheDocument();
+    expect(await screen.findByText('NIGHT')).toBeInTheDocument();
+    expect(
+      screen.getByText(/suggestions, not requirements/),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(/NIGHT.*missing|missing.*NIGHT/),
+    ).not.toBeInTheDocument();
   });
 });

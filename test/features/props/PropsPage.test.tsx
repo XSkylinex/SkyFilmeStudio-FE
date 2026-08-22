@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import {
   projectIdSchema,
@@ -42,6 +43,71 @@ const orchestratorServes = (
 };
 
 describe('PropsPage', () => {
+  it('keeps the library on screen when a refetch fails after a successful approve', async () => {
+    let listCalls = 0;
+    let postCalls = 0;
+
+    server.use(
+      http.get(API_PATH.projectProps(PROJECT_ID), () => {
+        listCalls += 1;
+
+        return listCalls === 1
+          ? HttpResponse.json({ items: [buildProp()] })
+          : new HttpResponse(null, { status: 503 });
+      }),
+      http.post(API_PATH.approveProp(PROJECT_ID, buildProp().id), () => {
+        postCalls += 1;
+
+        return HttpResponse.json(buildProp({ approved: true }));
+      }),
+    );
+
+    renderPage();
+
+    const approve = await screen.findByRole('button', {
+      name: 'Approve the prop Brass compass',
+    });
+
+    await userEvent.click(approve);
+    await waitFor(() => expect(listCalls).toBeGreaterThan(1));
+
+    expect(postCalls).toBe(1);
+    expect(
+      screen.getByRole('heading', { name: 'Brass compass', level: 3 }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText('The props could not be read'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('sends one request when the approve control is clicked twice', async () => {
+    let postCalls = 0;
+
+    server.use(
+      http.get(API_PATH.projectProps(PROJECT_ID), () =>
+        HttpResponse.json({ items: [buildProp()] }),
+      ),
+      http.post(API_PATH.approveProp(PROJECT_ID, buildProp().id), async () => {
+        postCalls += 1;
+        await new Promise((resolve) => setTimeout(resolve, 50));
+
+        return HttpResponse.json(buildProp({ approved: true }));
+      }),
+    );
+
+    renderPage();
+
+    const approve = await screen.findByRole('button', {
+      name: 'Approve the prop Brass compass',
+    });
+
+    await userEvent.click(approve);
+    expect(approve).toBeDisabled();
+    await userEvent.click(approve);
+
+    await waitFor(() => expect(postCalls).toBe(1));
+  });
+
   it('shows each prop with the continuity rules it carries', async () => {
     orchestratorServes([buildProp()]);
 

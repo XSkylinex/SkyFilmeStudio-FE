@@ -268,9 +268,10 @@ each states its own limits on screen rather than in this file.
 
 **Styles (step 1).** The wire returns every version of every lineage in one flat page, so
 `groupIntoLineages` folds on `lineageId` and names the approved head. **Which version a production is
-pinned to is not shown** — `productionSchema.styleProfileId` exists but no route reads a production —
-and the screen says that rather than omitting it, because an omission reads as "no production uses
-this". Approval is per version and the control is named for the version it would approve.
+pinned to is not shown** — `productionSchema.styleProfileId` exists but **no published route returns a
+`Production`**, so it is unreachable. Three controllers do mount on `productions/:productionId` and one
+404s "No production", so "no route reads a production" would be false; the accurate claim is about the
+return type, and the screen now says it that way. Approval is per version and the control is named for the version it would approve.
 
 **Voices (step 3).** Split on `subjectId` being absent, so narrator and standalone voices are a
 visible category rather than an afterthought. The one-approved-voice-per-subject limit is **enforced

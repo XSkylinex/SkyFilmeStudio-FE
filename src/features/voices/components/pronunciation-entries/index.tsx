@@ -38,25 +38,32 @@ export const PronunciationEntries: FC<PronunciationEntriesProps> = ({
   }
 
   return (
-    <ul className="pronunciation-entries">
-      {data.items.map((entry) => (
-        <li className="pronunciation-entries__entry" key={entry.id}>
-          <span className="pronunciation-entries__term">
-            <ContentText language={language}>{entry.term}</ContentText>
-          </span>
-          <span className="pronunciation-entries__normalised">
-            {translate('voices.entries.normalisedAs')}{' '}
-            <ContentText language={language}>
-              {entry.normalisedTerm}
-            </ContentText>
-          </span>
-          {entry.phonemeOverride === undefined ? null : (
-            <span className="pronunciation-entries__phonemes" dir="ltr">
-              {entry.phonemeOverride}
+    <>
+      {data.nextCursor === undefined ? null : (
+        <p className="pronunciation-entries__truncated">
+          {translate('voices.entries.truncated')}
+        </p>
+      )}
+      <ul className="pronunciation-entries">
+        {data.items.map((entry) => (
+          <li className="pronunciation-entries__entry" key={entry.id}>
+            <span className="pronunciation-entries__term">
+              <ContentText language={language}>{entry.term}</ContentText>
             </span>
-          )}
-        </li>
-      ))}
-    </ul>
+            <span className="pronunciation-entries__normalised">
+              {translate('voices.entries.normalisedAs')}{' '}
+              <ContentText language={language}>
+                {entry.normalisedTerm}
+              </ContentText>
+            </span>
+            {entry.phonemeOverride === undefined ? null : (
+              <span className="pronunciation-entries__phonemes" dir="ltr">
+                {entry.phonemeOverride}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 };
