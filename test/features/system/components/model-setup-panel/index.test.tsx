@@ -90,9 +90,11 @@ describe('ModelSetupPanel', () => {
     expect(
       await screen.findByText(/at the size the manifest declares/),
     ).toBeInTheDocument();
-    expect(screen.getByText(/nothing here reads a hash/)).toBeInTheDocument();
     expect(
-      screen.getByText(/MODEL_HASHES_MATCH preflight check is what does/),
+      screen.getByText(/nothing on this screen opens a file/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/this screen has no control for it/),
     ).toBeInTheDocument();
   });
 
@@ -136,6 +138,59 @@ describe('ModelSetupPanel', () => {
     expect(screen.getByText('Files not ready')).toBeInTheDocument();
     expect(screen.queryByText('Files missing')).not.toBeInTheDocument();
     expect(screen.queryByText(/Still to fetch/)).not.toBeInTheDocument();
+  });
+
+  it('labels every present-but-unproven status the contract can carry', async () => {
+    orchestratorReports(
+      buildModelSetupReport({
+        ready: true,
+        totalMissingBytes: 0,
+        models: [
+          {
+            id: modelManifestIdSchema.parse('ltx-2.5-distilled'),
+            role: 'VIDEO',
+            upstreamRepo: 'lightricks/ltx-video',
+            license: 'openrail-m',
+            totalBytes: 4_000_000_000,
+            missingBytes: 0,
+            ready: true,
+            files: [
+              {
+                relativePath: projectRelativePathSchema.parse(
+                  'video/ltx-2.5-distilled/changed.safetensors',
+                ),
+                bytes: 2_000_000_000,
+                status: 'PRESENT_UNVERIFIED',
+                detail:
+                  'Present and the declared size, but has not been hashed since it last changed.',
+              },
+              {
+                relativePath: projectRelativePathSchema.parse(
+                  'video/ltx-2.5-distilled/unhashed.safetensors',
+                ),
+                bytes: 2_000_000_000,
+                status: 'PRESENT_UNVERIFIABLE',
+                detail:
+                  'Present and the declared size, but the manifest records no SHA-256.',
+              },
+            ],
+            downloadArgv: [
+              'huggingface-cli',
+              'download',
+              'lightricks/ltx-video',
+            ],
+          },
+        ],
+      }),
+    );
+
+    renderInApp(<ModelSetupPanel />);
+
+    expect(
+      await screen.findByText('Present, not hashed since it changed'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Present, hash unknown')).toBeInTheDocument();
+    expect(screen.queryByText('Hash verified')).not.toBeInTheDocument();
   });
 
   it('never presents files-present as benchmarked, and shows the caveat alongside it', async () => {

@@ -27,10 +27,21 @@ describe('EN_CATALOGUE', () => {
     },
   );
 
+  it('does not let a file-status label claim what the setup report cannot know', () => {
+    expect(
+      EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIABLE'],
+    ).not.toMatch(/no hash|declares no|not declared|never be/i);
+    expect(
+      EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIED'],
+    ).not.toBe(EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIABLE']);
+  });
+
   it('does not send the reader to a screen or an action this build does not have', () => {
     const dangling = Object.entries(EN_CATALOGUE)
       .filter(([, value]) =>
-        /model setup screen|run the benchmark/i.test(value),
+        /model setup screen|run the benchmark|run the verification|verify them before/i.test(
+          value,
+        ),
       )
       .map(([key]) => key);
 

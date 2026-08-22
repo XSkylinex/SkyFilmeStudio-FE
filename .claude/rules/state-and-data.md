@@ -197,8 +197,9 @@ nothing needs it yet. Ask before working around it.
   its own schema. The module count this bullet used to quote is not currently measurable:
   `build/external-url-guard.ts` treats `.map` as text, so a sourcemap build fails on URLs harvested
   out of `sourcesContent` in third-party doc comments. Fix that before quoting a number again.
-- **The contract module is browser-safe, and that is load-bearing.** Its **62** files (re-counted
-  2026-08-22; this bullet said 47) import nothing but `zod` and relative paths; no `@nestjs/*`, no
+- **The contract module is browser-safe, and that is load-bearing.** Its files — **68** in source and
+  **66** built, counted 2026-08-22 18:50, and this bullet has said 47 and 62 before — import nothing
+  but `zod` and relative paths; no `@nestjs/*`, no
   `drizzle-orm`, no `node:*`. The backend now has a spec walking that import graph transitively from
   `contracts/index.ts`, which is a stronger guarantee than counting — but check it again before
   importing any *new* backend subpath, because the portal link would happily drag a database driver
@@ -234,6 +235,62 @@ nothing needs it yet. Ask before working around it.
   change and the sentences would be written with no throw site to read. Measured 2026-08-22: master
   showed 17 failures and `typecheck` exit 1 against 32 dirty upstream files, while this diff was empty
   and all 17 failures were in the three tests that enumerate `ERROR_CODE`.
+- **`HEAD` over there is a branch, and a branch may never merge.** The diff above answers "is this
+  repo in sync with the sibling's checkout", not "are these names on master" — `git show HEAD:` reads
+  whatever is checked out, and the sibling is usually mid-phase on something. Measured 2026-08-22
+  17:00: backend master carried **25** error codes while `be-13-styles-voices-locations-props` carried
+  **35**, and six of the ten that existed only on that branch were already mapped here. The diff was
+  empty and the gate was green. (That branch merged at 18:08 the same evening and all thirty-five are
+  on master now — which is why the time is on the measurement and not just the date.)
+
+  **The check is one word, not a second command.** Run the diff above a second time with `master:`
+  in place of `HEAD:`; if it is empty, the codes are on master. `branch --show-current` tells you what
+  the sibling is doing, which is worth knowing, but it does not answer this question — asked while the
+  tree had already moved on to the next phase it names a branch with nothing to do with the codes in
+  hand.
+
+  Record in the phase file which codes are branch-only, and re-run the `master:` diff at commit time
+  rather than once per session — `git.md` already says to re-read the backend before merging and not
+  only before committing, and this is that rule with a command attached.
+
+  Absorbing from an unmerged branch is still right, and barely a choice: the portal link reads
+  whichever branch is checked out, so the alternative is a red gate until someone else's review
+  finishes. **Building screens on it is a different bet.** A rename during review costs four sentences
+  if all that was done is map refusals; it costs a phase if seven screens are already written against
+  it. Map the taxonomy, wait for the merge before building the surface.
+- **The build over there can be behind its own source, and that is structural.** Since `types` moved
+  to `dist-esm/`, this repo compiles against the backend's *build output*, so a contract file can be
+  committed upstream and be invisible here with a fully green gate. It is not an oversight: the
+  backend's `build` is `nest build && tsc -p tsconfig.contracts-esm.json` and its `nest-cli.json` sets
+  `deleteOutDir: true`, so rebuilding deletes `dist/` out from under a running orchestrator. A backend
+  session with Alex's dev server up will correctly decline to rebuild.
+
+  Detect it by **file set, never by mtime** — a checkout or a rebase rewrites mtimes without changing
+  content, which produced a false alarm here before this bullet existed:
+
+  ```bash
+  diff <(cd ../sky-filme-studio-be/src/contracts && find . -name '*.ts' | sed 's/\.ts$//' | sort) \
+       <(cd ../sky-filme-studio-be/dist-esm/contracts && find . -name '*.d.ts' | sed 's/\.d\.ts$//' | sort)
+  ```
+
+  Measured 2026-08-22, twice on one day: identical at 66 in the afternoon, and by evening the source
+  was at 68 while the build stayed at 66, short exactly `domain/bible` and `enums/bible-section`.
+  Both numbers move; the diff is the answer and neither count is. **This is not a
+  test.** It would be red whenever the sibling is mid-branch, which is most of the time, and a guard
+  that is red for reasons that are not defects here gets ignored. `contract-source-matches-runtime`
+  covers the one file where drift is most expensive — it compares the built `ERROR_CODE` against the
+  source read as text — and everything else is this command plus judgement.
+
+  **That test has a known red mode, and it is not a defect here.** It compares the *built* enum with
+  the *source* text, so it fails whenever the sibling commits a contract change without rebuilding.
+  Measured 2026-08-22 19:00: source 41, build 35, master 35, taxonomy 35 — the suite went from fully
+  green to one red inside twenty minutes with nothing changed on this side, and the same test was red
+  on `master` here. Tell them apart before touching anything: if the `master:` diff two bullets up is
+  empty, the taxonomy is correct and the red belongs upstream. Clear it by asking for a rebuild, or by
+  waiting for the merge. **Do not weaken this assertion to get green** — a build behind its own source
+  is exactly the condition it exists to report, and absorbing the extra codes is not available anyway,
+  since `ErrorCode` comes from the build and a taxonomy entry for a code the build has never heard of
+  is an excess property, not a fix.
 - **Anything reachable from the contracts barrel must import relatively.** A `paths` alias does not
   cross a package boundary: `@/` resolves against *this* repo's `tsconfig`, so a contract file that
   uses one is unresolvable here. The barrel stopped being a directory boundary the moment it began

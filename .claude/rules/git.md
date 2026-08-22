@@ -73,6 +73,28 @@ Rule 6 in `CLAUDE.md` evicts rationale from `.ts`/`.tsx`. This is where it goes 
 - `git show 0d5b581` is the model for body shape. Its only defect was that it should have been six
   commits.
 
+## A measurement is not a fact until the instrument has produced a true positive
+
+Three claims entered this history from broken instruments on 2026-08-22, every one reported as
+measured:
+
+- `yarn typecheck | tail -3; echo $?` printed `0` while typecheck was failing — `$?` after a pipe is
+  `tail`'s status, not the command's;
+- `find src -newer dist/index.js` reported seven stale build files when the build was complete, because
+  a checkout rewrites mtimes without changing content;
+- `grep -rn "'CODE'" src | grep -c StudioError` returned **0** for six error codes that were all fully
+  wired, because the throw spans two lines and the filter kept only the one without `StudioError` on it.
+
+All three are the same shape: **a negative result, reported as absence, from an instrument never shown
+to produce a true positive.** The third was the expensive one — the zero was used to refuse work, went
+into a PR body, and was sent twice to another repo's session as a fact.
+
+So before a zero, an "empty", or a "none found" goes into a commit message, a plan file, a rule, or a
+message to anyone: **run the instrument against a case you know is positive.** If a `grep` finds
+nothing, make it find something first. If a diff is empty, break it on purpose and watch it fill. This
+is `testing.md`'s "watch the assertion fail, not the test" applied to the shell, and it costs one
+command.
+
 ## Branch, then PR
 
 - **Every change goes on a branch and through a PR — including when the instruction was to work on

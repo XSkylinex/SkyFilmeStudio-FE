@@ -51,12 +51,15 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **thirty-one as of
-2026-08-22**, ten of them added in one day: four by BE-12, two by BE-13's style work and four by its
-voice and pronunciation work, each one breaking
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **thirty-five as of
+2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
-loopback-only base URL;
+loopback-only base URL. Ten of them were mapped while they existed **only on an unmerged backend
+branch**, which the drift diagnostic could not tell you because `git show HEAD:` reads whatever is
+checked out; BE-13 merged as `325d09d` the same evening and all thirty-five are on master now.
+`.claude/rules/state-and-data.md` carries what to check instead, and why mapping a refusal from a
+branch is fine while building a screen on one is not;
 **There is no alias, and `types` and `import` come out of one compilation.**
 `exports["./contracts"]` sends both into a tree-shakeable `dist-esm/` emitted by a single `tsc`, and
 `require` to the CommonJS the orchestrator's own server loads. **That the two share a compilation is
@@ -81,10 +84,13 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **357 keys in English and
-Hebrew**, counted at runtime on 2026-08-22 — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **376 keys in English and
+Hebrew**, counted 2026-08-22 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail and subject review.
-This number has been wrong more than once; count it rather than increment it. English is the source of
+This number has been wrong more than once; count it rather than increment it — it said 357 while the
+tree held 371, so the warning had already failed once on the paragraph carrying it. Count both
+catalogues and require them equal:
+`grep -cE "^  '[^']+':" src/lib/i18n/catalogue/{en,he}.ts`. English is the source of
 truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
 The interface language lives in the shell slice, persists to
 `localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`

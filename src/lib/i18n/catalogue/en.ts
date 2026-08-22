@@ -63,7 +63,27 @@ export const EN_CATALOGUE = {
   'error.PRONUNCIATION_DICTIONARY_EXISTS':
     'This project already has a pronunciation dictionary for that language, and there is one per language. Add the entry to the dictionary that exists rather than starting a second.',
   'error.PRONUNCIATION_ENTRY_EXISTS':
-    'The dictionary already holds an entry that normalises to the same term as this one. Two spellings can normalise together — a decomposed accent, a stray direction mark, a doubled space — so the entry already there may not look identical to what was typed. Edit that one instead of adding a second.',
+    'The dictionary already holds an entry that normalises to the same term as this one. Two spellings can normalise together — a decomposed accent, a stray direction mark, a doubled space — so the entry already there may not look identical to what was typed. There is no route to edit an entry, so changing what a term sounds like means deleting the one that is there and adding its replacement.',
+  'error.LOCATION_IMMUTABLE':
+    'This location has been approved, so it can no longer be edited or approved again. Approved locations are frozen deliberately — shots already planned against this one must not have the place change underneath them. The freeze does not block deleting it, and a change means a new location rather than an edit.',
+  'error.PROP_IMMUTABLE':
+    'This prop has been approved, so it can no longer be edited or approved again. Its continuity rules are what later scenes get checked against, so they are frozen at approval. The freeze does not block deleting it, and a change means a new prop rather than an edit.',
+  'error.LOCATION_PLATE_IMMUTABLE':
+    'This plate has been approved, so it can no longer be edited or approved again. An approved plate is the canonical image for its kind, and scenes already framed against it must not shift. The freeze does not block deleting it, and a change means a new plate rather than an edit.',
+  'error.LOCATION_PLATE_KIND_ALREADY_APPROVED':
+    'This location already has an approved plate of that kind, and it gets exactly one — that is what keeps the place recognisable from cut to cut. Delete the plate that holds the place first: un-approving it is refused, so deleting is the only way to free it. Further drafts of the same kind may sit alongside it in the meantime.',
+  'error.PROJECT_BIBLE_IMMUTABLE':
+    'This bible version has been published, so it and its subject rules are frozen. A production that planned against it keeps what it planned against — a change means publishing the next version rather than editing this one.',
+  'error.PROJECT_BIBLE_VERSION_EXISTS':
+    'Another version of this bible was created at the same moment, so this one lost the race for its version number. Nothing was lost and nothing needs retyping — send it again and it will take the next number.',
+  'error.PROJECT_BIBLE_NARRATIVE_NOT_APPLICABLE':
+    'This kind of project carries no narrative section, so world rules, humour and drama language, chronology and subject behaviour have to stay empty. Clear those fields — for this kind of project the bible is the remaining sections only.',
+  'error.VOICE_RULES_REQUIRE_SPEECH':
+    'This subject is not recorded as one that speaks, so it cannot carry voice rules. Either clear the voice rules, or record the subject as speaking first.',
+  'error.CONTINUITY_SCOPE_INVALID':
+    "This fact's scope is not a valid one: either its start or end scene is not part of this production, or the end scene comes before the start. Pick both scenes from this production, with the end no earlier than the start.",
+  'error.CONTINUITY_CONTEXT_REQUIRED':
+    'The orchestrator asked a model to reason about a single scene without supplying that scene, so nothing was generated. The model remembers nothing between turns, which is why that context is not optional — this is a fault in the orchestrator rather than something to correct here.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
@@ -303,7 +323,7 @@ export const EN_CATALOGUE = {
   'system.models.filesPresent': 'Files ready',
   'system.models.filesMissing': 'Files not ready',
   'system.models.readyMeaning':
-    'Files ready means every file is on disk at the size the manifest declares. It does not mean the file is intact: nothing here reads a hash, and the MODEL_HASHES_MATCH preflight check is what does. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
+    'Files ready means every file is on disk at the size the manifest declares, which is the whole of what this report checks. It does not mean the file is intact: nothing on this screen opens a file, and neither does the MODEL_HASHES_MATCH preflight check, which reports what an earlier verification recorded. A present file of the declared size is reported here the same way whether or not the manifest declares a hash for it, so nothing on this screen separates proven from unproven — MODEL_HASHES_MATCH is where that shows, and it fails while any present file has not been hashed since it last changed. Starting a verification is a separate request, and this screen has no control for it. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
   'system.models.noDownload':
     'Local AI Studio never downloads a model. Run this yourself:',
   'system.models.files': 'Files',
@@ -311,6 +331,8 @@ export const EN_CATALOGUE = {
   'system.models.error.title': 'The model setup report could not be read',
   'system.models.fileStatus.VERIFIED': 'Hash verified',
   'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'Present, hash unknown',
+  'system.models.fileStatus.PRESENT_UNVERIFIED':
+    'Present, not hashed since it changed',
   'system.models.fileStatus.MISSING': 'Missing',
   'system.models.fileStatus.SIZE_MISMATCH': 'Wrong size',
   'system.models.fileStatus.HASH_MISMATCH': 'Hash mismatch',

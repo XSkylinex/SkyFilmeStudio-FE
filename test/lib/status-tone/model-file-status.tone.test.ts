@@ -23,8 +23,11 @@ describe('MODEL_FILE_STATUS_TONE', () => {
     });
   });
 
-  it('separates a file that is present but unverifiable from one that is verified', () => {
+  it('gives neither present-but-unproven status the tone of a verified one', () => {
     expect(MODEL_FILE_STATUS_TONE.PRESENT_UNVERIFIABLE).not.toBe(
+      MODEL_FILE_STATUS_TONE.VERIFIED,
+    );
+    expect(MODEL_FILE_STATUS_TONE.PRESENT_UNVERIFIED).not.toBe(
       MODEL_FILE_STATUS_TONE.VERIFIED,
     );
     expect(MODEL_FILE_STATUS_TONE.VERIFIED).toBe(STATUS_TONE.SUCCESS);

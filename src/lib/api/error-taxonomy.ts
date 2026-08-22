@@ -126,4 +126,44 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.PRONUNCIATION_ENTRY_EXISTS',
   },
+  LOCATION_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.LOCATION_IMMUTABLE',
+  },
+  PROP_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PROP_IMMUTABLE',
+  },
+  LOCATION_PLATE_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.LOCATION_PLATE_IMMUTABLE',
+  },
+  LOCATION_PLATE_KIND_ALREADY_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.LOCATION_PLATE_KIND_ALREADY_APPROVED',
+  },
+  PROJECT_BIBLE_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PROJECT_BIBLE_IMMUTABLE',
+  },
+  PROJECT_BIBLE_VERSION_EXISTS: {
+    presentation: 'TRANSIENT',
+    messageKey: 'error.PROJECT_BIBLE_VERSION_EXISTS',
+  },
+  PROJECT_BIBLE_NARRATIVE_NOT_APPLICABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PROJECT_BIBLE_NARRATIVE_NOT_APPLICABLE',
+  },
+  VOICE_RULES_REQUIRE_SPEECH: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.VOICE_RULES_REQUIRE_SPEECH',
+  },
+  CONTINUITY_SCOPE_INVALID: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.CONTINUITY_SCOPE_INVALID',
+  },
+  CONTINUITY_CONTEXT_REQUIRED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.CONTINUITY_CONTEXT_REQUIRED',
+  },
 };
