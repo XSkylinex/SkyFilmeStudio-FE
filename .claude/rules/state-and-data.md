@@ -140,23 +140,45 @@ hand-written in `interfaces/`, not copy-pasted from a Swagger page.
 `sky-filme-studio-be@portal:../sky-filme-studio-be` and every wire type comes from
 `import ... from 'sky-filme-studio-be/contracts'`.
 
-**One build, three conditions, and no alias — changed 2026-08-22.** `exports["./contracts"]` sends
-`types` to `dist/contracts/index.d.ts`, `import` to `dist-esm/contracts/index.js` and `require` to the
-CommonJS `dist/` the orchestrator's own server loads. The compiler and the runtime therefore read the
-same build, and `vite.config.ts` carries **no** alias for this specifier.
+**Three conditions and no alias — changed 2026-08-22.** `exports["./contracts"]` sends `types` to
+`dist/contracts/index.d.ts`, `import` to `dist-esm/contracts/index.js` and `require` to the CommonJS
+`dist/` the orchestrator's own server loads, and `vite.config.ts` carries **no** alias for this
+specifier.
 
-It used to. Until today `types` pointed at the backend's *source* and `default` at its `dist/`, and an
+It used to. Until then `types` pointed at the backend's *source* and `default` at its `dist/`, and an
 alias dragged the runtime back to the source so the two agreed. That bought agreement and
 tree-shaking at the price of compiling against a working tree — this repo's `tsc` read files the
 backend had not typechecked itself, which reddened master six times in one day without once finding a
 real defect here.
 
-**The bundle numbers are why the fix had to be ESM rather than just repointing `types`.** Measured on
-2026-08-22 with `yarn vite build`: alias **465.73 kB**, through the CommonJS condition **778.01 kB**,
-through the new ESM condition **466.15 kB**. Rolldown cannot tree-shake CJS, so removing the alias
-without an ESM build would have cost 312 kB. `test/contract-source-matches-runtime.test.ts` pins all
-of this, including that no alias comes back — **no resolver would report that one**, since
-`import.meta.resolve` does not see Vite aliases.
+`types` and `import` are **one compilation**, and that is the invariant to protect. One
+`tsc -p tsconfig.contracts-esm.json` over one file list emits both the `.d.ts` and the `.js`, so they
+cannot describe different code.
+
+It was briefly not so, and the near-miss is why the invariant is written down. For about twenty
+minutes on 2026-08-22, `types` pointed at `dist/` from `nest build` while `import` pointed at
+`dist-esm/` from a separate `tsc` whose `declaration` was `false`. `yarn build` ran both — but
+`nest start --watch`, which is what runs while developing, writes `dist/` only. So a field renamed in
+watch mode would have moved the types and not the runtime: this repo goes red, the call sites get
+fixed, the whole gate goes green, and every `parse()` in the bundle still runs the old schema. FE-04's
+dead-error-path defect, reachable on the first rename. The alias arrangement could not produce it,
+because there the two were literally one file.
+
+`test/contract-source-matches-runtime.test.ts` now asserts that `types` and `import` resolve to the
+same directory, which is the case that would have caught it and did not exist because nobody had named
+the invariant.
+
+**A fresh clone now needs the backend built first.** Both `/dist` and `/dist-esm` are gitignored, so
+`yarn typecheck` here fails with an unresolved module until `yarn build` has run over there. The old
+`types` → source was committed and needed no build step.
+
+**The bundle numbers are why the fix had to be ESM rather than just repointing `types`.** Re-measured
+2026-08-22 with `yarn vite build` on **one** tree, which the first version of this paragraph did not
+do: the alias and the ESM condition produce a **byte-identical bundle** — same content hash,
+**466.15 kB** — and the CommonJS condition produces **778.43 kB**. The difference is **312.28 kB**, and
+it is Rolldown's inability to tree-shake CJS. An earlier version quoted 465.73 kB for the alias, which
+was the same build measured before four error codes were added; the 0.42 kB is those codes, not the
+resolution change.
 
 **Nothing may resolve the contract outside the bundler.** The published ESM keeps extensionless
 directory specifiers (`export * from './bundle'`), which Vite and Rolldown resolve and raw Node ESM
@@ -170,21 +192,30 @@ nothing needs it yet. Ask before working around it.
 - **`zod` is the same version in both repos**: `4.4.3` in each `package.json` (registry latest,
   re-checked 2026-08-20). A v3/v4 split silently produces two incompatible `z.infer` shapes.
 - **Two zod copies are installed; one reaches the bundle.** The frontend uses zod's types, which
-  erase, and its runtime only through the contracts. Measured from the build sourcemap: a single zod
-  root, 17 modules. Do not add `resolve.dedupe` until a file here constructs its own schema.
-- **The contract module is browser-safe, and that is load-bearing.** All 47 files import nothing but
-  `zod`; no `@nestjs/*`, no `drizzle-orm`, no `node:*`. Check that again before importing any *new*
-  backend subpath — the portal link would happily drag a database driver into the bundle.
+  erase, and its runtime only through the contracts — and the copy that arrives is the **backend's**,
+  since that is what its contracts import. Do not add `resolve.dedupe` until a file here constructs
+  its own schema. The module count this bullet used to quote is not currently measurable:
+  `build/external-url-guard.ts` treats `.map` as text, so a sourcemap build fails on URLs harvested
+  out of `sourcesContent` in third-party doc comments. Fix that before quoting a number again.
+- **The contract module is browser-safe, and that is load-bearing.** Its **62** files (re-counted
+  2026-08-22; this bullet said 47) import nothing but `zod` and relative paths; no `@nestjs/*`, no
+  `drizzle-orm`, no `node:*`. The backend now has a spec walking that import graph transitively from
+  `contracts/index.ts`, which is a stronger guarantee than counting — but check it again before
+  importing any *new* backend subpath, because the portal link would happily drag a database driver
+  into the bundle.
 - **Everything is `z.strictObject` and every id is branded.** A route param is a `string` and a
   `ProjectId` is not; run it through `projectIdSchema.parse` at the boundary. `Timestamp` is an ISO
   string, never a `Date`.
 - When a contract changes, the frontend build should break. That is the feature. Do not add a
   permissive `Record<string, unknown>` to make it compile.
 - **A red build against the backend? Check `git -C ../sky-filme-studio-be status --porcelain` first.**
-  The portal link reads that repository's *working tree*, so this build sees every intermediate state
-  it passes through — including files written by an agent that has not run its own gate yet. A dirty
-  tree means you are reading a draft, not a contract, and the cheapest first move is to wait or ask
-  rather than to read the error. Measured 2026-08-22: four style-profile DTOs re-exported from
+  The portal link reads that repository's *build output*, so this build sees whatever `yarn build` last
+  produced over there. **Corrected 2026-08-22:** this bullet used to say "working tree", which was true
+  while `types` pointed at the backend's source and stopped being true the moment it pointed at
+  `dist/`. The failure mode inverted with it — a dirty tree over there used to make this build red over
+  a draft, and now makes it **green over a contract that has already moved**, because `nest start
+  --watch` refreshes `dist/` and nothing refreshes `dist-esm/`. A dirty tree is still the first thing
+  to check; what it now means is "do not trust green", not "ignore red". Measured 2026-08-22: four style-profile DTOs re-exported from
   `contracts/index.ts` while still importing through the backend's own `@/` alias produced seven
   errors here, six `TS2307` and one `TS7006` that was a *symptom* of the six — an unresolved schema
   makes a `.refine` callback's parameter implicitly `any`. Nothing was wrong on this side.
