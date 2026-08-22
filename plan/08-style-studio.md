@@ -179,8 +179,10 @@ before building against any of it; this is a working tree.
 **Every domain in steps 1, 3, 4, 5 and 6 has a surface**, all under `/projects/:projectId` —
 `style-profiles` (with `versions` and `approved`), `voice-profiles` (with `approved`),
 `pronunciation-dictionaries` (with `by-language` and a nested `entries` collection), `locations` (with
-a nested `plates` collection and its own `approved`), and `props`. Each of the five carries
-`POST :id/approve`, so the approval gate FE-07 built has four more places to go.
+a nested `plates` collection and its own `approved`), and `props`. **Five of those carry
+`POST :id/approve`, and they are not the same five** — style profiles, voice profiles, locations,
+props and *plates*. A pronunciation dictionary is not an approvable entity and its controller has no
+approve route at all, so the approval gate FE-07 built has four more places to go, not five.
 
 **Every approved-head route 404s when nothing is approved yet** — style profiles, voice profiles and
 plates behave exactly like the canonical head, so one handler covers all four and none of them
@@ -193,9 +195,11 @@ and the direction is in the name as this repo asked. BE-13 published all of its 
 **The eleven that are not published are all from earlier phases**, and each one is a blocker already
 named elsewhere in this repo: project create and update, asset import and the asset list query,
 subject create, update, list and add-reference, the canonical draft body, `POST /render-jobs`, and the
-model-hash verification query. That retrofit is Alex's call and is not purely additive — six of those
-files import through the backend's own `@/` alias, which does not cross a package boundary and broke
-this build on contact once already.
+model-hash verification query. That retrofit is Alex's call and is not purely additive — **nine of
+the eleven** import through the backend's own `@/` alias, which does not cross a package boundary and
+broke this build on contact once already. Only the model-hash query and the canonical draft body are
+free of it. Counted, because this paragraph said six first and understating the cost argues the same
+way while making the decision look cheaper than it is.
 
 **A plate's `kind` is an open vocabulary**, exactly like `StyleMode`: a branded
 `SCREAMING_SNAKE_CASE` string with `SUGGESTED_PLATE_KINDS` as suggestions, not an enum. A plate
@@ -208,10 +212,13 @@ is a `PATCH` that clears the only anchor. That is a form-level constraint, not a
 after the fact.
 
 **`PRONUNCIATION_ENTRY_EXISTS` collides on the normalised term**, so two strings that look different
-on screen can collide — a decomposed accent, a pasted bidi mark, a doubled space. `normaliseTerm` is
-not published, so this repo cannot compute the same key to warn before submitting. The backend offered
-to export it; it was agreed as advisory-never-a-gate and is worth taking when step 4 starts, because
-"that term exists" in front of a term the reader cannot see is unactionable.
+on screen can collide — a decomposed accent, a pasted bidi mark, a doubled space. **Showing the
+reader which entry it collided with needs nothing from the backend**:
+`pronunciationDictionaryEntrySchema` carries both `term` and `normalisedTerm`, so the colliding row
+can simply be listed. What is missing is only the *pre-submit* warning, which needs `normaliseTerm`
+itself; the backend offered it, advisory-never-a-gate, and it is worth taking when step 4 starts. An
+earlier version of this paragraph said the whole warning was impossible, which overstated a real but
+narrower constraint.
 
 **Dictionaries and entries cannot be edited, only created and deleted.** Neither controller carries a
 `PATCH`. Step 4's optional IPA overrides are therefore a delete-and-re-add, and the UI has to say so
@@ -231,13 +238,20 @@ Step 7 needs BE-14, which is in progress on `be-14-bible-and-continuity`. Step 8
 no controller; that is deliberate on the backend's side and its HTTP surface is a later phase there.
 
 **This section has been wrong about BE-13 three times in one day** — no route, then one surface of
-four, then four surfaces on an unmerged branch, and now merged. None of those was careless and each
-was true when written; the file simply cannot carry a status that changes faster than it is read. So
-it carries the check instead, and the answer gets recomputed rather than trusted:
+four, then four surfaces on an unmerged branch, and now merged.
+
+The first two were true when written. **The third was not**: it was committed at 18:23, and master
+had carried all thirty-five codes since 18:08. The measurement behind it was taken once at the start
+of the session and reused, which is the actual miss — `git.md` already says to re-read the backend
+before merging and not only before committing, and re-running one command at commit time would have
+caught it. "A plan file cannot carry a perishable status" is true and worth acting on, but it is the
+cheaper lesson and it was reached for first because it needs no admission.
+
+So the section carries the check, and the answer gets recomputed rather than trusted:
 
 ```bash
-git -C ../sky-filme-studio-be branch --show-current
-git -C ../sky-filme-studio-be log master --oneline -1
+git -C ../sky-filme-studio-be branch --show-current    # what they are doing
+git -C ../sky-filme-studio-be log master --oneline -1  # what is actually merged
 git -C ../sky-filme-studio-be show master:src/contracts/enums/error-code.ts | grep -cE "^  '[A-Z_]+',"
 ```
 
