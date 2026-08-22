@@ -234,6 +234,19 @@ nothing needs it yet. Ask before working around it.
   change and the sentences would be written with no throw site to read. Measured 2026-08-22: master
   showed 17 failures and `typecheck` exit 1 against 32 dirty upstream files, while this diff was empty
   and all 17 failures were in the three tests that enumerate `ERROR_CODE`.
+- **`HEAD` over there is a branch, and a branch may never merge.** The diff above answers "is this
+  repo in sync with the sibling's checkout", not "will these names survive review" — `git show HEAD:`
+  reads whatever is checked out. Measured 2026-08-22: backend master carried **25** error codes while
+  `be-13-styles-voices-locations-props` carried **35**, and this repo had already mapped six of the
+  ten that exist only on that branch. The diff was empty and the gate was green. Read
+  `git -C ../sky-filme-studio-be branch --show-current` beside the porcelain, and record in the phase
+  file which codes are branch-only.
+
+  Absorbing from an unmerged branch is still right, and barely a choice: the portal link reads
+  whichever branch is checked out, so the alternative is a red gate until someone else's review
+  finishes. **Building screens on it is a different bet.** A rename during review costs four sentences
+  if all that was done is map refusals; it costs a phase if seven screens are already written against
+  it. Map the taxonomy, wait for the merge before building the surface.
 - **Anything reachable from the contracts barrel must import relatively.** A `paths` alias does not
   cross a package boundary: `@/` resolves against *this* repo's `tsconfig`, so a contract file that
   uses one is unresolvable here. The barrel stopped being a directory boundary the moment it began

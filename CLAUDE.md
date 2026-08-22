@@ -51,12 +51,14 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **thirty-one as of
-2026-08-22**, ten of them added in one day: four by BE-12, two by BE-13's style work and four by its
-voice and pronunciation work, each one breaking
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **thirty-five as of
+2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
-loopback-only base URL;
+loopback-only base URL. **Ten of the thirty-five exist only on an unmerged backend branch**, which
+the drift diagnostic cannot tell you because `git show HEAD:` reads whatever is checked out;
+`.claude/rules/state-and-data.md` carries what to check instead, and why mapping a refusal from a
+branch is fine while building a screen on one is not;
 **There is no alias, and `types` and `import` come out of one compilation.**
 `exports["./contracts"]` sends both into a tree-shakeable `dist-esm/` emitted by a single `tsc`, and
 `require` to the CommonJS the orchestrator's own server loads. **That the two share a compilation is
