@@ -1,9 +1,15 @@
 import {
   canonicalAssetSetIdSchema,
+  locationIdSchema,
+  locationPlateIdSchema,
   projectIdSchema,
+  pronunciationDictionaryIdSchema,
+  propIdSchema,
   renderJobIdSchema,
   sourceAssetIdSchema,
+  styleProfileIdSchema,
   subjectIdSchema,
+  voiceProfileIdSchema,
 } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { ORCHESTRATOR_ROUTE_PREFIXES } from '@/lib/api/orchestrator-routes.constants';
@@ -26,6 +32,29 @@ const SAMPLE_SUBJECT_ID = subjectIdSchema.parse(
 
 const SAMPLE_CANONICAL_ASSET_SET_ID = canonicalAssetSetIdSchema.parse(
   '77777777-7777-4777-8777-777777777777',
+);
+
+const SAMPLE_STYLE_PROFILE_ID = styleProfileIdSchema.parse(
+  '88888888-8888-4888-8888-888888888888',
+);
+
+const SAMPLE_VOICE_PROFILE_ID = voiceProfileIdSchema.parse(
+  '99999999-9999-4999-8999-999999999999',
+);
+
+const SAMPLE_PRONUNCIATION_DICTIONARY_ID =
+  pronunciationDictionaryIdSchema.parse('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
+
+const SAMPLE_LOCATION_ID = locationIdSchema.parse(
+  'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+);
+
+const SAMPLE_LOCATION_PLATE_ID = locationPlateIdSchema.parse(
+  'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+);
+
+const SAMPLE_PROP_ID = propIdSchema.parse(
+  'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
 );
 
 const everyPath: Record<string, string> = {
@@ -64,6 +93,57 @@ const everyPath: Record<string, string> = {
     SAMPLE_SUBJECT_ID,
     SAMPLE_CANONICAL_ASSET_SET_ID,
   ),
+  styleProfiles: API_PATH.styleProfiles(SAMPLE_PROJECT_ID),
+  styleProfileVersions: API_PATH.styleProfileVersions(SAMPLE_PROJECT_ID),
+  approvedStyleProfile: API_PATH.approvedStyleProfile(SAMPLE_PROJECT_ID),
+  styleProfile: API_PATH.styleProfile(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_STYLE_PROFILE_ID,
+  ),
+  approveStyleProfile: API_PATH.approveStyleProfile(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_STYLE_PROFILE_ID,
+  ),
+  voiceProfiles: API_PATH.voiceProfiles(SAMPLE_PROJECT_ID),
+  approvedVoiceProfile: API_PATH.approvedVoiceProfile(SAMPLE_PROJECT_ID),
+  voiceProfile: API_PATH.voiceProfile(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_VOICE_PROFILE_ID,
+  ),
+  approveVoiceProfile: API_PATH.approveVoiceProfile(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_VOICE_PROFILE_ID,
+  ),
+  pronunciationDictionaries:
+    API_PATH.pronunciationDictionaries(SAMPLE_PROJECT_ID),
+  pronunciationDictionaryByLanguage:
+    API_PATH.pronunciationDictionaryByLanguage(SAMPLE_PROJECT_ID),
+  pronunciationDictionaryEntries: API_PATH.pronunciationDictionaryEntries(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PRONUNCIATION_DICTIONARY_ID,
+  ),
+  locations: API_PATH.locations(SAMPLE_PROJECT_ID),
+  location: API_PATH.location(SAMPLE_PROJECT_ID, SAMPLE_LOCATION_ID),
+  approveLocation: API_PATH.approveLocation(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_LOCATION_ID,
+  ),
+  locationPlates: API_PATH.locationPlates(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_LOCATION_ID,
+  ),
+  approvedLocationPlate: API_PATH.approvedLocationPlate(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_LOCATION_ID,
+  ),
+  approveLocationPlate: API_PATH.approveLocationPlate(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_LOCATION_ID,
+    SAMPLE_LOCATION_PLATE_ID,
+  ),
+  projectProps: API_PATH.projectProps(SAMPLE_PROJECT_ID),
+  projectProp: API_PATH.projectProp(SAMPLE_PROJECT_ID, SAMPLE_PROP_ID),
+  approveProp: API_PATH.approveProp(SAMPLE_PROJECT_ID, SAMPLE_PROP_ID),
   renderJob: API_PATH.renderJob(SAMPLE_RENDER_JOB_ID),
 };
 
