@@ -89,11 +89,13 @@ export const RuntimeBudgetPanel: FC<RuntimeBudgetPanelProps> = ({
 
   const summary = summariseRuntimeBudget(data);
   const short = data.varianceSeconds < 0;
-  const filled = Math.min(
-    PROGRESS_BAR_CEILING,
-    data.targetRuntimeSeconds === 0
-      ? 0
-      : (data.totalSeconds / data.targetRuntimeSeconds) * PERCENT_SCALE,
+  const filled = Math.round(
+    Math.min(
+      PROGRESS_BAR_CEILING,
+      data.targetRuntimeSeconds === 0
+        ? 0
+        : (data.totalSeconds / data.targetRuntimeSeconds) * PERCENT_SCALE,
+    ),
   );
 
   return (
