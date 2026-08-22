@@ -6,6 +6,11 @@ import { ERROR_CODE } from 'sky-filme-studio-be/contracts';
 const CONTRACT_PACKAGE = 'sky-filme-studio-be';
 const CONTRACT_ENTRY = 'contracts';
 const ERROR_CODE_SOURCE = join('src', 'contracts', 'enums', 'error-code.ts');
+const ALIAS_CAPABLE_CONFIGS = [
+  'vite.config.ts',
+  'vitest.config.ts',
+  'tsconfig.app.json',
+];
 
 interface ContractPackage {
   readonly exports: Record<
@@ -55,13 +60,22 @@ describe('the contract this app loads is one build, not two', () => {
   });
 
   it('is not aliased back onto the source, which no resolver would report', () => {
-    const viteConfig = readFileSync(
-      resolve(process.cwd(), 'vite.config.ts'),
-      'utf8',
-    );
+    const specifier = `${CONTRACT_PACKAGE}/${CONTRACT_ENTRY}`;
 
-    expect(viteConfig).toContain('tsconfigPaths');
-    expect(viteConfig).not.toContain(`${CONTRACT_PACKAGE}/${CONTRACT_ENTRY}`);
+    for (const config of ALIAS_CAPABLE_CONFIGS) {
+      expect(
+        readFileSync(resolve(process.cwd(), config), 'utf8'),
+      ).not.toContain(specifier);
+    }
+  });
+
+  it('has really loaded the ESM copy, not merely resolved to it', () => {
+    const fromCommonJs = resolveFromHere(
+      join(dirname(packageJsonPath), 'dist', 'contracts', 'index.js'),
+    ) as { readonly ERROR_CODE: Record<string, string> };
+
+    expect(fromCommonJs.ERROR_CODE).toBeDefined();
+    expect(ERROR_CODE).not.toBe(fromCommonJs.ERROR_CODE);
   });
 
   it('serves the error codes the source declares, read as text so it cannot self-compare', () => {
