@@ -247,6 +247,27 @@ nothing needs it yet. Ask before working around it.
   finishes. **Building screens on it is a different bet.** A rename during review costs four sentences
   if all that was done is map refusals; it costs a phase if seven screens are already written against
   it. Map the taxonomy, wait for the merge before building the surface.
+- **The build over there can be behind its own source, and that is structural.** Since `types` moved
+  to `dist-esm/`, this repo compiles against the backend's *build output*, so a contract file can be
+  committed upstream and be invisible here with a fully green gate. It is not an oversight: the
+  backend's `build` is `nest build && tsc -p tsconfig.contracts-esm.json` and its `nest-cli.json` sets
+  `deleteOutDir: true`, so rebuilding deletes `dist/` out from under a running orchestrator. A backend
+  session with Alex's dev server up will correctly decline to rebuild.
+
+  Detect it by **file set, never by mtime** — a checkout or a rebase rewrites mtimes without changing
+  content, which produced a false alarm here before this bullet existed:
+
+  ```bash
+  diff <(cd ../sky-filme-studio-be/src/contracts && find . -name '*.ts' | sed 's/\.ts$//' | sort) \
+       <(cd ../sky-filme-studio-be/dist-esm/contracts && find . -name '*.d.ts' | sed 's/\.d\.ts$//' | sort)
+  ```
+
+  Measured 2026-08-22, twice on one day: identical at 66 files in the afternoon, and by evening the
+  source carried `domain/bible` and `enums/bible-section` that the build did not. **This is not a
+  test.** It would be red whenever the sibling is mid-branch, which is most of the time, and a guard
+  that is red for reasons that are not defects here gets ignored. `contract-source-matches-runtime`
+  covers the one file where drift is most expensive — it compares the built `ERROR_CODE` against the
+  source read as text — and everything else is this command plus judgement.
 - **Anything reachable from the contracts barrel must import relatively.** A `paths` alias does not
   cross a package boundary: `@/` resolves against *this* repo's `tsconfig`, so a contract file that
   uses one is unresolvable here. The barrel stopped being a directory boundary the moment it began
