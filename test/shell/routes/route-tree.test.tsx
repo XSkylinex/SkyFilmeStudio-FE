@@ -67,6 +67,7 @@ describe('routeTree', () => {
       'assets/:assetId',
       'audio',
       'design-system',
+      'plan',
       'shots',
       'shots/:shotId',
       'storyboard',
