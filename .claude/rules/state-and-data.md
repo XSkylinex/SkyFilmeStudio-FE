@@ -280,6 +280,17 @@ nothing needs it yet. Ask before working around it.
   that is red for reasons that are not defects here gets ignored. `contract-source-matches-runtime`
   covers the one file where drift is most expensive — it compares the built `ERROR_CODE` against the
   source read as text — and everything else is this command plus judgement.
+
+  **That test has a known red mode, and it is not a defect here.** It compares the *built* enum with
+  the *source* text, so it fails whenever the sibling commits a contract change without rebuilding.
+  Measured 2026-08-22 19:00: source 41, build 35, master 35, taxonomy 35 — the suite went from fully
+  green to one red inside twenty minutes with nothing changed on this side, and the same test was red
+  on `master` here. Tell them apart before touching anything: if the `master:` diff two bullets up is
+  empty, the taxonomy is correct and the red belongs upstream. Clear it by asking for a rebuild, or by
+  waiting for the merge. **Do not weaken this assertion to get green** — a build behind its own source
+  is exactly the condition it exists to report, and absorbing the extra codes is not available anyway,
+  since `ErrorCode` comes from the build and a taxonomy entry for a code the build has never heard of
+  is an excess property, not a fix.
 - **Anything reachable from the contracts barrel must import relatively.** A `paths` alias does not
   cross a package boundary: `@/` resolves against *this* repo's `tsconfig`, so a contract file that
   uses one is unresolvable here. The barrel stopped being a directory boundary the moment it began
