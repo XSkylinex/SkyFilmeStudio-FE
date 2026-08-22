@@ -501,9 +501,43 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.styles.title': 'סגנונות',
   'page.styles.description':
     'הסגנונות הוויזואליים שמולם הפרויקט הזה מייצר, מקובצים לשושלות עם הגרסאות שלהן.',
+  'voices.loading': 'טוען קולות…',
+  'voices.error.title': 'לא ניתן לקרוא את הקולות',
+  'voices.empty.title': 'אין עדיין קולות',
+  'voices.empty.description':
+    'פרופיל קול הוא מה ששומר על דמות נשמעת כמו עצמה לאורך הפקה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+  'voices.truncated':
+    'קיימים יותר קולות ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
+  'voices.onePerSubject':
+    'לכל דמות יש בדיוק קול מאושר אחד. יכולות להתקיים כמה טיוטות, וההגבלה נאכפת באישור ולא ביצירה — ולכן טיוטה שנייה מותרת, ואישור שלה יידחה עד שהראשונה תימחק.',
+  'voices.noPreview':
+    'אי אפשר להאזין לשום דבר כאן. האורקסטרטור אינו מפרסם מסלול לתצוגה מקדימה של סינתזה, ולכן קול נשפט לפי המנוע, המודל והתמלול שלו ולא לפי צליל.',
+  'voices.group.subjects': 'משויכים לדמות',
+  'voices.group.standalone': 'קריינות ועצמאיים',
+  'voices.group.noneForSubjects': 'לאף דמות בפרויקט הזה אין עדיין קול.',
+  'voices.group.noneStandalone':
+    'אין עדיין קול קריינות או קול עצמאי. קול אינו חייב להיות משויך לדמות.',
+  'voices.card.approved': 'מאושר',
+  'voices.card.draft': 'טיוטה',
+  'voices.card.engine': 'מנוע',
+  'voices.card.model': 'מודל',
+  'voices.card.language': 'שפה',
+  'voices.card.context': 'הקול {name}',
+  'voices.approveError.title': 'הקול הזה לא אושר',
+  'voices.dictionaries.title': 'מילוני הגייה',
+  'voices.dictionaries.error.title': 'לא ניתן לקרוא את מילוני ההגייה',
+  'voices.dictionaries.empty.title': 'אין עדיין מילוני הגייה',
+  'voices.dictionaries.empty.description':
+    'מילון מחזיק שפה אחת של הפרויקט ואת המונחים שההגייה שלהם נדרסת בה.',
+  'voices.dictionaries.editNote':
+    'לא ניתן לערוך ערך: האורקסטרטור אינו מפרסם מסלול לכך, ולכן שינוי פירושו מחיקה והוספה של ערך מחליף.',
+  'voices.entries.none': 'למילון הזה אין ערכים.',
+  'voices.entries.unreadable':
+    'לא ניתן לקרוא את הערכים של המילון הזה, ולכן זה אינו ידוע ולא ריק.',
+  'voices.entries.normalisedAs': 'מתנרמל ל־',
   'page.voices.title': 'קולות',
   'page.voices.description':
-    'הקולות הזמינים לקריינות ולדיאלוג בפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+    'הקולות הקבועים שבהם הפרויקט הזה מדבר, ומילוני ההגייה שמולם הם נקראים.',
   'locations.loading': 'טוען לוקיישנים…',
   'locations.error.title': 'לא ניתן לקרוא את הלוקיישנים',
   'locations.empty.title': 'אין עדיין לוקיישנים',

@@ -1,0 +1,40 @@
+@layer features {
+  .voice-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .voice-list__group-title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-md);
+  }
+
+  .voice-list__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .voice-list__placeholder {
+    block-size: var(--space-8);
+  }
+
+  .voice-list__loading {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .voice-list__rule,
+  .voice-list__none,
+  .voice-list__truncated {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-relaxed);
+  }
+}

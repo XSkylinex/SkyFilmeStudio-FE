@@ -1,0 +1,1 @@
+export const VOICE_LIST_SKELETON_COUNT = 3;

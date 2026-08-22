@@ -1,0 +1,41 @@
+@layer features {
+  .pronunciation-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pronunciation-entries__entry {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+  }
+
+  .pronunciation-entries__term {
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .pronunciation-entries__normalised {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+
+  .pronunciation-entries__phonemes {
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+  }
+
+  .pronunciation-entries__none,
+  .pronunciation-entries__unread {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+}

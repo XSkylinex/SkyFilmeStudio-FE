@@ -506,9 +506,44 @@ export const EN_CATALOGUE = {
   'page.styles.title': 'Styles',
   'page.styles.description':
     'The visual styles this project generates against, grouped into lineages with their versions.',
+  'voices.loading': 'Loading voices…',
+  'voices.error.title': 'The voices could not be read',
+  'voices.empty.title': 'No voices yet',
+  'voices.empty.description':
+    'A voice profile is what keeps a subject sounding like itself across a production. This project has none, and there is no way to create one here yet.',
+  'voices.truncated':
+    'More voices exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'voices.onePerSubject':
+    'A subject gets exactly one approved voice. Several drafts may exist, and the limit is enforced when one is approved rather than when it is created — so a second draft is allowed and approving it will be refused until the first is deleted.',
+  'voices.noPreview':
+    'Nothing here can be listened to. The orchestrator publishes no synthesis preview route, so a voice is judged from its engine, model and reference transcript rather than from sound.',
+  'voices.group.subjects': 'Attached to a subject',
+  'voices.group.standalone': 'Narrator and standalone',
+  'voices.group.noneForSubjects': 'No subject in this project has a voice yet.',
+  'voices.group.noneStandalone':
+    'No narrator or standalone voice yet. A voice does not need a subject.',
+  'voices.card.approved': 'Approved',
+  'voices.card.draft': 'Draft',
+  'voices.card.engine': 'Engine',
+  'voices.card.model': 'Model',
+  'voices.card.language': 'Language',
+  'voices.card.context': 'the voice {name}',
+  'voices.approveError.title': 'That voice was not approved',
+  'voices.dictionaries.title': 'Pronunciation dictionaries',
+  'voices.dictionaries.error.title':
+    'The pronunciation dictionaries could not be read',
+  'voices.dictionaries.empty.title': 'No pronunciation dictionaries yet',
+  'voices.dictionaries.empty.description':
+    'A dictionary holds one project language and the terms whose pronunciation is overridden in it.',
+  'voices.dictionaries.editNote':
+    'An entry cannot be edited: the orchestrator publishes no route for it, so changing one means deleting it and adding the replacement.',
+  'voices.entries.none': 'This dictionary has no entries.',
+  'voices.entries.unreadable':
+    'The entries for this dictionary could not be read, so this is unknown rather than empty.',
+  'voices.entries.normalisedAs': 'normalises to',
   'page.voices.title': 'Voices',
   'page.voices.description':
-    'The voices available for narration and dialogue in this project. Not connected to the orchestrator yet.',
+    'The persistent voices this project speaks with, and the pronunciation dictionaries they read against.',
   'locations.loading': 'Loading locations…',
   'locations.error.title': 'The locations could not be read',
   'locations.empty.title': 'No locations yet',
