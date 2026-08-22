@@ -70,19 +70,21 @@ export const PlanningStageList: FC<PlanningStageListProps> = ({
             className="planning-stage-list__stage"
             data-computed={stage === COMPUTED_PLANNING_STAGE}
           >
-            <span className="planning-stage-list__stage-name">
-              {translate(PLANNING_STAGE_LABEL[stage])}
-            </span>
-            {stage === COMPUTED_PLANNING_STAGE ? (
-              <>
+            <span className="planning-stage-list__stage-row">
+              <span className="planning-stage-list__stage-name">
+                {translate(PLANNING_STAGE_LABEL[stage])}
+              </span>
+              {stage === COMPUTED_PLANNING_STAGE ? (
                 <Badge
                   tone={STATUS_TONE.SUCCESS}
                   label={translate('planner.stages.computed')}
                 />
-                <span className="planning-stage-list__stage-note">
-                  {translate('planner.stages.computedNote')}
-                </span>
-              </>
+              ) : null}
+            </span>
+            {stage === COMPUTED_PLANNING_STAGE ? (
+              <span className="planning-stage-list__stage-note">
+                {translate('planner.stages.computedNote')}
+              </span>
             ) : null}
           </li>
         ))}
