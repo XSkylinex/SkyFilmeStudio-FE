@@ -56,19 +56,17 @@ here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fe
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL;
-**The backend publishes two files under one specifier, and one line of `vite.config.ts` decides which
-one this app runs.** `exports["./contracts"]` sends `types` to the backend's
-`src/contracts/index.ts` and `default` to its `dist/contracts/index.js`. FE-04 saw this and aliased the
-specifier to the source, so the compiler and the runtime read the same file. Delete that alias and the
-runtime silently falls back to `dist/`: a stale build would then give a green `yarn typecheck` over an
-`errorCodeSchema` that rejects the very code the types just accepted — FE-04's dead-error-path defect
-with nothing to see it. `test/contract-source-matches-runtime.test.ts` pins the alias, and was proved
-by removing it.
+**The compiler and the runtime read one build, and there is no alias.** `exports["./contracts"]` sends
+`types` to `dist/contracts/index.d.ts`, `import` to a tree-shakeable `dist-esm/`, and `require` to the
+CommonJS the orchestrator's own server loads. Until 2026-08-22 `types` pointed at the backend's
+*source* and a `vite.config.ts` alias dragged the runtime back to match it — which meant this repo
+compiled against a working tree and went red six times in one day on files the backend had not
+typechecked itself. `test/contract-source-matches-runtime.test.ts` pins the new arrangement, including
+that the alias does not return: **no resolver reports that**, because `import.meta.resolve` is Node's
+and cannot see a Vite alias.
 
-**`import.meta.resolve` does not know about Vite aliases.** It is Node's resolver and answers
-`dist/`, which is the correct answer to a question this app never asks. Settle "which module is
-actually loaded" by comparing module identity against a direct import of the file, never by resolving
-a specifier.
+**The ESM build is load-bearing, not tidiness.** Measured: 465.73 kB with the old alias, **778.01 kB**
+through the CommonJS condition, 466.15 kB through ESM. Rolldown cannot tree-shake CJS.
 
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
 `StatusTone` — six from FE-04 and model file status from FE-06 — which is the mapping FE-02 deferred

@@ -138,16 +138,25 @@ hand-written in `interfaces/`, not copy-pasted from a Swagger page.
 
 **The mechanism, landed 2026-08-20.** `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be` and every wire type comes from
-`import ... from 'sky-filme-studio-be/contracts'`. The backend's `exports` map points that subpath's
-`types` condition at `./src/contracts/index.ts` — its *source*, not its build output — which is what
-makes a rename break this repo on the next `tsc` instead of on the next version bump.
+`import ... from 'sky-filme-studio-be/contracts'`.
 
-**`vite.config.ts` aliases that specifier to the same source file, and must keep doing so.** The
-backend's `default` export condition points at `dist/`, which is gitignored and CommonJS. Left alone,
-the runtime would load a build artifact while the types came from source — so appending an enum value
-in the backend would typecheck green here and then throw at `parse()` against a stale `dist/`. The
-alias also lets the bundle tree-shake: 456.68 kB and 17 zod modules, against 759 kB and 79 through
-`dist/`. Do not "simplify" it away.
+**One build, three conditions, and no alias — changed 2026-08-22.** `exports["./contracts"]` sends
+`types` to `dist/contracts/index.d.ts`, `import` to `dist-esm/contracts/index.js` and `require` to the
+CommonJS `dist/` the orchestrator's own server loads. The compiler and the runtime therefore read the
+same build, and `vite.config.ts` carries **no** alias for this specifier.
+
+It used to. Until today `types` pointed at the backend's *source* and `default` at its `dist/`, and an
+alias dragged the runtime back to the source so the two agreed. That bought agreement and
+tree-shaking at the price of compiling against a working tree — this repo's `tsc` read files the
+backend had not typechecked itself, which reddened master six times in one day without once finding a
+real defect here.
+
+**The bundle numbers are why the fix had to be ESM rather than just repointing `types`.** Measured on
+2026-08-22 with `yarn vite build`: alias **465.73 kB**, through the CommonJS condition **778.01 kB**,
+through the new ESM condition **466.15 kB**. Rolldown cannot tree-shake CJS, so removing the alias
+without an ESM build would have cost 312 kB. `test/contract-source-matches-runtime.test.ts` pins all
+of this, including that no alias comes back — **no resolver would report that one**, since
+`import.meta.resolve` does not see Vite aliases.
 
 - **`zod` is the same version in both repos**: `4.4.3` in each `package.json` (registry latest,
   re-checked 2026-08-20). A v3/v4 split silently produces two incompatible `z.infer` shapes.
