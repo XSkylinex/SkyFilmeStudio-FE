@@ -439,7 +439,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'subjectReview.draft.notes': 'הערות',
   'subjectReview.draft.context': 'המערך הקנוני של {subject}',
   'subjectReview.draft.explained':
-    'אישור מקפיא את המערך הזה. התיאור שלו וה-SHA-256 שלו נרשמים, הוא הופך לגרסה שכל יצירה עוגנת אליה, ולא ניתן לשנות בו דבר לאחר מכן — כולל ביטול האישור.',
+    'אישור מקפיא את המערך הזה. התיאור שלו נרשם ומגובב, הוא הופך לגרסה שכל יצירה עוגנת אליה, ולא ניתן לשנות בו דבר לאחר מכן — כולל ביטול האישור.',
   'subjectReview.draft.approveError.title': 'הטיוטה הזו לא אושרה',
 
   'page.subjects.title': 'סובייקטים',

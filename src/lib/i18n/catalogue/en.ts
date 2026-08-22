@@ -443,7 +443,7 @@ export const EN_CATALOGUE = {
   'subjectReview.draft.notes': 'Notes',
   'subjectReview.draft.context': 'the canonical set for {subject}',
   'subjectReview.draft.explained':
-    'Approving freezes this set. Its descriptor and that descriptor’s SHA-256 are recorded, it becomes the version every generation is anchored to, and nothing about it can be changed afterwards — including un-approving it.',
+    'Approving freezes this set. Its descriptor is recorded and hashed, it becomes the version every generation is anchored to, and nothing about it can be changed afterwards — including un-approving it.',
   'subjectReview.draft.approveError.title': 'This draft was not approved',
 
   'page.subjects.title': 'Subjects',
