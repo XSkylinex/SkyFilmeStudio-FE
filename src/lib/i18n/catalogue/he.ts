@@ -631,6 +631,11 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.system.title': 'מערכת',
   'page.system.description':
     'פרופיל חומרה, מודלים מותקנים, מקום בדיסק, בדיקות מקדימות ומצב ההפעלה של ההתקנה הזו.',
+  'form.invalid.required': 'צריך למלא את זה.',
+  'form.invalid.tooSmall': 'המספר הזה קטן מדי.',
+  'form.invalid.tooBig': 'המספר הזה גדול מדי.',
+  'form.invalid.type': 'זה לא סוג הערך שהשדה הזה מקבל.',
+  'form.invalid.value': 'החוזה לא יקבל את הערך הזה.',
   'productions.heading': 'ההפקות בפרויקט הזה',
   'productions.loading': 'קורא את ההפקות של הפרויקט…',
   'productions.error.title': 'לא ניתן היה לקרוא את רשימת ההפקות',

@@ -637,6 +637,11 @@ export const EN_CATALOGUE = {
   'page.system.title': 'System',
   'page.system.description':
     'Hardware profile, installed models, disk space, preflight and the operating mode of this installation.',
+  'form.invalid.required': 'This needs a value.',
+  'form.invalid.tooSmall': 'This number is too small.',
+  'form.invalid.tooBig': 'This number is too large.',
+  'form.invalid.type': 'This is not the kind of value this field takes.',
+  'form.invalid.value': 'The contract will not accept this value.',
   'productions.heading': 'Productions in this project',
   'productions.loading': 'Reading this project’s productions…',
   'productions.error.title': 'The production list could not be read',
