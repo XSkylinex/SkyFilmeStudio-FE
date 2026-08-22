@@ -1,7 +1,7 @@
 # FE-08 — Style, voice, location & prop studio
 
 > **Depends on:** 07 · **Blocks:** 09 · **Backend needs:** BE-13 · **Plan authority:** §3.5, §11.5–11.8, §13, §29
-> **Status:** blocked 2026-08-22 — BE-13 is in progress but serves no route; the ungated half landed
+> **Status:** blocked 2026-08-22 — BE-13 is complete on an unmerged branch; its refusals are absorbed
 
 ## Goal
 
@@ -133,6 +133,11 @@ dictionary, locations and props still have no controller, and the project bible 
 Building step 1 alone would mean one screen and six explanations of absence, which is worse for a
 reader than an honest status line. Start this phase when all four have a surface.
 
+**That paragraph was true for about six hours.** By the evening BE-13 was complete on
+`be-13-styles-voices-locations-props`, and all four domains have controllers — verified here by
+reading them, not by taking the backend session's summary on trust. The condition this paragraph set
+is met; the section below records what is actually there and what now blocks instead.
+
 **The vocabulary guard** — `test/style-and-language-agnostic.test.ts`. Step 1 says the application is
 style-agnostic and that "the UI is where that either holds or quietly stops holding", which until now
 nothing enforced. It fails on a style mode written anywhere in `src/`, on the word *anime*, on a quoted
@@ -166,27 +171,69 @@ catches the raised exception and rethrows it as `StudioError('STYLE_PROFILE_IMMU
 update paths — `approve`, `update` and `softDelete` — and the backend has a database test asserting the
 translation. Nothing here needs to handle a 500 for this case.
 
-## Two things to settle before this phase resumes
+## What BE-13 publishes, measured 2026-08-22
 
-- **A lineage needs a list route.** `canonical-sets` shipped without one and the consequence was
-  total: a draft could be created but never rediscovered after a reload, which is why FE-07's
-  approval half is still unbuilt. Versioning is this phase's whole feature — which version a
-  production is pinned to, and what changed between versions, are both unanswerable from a head
-  pointer alone. Raised with the backend session on 2026-08-22, **and fixed the same afternoon**:
-  `edb38a3` added `GET .../canonical-sets`, returning every non-deleted set for a subject, drafts
-  included. The equivalent route for a style lineage is the thing to check for before this phase
-  starts, not after.
-- **Request DTOs must reach `./contracts`.** Confirmed by the backend: `src/contracts/` re-exports no
-  module DTO at all — **not one**, which is the durable fact and the one worth acting on. Every request
-and query schema lives in a `*/dto/*.schema.ts` under a feature module and is invisible to this repo.
-No count is recorded here on purpose: it was ten, then eleven, then twelve within a day, and a number
-that rots is what sent two earlier paragraphs in this file wrong. Count it when you need it —
-`find src -path '*/dto/*.schema.ts'` in the backend, and `grep -rn dto src/contracts/` to confirm the
-barrel still re-exports none of them. BE-13 will export its
-  own as it writes them; the ten existing ones are Alex's call. This repo asked for the direction to
-  be visible in the name — `createStyleProfileRequestSchema` beside `styleProfileSchema` — because
-  confusing a published response shape for a published request shape has been this repo's single most
-  repeated defect.
+Read from the controllers and the barrel in `../sky-filme-studio-be`, not from a summary. Re-measure
+before building against any of it; this is a working tree.
+
+**Every domain in steps 1, 3, 4, 5 and 6 has a surface**, all under `/projects/:projectId` —
+`style-profiles` (with `versions` and `approved`), `voice-profiles` (with `approved`),
+`pronunciation-dictionaries` (with `by-language` and a nested `entries` collection), `locations` (with
+a nested `plates` collection and its own `approved`), and `props`. Each of the five carries
+`POST :id/approve`, so the approval gate FE-07 built has four more places to go.
+
+**Every approved-head route 404s when nothing is approved yet** — style profiles, voice profiles and
+plates behave exactly like the canonical head, so one handler covers all four and none of them
+returns a null body or a 200 with nothing in it.
+
+**The request DTOs are published**, which is what the previous version of this section said was the
+blocker. Measured: 34 `*/dto/*.schema.ts` in the backend, **23 re-exported** through `./contracts`,
+and the direction is in the name as this repo asked. BE-13 published all of its own.
+
+**The eleven that are not published are all from earlier phases**, and each one is a blocker already
+named elsewhere in this repo: project create and update, asset import and the asset list query,
+subject create, update, list and add-reference, the canonical draft body, `POST /render-jobs`, and the
+model-hash verification query. That retrofit is Alex's call and is not purely additive — six of those
+files import through the backend's own `@/` alias, which does not cross a package boundary and broke
+this build on contact once already.
+
+**A plate's `kind` is an open vocabulary**, exactly like `StyleMode`: a branded
+`SCREAMING_SNAKE_CASE` string with `SUGGESTED_PLATE_KINDS` as suggestions, not an enum. A plate
+picker reads those four from the wire. When one exists, `test/style-and-language-agnostic.test.ts`
+should grow a plate-kind rule for the same reason it has a style-mode rule — until then there is no
+code for it to guard.
+
+**A plate anchors exactly one of `sourceAssetId` or `artifactId`.** Neither or both is a 400, and so
+is a `PATCH` that clears the only anchor. That is a form-level constraint, not an error to render
+after the fact.
+
+**`PRONUNCIATION_ENTRY_EXISTS` collides on the normalised term**, so two strings that look different
+on screen can collide — a decomposed accent, a pasted bidi mark, a doubled space. `normaliseTerm` is
+not published, so this repo cannot compute the same key to warn before submitting. The backend offered
+to export it; it was agreed as advisory-never-a-gate and is worth taking when step 4 starts, because
+"that term exists" in front of a term the reader cannot see is unactionable.
+
+**Dictionaries and entries cannot be edited, only created and deleted.** Neither controller carries a
+`PATCH`. Step 4's optional IPA overrides are therefore a delete-and-re-add, and the UI has to say so
+rather than offering an edit that does not exist.
+
+**Step 8 has types and no route.** `6f33f99` scaffolded the animation, opening-ending and SFX library
+wire shapes under `contracts/domain/`, and there is no libraries controller. That is the inverse of
+the usual gap here and just as blocking.
+
+## What actually blocks this phase now
+
+**BE-13 is not merged.** It is 33 commits on `be-13-styles-voices-locations-props`, and Alex reviews
+and merges it himself. Backend master carries 25 error codes; that branch carries 35, so **ten of the
+codes this repo maps do not exist on master** — the two style ones, the four voice and pronunciation
+ones, and the four absorbed this cycle.
+
+That is not a reason to stop absorbing: the `portal:` link reads whichever branch the sibling tree has
+checked out, so the only alternative to absorbing is sitting red. It is a reason not to build seven
+screens yet. A rename during review costs four sentences today; it would cost a phase if the screens
+were already written against it.
+
+The project bible in step 7 additionally needs BE-14, which does not exist.
 
 ## Done when
 
