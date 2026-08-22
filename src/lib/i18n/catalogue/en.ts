@@ -29,6 +29,18 @@ export const EN_CATALOGUE = {
     'The generated audio clips. The peaks are distorted and will stay distorted through the mix.',
   'error.PROMPT_SCHEMA_INVALID':
     'The planner returned a structure this pipeline cannot use. The planning step has to run again before any render can be built from it.',
+  'error.SHOT_TRANSITION_INVALID':
+    'That shot is not in the state this move assumed, so nothing changed. Either the step was never legal from where the shot is, or something else moved it first. Re-read the shot before deciding what to do next.',
+  'error.SHOT_STRATEGY_INVALID':
+    'A shot that names a subject asked for a generation strategy reserved for shots with no subject in them. The plan has to change: a subject-centric shot renders from an approved keyframe or from another subject-aware strategy.',
+  'error.SHOT_DURATION_UNMEASURED':
+    'This shot has dialogue whose speech has not been generated yet, so how long it runs is not known. A dialogue shot is timed from the audio that was actually produced — generate the draft speech first. Sending this again changes nothing.',
+  'error.SUBJECT_DESCRIPTOR_UNAVAILABLE':
+    'A subject in this shot has no frozen descriptor, and that only exists once its canonical set has been approved. Approve the subject first: a prompt cannot describe someone the system has not agreed the look of.',
+  'error.PROMPT_SPEC_IMMUTABLE':
+    'One of this scene’s shots already carries a compiled prompt, which is the record of how something was rendered and is never overwritten. Withdraw or supersede that shot deliberately rather than replacing the whole scene.',
+  'error.LIMITED_ANIMATION_OVERUSED':
+    'More of this scene is limited animation than the plan allows, which is how a production becomes a slideshow without anyone choosing that. If it is deliberate, raise the ceiling on the request explicitly.',
   'error.OFFLINE_POLICY_VIOLATION':
     'A provider was pointed off this machine and generation was stopped. Nothing may leave this computer — find the provider that was reconfigured before running anything else.',
   'error.DISK_SPACE_LOW':
