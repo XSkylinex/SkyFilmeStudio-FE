@@ -1,7 +1,9 @@
 import {
+  canonicalAssetSetIdSchema,
   projectIdSchema,
   renderJobIdSchema,
   sourceAssetIdSchema,
+  subjectIdSchema,
 } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { ORCHESTRATOR_ROUTE_PREFIXES } from '@/lib/api/orchestrator-routes.constants';
@@ -16,6 +18,14 @@ const SAMPLE_PROJECT_ID = projectIdSchema.parse(
 
 const SAMPLE_SOURCE_ASSET_ID = sourceAssetIdSchema.parse(
   '55555555-5555-4555-8555-555555555555',
+);
+
+const SAMPLE_SUBJECT_ID = subjectIdSchema.parse(
+  '66666666-6666-4666-8666-666666666666',
+);
+
+const SAMPLE_CANONICAL_ASSET_SET_ID = canonicalAssetSetIdSchema.parse(
+  '77777777-7777-4777-8777-777777777777',
 );
 
 const everyPath: Record<string, string> = {
@@ -36,6 +46,17 @@ const everyPath: Record<string, string> = {
   projectAssetProxy: API_PATH.projectAssetProxy(
     SAMPLE_PROJECT_ID,
     SAMPLE_SOURCE_ASSET_ID,
+  ),
+  projectSubjects: API_PATH.projectSubjects(SAMPLE_PROJECT_ID),
+  projectSubject: API_PATH.projectSubject(SAMPLE_PROJECT_ID, SAMPLE_SUBJECT_ID),
+  approvedCanonicalSet: API_PATH.approvedCanonicalSet(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_SUBJECT_ID,
+  ),
+  canonicalReferences: API_PATH.canonicalReferences(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_SUBJECT_ID,
+    SAMPLE_CANONICAL_ASSET_SET_ID,
   ),
   renderJob: API_PATH.renderJob(SAMPLE_RENDER_JOB_ID),
 };
