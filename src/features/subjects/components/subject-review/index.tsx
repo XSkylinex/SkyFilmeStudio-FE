@@ -34,6 +34,7 @@ export const SubjectReview: FC<SubjectReviewProps> = ({
         title={translate('subjectReview.error.title')}
         description={composeRouteErrorDescription(errorView, translate)}
         detail={errorView.detail}
+        headingLevel={1}
       />
     );
   }

@@ -25,6 +25,7 @@ export const SubjectReviewPage: FC = () => {
       <ErrorState
         title={translate('project.invalidId.title')}
         description={translate('project.invalidId.description')}
+        headingLevel={1}
       />
     );
   }
@@ -34,6 +35,7 @@ export const SubjectReviewPage: FC = () => {
       <ErrorState
         title={translate('subjectReview.invalidSubject.title')}
         description={translate('subjectReview.invalidSubject.description')}
+        headingLevel={1}
       />
     );
   }

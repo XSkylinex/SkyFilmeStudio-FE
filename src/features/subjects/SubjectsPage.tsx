@@ -17,6 +17,7 @@ export const SubjectsPage: FC = () => {
       <ErrorState
         title={translate('project.invalidId.title')}
         description={translate('project.invalidId.description')}
+        headingLevel={1}
       />
     );
   }

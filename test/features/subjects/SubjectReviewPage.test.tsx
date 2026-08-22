@@ -188,6 +188,26 @@ describe('SubjectReviewPage', () => {
     expect(askedAboutTheSet).toBe(0);
   });
 
+  it('keeps a level-one heading on every branch, including the ones that failed', async () => {
+    server.use(
+      http.get(API_PATH.projectSubject(PROJECT_ID, SUBJECT_ID), () =>
+        HttpResponse.json(
+          { statusCode: 404, message: 'no subject', error: 'Not Found' },
+          { status: 404 },
+        ),
+      ),
+    );
+
+    renderAt(PATH);
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'This subject could not be read',
+        level: 1,
+      }),
+    ).toBeInTheDocument();
+  });
+
   it('refuses a subject id the orchestrator would reject, without asking it', () => {
     renderAt(`/projects/${PROJECT_ID}/subjects/not-a-uuid`);
 

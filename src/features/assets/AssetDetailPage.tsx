@@ -25,6 +25,7 @@ export const AssetDetailPage: FC = () => {
       <ErrorState
         title={translate('project.invalidId.title')}
         description={translate('project.invalidId.description')}
+        headingLevel={1}
       />
     );
   }
@@ -34,6 +35,7 @@ export const AssetDetailPage: FC = () => {
       <ErrorState
         title={translate('assetDetail.invalidAsset.title')}
         description={translate('assetDetail.invalidAsset.description')}
+        headingLevel={1}
       />
     );
   }
