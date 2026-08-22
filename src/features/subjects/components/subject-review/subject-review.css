@@ -1,0 +1,27 @@
+@layer features {
+  .subject-review {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .subject-review__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-xl);
+  }
+
+  .subject-review__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .subject-review__loading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+}

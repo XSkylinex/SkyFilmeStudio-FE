@@ -1,0 +1,52 @@
+@layer features {
+  .canonical-reference-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .canonical-reference-grid__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-lg);
+  }
+
+  .canonical-reference-grid__empty,
+  .canonical-reference-grid__explained,
+  .canonical-reference-grid__generated {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .canonical-reference-grid__items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .canonical-reference-grid__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-block: var(--space-3);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-raised);
+  }
+
+  .canonical-reference-grid__item[data-anchor='true'] {
+    border-color: var(--tone-active-border);
+  }
+
+  .canonical-reference-grid__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}
