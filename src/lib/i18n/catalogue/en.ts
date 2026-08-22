@@ -484,18 +484,112 @@ export const EN_CATALOGUE = {
   'page.subjectReview.title': 'Subject review',
   'page.subjectReview.description':
     "Compare a subject's candidate reference images and approve the ones that define it. Not connected to the orchestrator yet.",
+  'styles.heading': 'Style profiles',
+  'styles.loading': 'Loading style profiles…',
+  'styles.error.title': 'The style profiles could not be read',
+  'styles.empty.title': 'No style profiles yet',
+  'styles.empty.description':
+    'A style profile records the palette, lighting, camera, texture and motion rules a production is generated against. This project has none, and there is no way to create one here yet.',
+  'styles.pinning':
+    'A profile is a lineage and each row below is one version of it. Which version a production is pinned to is not shown, because the orchestrator publishes no route that reads a production.',
+  'styles.truncated':
+    'More style profiles exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'styles.lineage.versionCount': '{count} versions',
+  'styles.lineage.noApproved': 'No approved version',
+  'styles.lineage.approvedIs': 'Approved: v{version}',
+  'styles.version.label': 'v{version}',
+  'styles.version.approved': 'Approved',
+  'styles.version.frozen':
+    'An approved version is frozen, so a change becomes a new version rather than an edit.',
+  'styles.version.context': 'version {version} of {name}',
+  'styles.approveError.title': 'That version was not approved',
   'page.styles.title': 'Styles',
   'page.styles.description':
-    'The visual styles available to this project. Not connected to the orchestrator yet.',
+    'The visual styles this project generates against, grouped into lineages with their versions.',
+  'voices.loading': 'Loading voices…',
+  'voices.error.title': 'The voices could not be read',
+  'voices.empty.title': 'No voices yet',
+  'voices.empty.description':
+    'A voice profile is what keeps a subject sounding like itself across a production. This project has none, and there is no way to create one here yet.',
+  'voices.truncated':
+    'More voices exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'voices.onePerSubject':
+    'A subject gets exactly one approved voice. Several drafts may exist, and the limit is enforced when one is approved rather than when it is created — so a second draft is allowed and approving it will be refused until the first is deleted.',
+  'voices.noPreview':
+    'Nothing here can be listened to. The orchestrator publishes no synthesis preview route, so a voice is judged from its engine, model and reference transcript rather than from sound.',
+  'voices.group.subjects': 'Attached to a subject',
+  'voices.group.standalone': 'Narrator and standalone',
+  'voices.group.noneForSubjects': 'No subject in this project has a voice yet.',
+  'voices.group.noneStandalone':
+    'No narrator or standalone voice yet. A voice does not need a subject.',
+  'voices.card.approved': 'Approved',
+  'voices.card.draft': 'Draft',
+  'voices.card.engine': 'Engine',
+  'voices.card.model': 'Model',
+  'voices.card.language': 'Language',
+  'voices.card.context': 'the voice {name}',
+  'voices.approveError.title': 'That voice was not approved',
+  'voices.dictionaries.title': 'Pronunciation dictionaries',
+  'voices.dictionaries.error.title':
+    'The pronunciation dictionaries could not be read',
+  'voices.dictionaries.empty.title': 'No pronunciation dictionaries yet',
+  'voices.dictionaries.empty.description':
+    'A dictionary holds one project language and the terms whose pronunciation is overridden in it.',
+  'voices.dictionaries.editNote':
+    'An entry cannot be edited: the orchestrator publishes no route for it, so changing one means deleting it and adding the replacement.',
+  'voices.entries.none': 'This dictionary has no entries.',
+  'voices.entries.unreadable':
+    'The entries for this dictionary could not be read, so this is unknown rather than empty.',
+  'voices.entries.normalisedAs': 'normalises to',
   'page.voices.title': 'Voices',
   'page.voices.description':
-    'The voices available for narration and dialogue in this project. Not connected to the orchestrator yet.',
+    'The persistent voices this project speaks with, and the pronunciation dictionaries they read against.',
+  'locations.loading': 'Loading locations…',
+  'locations.error.title': 'The locations could not be read',
+  'locations.empty.title': 'No locations yet',
+  'locations.empty.description':
+    'A location holds the immutable features and canonical plates a scene is framed against. This project has none, and there is no way to create one here yet.',
+  'locations.truncated':
+    'More locations exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'locations.coverageNote':
+    'Plate kinds are open text, not a fixed list, so coverage below is what each location actually has. The four suggested kinds are a starting point, never a requirement, and a lighting variant such as a night plate is not a kind the orchestrator publishes at all.',
+  'locations.card.approved': 'Approved',
+  'locations.card.draft': 'Draft',
+  'locations.card.immutableFeatures': 'Immutable features:',
+  'locations.card.context': 'the location {name}',
+  'locations.approveError.title': 'That location was not approved',
+  'locations.plates.title': 'Plate coverage',
+  'locations.plates.none':
+    'No plates at all, so any scene here resolves from text rather than from a canonical image.',
+  'locations.plates.approved': 'Approved',
+  'locations.plates.draftsOnly': '{count} drafts, none approved',
+  'locations.plates.suggestedMissing':
+    'Suggested kinds with no plate yet: {kinds}. Suggestions, not requirements.',
+  'locations.plates.unreadable':
+    'The plates for this location could not be read, so coverage is unknown rather than empty.',
   'page.locations.title': 'Locations',
   'page.locations.description':
-    'The locations available to this project. Not connected to the orchestrator yet.',
+    'The locations this project shoots against, with the canonical plate coverage each one has.',
+  'props.loading': 'Loading props…',
+  'props.error.title': 'The props could not be read',
+  'props.empty.title': 'No props yet',
+  'props.empty.description':
+    'A prop carries the continuity rules a later scene is checked against. This project has none, and there is no way to create one here yet.',
+  'props.truncated':
+    'More props exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'props.card.approved': 'Approved',
+  'props.card.draft': 'Draft',
+  'props.card.owned': 'Belongs to a subject',
+  'props.card.continuityRules': 'Continuity rules',
+  'props.card.noContinuityRules':
+    'No continuity rules recorded, so nothing about this prop will be checked between scenes.',
+  'props.card.appearancesUnavailable':
+    'Where this prop appears is not shown: continuity facts are scoped to a production and carry an untyped entity id, so nothing published joins a prop to its scenes.',
+  'props.card.context': 'the prop {name}',
+  'props.approveError.title': 'That prop was not approved',
   'page.props.title': 'Props',
   'page.props.description':
-    'The props available to this project. Not connected to the orchestrator yet.',
+    'The props this project tracks, with the continuity rules each one carries.',
   'page.productions.title': 'Productions',
   'page.productions.description':
     'Every production in this project, from screenplay to final cut. Not connected to the orchestrator yet.',

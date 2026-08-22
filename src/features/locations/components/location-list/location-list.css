@@ -1,0 +1,33 @@
+@layer features {
+  .location-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .location-list__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .location-list__placeholder {
+    block-size: var(--space-8);
+  }
+
+  .location-list__loading {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .location-list__coverage-note,
+  .location-list__truncated {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-relaxed);
+  }
+}

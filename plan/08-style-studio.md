@@ -1,7 +1,7 @@
 # FE-08 — Style, voice, location & prop studio
 
 > **Depends on:** 07 · **Blocks:** 09 · **Backend needs:** BE-13 · **Plan authority:** §3.5, §11.5–11.8, §13, §29
-> **Status:** unblocked 2026-08-22 for steps 1–6 — BE-13 merged; step 7 needs BE-14, step 8 needs a route
+> **Status:** partly done 2026-08-22 — steps 1, 3, 4, 5, 6 read; step 2 blocked, 7 and 8 unbuilt
 
 ## Goal
 
@@ -260,15 +260,88 @@ an unmerged branch, and do not build a screen on one. That held here — the ten
 before the merge and cost nothing when it landed, and no screen was written that a rename could have
 invalidated.
 
+## What landed 2026-08-22, and what each screen refuses to claim
+
+Four screens stopped being `EmptyState` stubs whose descriptions said "Not connected to the
+orchestrator yet". Each reads the orchestrator, each carries the fact its step says is the point, and
+each states its own limits on screen rather than in this file.
+
+**Styles (step 1).** The wire returns every version of every lineage in one flat page, so
+`groupIntoLineages` folds on `lineageId` and names the approved head. **Which version a production is
+pinned to is not shown** — `productionSchema.styleProfileId` exists but no route reads a production —
+and the screen says that rather than omitting it, because an omission reads as "no production uses
+this". Approval is per version and the control is named for the version it would approve.
+
+**Voices (step 3).** Split on `subjectId` being absent, so narrator and standalone voices are a
+visible category rather than an afterthought. The one-approved-voice-per-subject limit is **enforced
+on approval, not creation**, so the screen says so — otherwise a user learns the rule from a refusal
+that cannot explain why the create succeeded.
+
+**Pronunciation (step 4).** Each entry shows its `term` beside the `normalisedTerm` it collapses to.
+That is not decoration: normalisation strips exactly the marks an operator cannot see, so two
+identical-looking terms legitimately collide, and without the normalised form on screen
+`PRONUNCIATION_ENTRY_EXISTS` names a term the reader cannot find. `phonemeOverride` is notation and
+gets its own inline `dir="ltr"` element rather than `ContentText`.
+
+**Locations and plates (step 5).** Coverage is computed from **observed kinds**, with the four
+suggestions rendered separately and labelled as suggestions. No percentage, because a denominator of
+four would assert a closed set.
+
+**Props (step 6).** Continuity rules render, and the card says where the prop appears is unknown.
+
+## Five things measured here that this file previously got wrong or did not know
+
+1. **There is no `NIGHT` plate kind, nor `DAY`, nor `DAMAGED`.** Step 5 and the Done-when box below
+   ask for "a missing night plate flagged as missing". `SUGGESTED_PLATE_KINDS` has four values and no
+   lighting axis. That acceptance criterion **cannot be met without this repo inventing a
+   vocabulary**, which is the plate version of the closed style dropdown this file forbids.
+   `test/style-and-language-agnostic.test.ts` now fails on those three words in `src/`.
+2. **No synthesis preview route exists.** Twenty controllers, none serving preview, synth, tts or
+   audio. The render-job fallback is closed too: `createRenderJobRequestSchema` is unpublished and
+   `jobType` is a bare string with no enum. Step 3's "preview synthesis" and step 4's "hear it with
+   and without the override" are both unbuildable.
+3. **Nothing joins a prop to where it appears.** Continuity facts are scoped to a production and
+   props to a project; `continuityFactSchema.entityId` is a bare `z.uuid()`, not a `PropId`; and
+   `Scene.propIds` / `Shot.propIds` exist as contracts with no scenes or shots controller.
+4. **A plate anchored by `artifactId` has no renderable image.** There is no artifacts controller.
+   A `sourceAssetId` plate can use the thumbnail route; a generated one is an id and a label.
+5. **Dictionaries and entries have no `PATCH`.** Editing is delete-and-re-add, and both screens say so.
+
+## Steps 2, 7 and 8
+
+**Step 2 (style samples) is blocked** on `createRenderJobRequestSchema`, one of the DTOs still not
+re-exported. Without it Decision 2 — "a style profile that cannot be seen cannot be approved" — has no
+mechanism, and the same-subject-two-styles comparison with it.
+
+**Step 7 (project bible)** — BE-14 merged as `f168891` and the bible DTOs are published, so this is no
+longer blocked on the backend. It was not built here because one phase is one phase.
+
+**Step 8 (libraries)** has wire types and no controller, deliberately on the backend's side.
+
+## What no screen does yet
+
+**Create, edit, approve-with-a-form.** Every screen here reads and approves. The create and update
+DTOs are published for all five domains, so the forms are buildable; they are a phase of their own,
+and the empty states say "there is no way to create one here yet" rather than implying one exists.
+
+**Paging.** Every list reads the first page. `Page<T>` carries `nextCursor` and an absent one means
+the end, so each screen says "reads the first page only" when the server offers more. The asset
+library, which predates this, silently shows fifty and stops — that is FE-07's to fix.
+
+**Naming a prop's owner subject.** `projectSubjectsQueryOptions` lives in another feature and
+`code-style.md` forbids reaching sideways. Moving it down needs a home that neither `src/lib/api/`
+(the fetch client) nor `src/shell/api/` (installation status) cleanly provides. Left as an open
+question rather than settled under time pressure.
+
 ## Done when
 
-- [ ] style modes are open-ended, with no default style presented
-- [ ] versioning is visible: pinning, diffs, and a warning before creating a new version
+- [x] style modes are open-ended, with no default style presented — nothing in `src/` names one
+- [ ] versioning is visible: lineages and their approved head **are**; pinning has no route, diffs are computable from `/versions` but unbuilt, and the warning needs an editor
 - [ ] the same-subject-two-styles comparison exists and demonstrates identity is unchanged
-- [ ] voices support subject, narrator and standalone roles; one voice per subject is the obvious path
-- [ ] the pronunciation dictionary works per language, with Hebrew first-class and an audible preview
-- [ ] locations show plate coverage; missing plates are visible
-- [ ] props carry continuity rules and link to where they apply
+- [x] voices support subject, narrator and standalone roles; one voice per subject is stated where it is enforced
+- [ ] the pronunciation dictionary works per language with Hebrew first-class — **the audible preview has no route**
+- [x] locations show plate coverage against observed kinds; suggested kinds without a plate are named as suggestions
+- [ ] props carry continuity rules — **the link to where they apply has no published join**
 - [ ] the bible is structured, versioned, and shows only fields relevant to the project kind
 - [ ] reusable libraries are discoverable
 

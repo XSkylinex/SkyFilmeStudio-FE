@@ -479,18 +479,111 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.subjectReview.title': 'סקירת סובייקט',
   'page.subjectReview.description':
     'השוואה בין תמונות הרפרנס המועמדות של סובייקט ואישור אלה שמגדירות אותו. אין עדיין חיבור ל-orchestrator.',
+  'styles.heading': 'פרופילי סגנון',
+  'styles.loading': 'טוען פרופילי סגנון…',
+  'styles.error.title': 'לא ניתן לקרוא את פרופילי הסגנון',
+  'styles.empty.title': 'אין עדיין פרופילי סגנון',
+  'styles.empty.description':
+    'פרופיל סגנון מתעד את כללי הפלטה, התאורה, המצלמה, המרקם והתנועה שמולם מיוצרת הפקה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+  'styles.pinning':
+    'פרופיל הוא שושלת, וכל שורה למטה היא גרסה אחת שלו. לאיזו גרסה הפקה מוצמדת אינו מוצג, מכיוון שהאורקסטרטור אינו מפרסם מסלול שקורא הפקה.',
+  'styles.truncated':
+    'קיימים יותר פרופילי סגנון ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
+  'styles.lineage.versionCount': '{count} גרסאות',
+  'styles.lineage.noApproved': 'אין גרסה מאושרת',
+  'styles.lineage.approvedIs': 'מאושרת: גרסה {version}',
+  'styles.version.label': 'גרסה {version}',
+  'styles.version.approved': 'מאושרת',
+  'styles.version.frozen':
+    'גרסה מאושרת מוקפאת, ולכן שינוי הופך לגרסה חדשה ולא לעריכה.',
+  'styles.version.context': 'גרסה {version} של {name}',
+  'styles.approveError.title': 'הגרסה הזו לא אושרה',
   'page.styles.title': 'סגנונות',
   'page.styles.description':
-    'הסגנונות הוויזואליים הזמינים לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+    'הסגנונות הוויזואליים שמולם הפרויקט הזה מייצר, מקובצים לשושלות עם הגרסאות שלהן.',
+  'voices.loading': 'טוען קולות…',
+  'voices.error.title': 'לא ניתן לקרוא את הקולות',
+  'voices.empty.title': 'אין עדיין קולות',
+  'voices.empty.description':
+    'פרופיל קול הוא מה ששומר על דמות נשמעת כמו עצמה לאורך הפקה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+  'voices.truncated':
+    'קיימים יותר קולות ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
+  'voices.onePerSubject':
+    'לכל דמות יש בדיוק קול מאושר אחד. יכולות להתקיים כמה טיוטות, וההגבלה נאכפת באישור ולא ביצירה — ולכן טיוטה שנייה מותרת, ואישור שלה יידחה עד שהראשונה תימחק.',
+  'voices.noPreview':
+    'אי אפשר להאזין לשום דבר כאן. האורקסטרטור אינו מפרסם מסלול לתצוגה מקדימה של סינתזה, ולכן קול נשפט לפי המנוע, המודל והתמלול שלו ולא לפי צליל.',
+  'voices.group.subjects': 'משויכים לדמות',
+  'voices.group.standalone': 'קריינות ועצמאיים',
+  'voices.group.noneForSubjects': 'לאף דמות בפרויקט הזה אין עדיין קול.',
+  'voices.group.noneStandalone':
+    'אין עדיין קול קריינות או קול עצמאי. קול אינו חייב להיות משויך לדמות.',
+  'voices.card.approved': 'מאושר',
+  'voices.card.draft': 'טיוטה',
+  'voices.card.engine': 'מנוע',
+  'voices.card.model': 'מודל',
+  'voices.card.language': 'שפה',
+  'voices.card.context': 'הקול {name}',
+  'voices.approveError.title': 'הקול הזה לא אושר',
+  'voices.dictionaries.title': 'מילוני הגייה',
+  'voices.dictionaries.error.title': 'לא ניתן לקרוא את מילוני ההגייה',
+  'voices.dictionaries.empty.title': 'אין עדיין מילוני הגייה',
+  'voices.dictionaries.empty.description':
+    'מילון מחזיק שפה אחת של הפרויקט ואת המונחים שההגייה שלהם נדרסת בה.',
+  'voices.dictionaries.editNote':
+    'לא ניתן לערוך ערך: האורקסטרטור אינו מפרסם מסלול לכך, ולכן שינוי פירושו מחיקה והוספה של ערך מחליף.',
+  'voices.entries.none': 'למילון הזה אין ערכים.',
+  'voices.entries.unreadable':
+    'לא ניתן לקרוא את הערכים של המילון הזה, ולכן זה אינו ידוע ולא ריק.',
+  'voices.entries.normalisedAs': 'מתנרמל ל־',
   'page.voices.title': 'קולות',
   'page.voices.description':
-    'הקולות הזמינים לקריינות ולדיאלוג בפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+    'הקולות הקבועים שבהם הפרויקט הזה מדבר, ומילוני ההגייה שמולם הם נקראים.',
+  'locations.loading': 'טוען לוקיישנים…',
+  'locations.error.title': 'לא ניתן לקרוא את הלוקיישנים',
+  'locations.empty.title': 'אין עדיין לוקיישנים',
+  'locations.empty.description':
+    'לוקיישן מחזיק את המאפיינים הקבועים ואת ה-plates הקנוניים שמולם ממוסגרת סצנה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+  'locations.truncated':
+    'קיימים יותר לוקיישנים ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
+  'locations.coverageNote':
+    'סוגי ה-plates הם טקסט פתוח ולא רשימה סגורה, ולכן הכיסוי למטה הוא מה שיש לכל לוקיישן בפועל. ארבעת הסוגים המוצעים הם נקודת התחלה ולא דרישה, וּוריאציית תאורה כמו plate של לילה אינה סוג שהאורקסטרטור מפרסם בכלל.',
+  'locations.card.approved': 'מאושר',
+  'locations.card.draft': 'טיוטה',
+  'locations.card.immutableFeatures': 'מאפיינים קבועים:',
+  'locations.card.context': 'הלוקיישן {name}',
+  'locations.approveError.title': 'הלוקיישן הזה לא אושר',
+  'locations.plates.title': 'כיסוי plates',
+  'locations.plates.none':
+    'אין plates בכלל, ולכן כל סצנה כאן נפתרת מטקסט ולא מתמונה קנונית.',
+  'locations.plates.approved': 'מאושר',
+  'locations.plates.draftsOnly': '{count} טיוטות, אף אחת לא מאושרת',
+  'locations.plates.suggestedMissing':
+    'סוגים מוצעים שאין להם עדיין plate: {kinds}. הצעות, לא דרישות.',
+  'locations.plates.unreadable':
+    'לא ניתן לקרוא את ה-plates של הלוקיישן הזה, ולכן הכיסוי אינו ידוע ולא ריק.',
   'page.locations.title': 'לוקיישנים',
   'page.locations.description':
-    'הלוקיישנים הזמינים לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+    'הלוקיישנים שמולם הפרויקט הזה מצלם, עם כיסוי ה-plates הקנוניים של כל אחד.',
+  'props.loading': 'טוען אביזרים…',
+  'props.error.title': 'לא ניתן לקרוא את האביזרים',
+  'props.empty.title': 'אין עדיין אביזרים',
+  'props.empty.description':
+    'אבזר נושא את כללי הרציפות שמולם נבדקת סצנה מאוחרת. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+  'props.truncated':
+    'קיימים יותר אביזרים ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
+  'props.card.approved': 'מאושר',
+  'props.card.draft': 'טיוטה',
+  'props.card.owned': 'שייך לדמות',
+  'props.card.continuityRules': 'כללי רציפות',
+  'props.card.noContinuityRules':
+    'לא נרשמו כללי רציפות, ולכן שום דבר באבזר הזה לא ייבדק בין סצנות.',
+  'props.card.appearancesUnavailable':
+    'היכן האבזר הזה מופיע אינו מוצג: עובדות רציפות משויכות להפקה ונושאות מזהה ישות ללא טיפוס, ולכן שום דבר שפורסם אינו מקשר אבזר לסצנות שלו.',
+  'props.card.context': 'האבזר {name}',
+  'props.approveError.title': 'האבזר הזה לא אושר',
   'page.props.title': 'אביזרים',
   'page.props.description':
-    'האביזרים הזמינים לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+    'האביזרים שהפרויקט הזה עוקב אחריהם, עם כללי הרציפות שכל אחד נושא.',
   'page.productions.title': 'הפקות',
   'page.productions.description':
     'כל ההפקות בפרויקט הזה, מהתסריט ועד הקאט הסופי. אין עדיין חיבור ל-orchestrator.',

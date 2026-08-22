@@ -14,6 +14,15 @@ const STYLE_MODES = [
   'MIXED_MEDIA',
 ];
 
+const SUGGESTED_PLATE_KIND_NAMES = [
+  'WIDE_ESTABLISHING',
+  'MEDIUM_LEFT',
+  'MEDIUM_RIGHT',
+  'CLOSE_DETAIL',
+];
+
+const INVENTED_PLATE_KINDS = ['NIGHT', 'DAY', 'DAMAGED'];
+
 const LANGUAGE_TAGS = ['he', 'he-IL', 'iw', 'en', 'en-US'];
 
 const LANGUAGE_MECHANISM_FILES: readonly string[] = [
@@ -63,6 +72,14 @@ const quotedAnyStyle = (values: readonly string[]): RegExp =>
 describe('the interface stays style-agnostic and language-agnostic', () => {
   it('names no style mode, because the suggestion list belongs to the contract', () => {
     expect(scan(anywhere(STYLE_MODES))).toEqual([]);
+  });
+
+  it('names no plate kind, because that vocabulary is open and lives on the wire', () => {
+    expect(scan(anywhere(SUGGESTED_PLATE_KIND_NAMES))).toEqual([]);
+  });
+
+  it('invents no lighting-variant plate kind, because the contract publishes none', () => {
+    expect(scan(quotedAnyStyle(INVENTED_PLATE_KINDS))).toEqual([]);
   });
 
   it('mentions no anime, which is the preset this product must never default to', () => {

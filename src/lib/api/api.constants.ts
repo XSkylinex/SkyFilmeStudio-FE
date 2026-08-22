@@ -1,9 +1,15 @@
 import type {
   CanonicalAssetSetId,
+  LocationId,
+  LocationPlateId,
   ProjectId,
+  PronunciationDictionaryId,
+  PropId,
   RenderJobId,
   SourceAssetId,
+  StyleProfileId,
   SubjectId,
+  VoiceProfileId,
 } from 'sky-filme-studio-be/contracts';
 
 export const API_PATH = {
@@ -42,6 +48,67 @@ export const API_PATH = {
     setId: CanonicalAssetSetId,
   ): string =>
     `/projects/${projectId}/subjects/${subjectId}/canonical-sets/${setId}/references`,
+  styleProfiles: (projectId: ProjectId): string =>
+    `/projects/${projectId}/style-profiles`,
+  styleProfileVersions: (projectId: ProjectId): string =>
+    `/projects/${projectId}/style-profiles/versions`,
+  approvedStyleProfile: (projectId: ProjectId): string =>
+    `/projects/${projectId}/style-profiles/approved`,
+  styleProfile: (
+    projectId: ProjectId,
+    styleProfileId: StyleProfileId,
+  ): string => `/projects/${projectId}/style-profiles/${styleProfileId}`,
+  approveStyleProfile: (
+    projectId: ProjectId,
+    styleProfileId: StyleProfileId,
+  ): string =>
+    `/projects/${projectId}/style-profiles/${styleProfileId}/approve`,
+  voiceProfiles: (projectId: ProjectId): string =>
+    `/projects/${projectId}/voice-profiles`,
+  approvedVoiceProfile: (projectId: ProjectId): string =>
+    `/projects/${projectId}/voice-profiles/approved`,
+  voiceProfile: (
+    projectId: ProjectId,
+    voiceProfileId: VoiceProfileId,
+  ): string => `/projects/${projectId}/voice-profiles/${voiceProfileId}`,
+  approveVoiceProfile: (
+    projectId: ProjectId,
+    voiceProfileId: VoiceProfileId,
+  ): string =>
+    `/projects/${projectId}/voice-profiles/${voiceProfileId}/approve`,
+  pronunciationDictionaries: (projectId: ProjectId): string =>
+    `/projects/${projectId}/pronunciation-dictionaries`,
+  pronunciationDictionaryByLanguage: (projectId: ProjectId): string =>
+    `/projects/${projectId}/pronunciation-dictionaries/by-language`,
+  pronunciationDictionaryEntries: (
+    projectId: ProjectId,
+    dictionaryId: PronunciationDictionaryId,
+  ): string =>
+    `/projects/${projectId}/pronunciation-dictionaries/${dictionaryId}/entries`,
+  locations: (projectId: ProjectId): string =>
+    `/projects/${projectId}/locations`,
+  location: (projectId: ProjectId, locationId: LocationId): string =>
+    `/projects/${projectId}/locations/${locationId}`,
+  approveLocation: (projectId: ProjectId, locationId: LocationId): string =>
+    `/projects/${projectId}/locations/${locationId}/approve`,
+  locationPlates: (projectId: ProjectId, locationId: LocationId): string =>
+    `/projects/${projectId}/locations/${locationId}/plates`,
+  approvedLocationPlate: (
+    projectId: ProjectId,
+    locationId: LocationId,
+  ): string => `/projects/${projectId}/locations/${locationId}/plates/approved`,
+  approveLocationPlate: (
+    projectId: ProjectId,
+    locationId: LocationId,
+    plateId: LocationPlateId,
+  ): string =>
+    `/projects/${projectId}/locations/${locationId}/plates/${plateId}/approve`,
+  projectProps: (projectId: ProjectId): string =>
+    `/projects/${projectId}/props`,
+  projectProp: (projectId: ProjectId, propId: PropId): string =>
+    `/projects/${projectId}/props/${propId}`,
+  approveProp: (projectId: ProjectId, propId: PropId): string =>
+    `/projects/${projectId}/props/${propId}/approve`,
   renderJob: (renderJobId: RenderJobId): string =>
     `/render-jobs/${renderJobId}`,
 } satisfies Record<string, (...args: never[]) => string>;

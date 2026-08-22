@@ -1,0 +1,1 @@
+export const LOCATION_LIST_SKELETON_COUNT = 3;
