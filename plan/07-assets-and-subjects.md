@@ -421,12 +421,20 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
       sentence saying why the wording is frozen
 - [x] the unapproved-set render block is clearly surfaced — a subject with no approved set says
       generation is blocked, and says the block is the point
-- [x] canonical anchors are visible on every reference — `anchorEligible` is a badge and a border on
-      the tile, with a sentence explaining what an anchor is for
+- [ ] canonical anchors are visible on every derived generation — **unchanged and still open.** There
+      are no generations in this build, so nothing can show which anchor produced it. An earlier
+      version of this line was reworded to "on every reference" and ticked, which is the one edit that
+      makes a checklist stop being evidence; restored 2026-08-22 by review
+- [x] every canonical *reference* shows whether it is anchor-eligible — a badge and a border, with a
+      sentence saying what an anchor is for. A smaller claim than the box above, and a separate one
 - [ ] the comparison view is large enough to judge drift — needs a second set to compare against, and
       only the approved head is served; a draft-versus-approved view has no endpoint pairing yet
-- [ ] approving a set from the UI — **blocked on the request shape.** `POST …/canonical-sets/:setId/approve`
-      exists; the panel says so rather than offering a control that does nothing
+- [ ] approving a set from the UI — **blocked on a missing route, not a missing export.**
+      `POST …/canonical-sets/:setId/approve` takes three path params and **no body**, and returns the
+      published `CanonicalAssetSet`, so nothing about it is unexported. What is missing is a route
+      that lists a subject's sets: only `approved`, `:setId` and `:setId/references` exist, and
+      `approve` transitions `PENDING → APPROVED`, so this build cannot discover a draft to approve.
+      Approving the head would be a no-op by construction
 
 ## Traps
 
