@@ -107,7 +107,7 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     messageKey: 'error.STYLE_PROFILE_IMMUTABLE',
   },
   STYLE_VERSION_CONFLICT: {
-    presentation: 'PERSISTENT',
+    presentation: 'TRANSIENT',
     messageKey: 'error.STYLE_VERSION_CONFLICT',
   },
 };

@@ -55,7 +55,7 @@ export const EN_CATALOGUE = {
   'error.STYLE_PROFILE_IMMUTABLE':
     'This style profile version has been approved, so it can no longer be edited in place. A production already pinned to it must not shift underneath itself — a change becomes a new version instead.',
   'error.STYLE_VERSION_CONFLICT':
-    'This style profile moved on while the change was being made, so the version it was based on is no longer the current one. Reload the profile and reapply the change so the new version builds on what is actually there.',
+    'Another version of this style was added at the same moment, so this one lost the race for its version number. Nothing was lost and nothing needs retyping — send it again and it will take the next number.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
