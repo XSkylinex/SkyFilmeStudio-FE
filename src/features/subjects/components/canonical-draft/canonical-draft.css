@@ -43,6 +43,17 @@
     line-height: var(--line-height-relaxed);
   }
 
+  .canonical-draft__approved {
+    margin: 0;
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .canonical-draft__refusal {
+    display: contents;
+  }
+
   .canonical-draft__explained {
     margin: 0;
     color: var(--color-text-secondary);

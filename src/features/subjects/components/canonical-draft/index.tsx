@@ -18,6 +18,10 @@ import { CanonicalReferences } from '@/features/subjects/components/canonical-re
 import type { CanonicalDraftProps } from './canonical-draft.interface';
 import './canonical-draft.css';
 
+const focusWhenShown = (node: HTMLElement | null): void => {
+  node?.focus();
+};
+
 export const CanonicalDraft: FC<CanonicalDraftProps> = ({
   projectId,
   subjectId,
@@ -59,16 +63,26 @@ export const CanonicalDraft: FC<CanonicalDraftProps> = ({
       </h2>
 
       {draft === undefined ? (
-        <>
-          <EmptyState
-            title={translate('subjectReview.draft.none.title')}
-            description={translate('subjectReview.draft.none.description')}
-            headingLevel={3}
-          />
-          <p className="canonical-draft__explained">
-            {translate('subjectReview.draft.cannotOpen')}
-          </p>
-        </>
+        approve.isSuccess ? (
+          <output
+            className="canonical-draft__approved"
+            ref={focusWhenShown}
+            tabIndex={-1}
+          >
+            {translate('subjectReview.draft.approved')}
+          </output>
+        ) : (
+          <>
+            <EmptyState
+              title={translate('subjectReview.draft.none.title')}
+              description={translate('subjectReview.draft.none.description')}
+              headingLevel={3}
+            />
+            <p className="canonical-draft__explained">
+              {translate('subjectReview.draft.cannotOpen')}
+            </p>
+          </>
+        )
       ) : (
         <>
           <p className="canonical-draft__fact">

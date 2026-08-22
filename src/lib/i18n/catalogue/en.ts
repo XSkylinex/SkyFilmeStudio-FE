@@ -445,6 +445,8 @@ export const EN_CATALOGUE = {
   'subjectReview.draft.explained':
     'Approving freezes this set. Its descriptor is recorded and hashed, it becomes the version every generation is anchored to, and nothing about it can be changed afterwards — including un-approving it.',
   'subjectReview.draft.approveError.title': 'This draft was not approved',
+  'subjectReview.draft.approved':
+    'Approved. This set is now the version every generation of this subject is anchored to, and it can no longer be changed.',
 
   'page.subjects.title': 'Subjects',
   'page.subjects.description':

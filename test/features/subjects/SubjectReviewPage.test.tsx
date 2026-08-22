@@ -239,6 +239,56 @@ describe('SubjectReviewPage', () => {
     });
   });
 
+  it('confirms an approval and puts focus on the confirmation', async () => {
+    const user = userEvent.setup();
+    let listCalls = 0;
+    servesSubject();
+    servesApprovedSet();
+    server.use(
+      http.get(API_PATH.canonicalSets(PROJECT_ID, SUBJECT_ID), () => {
+        listCalls += 1;
+        return HttpResponse.json(
+          listCalls === 1
+            ? [
+                buildCanonicalAssetSet({
+                  id: DRAFT_ID,
+                  approvalState: 'PENDING',
+                }),
+              ]
+            : [buildCanonicalAssetSet({ id: DRAFT_ID, approvalVersion: 3 })],
+        );
+      }),
+      http.get(
+        API_PATH.canonicalReferences(PROJECT_ID, SUBJECT_ID, DRAFT_ID),
+        () =>
+          HttpResponse.json([buildCanonicalReference({ role: 'FRONT_VIEW' })]),
+      ),
+      http.post(
+        API_PATH.approveCanonicalSet(PROJECT_ID, SUBJECT_ID, DRAFT_ID),
+        () =>
+          HttpResponse.json(
+            buildCanonicalAssetSet({ id: DRAFT_ID, approvalVersion: 3 }),
+          ),
+      ),
+    );
+
+    renderAt(PATH);
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Approve the canonical set for Mira',
+      }),
+    );
+
+    const confirmation = await screen.findByText(
+      /is now the version every generation of this subject is anchored to/i,
+    );
+
+    expect(confirmation).toHaveFocus();
+    expect(
+      screen.queryByRole('heading', { name: 'No open draft' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('shows the orchestrator’s own refusal when a draft has nothing to anchor to', async () => {
     const user = userEvent.setup();
     servesSubject();
