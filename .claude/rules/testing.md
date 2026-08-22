@@ -83,6 +83,23 @@ class name.
 **Prove the test has teeth.** Break the implementation on purpose, watch the test fail, put it back. A
 test that passes on broken code is worse than no test because it reads as coverage.
 
+**Watch the *assertion* fail, not the test.** A red test proves something threw; it does not prove
+your comparison ran. FE-08 shipped a guard whose central assertion compared a module against a dynamic
+import of its own path — a cache hit on the same record, so it was `x === x` whenever it evaluated at
+all. Breaking the thing it guarded did turn it red, on the import throwing several lines earlier, and
+that was reported as proof. Read the failure output and confirm it names the values you meant to
+compare. If the message is a `TypeError`, a `Cannot find module`, or anything about setup rather than
+about your expectation, the assertion never ran and nothing is proved.
+
+Two shapes that pass while proving nothing, both found in this repo:
+
+- **asserting an absence while the thing is still loading** — the heading is missing because the query
+  has not resolved, not because the code is right. Assert the loading state synchronously instead, and
+  count the requests.
+- **comparing two things that are the same object by construction.** If one side is imported and the
+  other is derived from that import, there is no comparison. Read one side from disk as text, or build
+  it independently.
+
 ## Mocking
 
 - **Mock the network at the HTTP boundary** with MSW (2.15.0, installed by `plan/04`), not by stubbing
