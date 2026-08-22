@@ -27,6 +27,12 @@ describe('EN_CATALOGUE', () => {
     },
   );
 
+  it('does not let the two present-but-unproven file statuses read alike', () => {
+    expect(
+      EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIED'],
+    ).not.toBe(EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIABLE']);
+  });
+
   it('does not send the reader to a screen or an action this build does not have', () => {
     const dangling = Object.entries(EN_CATALOGUE)
       .filter(([, value]) =>

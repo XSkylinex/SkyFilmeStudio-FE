@@ -64,6 +64,14 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'לפרויקט הזה כבר יש מילון הגייה לשפה הזו, ויש מילון אחד לכל שפה. יש להוסיף את הערך למילון הקיים במקום לפתוח מילון שני.',
   'error.PRONUNCIATION_ENTRY_EXISTS':
     'במילון כבר קיים ערך שמנורמל לאותו מונח כמו זה. שני איותים שונים יכולים להתנרמל לאותו דבר — ניקוד מפורק, סימן כיווניות שנשתרבב, רווח כפול — ולכן הערך שכבר קיים עשוי להיראות שונה ממה שהוקלד. יש לערוך אותו במקום להוסיף ערך שני.',
+  'error.LOCATION_IMMUTABLE':
+    'המיקום הזה אושר, ולכן כבר לא ניתן לערוך אותו או לאשר אותו שוב. מיקומים מאושרים מוקפאים במכוון — שוטים שכבר תוכננו מולו לא אמורים לגלות שהמקום השתנה מתחתיהם. ההקפאה אינה חוסמת מחיקה, ושינוי פירושו מיקום חדש ולא עריכה.',
+  'error.PROP_IMMUTABLE':
+    'האבזר הזה אושר, ולכן כבר לא ניתן לערוך אותו או לאשר אותו שוב. כללי הרציפות שלו הם מה שסצנות מאוחרות נבדקות מולו, ולכן הם מוקפאים עם האישור. ההקפאה אינה חוסמת מחיקה, ושינוי פירושו אבזר חדש ולא עריכה.',
+  'error.LOCATION_PLATE_IMMUTABLE':
+    'ה-plate הזה אושר, ולכן כבר לא ניתן לערוך אותו או לאשר אותו שוב. plate מאושר הוא התמונה הקנונית לסוג שלו, וסצנות שכבר מוסגרו מולו לא אמורות לזוז. ההקפאה אינה חוסמת מחיקה, ושינוי פירושו plate חדש ולא עריכה.',
+  'error.LOCATION_PLATE_KIND_ALREADY_APPROVED':
+    'למיקום הזה כבר יש plate מאושר מהסוג הזה, ויש בדיוק אחד — זה מה ששומר על המקום מזוהה מקאט לקאט. יש למחוק קודם את זה שתופס את המקום: ביטול אישור נדחה, ולכן מחיקה היא הדרך היחידה לפנות אותו. טיוטות נוספות מאותו סוג יכולות לשבת לצידו בינתיים.',
   'error.network':
     'ה-orchestrator לא עונה. זה התהליך שמריץ כל רינדור, ולכן שום דבר לא יכול להתחיל עד שהוא יחזור.',
   'error.malformed':
@@ -307,7 +315,8 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'system.models.empty': 'המניפסט אינו מצהיר על אף מודל.',
   'system.models.error.title': 'לא ניתן לקרוא את דוח התקנת המודלים',
   'system.models.fileStatus.VERIFIED': 'ה-hash אומת',
-  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'קיים, ה-hash לא ידוע',
+  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'קיים, לא הוצהר hash',
+  'system.models.fileStatus.PRESENT_UNVERIFIED': 'קיים, טרם אומת',
   'system.models.fileStatus.MISSING': 'חסר',
   'system.models.fileStatus.SIZE_MISMATCH': 'גודל שגוי',
   'system.models.fileStatus.HASH_MISMATCH': 'אי-התאמה ב-hash',

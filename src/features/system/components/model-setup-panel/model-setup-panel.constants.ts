@@ -16,6 +16,7 @@ export const MODEL_ROLE_LABEL_KEY = {
 export const MODEL_FILE_STATUS_LABEL_KEY = {
   VERIFIED: 'system.models.fileStatus.VERIFIED',
   PRESENT_UNVERIFIABLE: 'system.models.fileStatus.PRESENT_UNVERIFIABLE',
+  PRESENT_UNVERIFIED: 'system.models.fileStatus.PRESENT_UNVERIFIED',
   MISSING: 'system.models.fileStatus.MISSING',
   SIZE_MISMATCH: 'system.models.fileStatus.SIZE_MISMATCH',
   HASH_MISMATCH: 'system.models.fileStatus.HASH_MISMATCH',

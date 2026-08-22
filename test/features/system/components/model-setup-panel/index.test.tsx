@@ -138,6 +138,59 @@ describe('ModelSetupPanel', () => {
     expect(screen.queryByText(/Still to fetch/)).not.toBeInTheDocument();
   });
 
+  it('separates a file not hashed yet from one that can never be hashed', async () => {
+    orchestratorReports(
+      buildModelSetupReport({
+        ready: true,
+        totalMissingBytes: 0,
+        models: [
+          {
+            id: modelManifestIdSchema.parse('ltx-2.5-distilled'),
+            role: 'VIDEO',
+            upstreamRepo: 'lightricks/ltx-video',
+            license: 'openrail-m',
+            totalBytes: 4_000_000_000,
+            missingBytes: 0,
+            ready: true,
+            files: [
+              {
+                relativePath: projectRelativePathSchema.parse(
+                  'video/ltx-2.5-distilled/changed.safetensors',
+                ),
+                bytes: 2_000_000_000,
+                status: 'PRESENT_UNVERIFIED',
+                detail:
+                  'Present and the declared size, but has not been hashed since it last changed.',
+              },
+              {
+                relativePath: projectRelativePathSchema.parse(
+                  'video/ltx-2.5-distilled/unhashed.safetensors',
+                ),
+                bytes: 2_000_000_000,
+                status: 'PRESENT_UNVERIFIABLE',
+                detail:
+                  'Present and the declared size, but the manifest records no SHA-256.',
+              },
+            ],
+            downloadArgv: [
+              'huggingface-cli',
+              'download',
+              'lightricks/ltx-video',
+            ],
+          },
+        ],
+      }),
+    );
+
+    renderInApp(<ModelSetupPanel />);
+
+    expect(
+      await screen.findByText('Present, not yet verified'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Present, no hash declared')).toBeInTheDocument();
+    expect(screen.queryByText('Hash verified')).not.toBeInTheDocument();
+  });
+
   it('never presents files-present as benchmarked, and shows the caveat alongside it', async () => {
     orchestratorReports(buildModelSetupReport());
 

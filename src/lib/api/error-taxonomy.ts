@@ -126,4 +126,20 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.PRONUNCIATION_ENTRY_EXISTS',
   },
+  LOCATION_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.LOCATION_IMMUTABLE',
+  },
+  PROP_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PROP_IMMUTABLE',
+  },
+  LOCATION_PLATE_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.LOCATION_PLATE_IMMUTABLE',
+  },
+  LOCATION_PLATE_KIND_ALREADY_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.LOCATION_PLATE_KIND_ALREADY_APPROVED',
+  },
 };
