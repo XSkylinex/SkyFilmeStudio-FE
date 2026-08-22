@@ -1,0 +1,1 @@
+export const PROP_LIST_SKELETON_COUNT = 4;

@@ -1,0 +1,13 @@
+@layer features {
+  .props-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .props-page__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-2xl);
+  }
+}

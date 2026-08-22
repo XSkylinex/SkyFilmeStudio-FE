@@ -507,9 +507,26 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.locations.title': 'לוקיישנים',
   'page.locations.description':
     'הלוקיישנים הזמינים לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+  'props.loading': 'טוען אביזרים…',
+  'props.error.title': 'לא ניתן לקרוא את האביזרים',
+  'props.empty.title': 'אין עדיין אביזרים',
+  'props.empty.description':
+    'אבזר נושא את כללי הרציפות שמולם נבדקת סצנה מאוחרת. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+  'props.truncated':
+    'קיימים יותר אביזרים ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
+  'props.card.approved': 'מאושר',
+  'props.card.draft': 'טיוטה',
+  'props.card.owned': 'שייך לדמות',
+  'props.card.continuityRules': 'כללי רציפות',
+  'props.card.noContinuityRules':
+    'לא נרשמו כללי רציפות, ולכן שום דבר באבזר הזה לא ייבדק בין סצנות.',
+  'props.card.appearancesUnavailable':
+    'היכן האבזר הזה מופיע אינו מוצג: עובדות רציפות משויכות להפקה ונושאות מזהה ישות ללא טיפוס, ולכן שום דבר שפורסם אינו מקשר אבזר לסצנות שלו.',
+  'props.card.context': 'האבזר {name}',
+  'props.approveError.title': 'האבזר הזה לא אושר',
   'page.props.title': 'אביזרים',
   'page.props.description':
-    'האביזרים הזמינים לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+    'האביזרים שהפרויקט הזה עוקב אחריהם, עם כללי הרציפות שכל אחד נושא.',
   'page.productions.title': 'הפקות',
   'page.productions.description':
     'כל ההפקות בפרויקט הזה, מהתסריט ועד הקאט הסופי. אין עדיין חיבור ל-orchestrator.',

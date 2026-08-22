@@ -512,9 +512,26 @@ export const EN_CATALOGUE = {
   'page.locations.title': 'Locations',
   'page.locations.description':
     'The locations available to this project. Not connected to the orchestrator yet.',
+  'props.loading': 'Loading props…',
+  'props.error.title': 'The props could not be read',
+  'props.empty.title': 'No props yet',
+  'props.empty.description':
+    'A prop carries the continuity rules a later scene is checked against. This project has none, and there is no way to create one here yet.',
+  'props.truncated':
+    'More props exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'props.card.approved': 'Approved',
+  'props.card.draft': 'Draft',
+  'props.card.owned': 'Belongs to a subject',
+  'props.card.continuityRules': 'Continuity rules',
+  'props.card.noContinuityRules':
+    'No continuity rules recorded, so nothing about this prop will be checked between scenes.',
+  'props.card.appearancesUnavailable':
+    'Where this prop appears is not shown: continuity facts are scoped to a production and carry an untyped entity id, so nothing published joins a prop to its scenes.',
+  'props.card.context': 'the prop {name}',
+  'props.approveError.title': 'That prop was not approved',
   'page.props.title': 'Props',
   'page.props.description':
-    'The props available to this project. Not connected to the orchestrator yet.',
+    'The props this project tracks, with the continuity rules each one carries.',
   'page.productions.title': 'Productions',
   'page.productions.description':
     'Every production in this project, from screenplay to final cut. Not connected to the orchestrator yet.',
