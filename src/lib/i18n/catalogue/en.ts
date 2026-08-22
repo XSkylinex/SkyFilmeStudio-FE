@@ -72,6 +72,18 @@ export const EN_CATALOGUE = {
     'This plate has been approved, so it can no longer be edited or approved again. An approved plate is the canonical image for its kind, and scenes already framed against it must not shift. The freeze does not block deleting it, and a change means a new plate rather than an edit.',
   'error.LOCATION_PLATE_KIND_ALREADY_APPROVED':
     'This location already has an approved plate of that kind, and it gets exactly one — that is what keeps the place recognisable from cut to cut. Delete the plate that holds the place first: un-approving it is refused, so deleting is the only way to free it. Further drafts of the same kind may sit alongside it in the meantime.',
+  'error.PROJECT_BIBLE_IMMUTABLE':
+    'This bible version has been published, so it and its subject rules are frozen. A production that planned against it keeps what it planned against — a change means publishing the next version rather than editing this one.',
+  'error.PROJECT_BIBLE_VERSION_EXISTS':
+    'Another version of this bible was created at the same moment, so this one lost the race for its version number. Nothing was lost and nothing needs retyping — send it again and it will take the next number.',
+  'error.PROJECT_BIBLE_NARRATIVE_NOT_APPLICABLE':
+    'This kind of project carries no narrative section, so world rules, humour and drama language, chronology and subject behaviour have to stay empty. Clear those fields — for this kind of project the bible is the remaining sections only.',
+  'error.VOICE_RULES_REQUIRE_SPEECH':
+    'This subject is not recorded as one that speaks, so it cannot carry voice rules. Either clear the voice rules, or record the subject as speaking first.',
+  'error.CONTINUITY_SCOPE_INVALID':
+    "This fact's scope is not a valid one: either its start or end scene is not part of this production, or the end scene comes before the start. Pick both scenes from this production, with the end no earlier than the start.",
+  'error.CONTINUITY_CONTEXT_REQUIRED':
+    'The orchestrator asked a model to reason about a single scene without supplying that scene, so nothing was generated. The model remembers nothing between turns, which is why that context is not optional — this is a fault in the orchestrator rather than something to correct here.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
