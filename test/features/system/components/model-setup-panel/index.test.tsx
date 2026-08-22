@@ -140,7 +140,7 @@ describe('ModelSetupPanel', () => {
     expect(screen.queryByText(/Still to fetch/)).not.toBeInTheDocument();
   });
 
-  it('separates a file not hashed yet from one that can never be hashed', async () => {
+  it('labels every present-but-unproven status the contract can carry', async () => {
     orchestratorReports(
       buildModelSetupReport({
         ready: true,
@@ -187,9 +187,9 @@ describe('ModelSetupPanel', () => {
     renderInApp(<ModelSetupPanel />);
 
     expect(
-      await screen.findByText('Present, not yet verified'),
+      await screen.findByText('Present, not hashed since it changed'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Present, no hash declared')).toBeInTheDocument();
+    expect(screen.getByText('Present, hash unknown')).toBeInTheDocument();
     expect(screen.queryByText('Hash verified')).not.toBeInTheDocument();
   });
 

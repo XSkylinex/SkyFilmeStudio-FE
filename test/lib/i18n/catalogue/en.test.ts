@@ -27,7 +27,10 @@ describe('EN_CATALOGUE', () => {
     },
   );
 
-  it('does not let the two present-but-unproven file statuses read alike', () => {
+  it('does not let a file-status label claim what the setup report cannot know', () => {
+    expect(
+      EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIABLE'],
+    ).not.toMatch(/no hash|declares no|not declared|never be/i);
     expect(
       EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIED'],
     ).not.toBe(EN_CATALOGUE['system.models.fileStatus.PRESENT_UNVERIFIABLE']);

@@ -308,15 +308,15 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'system.models.filesPresent': 'הקבצים מוכנים',
   'system.models.filesMissing': 'הקבצים אינם מוכנים',
   'system.models.readyMeaning':
-    '"הקבצים מוכנים" אומר שכל קובץ יושב בדיסק בגודל שהמניפסט מצהיר עליו. זה לא אומר שהקובץ תקין: שום דבר במסך הזה לא פותח קובץ, וגם בדיקת ה-preflight ‏MODEL_HASHES_MATCH לא — שתיהן מדווחות את מה שאימות קודם רשם, ולכן קובץ שהשתנה מאז מוצג כמי שטרם אומת ולא כשגוי. הרצת אימות חדש היא בקשה נפרדת, ואין לה פקד במסך הזה. זה גם לא אומר שהמודל עבר benchmark על החומרה הזו — האורקסטרטור עדיין לא מפרסם את הסיווג הזה, ולכן אין לקרוא שום דבר כאן כ"נבדק".',
+    '"הקבצים מוכנים" אומר שכל קובץ יושב בדיסק בגודל שהמניפסט מצהיר עליו, וזה כל מה שהדוח הזה בודק. זה לא אומר שהקובץ תקין: שום דבר במסך הזה לא פותח קובץ, וגם לא בדיקת ה-preflight ‏MODEL_HASHES_MATCH, שמדווחת את מה שאימות קודם רשם. קובץ קיים בגודל המוצהר מדווח כאן באותה צורה בין אם המניפסט מצהיר עבורו hash ובין אם לא, ולכן שום דבר במסך הזה לא מפריד בין מוכח ללא מוכח — ‏MODEL_HASHES_MATCH היא המקום שבו זה נראה, והיא נכשלת כל עוד קובץ קיים כלשהו לא עבר hash מאז שהשתנה. הרצת אימות היא בקשה נפרדת, ואין לה פקד במסך הזה. זה גם לא אומר שהמודל עבר benchmark על החומרה הזו — האורקסטרטור עדיין לא מפרסם את הסיווג הזה, ולכן אין לקרוא שום דבר כאן כ"נבדק".',
   'system.models.noDownload':
     'Local AI Studio לעולם אינו מוריד מודל. יש להריץ את זה בעצמכם:',
   'system.models.files': 'קבצים',
   'system.models.empty': 'המניפסט אינו מצהיר על אף מודל.',
   'system.models.error.title': 'לא ניתן לקרוא את דוח התקנת המודלים',
   'system.models.fileStatus.VERIFIED': 'ה-hash אומת',
-  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'קיים, לא הוצהר hash',
-  'system.models.fileStatus.PRESENT_UNVERIFIED': 'קיים, טרם אומת',
+  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'קיים, ה-hash לא ידוע',
+  'system.models.fileStatus.PRESENT_UNVERIFIED': 'קיים, לא עבר hash מאז שהשתנה',
   'system.models.fileStatus.MISSING': 'חסר',
   'system.models.fileStatus.SIZE_MISMATCH': 'גודל שגוי',
   'system.models.fileStatus.HASH_MISMATCH': 'אי-התאמה ב-hash',

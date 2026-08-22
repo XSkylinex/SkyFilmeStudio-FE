@@ -311,15 +311,16 @@ export const EN_CATALOGUE = {
   'system.models.filesPresent': 'Files ready',
   'system.models.filesMissing': 'Files not ready',
   'system.models.readyMeaning':
-    'Files ready means every file is on disk at the size the manifest declares. It does not mean the file is intact: nothing on this screen opens a file, and neither does the MODEL_HASHES_MATCH preflight check — both report what an earlier verification recorded, so a file changed since then reads as not yet verified rather than as wrong. Starting a fresh verification is a separate request, and this screen has no control for it. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
+    'Files ready means every file is on disk at the size the manifest declares, which is the whole of what this report checks. It does not mean the file is intact: nothing on this screen opens a file, and neither does the MODEL_HASHES_MATCH preflight check, which reports what an earlier verification recorded. A present file of the declared size is reported here the same way whether or not the manifest declares a hash for it, so nothing on this screen separates proven from unproven — MODEL_HASHES_MATCH is where that shows, and it fails while any present file has not been hashed since it last changed. Starting a verification is a separate request, and this screen has no control for it. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
   'system.models.noDownload':
     'Local AI Studio never downloads a model. Run this yourself:',
   'system.models.files': 'Files',
   'system.models.empty': 'The manifest declares no models.',
   'system.models.error.title': 'The model setup report could not be read',
   'system.models.fileStatus.VERIFIED': 'Hash verified',
-  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'Present, no hash declared',
-  'system.models.fileStatus.PRESENT_UNVERIFIED': 'Present, not yet verified',
+  'system.models.fileStatus.PRESENT_UNVERIFIABLE': 'Present, hash unknown',
+  'system.models.fileStatus.PRESENT_UNVERIFIED':
+    'Present, not hashed since it changed',
   'system.models.fileStatus.MISSING': 'Missing',
   'system.models.fileStatus.SIZE_MISMATCH': 'Wrong size',
   'system.models.fileStatus.HASH_MISMATCH': 'Hash mismatch',
