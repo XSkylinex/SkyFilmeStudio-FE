@@ -56,6 +56,14 @@ export const EN_CATALOGUE = {
     'This style profile version has been approved, so it can no longer be edited in place. A production already pinned to it must not shift underneath itself — a change becomes a new version instead.',
   'error.STYLE_VERSION_CONFLICT':
     'Another version of this style was added at the same moment, so this one lost the race for its version number. Nothing was lost and nothing needs retyping — send it again and it will take the next number.',
+  'error.VOICE_PROFILE_IMMUTABLE':
+    'This voice profile has been approved and dialogue is already pinned to it, so it can no longer be changed. A change means a new voice profile, which leaves lines that were already recorded sounding as they were.',
+  'error.VOICE_ALREADY_APPROVED_FOR_SUBJECT':
+    'This subject already has an approved voice, and a subject gets exactly one — that is what keeps it sounding like itself across a production. Delete the existing voice first: un-approving it is refused, so deleting is the only way to free the place.',
+  'error.PRONUNCIATION_DICTIONARY_EXISTS':
+    'This project already has a pronunciation dictionary for that language, and there is one per language. Add the entry to the dictionary that exists rather than starting a second.',
+  'error.PRONUNCIATION_ENTRY_EXISTS':
+    'The dictionary already holds an entry that normalises to the same term as this one. Two spellings can normalise together — a decomposed accent, a stray direction mark, a doubled space — so the entry already there may not look identical to what was typed. Edit that one instead of adding a second.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
