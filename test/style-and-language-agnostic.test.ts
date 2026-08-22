@@ -54,12 +54,15 @@ const scan = (pattern: RegExp): Finding[] =>
       ),
   );
 
-const quoted = (values: readonly string[]): RegExp =>
-  new RegExp(`'(?:${values.join('|')})'`, 'u');
+const anywhere = (values: readonly string[]): RegExp =>
+  new RegExp(`\\b(?:${values.join('|')})\\b`, 'u');
+
+const quotedAnyStyle = (values: readonly string[]): RegExp =>
+  new RegExp(`['"\`](?:${values.join('|')})['"\`]`, 'u');
 
 describe('the interface stays style-agnostic and language-agnostic', () => {
   it('names no style mode, because the suggestion list belongs to the contract', () => {
-    expect(scan(quoted(STYLE_MODES))).toEqual([]);
+    expect(scan(anywhere(STYLE_MODES))).toEqual([]);
   });
 
   it('mentions no anime, which is the preset this product must never default to', () => {
@@ -67,7 +70,7 @@ describe('the interface stays style-agnostic and language-agnostic', () => {
   });
 
   it('names a language only where choosing the interface language is the mechanism', () => {
-    const findings = scan(quoted(LANGUAGE_TAGS)).filter(
+    const findings = scan(quotedAnyStyle(LANGUAGE_TAGS)).filter(
       (finding) => !LANGUAGE_MECHANISM_FILES.includes(finding.file),
     );
 
@@ -75,7 +78,7 @@ describe('the interface stays style-agnostic and language-agnostic', () => {
   });
 
   it('carries no language-named field, because text travels with its own language tag', () => {
-    expect(scan(/\b\w*(?:hebrew|english|arabic|spanish)\w*\s*[:?]/iu)).toEqual(
+    expect(scan(/\b\w*(?:hebrew|english|arabic|spanish)\w*\s*[:?=]/iu)).toEqual(
       [],
     );
   });

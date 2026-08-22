@@ -123,9 +123,15 @@ apiece.
 
 **The vocabulary guard** — `test/style-and-language-agnostic.test.ts`. Step 1 says the application is
 style-agnostic and that "the UI is where that either holds or quietly stops holding", which until now
-nothing enforced. It fails on a style-mode literal anywhere in `src/`, on the word *anime*, on a
+nothing enforced. It fails on a style mode written anywhere in `src/`, on the word *anime*, on a quoted
 language tag outside the three files that own the interface-language mechanism, and on a
-language-named field. Proved by a deliberate four-rule violation that failed exactly four of its five
+language-named identifier.
+
+Its first version matched only single-quoted names, which a review showed left eight ways through —
+double quotes, a template literal, a bare object key, and most realistically an i18n key like
+`'style.mode.PHOTOREAL_CINEMATIC'`, which is precisely the second source of truth this rule exists to
+stop. Prettier's default double-quotes JSX attributes, so `lang="he"` was reformatted past the guard by
+`yarn format` itself. Matching is now on word boundaries rather than on quoting. Proved by a deliberate four-rule violation that failed exactly four of its five
 tests; the fifth asserts the walker read more than 150 files, so an empty result means agnostic rather
 than nothing scanned. There are 267.
 

@@ -92,12 +92,15 @@ the reader.
 product needs. Use `[dir='rtl']`. `.claude/rules/css.md` carries the measurement.
 
 **`src/` never names a style mode or a language.** `test/style-and-language-agnostic.test.ts` scans
-every `.ts`/`.tsx` under `src/` and fails on a style-mode literal, on the word *anime*, on a language
-tag outside the three files that own the interface-language mechanism, and on a language-named field.
-The suggestion list for a style picker is `SUGGESTED_STYLE_MODES` from the contract — a mode spelled
-out here would be a second source of truth. Interface language is a closed set of two and says so in
-one place; **content** language is open data that travels with each record. The guard was proved by a
-deliberate four-rule violation, not by watching it pass.
+every `.ts`/`.tsx` under `src/` and fails on a style mode written **anywhere** — quoted either way, in
+a template literal, as a bare object key, or buried inside a longer i18n key — on the word *anime*, on
+a quoted language tag outside the three files that own the interface-language mechanism, and on a
+language-named identifier. The suggestion list for a style picker is `SUGGESTED_STYLE_MODES` from the
+contract; a mode spelled out here would be a second source of truth. Interface language is a closed set
+of two, declared across those three files and nowhere else; **content** language is open data that
+travels with each record. Proved by deliberate violation, not by watching it pass — including the eight
+bypasses a review found in its first version, every one of which the pattern had missed because it
+required a single quote on each side.
 
 FE-06 made three screens real. `src/shell/api/` now owns the installation-status queries — system
 mode, preflight and the model setup report — and `src/shell/system-readiness/` renders the first
