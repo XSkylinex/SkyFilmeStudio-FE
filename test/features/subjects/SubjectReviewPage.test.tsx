@@ -159,6 +159,35 @@ describe('SubjectReviewPage', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('never asks about a canonical set for a subject it could not read', async () => {
+    let askedAboutTheSet = 0;
+    server.use(
+      http.get(API_PATH.projectSubject(PROJECT_ID, SUBJECT_ID), () =>
+        HttpResponse.json(
+          { statusCode: 404, message: 'no subject', error: 'Not Found' },
+          { status: 404 },
+        ),
+      ),
+      http.get(API_PATH.approvedCanonicalSet(PROJECT_ID, SUBJECT_ID), () => {
+        askedAboutTheSet += 1;
+        return HttpResponse.json(
+          { statusCode: 404, message: 'no approved set', error: 'Not Found' },
+          { status: 404 },
+        );
+      }),
+    );
+
+    renderAt(PATH);
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'This subject could not be read',
+      }),
+    ).toBeInTheDocument();
+    expect(document.querySelectorAll('.skeleton')).toHaveLength(0);
+    expect(askedAboutTheSet).toBe(0);
+  });
+
   it('refuses a subject id the orchestrator would reject, without asking it', () => {
     renderAt(`/projects/${PROJECT_ID}/subjects/not-a-uuid`);
 

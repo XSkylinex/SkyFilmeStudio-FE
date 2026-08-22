@@ -228,6 +228,29 @@ This is the same shape as the proxy player's mistake earlier the same day — "t
 conflated with "I could not tell". **Two facts that feel like one are the recurring defect in this
 phase**, and both times the fix was to give each its own branch rather than its own wording.
 
+**The 404 catch is narrower than it looks, and it rests on an invariant nothing in the code states.**
+`GET …/canonical-sets/approved` has *two* 404 sources: `findApprovedHead` returning nothing, and
+`requireSubject` failing because the subject is missing or belongs to another project. The query
+collapses both into `null`, so the second one would render "no approved set" — a false statement.
+
+It is unreachable today because `CanonicalSection` only mounts after the subject query has resolved,
+and `subjects.controller.ts` uses the *identical* `requireSubject` check, so a subject that would fail
+one endpoint fails the other first. That is a real guarantee, but it is a property of how
+`SubjectReview` is ordered rather than anything the section enforces. Render `CanonicalSection`
+anywhere else — a card, a dashboard summary — and the conflation is back.
+
+**The test that pins it asserts a request count and a synchronous skeleton, not a missing heading.**
+The first two versions asserted that "No approved set" was absent after the subject error appeared,
+and **both passed with the invariant deliberately broken** — they were reading a negative while the
+canonical query was still in flight, so the heading was absent either way. A race, not an invariant.
+What is deterministic is that a mounted `CanonicalSection` renders a `Skeleton` on its first render,
+before any network. Breaking the ordering now fails with
+`expected <div class="skeleton"> to have a length of +0 but got 1`.
+
+**The lesson is the repo's own, learned again the hard way: a test that passes on broken code reads as
+coverage and is worse than none.** It took three attempts to get one with teeth, and the first two
+were claimed as pinning the invariant before being checked against broken code.
+
 **A zod value-import was avoided rather than merged.** The references endpoint needs an array schema,
 and `z.array(canonicalReferenceSchema)` would have been the first value import of `zod` in `src/` —
 the exact point `.claude/rules/state-and-data.md` warns a second zod copy can appear.
