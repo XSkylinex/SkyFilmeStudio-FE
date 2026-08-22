@@ -64,9 +64,10 @@ compares the two.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **204 keys in English and
-Hebrew** — 109 when FE-15 closed, FE-06 added the system screen's copy, and FE-16 paid off the
-primitive layer FE-15's migration never reached. English is the source of
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **357 keys in English and
+Hebrew**, counted at runtime on 2026-08-22 — 109 when FE-15 closed, then the system screen, the
+primitive layer FE-15's migration never reached, the asset library, asset detail and subject review.
+This number has been wrong more than once; count it rather than increment it. English is the source of
 truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
 The interface language lives in the shell slice, persists to
 `localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`
