@@ -55,8 +55,9 @@ here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fe
 2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
-loopback-only base URL. **Ten of the thirty-five exist only on an unmerged backend branch**, which
-the drift diagnostic cannot tell you because `git show HEAD:` reads whatever is checked out;
+loopback-only base URL. Ten of them were mapped while they existed **only on an unmerged backend
+branch**, which the drift diagnostic could not tell you because `git show HEAD:` reads whatever is
+checked out; BE-13 merged as `325d09d` the same evening and all thirty-five are on master now.
 `.claude/rules/state-and-data.md` carries what to check instead, and why mapping a refusal from a
 branch is fine while building a screen on one is not;
 **There is no alias, and `types` and `import` come out of one compilation.**

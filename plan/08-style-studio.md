@@ -1,7 +1,7 @@
 # FE-08 — Style, voice, location & prop studio
 
 > **Depends on:** 07 · **Blocks:** 09 · **Backend needs:** BE-13 · **Plan authority:** §3.5, §11.5–11.8, §13, §29
-> **Status:** blocked 2026-08-22 — BE-13 is complete on an unmerged branch; its refusals are absorbed
+> **Status:** unblocked 2026-08-22 for steps 1–6 — BE-13 merged; step 7 needs BE-14, step 8 needs a route
 
 ## Goal
 
@@ -223,17 +223,28 @@ the usual gap here and just as blocking.
 
 ## What actually blocks this phase now
 
-**BE-13 is not merged.** It is 33 commits on `be-13-styles-voices-locations-props`, and Alex reviews
-and merges it himself. Backend master carries 25 error codes; that branch carries 35, so **ten of the
-codes this repo maps do not exist on master** — the two style ones, the four voice and pronunciation
-ones, and the four absorbed this cycle.
+**Nothing in steps 1–6.** BE-13 merged the same evening it was reported complete — `325d09d` on
+backend master — and master now carries all 35 error codes, the ten this repo mapped ahead of the
+merge included. Verified by reading master here, not by being told.
 
-That is not a reason to stop absorbing: the `portal:` link reads whichever branch the sibling tree has
-checked out, so the only alternative to absorbing is sitting red. It is a reason not to build seven
-screens yet. A rename during review costs four sentences today; it would cost a phase if the screens
-were already written against it.
+Step 7 needs BE-14, which is in progress on `be-14-bible-and-continuity`. Step 8 has wire types and
+no controller; that is deliberate on the backend's side and its HTTP surface is a later phase there.
 
-The project bible in step 7 additionally needs BE-14, which does not exist.
+**This section has been wrong about BE-13 three times in one day** — no route, then one surface of
+four, then four surfaces on an unmerged branch, and now merged. None of those was careless and each
+was true when written; the file simply cannot carry a status that changes faster than it is read. So
+it carries the check instead, and the answer gets recomputed rather than trusted:
+
+```bash
+git -C ../sky-filme-studio-be branch --show-current
+git -C ../sky-filme-studio-be log master --oneline -1
+git -C ../sky-filme-studio-be show master:src/contracts/enums/error-code.ts | grep -cE "^  '[A-Z_]+',"
+```
+
+One thing that does **not** expire, because it is a decision rather than a status: map a refusal from
+an unmerged branch, and do not build a screen on one. That held here — the ten codes were mapped
+before the merge and cost nothing when it landed, and no screen was written that a rename could have
+invalidated.
 
 ## Done when
 
