@@ -462,6 +462,14 @@ export const DesignSystemPreview: FC = () => {
             pending={false}
             decided
           />
+          <ApprovalControls
+            contextLabel="the canonical set for Rivka"
+            onApprove={handleApprovalControlsAction}
+            regenerationModes={[]}
+            onRegenerate={handleApprovalControlsAction}
+            pending={false}
+            decided={false}
+          />
         </div>
       </section>
     </div>

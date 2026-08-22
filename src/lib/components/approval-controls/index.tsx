@@ -32,17 +32,19 @@ export const ApprovalControls: FC<ApprovalControlsProps> = ({
         >
           {translate('approval.approve')}
         </Button>
-        <Button
-          variant="danger"
-          size="md"
-          disabled={decisionDisabled}
-          aria-label={translate('approval.rejectContext', {
-            context: contextLabel,
-          })}
-          onClick={onReject}
-        >
-          {translate('approval.reject')}
-        </Button>
+        {onReject === undefined ? null : (
+          <Button
+            variant="danger"
+            size="md"
+            disabled={decisionDisabled}
+            aria-label={translate('approval.rejectContext', {
+              context: contextLabel,
+            })}
+            onClick={onReject}
+          >
+            {translate('approval.reject')}
+          </Button>
+        )}
       </div>
       {regenerationModes.length > 0 ? (
         <div className="approval-controls__modes">

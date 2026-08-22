@@ -309,4 +309,28 @@ describe('ApprovalControls', () => {
       0,
     );
   });
+
+  it('offers no Reject when the caller passes no handler for one', () => {
+    renderInStore(
+      <ApprovalControls
+        contextLabel="the canonical set for Rivka"
+        onApprove={noop}
+        regenerationModes={[]}
+        onRegenerate={noop}
+        pending={false}
+        decided={false}
+      />,
+    );
+
+    expect(
+      screen.getByRole('button', {
+        name: 'Approve the canonical set for Rivka',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', {
+        name: 'Reject the canonical set for Rivka',
+      }),
+    ).not.toBeInTheDocument();
+  });
 });
