@@ -127,6 +127,22 @@ a language. The same applies here:
   too. And **not inside a sentence** — `interpolate` returns a string, so a substituted value cannot
   be given an element, and the same reordering happens where it is harder to see. A key that needs a
   figure ends in a colon and the figure is rendered beside it.
+- **The order inside the run decides whether it breaks, and the two orders are not symmetric.**
+  Measured 2026-08-22 with `bidi-js` (already installed here) at base direction RTL, because FE-08
+  asserted the general rule from memory and got it backwards:
+
+  ```text
+  נשארו 8.0 GB בלבד          → דבלב GB 8.0 וראשנ        digits then Latin — INVERTED
+  התיאור שלו וה-SHA-256 שלו   → ...SHA-256-הו ולש רואיתה   Latin then digits — intact
+  SHA-256 של התיאור:          → :רואיתה לש SHA-256         intact
+  ```
+
+  UAX#9 rule W7 folds a European number into `L` when the nearest preceding strong type is `L` — the
+  `A` of `SHA` — so `SHA-256` is one left-to-right run and the hyphen goes with it. In `8.0 GB` the
+  number has no preceding strong `L`, stays `EN`, and N1 treats `EN` as `R` for the space, which is
+  what splits it. So an identifier that *starts* with letters is safe inside a Hebrew sentence, and a
+  measurement that starts with digits is not. **Measure it rather than reasoning about it** — this
+  file's own `8.0 GB` line is the correct fact and was generalised into a false one within a day.
 - **A backend-authored message is passed through, not translated.** It is not ours to translate, and
   it arrives in whatever language the orchestrator wrote it.
 - **Passing it through is not the same as dropping it into the paragraph — it still needs
