@@ -123,16 +123,29 @@ describe('LocationsPage', () => {
     renderPage();
 
     expect(
-      await screen.findByText(/Suggestions, not requirements/),
+      await screen.findByText(/suggestions, not requirements/),
     ).toBeInTheDocument();
   });
 
-  it('never claims a lighting variant is a kind the orchestrator has', async () => {
-    orchestratorServes([buildLocation()], []);
+  it('shows a lighting-variant kind as observed, never as a checklist slot', async () => {
+    orchestratorServes(
+      [buildLocation()],
+      [
+        buildLocationPlate({
+          kind: plateKindSchema.parse('NIGHT'),
+          approved: true,
+        }),
+      ],
+    );
 
     renderPage();
 
-    await screen.findByRole('heading', { name: 'The lighthouse', level: 3 });
-    expect(screen.queryByText(/\bNIGHT\b/)).not.toBeInTheDocument();
+    expect(await screen.findByText('NIGHT')).toBeInTheDocument();
+    expect(
+      screen.getByText(/suggestions, not requirements/),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(/NIGHT.*missing|missing.*NIGHT/),
+    ).not.toBeInTheDocument();
   });
 });

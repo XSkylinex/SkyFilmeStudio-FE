@@ -79,7 +79,7 @@ describe('the interface stays style-agnostic and language-agnostic', () => {
   });
 
   it('invents no lighting-variant plate kind, because the contract publishes none', () => {
-    expect(scan(quotedAnyStyle(INVENTED_PLATE_KINDS))).toEqual([]);
+    expect(scan(anywhere(INVENTED_PLATE_KINDS))).toEqual([]);
   });
 
   it('mentions no anime, which is the preset this product must never default to', () => {

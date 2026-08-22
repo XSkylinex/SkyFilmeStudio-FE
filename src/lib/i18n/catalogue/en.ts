@@ -556,10 +556,12 @@ export const EN_CATALOGUE = {
   'voices.entries.none': 'This dictionary has no entries.',
   'voices.entries.unreadable':
     'The entries for this dictionary could not be read, so this is unknown rather than empty.',
+  'voices.entries.truncated':
+    'This dictionary holds more entries than one page, and the rest are not shown.',
   'voices.entries.normalisedAs': 'normalises to',
   'page.voices.title': 'Voices',
   'page.voices.description':
-    'The persistent voices this project speaks with, and the pronunciation dictionaries they read against.',
+    'The persistent voices this project speaks with, and the pronunciation dictionaries it holds. Which voice uses which dictionary is not shown yet.',
   'locations.loading': 'Loading locations…',
   'locations.error.title': 'The locations could not be read',
   'locations.empty.title': 'No locations yet',
@@ -580,7 +582,9 @@ export const EN_CATALOGUE = {
   'locations.plates.approved': 'Approved',
   'locations.plates.draftsOnly': 'None approved — drafts: {count}',
   'locations.plates.suggestedMissing':
-    'Suggested kinds with no plate yet: {kinds}. Suggestions, not requirements.',
+    'Suggested kinds with no plate yet — suggestions, not requirements:',
+  'locations.plates.truncated':
+    'This location has more plates than one page holds, so the coverage above is computed from part of them.',
   'locations.plates.unreadable':
     'The plates for this location could not be read, so coverage is unknown rather than empty.',
   'page.locations.title': 'Locations',

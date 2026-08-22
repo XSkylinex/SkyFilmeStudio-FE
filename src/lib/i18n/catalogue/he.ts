@@ -550,10 +550,12 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'voices.entries.none': 'למילון הזה אין ערכים.',
   'voices.entries.unreadable':
     'לא ניתן לקרוא את הערכים של המילון הזה, ולכן זה אינו ידוע ולא ריק.',
+  'voices.entries.truncated':
+    'המילון הזה מחזיק יותר ערכים מעמוד אחד, והשאר אינם מוצגים.',
   'voices.entries.normalisedAs': 'מתנרמל ל־',
   'page.voices.title': 'קולות',
   'page.voices.description':
-    'הקולות הקבועים שבהם הפרויקט הזה מדבר, ומילוני ההגייה שמולם הם נקראים.',
+    'הקולות הקבועים שבהם הפרויקט הזה מדבר, ומילוני ההגייה שהוא מחזיק. איזה קול משתמש באיזה מילון עדיין אינו מוצג.',
   'locations.loading': 'טוען לוקיישנים…',
   'locations.error.title': 'לא ניתן לקרוא את הלוקיישנים',
   'locations.empty.title': 'אין עדיין לוקיישנים',
@@ -574,7 +576,9 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'locations.plates.approved': 'מאושר',
   'locations.plates.draftsOnly': 'אף אחת לא מאושרת — טיוטות: {count}',
   'locations.plates.suggestedMissing':
-    'סוגים מוצעים שאין להם עדיין plate: {kinds}. הצעות, לא דרישות.',
+    'סוגים מוצעים שאין להם עדיין plate — הצעות, לא דרישות:',
+  'locations.plates.truncated':
+    'ללוקיישן הזה יש יותר plates ממה שעמוד אחד מחזיק, ולכן הכיסוי למעלה מחושב מחלק מהם.',
   'locations.plates.unreadable':
     'לא ניתן לקרוא את ה-plates של הלוקיישן הזה, ולכן הכיסוי אינו ידוע ולא ריק.',
   'page.locations.title': 'לוקיישנים',

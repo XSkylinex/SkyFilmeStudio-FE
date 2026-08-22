@@ -41,7 +41,7 @@ export const buildPronunciationEntry = (
   pronunciationDictionaryEntrySchema.parse({
     id: 'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',
     dictionaryId: 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
-    term: 'שלום',
-    normalisedTerm: 'שלום',
+    term: 'שלום  עולם',
+    normalisedTerm: 'שלום עולם',
     ...overrides,
   });
