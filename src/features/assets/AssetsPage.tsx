@@ -16,8 +16,8 @@ export const AssetsPage: FC = () => {
   if (!projectId.success) {
     return (
       <ErrorState
-        title={translate('assets.invalidProject.title')}
-        description={translate('assets.invalidProject.description')}
+        title={translate('project.invalidId.title')}
+        description={translate('project.invalidId.description')}
         headingLevel={1}
       />
     );

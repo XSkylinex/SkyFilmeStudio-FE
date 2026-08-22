@@ -1,0 +1,41 @@
+@layer features {
+  .trait-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .trait-list__title {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+  }
+
+  .trait-list__items {
+    margin: 0;
+    padding-inline-start: var(--space-4);
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .trait-list__empty {
+    margin: 0;
+    color: var(--color-text-disabled);
+    font-size: var(--font-size-sm);
+  }
+
+  .trait-list[data-emphasis='true'] {
+    padding-block: var(--space-2);
+    padding-inline: var(--space-3);
+    border-inline-start: 2px solid var(--tone-attention-border);
+    border-radius: var(--radius-sm);
+    background: var(--tone-attention-bg);
+  }
+
+  .trait-list[data-emphasis='true'] .trait-list__title {
+    color: var(--tone-attention-fg);
+  }
+}

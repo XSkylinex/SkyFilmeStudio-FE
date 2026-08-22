@@ -70,6 +70,7 @@ describe('routeTree', () => {
       'shots',
       'shots/:shotId',
       'storyboard',
+      'subjects/:subjectId',
       'system',
       'timeline',
     ]);

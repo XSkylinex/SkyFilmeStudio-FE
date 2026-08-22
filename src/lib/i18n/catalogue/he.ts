@@ -50,6 +50,8 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'המערך הקנוני הזה אושר, ולכן לא ניתן עוד לשנות אותו. מערכים מאושרים מוקפאים במכוון — הפקה שכבר נצמדה למערך הזה לא אמורה להשתנות תחתיה. שינוי פירושו גרסה חדשה.',
   'error.CANONICAL_ANCHOR_REQUIRED':
     'הבקשה ביקשה יצירה הנגזרת מסובייקט בלי לציין את ההפניה המאושרת שאליה היא עוגנת. בלי עוגן לא ניתן היה לייחס את הזהות שנוצרה לשום מקור.',
+  'error.CANONICAL_DRAFT_EXISTS':
+    'לסובייקט הזה כבר יש טיוטה קנונית פתוחה. קיימת טיוטה אחת בכל רגע, ולכן יש לאשר או לבטל את הפתוחה לפני שמתחילים אחרת.',
   'error.network':
     'ה-orchestrator לא עונה. זה התהליך שמריץ כל רינדור, ולכן שום דבר לא יכול להתחיל עד שהוא יחזור.',
   'error.malformed':
@@ -170,15 +172,15 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'captureGuide.show': 'הצגת מדריך הצילום',
   'captureGuide.error.title': 'לא ניתן היה לקרוא את מדריך הצילום',
 
+  'project.invalidId.title': 'זה אינו מזהה פרויקט',
+  'project.invalidId.description':
+    'הכתובת מכילה ערך שהמתזמר היה דוחה. פתח את הפרויקט מתוך רשימת הפרויקטים במקום לערוך את הכתובת.',
   'assets.title': 'נכסי מקור',
   'assets.loading': 'טוען נכסי מקור',
   'assets.error.title': 'לא ניתן היה לקרוא את רשימת הנכסים',
   'assets.empty.title': 'אין עדיין נכסי מקור',
   'assets.empty.description':
     'שום דבר לא יובא לפרויקט הזה. הייבוא אינו מחובר בגרסה הזו — המתזמר מקבל גם העלאה וגם ייבוא מנתיב מקומי, אך אף אחד ממבני הבקשה אינו מפורסם בחוזה המשותף.',
-  'assets.invalidProject.title': 'זה אינו מזהה פרויקט',
-  'assets.invalidProject.description':
-    'הכתובת מכילה ערך שהמתזמר היה דוחה. פתח את הפרויקט מתוך רשימת הפרויקטים במקום לערוך את הכתובת.',
   'assets.thumbnailAlt': 'תמונה ממוזערת של {path}',
   'assets.immutable': 'מקור, לעולם לא נערך במקום',
   'assets.captured': 'צולם:',
@@ -336,6 +338,94 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.assets.description':
     'צילומי המקור, התמונות והאודיו שהוכנסו לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
   'page.assetDetail.title': 'נכס',
+  'subjects.title': 'סובייקטים',
+  'subjects.loading': 'טוען סובייקטים',
+  'subjects.error.title': 'לא ניתן היה לקרוא את רשימת הסובייקטים',
+  'subjects.empty.title': 'אין עדיין סובייקטים',
+  'subjects.empty.description':
+    'שום דבר לא נרשם בפרויקט הזה. הרישום אינו מחובר בגרסה הזו — המתזמר מקבל סובייקט, אך מבנה הבקשה אינו מפורסם בחוזה המשותף.',
+  'subjects.inactive': 'לא פעיל',
+  'subjects.type.HUMAN': 'אדם',
+  'subjects.type.ANIMAL': 'בעל חיים',
+  'subjects.type.OBJECT': 'עצם',
+  'subjects.type.FIGURE': 'דמות מעוצבת',
+  'subjects.type.CREATURE': 'יצור',
+  'subjects.type.VEHICLE': 'כלי רכב',
+  'subjects.type.PRODUCT': 'מוצר',
+  'subjects.type.ROBOT': 'רובוט',
+  'subjects.type.ABSTRACT': 'מופשט',
+  'subjects.type.OTHER': 'אחר',
+  'subjects.sourceMode.CAPTURED': 'צולם',
+  'subjects.sourceMode.IMPORTED': 'יובא',
+  'subjects.sourceMode.GENERATED': 'נוצר',
+  'subjects.sourceMode.HYBRID': 'משולב',
+  'subjects.narrativeRole.CHARACTER': 'דמות',
+  'subjects.narrativeRole.BACKGROUND_ENTITY': 'ישות רקע',
+  'subjects.narrativeRole.PRODUCT': 'מוצר',
+  'subjects.narrativeRole.OBJECT': 'עצם',
+  'subjects.narrativeRole.OTHER': 'אחר',
+  'subjects.approval.PENDING': 'ממתין לאישור',
+  'subjects.approval.APPROVED': 'מאושר',
+  'subjects.approval.REJECTED': 'נדחה',
+  'subjects.role.SOURCE': 'מקור',
+  'subjects.role.PRIMARY': 'ראשי',
+  'subjects.role.FRONT_VIEW': 'חזית',
+  'subjects.role.REAR_VIEW': 'גב',
+  'subjects.role.LEFT_VIEW': 'שמאל',
+  'subjects.role.RIGHT_VIEW': 'ימין',
+  'subjects.role.THREE_QUARTER': 'שלושת רבעי',
+  'subjects.role.DETAIL': 'פרט',
+  'subjects.role.EXPRESSION': 'הבעה',
+  'subjects.role.POSE': 'תנוחה',
+  'subjects.role.TEXTURE': 'מרקם',
+  'subjects.role.MASK': 'מסכה',
+  'subjects.role.SCALE': 'הפניית קנה מידה',
+
+  'subjectReview.error.title': 'לא ניתן היה לקרוא את הסובייקט הזה',
+  'subjectReview.loading': 'טוען את הסובייקט',
+  'subjectReview.invalidSubject.title': 'זה אינו מזהה סובייקט',
+  'subjectReview.invalidSubject.description':
+    'הכתובת מכילה ערך שהמתזמר היה דוחה. פתח את הסובייקט מתוך הרשימה במקום לערוך את הכתובת.',
+  'subjectReview.back': 'חזרה לרשימת הסובייקטים',
+  'subjectReview.identity.title': 'מה שאסור שישתנה',
+  'subjectReview.identity.immutable': 'מאפיינים קבועים',
+  'subjectReview.identity.prohibited': 'שינויים אסורים',
+  'subjectReview.identity.mutable': 'עשוי להשתנות בין שוטים',
+  'subjectReview.identity.wardrobe': 'כללי לבוש ומשטח',
+  'subjectReview.identity.palette': 'לוח צבעים',
+  'subjectReview.identity.scale': 'קנה מידה יחסי:',
+  'subjectReview.identity.speech': 'סגנון דיבור:',
+  'subjectReview.identity.none': 'לא נרשם דבר.',
+  'subjectReview.canonical.error.title': 'לא ניתן היה לקרוא את המערך הקנוני',
+  'subjectReview.references.error.title': 'לא ניתן היה לקרוא את ההפניות',
+  'subjectReview.canonical.title': 'מערך הפניות קנוני',
+  'subjectReview.canonical.absent.title': 'אין מערך מאושר',
+  'subjectReview.canonical.absent.description':
+    'לסובייקט הזה אין מערך קנוני מאושר, ולכן אי אפשר לייצר ממנו דבר. החסימה הזו היא כל העניין: היא מונעת רינדור ארוך שמתחייב לדמות שאיש לא הסכים לה.',
+  'subjectReview.canonical.blocked':
+    'היצירה עבור הסובייקט הזה חסומה עד לאישור מערך קנוני.',
+  'subjectReview.canonical.version': 'גרסת אישור:',
+  'subjectReview.canonical.approvedAt': 'אושר:',
+  'subjectReview.canonical.frozenDescriptor': 'תיאור מוקפא',
+  'subjectReview.canonical.frozenHash': 'SHA-256 של התיאור:',
+  'subjectReview.canonical.frozenExplained':
+    'האישור הקפיא את הנוסח הזה וגיבב אותו. תיקון מאוחר אינו יכול לשכתב את מה שהפקה קיימת תוכננה מולו — הוא הופך לגרסה חדשה.',
+  'subjectReview.canonical.notes': 'הערות',
+  'subjectReview.references.title': 'מה שהמערך מתאר',
+  'subjectReview.references.empty':
+    'למערך הזה אין עדיין הפניות. מערך בלי הפניה אינו יכול לעגן יצירה.',
+  'subjectReview.references.anchor': 'כשיר לעיגון',
+  'subjectReview.references.notAnchor': 'אינו עוגן',
+  'subjectReview.references.anchorExplained':
+    'עוגן הוא הפניה שיצירה יכולה להיקשר אליה. הפניה שאינה כשירה לעיגון עדיין חלק מהמערך, אך שום דבר אינו גוזר ממנה זהות.',
+  'subjectReview.references.approved': 'מאושר',
+  'subjectReview.references.pending': 'לא מאושר',
+  'subjectReview.references.generated':
+    'תוצר שנוצר — המתזמר עדיין אינו מגיש עבורו תמונה.',
+  'subjectReview.references.alt': 'הפניית {role} עבור הסובייקט הזה',
+  'subjectReview.approve.unavailable':
+    'המסך הזה מציג את המערך המאושר. אישור מתבצע על טיוטה, והמתזמר אינו מפרסם דרך לרשום את הטיוטות של סובייקט, ולכן אין כאן מה לאשר.',
+
   'page.subjects.title': 'סובייקטים',
   'page.subjects.description':
     'האנשים, הדמויות והאובייקטים החוזרים שהפרויקט הזה זיהה לסקירה. אין עדיין חיבור ל-orchestrator.',

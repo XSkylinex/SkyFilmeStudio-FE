@@ -1,0 +1,13 @@
+@layer features {
+  .subject-review-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .subject-review-page__back {
+    align-self: start;
+    color: var(--color-accent);
+    font-size: var(--font-size-sm);
+  }
+}

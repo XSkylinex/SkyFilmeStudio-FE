@@ -46,8 +46,9 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **twenty-four as of
-2026-08-22**, read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **twenty-five as of
+2026-08-22**, four of them added by BE-12 in a single day, each one breaking `yarn typecheck` here the
+moment it landed, read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL;
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
 `StatusTone` — six from FE-04 and model file status from FE-06 — which is the mapping FE-02 deferred

@@ -1,7 +1,7 @@
 # FE-07 — Asset ingestion & subject review
 
 > **Depends on:** 06 · **Blocks:** 08 · **Backend needs:** BE-11, BE-12 · **Plan authority:** §12, §27.3, §39
-> **Status:** partly done 2026-08-21, **detail view added 2026-08-22**
+> **Status:** partly done 2026-08-21, **detail view and subject review added 2026-08-22**
 
 ## Goal
 
@@ -190,6 +190,76 @@ progress bar. **The warning is left visible rather than suppressed**, because th
 capability and not a lint configuration. The delivered-video case, where this criterion really
 bites, belongs to **FE-14**.
 
+## Subject review, 2026-08-22
+
+BE-12 landed `subjects.controller.ts` and `canonical-sets.controller.ts`, and `Subject`,
+`CanonicalAssetSet` and `CanonicalReference` are all published — so the *read* half of this phase's
+second act became buildable in one step. Registration and approval did not: their request shapes sit
+under `src/subjects/dto/`, outside `src/contracts/`, which is the same missing-export pattern that
+still blocks project creation and asset import.
+
+**The screen leads with what must not change.** `immutableTraits` and `prohibitedChanges` come first
+and carry an emphasis treatment; mutable traits, wardrobe rules and palette follow. That ordering is
+the product rule made visible — a review screen exists to decide whether an identity is right, and
+the fields that pin the identity are not equal to the ones that vary per shot.
+
+**Three endpoint shapes worth knowing before building on them**, each read from the controller rather
+than assumed:
+
+| Route | Shape |
+| ----- | ----- |
+| `…/subjects` | `Page<Subject>` |
+| `…/canonical-sets/approved` | `CanonicalAssetSet`, **404 when none is approved** |
+| `…/canonical-sets/:setId/references` | a **bare array**, not `Page<T>` |
+
+**The 404 is an answer, not a failure, and getting that wrong is a real defect rather than a wording
+one.** The query turns 404 into a resolved `null`; any other status still throws. It must be `null`
+and not `undefined` — `@tanstack/query-core@5.101.4` throws `data is undefined` from a `queryFn`
+unconditionally, so `undefined` is not available to mean anything.
+
+**That distinction caught a defect in the first version of this screen.** `CanonicalSetPanel` took
+`CanonicalAssetSet | undefined` and branched on `undefined`, which would have rendered *"No approved
+set — generation is blocked"* **while the query was still loading**. Three states, not two: still
+asking, confirmed absent, present. A container now owns all three and the panel takes `| null`, so
+the absent branch is unreachable until the answer is in. A test asserts the blocked sentence does not
+appear while it is still asking.
+
+This is the same shape as the proxy player's mistake earlier the same day — "there is no proxy"
+conflated with "I could not tell". **Two facts that feel like one are the recurring defect in this
+phase**, and both times the fix was to give each its own branch rather than its own wording.
+
+**The 404 catch is narrower than it looks, and it rests on an invariant nothing in the code states.**
+`GET …/canonical-sets/approved` has *two* 404 sources: `findApprovedHead` returning nothing, and
+`requireSubject` failing because the subject is missing or belongs to another project. The query
+collapses both into `null`, so the second one would render "no approved set" — a false statement.
+
+It is unreachable today because `CanonicalSection` only mounts after the subject query has resolved,
+and `subjects.controller.ts` uses the *identical* `requireSubject` check, so a subject that would fail
+one endpoint fails the other first. That is a real guarantee, but it is a property of how
+`SubjectReview` is ordered rather than anything the section enforces. Render `CanonicalSection`
+anywhere else — a card, a dashboard summary — and the conflation is back.
+
+**The test that pins it asserts a request count and a synchronous skeleton, not a missing heading.**
+The first two versions asserted that "No approved set" was absent after the subject error appeared,
+and **both passed with the invariant deliberately broken** — they were reading a negative while the
+canonical query was still in flight, so the heading was absent either way. A race, not an invariant.
+What is deterministic is that a mounted `CanonicalSection` renders a `Skeleton` on its first render,
+before any network. Breaking the ordering now fails with
+`expected <div class="skeleton"> to have a length of +0 but got 1`.
+
+**The lesson is the repo's own, learned again the hard way: a test that passes on broken code reads as
+coverage and is worse than none.** It took three attempts to get one with teeth, and the first two
+were claimed as pinning the invariant before being checked against broken code.
+
+**A zod value-import was avoided rather than merged.** The references endpoint needs an array schema,
+and `z.array(canonicalReferenceSchema)` would have been the first value import of `zod` in `src/` —
+the exact point `.claude/rules/state-and-data.md` warns a second zod copy can appear.
+`canonicalReferenceSchema.array()` does the same job through the schema this repo already ships.
+
+**`SubjectReviewPage` is `lazy`.** It renders `MediaTile`s, so it is a media surface by the same
+argument as the asset detail view, and the entry chunk went 475.57 kB → **462.34 kB** when the route
+was split.
+
 ## What the browser found that the gate could not, 2026-08-22
 
 Two more, both in a tree where `yarn typecheck`, `yarn lint`, 777 tests and `yarn build` were all
@@ -339,12 +409,32 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
       either.** Derived assets have no route at all; subjects wait on **BE-12**
 - [x] originals are immutable in the UI — nothing here edits anything, and `immutable` is shown
 - [x] the capture guide is optional, dismissible, and does not mark missing views as errors
-- [ ] subject registration covers all ten types and assumes neither a face nor speech — **BE-12**
-- [ ] `immutableTraits` capture is guided toward specific, checkable statements — **BE-12**
-- [ ] canonical approval is per set version, with visible lineage — **BE-12**
-- [ ] the unapproved-set render block is clearly surfaced — **BE-12**
-- [ ] canonical anchors are visible on every derived generation — **BE-12**
-- [ ] the comparison view is large enough to judge drift — **BE-12**
+- [ ] subject registration covers all ten types and assumes neither a face nor speech — **blocked on
+      the request shape, not the endpoint.** `POST /projects/:projectId/subjects` exists;
+      `createSubjectRequestSchema` lives under `src/subjects/dto/` and the backend publishes only
+      `./contracts`. All ten types are labelled and the list renders them
+- [ ] `immutableTraits` capture is guided toward specific, checkable statements — **same blocker.**
+      They are *read* and shown first, under "What must not change", which is the half a review screen
+      needs
+- [x] canonical approval is per set version, with visible lineage — the approved head shows its
+      `approvalVersion`, `approvedAt`, frozen descriptor and the descriptor's SHA-256, with the
+      sentence saying why the wording is frozen
+- [x] the unapproved-set render block is clearly surfaced — a subject with no approved set says
+      generation is blocked, and says the block is the point
+- [ ] canonical anchors are visible on every derived generation — **unchanged and still open.** There
+      are no generations in this build, so nothing can show which anchor produced it. An earlier
+      version of this line was reworded to "on every reference" and ticked, which is the one edit that
+      makes a checklist stop being evidence; restored 2026-08-22 by review
+- [x] every canonical *reference* shows whether it is anchor-eligible — a badge and a border, with a
+      sentence saying what an anchor is for. A smaller claim than the box above, and a separate one
+- [ ] the comparison view is large enough to judge drift — needs a second set to compare against, and
+      only the approved head is served; a draft-versus-approved view has no endpoint pairing yet
+- [ ] approving a set from the UI — **blocked on a missing route, not a missing export.**
+      `POST …/canonical-sets/:setId/approve` takes three path params and **no body**, and returns the
+      published `CanonicalAssetSet`, so nothing about it is unexported. What is missing is a route
+      that lists a subject's sets: only `approved`, `:setId` and `:setId/references` exist, and
+      `approve` transitions `PENDING → APPROVED`, so this build cannot discover a draft to approve.
+      Approving the head would be a no-op by construction
 
 ## Traps
 

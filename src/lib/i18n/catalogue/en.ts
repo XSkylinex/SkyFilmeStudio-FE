@@ -50,6 +50,8 @@ export const EN_CATALOGUE = {
     'This canonical set has been approved, so it can no longer be changed. Approved sets are frozen deliberately — a production already pinned to this one must not shift underneath it. A change means a new version.',
   'error.CANONICAL_ANCHOR_REQUIRED':
     'This asked for a generation derived from a subject without naming the approved reference it is anchored to. Without an anchor the identity it produced could not be traced back to anything.',
+  'error.CANONICAL_DRAFT_EXISTS':
+    'This subject already has an open canonical draft. Only one draft exists at a time, so the open one has to be approved or discarded before another can start.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
@@ -170,15 +172,15 @@ export const EN_CATALOGUE = {
   'captureGuide.show': 'Show the capture guide',
   'captureGuide.error.title': 'The capture guide could not be read',
 
+  'project.invalidId.title': 'That is not a project id',
+  'project.invalidId.description':
+    'The address carries something the orchestrator would refuse. Open the project from the project list rather than editing the URL.',
   'assets.title': 'Source assets',
   'assets.loading': 'Loading source assets',
   'assets.error.title': 'The asset list could not be read',
   'assets.empty.title': 'No source assets yet',
   'assets.empty.description':
     'Nothing has been imported into this project. Importing is not wired up in this build yet — the orchestrator accepts both an upload and a point-at-a-path import, but neither request shape is published through the shared contract.',
-  'assets.invalidProject.title': 'That is not a project id',
-  'assets.invalidProject.description':
-    'The address carries something the orchestrator would refuse. Open the project from the project list rather than editing the URL.',
   'assets.thumbnailAlt': 'Thumbnail of {path}',
   'assets.immutable': 'Original, never edited in place',
   'assets.captured': 'Captured:',
@@ -341,6 +343,94 @@ export const EN_CATALOGUE = {
   'page.assets.description':
     'The source footage, images and audio brought into this project. Not connected to the orchestrator yet.',
   'page.assetDetail.title': 'Asset',
+  'subjects.title': 'Subjects',
+  'subjects.loading': 'Loading subjects',
+  'subjects.error.title': 'The subject list could not be read',
+  'subjects.empty.title': 'No subjects yet',
+  'subjects.empty.description':
+    'Nothing has been registered in this project. Registering is not wired up in this build yet — the orchestrator accepts a subject, but the request shape is not published through the shared contract.',
+  'subjects.inactive': 'Inactive',
+  'subjects.type.HUMAN': 'Human',
+  'subjects.type.ANIMAL': 'Animal',
+  'subjects.type.OBJECT': 'Object',
+  'subjects.type.FIGURE': 'Figure',
+  'subjects.type.CREATURE': 'Creature',
+  'subjects.type.VEHICLE': 'Vehicle',
+  'subjects.type.PRODUCT': 'Product',
+  'subjects.type.ROBOT': 'Robot',
+  'subjects.type.ABSTRACT': 'Abstract',
+  'subjects.type.OTHER': 'Other',
+  'subjects.sourceMode.CAPTURED': 'Captured',
+  'subjects.sourceMode.IMPORTED': 'Imported',
+  'subjects.sourceMode.GENERATED': 'Generated',
+  'subjects.sourceMode.HYBRID': 'Hybrid',
+  'subjects.narrativeRole.CHARACTER': 'Character',
+  'subjects.narrativeRole.BACKGROUND_ENTITY': 'Background entity',
+  'subjects.narrativeRole.PRODUCT': 'Product',
+  'subjects.narrativeRole.OBJECT': 'Object',
+  'subjects.narrativeRole.OTHER': 'Other',
+  'subjects.approval.PENDING': 'Awaiting approval',
+  'subjects.approval.APPROVED': 'Approved',
+  'subjects.approval.REJECTED': 'Rejected',
+  'subjects.role.SOURCE': 'Source',
+  'subjects.role.PRIMARY': 'Primary',
+  'subjects.role.FRONT_VIEW': 'Front',
+  'subjects.role.REAR_VIEW': 'Rear',
+  'subjects.role.LEFT_VIEW': 'Left',
+  'subjects.role.RIGHT_VIEW': 'Right',
+  'subjects.role.THREE_QUARTER': 'Three-quarter',
+  'subjects.role.DETAIL': 'Detail',
+  'subjects.role.EXPRESSION': 'Expression',
+  'subjects.role.POSE': 'Pose',
+  'subjects.role.TEXTURE': 'Texture',
+  'subjects.role.MASK': 'Mask',
+  'subjects.role.SCALE': 'Scale reference',
+
+  'subjectReview.error.title': 'This subject could not be read',
+  'subjectReview.loading': 'Loading this subject',
+  'subjectReview.invalidSubject.title': 'That is not a subject id',
+  'subjectReview.invalidSubject.description':
+    'The address carries something the orchestrator would refuse. Open the subject from the list rather than editing the URL.',
+  'subjectReview.back': 'Back to the subject list',
+  'subjectReview.identity.title': 'What must not change',
+  'subjectReview.identity.immutable': 'Immutable traits',
+  'subjectReview.identity.prohibited': 'Prohibited changes',
+  'subjectReview.identity.mutable': 'May vary between shots',
+  'subjectReview.identity.wardrobe': 'Wardrobe and surface rules',
+  'subjectReview.identity.palette': 'Colour palette',
+  'subjectReview.identity.scale': 'Relative scale:',
+  'subjectReview.identity.speech': 'Speech style:',
+  'subjectReview.identity.none': 'None recorded.',
+  'subjectReview.canonical.error.title': 'The canonical set could not be read',
+  'subjectReview.references.error.title': 'The references could not be read',
+  'subjectReview.canonical.title': 'Canonical reference set',
+  'subjectReview.canonical.absent.title': 'No approved set',
+  'subjectReview.canonical.absent.description':
+    'This subject has no approved canonical set, so nothing may be generated from it. That block is the point: it stops a long render from committing to a likeness nobody has agreed to.',
+  'subjectReview.canonical.blocked':
+    'Generation is blocked for this subject until a canonical set is approved.',
+  'subjectReview.canonical.version': 'Approval version:',
+  'subjectReview.canonical.approvedAt': 'Approved:',
+  'subjectReview.canonical.frozenDescriptor': 'Frozen descriptor',
+  'subjectReview.canonical.frozenHash': 'Descriptor SHA-256:',
+  'subjectReview.canonical.frozenExplained':
+    'Approval froze this wording and hashed it. A later revision cannot rewrite what an existing production was planned against — it becomes a new version.',
+  'subjectReview.canonical.notes': 'Notes',
+  'subjectReview.references.title': 'What the set depicts',
+  'subjectReview.references.empty':
+    'This set has no references yet. A set with no reference cannot anchor a generation.',
+  'subjectReview.references.anchor': 'Anchor eligible',
+  'subjectReview.references.notAnchor': 'Not an anchor',
+  'subjectReview.references.anchorExplained':
+    'An anchor is a reference a generation may be tied to. A reference that is not anchor-eligible is still part of the set, but nothing derives identity from it.',
+  'subjectReview.references.approved': 'Approved',
+  'subjectReview.references.pending': 'Not approved',
+  'subjectReview.references.generated':
+    'Generated artifact — the orchestrator serves no image for one yet.',
+  'subjectReview.references.alt': 'Reference {role} for this subject',
+  'subjectReview.approve.unavailable':
+    "This screen shows the approved set. Approving happens to a draft, and the orchestrator publishes no way to list a subject's drafts, so there is nothing here to approve.",
+
   'page.subjects.title': 'Subjects',
   'page.subjects.description':
     'The recurring people, characters and objects this project has identified for review. Not connected to the orchestrator yet.',

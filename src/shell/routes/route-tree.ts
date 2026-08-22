@@ -9,7 +9,6 @@ import { ProjectListPage } from '@/features/projects/ProjectListPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
 import { AssetsPage } from '@/features/assets/AssetsPage';
 import { SubjectsPage } from '@/features/subjects/SubjectsPage';
-import { SubjectReviewPage } from '@/features/subjects/SubjectReviewPage';
 import { StylesPage } from '@/features/styles/StylesPage';
 import { VoicesPage } from '@/features/voices/VoicesPage';
 import { LocationsPage } from '@/features/locations/LocationsPage';
@@ -162,7 +161,11 @@ const projectRoutes: RouteObject[] = [
   },
   {
     path: `${SUBJECTS_SEGMENT}/:${SUBJECT_ID_PARAM}`,
-    Component: SubjectReviewPage,
+    lazy: () =>
+      import('@/features/subjects/SubjectReviewPage').then((routeModule) => ({
+        Component: routeModule.SubjectReviewPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.subjectReview.title'),
   },

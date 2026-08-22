@@ -98,4 +98,8 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.CANONICAL_ANCHOR_REQUIRED',
   },
+  CANONICAL_DRAFT_EXISTS: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.CANONICAL_DRAFT_EXISTS',
+  },
 };

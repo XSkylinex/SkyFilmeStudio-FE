@@ -1,7 +1,9 @@
 import type {
+  CanonicalAssetSetId,
   ProjectId,
   RenderJobId,
   SourceAssetId,
+  SubjectId,
 } from 'sky-filme-studio-be/contracts';
 
 export const API_PATH = {
@@ -20,6 +22,18 @@ export const API_PATH = {
   ): string => `/projects/${projectId}/assets/${assetId}/thumbnail`,
   projectAssetProxy: (projectId: ProjectId, assetId: SourceAssetId): string =>
     `/projects/${projectId}/assets/${assetId}/proxy`,
+  projectSubjects: (projectId: ProjectId): string =>
+    `/projects/${projectId}/subjects`,
+  projectSubject: (projectId: ProjectId, subjectId: SubjectId): string =>
+    `/projects/${projectId}/subjects/${subjectId}`,
+  approvedCanonicalSet: (projectId: ProjectId, subjectId: SubjectId): string =>
+    `/projects/${projectId}/subjects/${subjectId}/canonical-sets/approved`,
+  canonicalReferences: (
+    projectId: ProjectId,
+    subjectId: SubjectId,
+    setId: CanonicalAssetSetId,
+  ): string =>
+    `/projects/${projectId}/subjects/${subjectId}/canonical-sets/${setId}/references`,
   renderJob: (renderJobId: RenderJobId): string =>
     `/render-jobs/${renderJobId}`,
 } satisfies Record<string, (...args: never[]) => string>;
