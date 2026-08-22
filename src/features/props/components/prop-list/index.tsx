@@ -18,7 +18,7 @@ export const PropList: FC<PropListProps> = ({ projectId }) => {
     projectPropsQueryOptions(projectId),
   );
 
-  if (error) {
+  if (error && data === undefined) {
     const view = resolveRouteErrorView(error);
 
     return (
