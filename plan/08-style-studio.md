@@ -165,8 +165,12 @@ translation. Nothing here needs to handle a 500 for this case.
   included. The equivalent route for a style lineage is the thing to check for before this phase
   starts, not after.
 - **Request DTOs must reach `./contracts`.** Confirmed by the backend: `src/contracts/` re-exports no
-  module DTO at all, and eleven request and query schemas across ten files sit outside the barrel —
-`import-asset-request.schema.ts` and `list-assets-query.schema.ts` each carry two. BE-13 will export its
+  module DTO at all — **not one**, which is the durable fact and the one worth acting on. Every request
+and query schema lives in a `*/dto/*.schema.ts` under a feature module and is invisible to this repo.
+No count is recorded here on purpose: it was ten, then eleven, then twelve within a day, and a number
+that rots is what sent two earlier paragraphs in this file wrong. Count it when you need it —
+`find src -path '*/dto/*.schema.ts'` in the backend, and `grep -rn dto src/contracts/` to confirm the
+barrel still re-exports none of them. BE-13 will export its
   own as it writes them; the ten existing ones are Alex's call. This repo asked for the direction to
   be visible in the name — `createStyleProfileRequestSchema` beside `styleProfileSchema` — because
   confusing a published response shape for a published request shape has been this repo's single most
