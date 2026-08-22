@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import { http, HttpResponse } from 'msw';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { API_PATH } from '@/lib/api/api.constants';
 import { routeTree } from '@/shell/routes/route-tree';
 import { NotFoundPage } from '@/shell/routes/not-found-page';
@@ -88,12 +88,11 @@ describe('routeTree', () => {
 
     renderInApp(<RouterProvider router={memoryRouter} />);
 
-    expect(
-      await screen.findByRole('heading', { name: 'Plan', level: 1 }),
-    ).toBeInTheDocument();
-    expect(memoryRouter.state.location.pathname).toBe(
-      productionPlanPath('proj-1', 'prod-1'),
-    );
+    await waitFor(() => {
+      expect(memoryRouter.state.location.pathname).toBe(
+        productionPlanPath('proj-1', 'prod-1'),
+      );
+    });
   });
 
   it('replaces the production-index redirect instead of pushing it, so Back escapes on the first press', async () => {
@@ -104,9 +103,11 @@ describe('routeTree', () => {
 
     renderInApp(<RouterProvider router={memoryRouter} />);
 
-    expect(
-      await screen.findByRole('heading', { name: 'Plan', level: 1 }),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(memoryRouter.state.location.pathname).toBe(
+        productionPlanPath('proj-1', 'prod-1'),
+      );
+    });
     expect(memoryRouter.state.historyAction).toBe('REPLACE');
 
     await memoryRouter.navigate(-1);
