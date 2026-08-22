@@ -249,6 +249,25 @@ nothing needs it yet. Ask before working around it.
   tree had already moved on to the next phase it names a branch with nothing to do with the codes in
   hand.
 
+  **And `master` over there is a local ref that only moves when someone in that repo runs `git pull`.**
+  A sibling working tree is not a mirror of GitHub; its `master` is as old as the last time a session
+  there happened to update it, and nothing in this repo makes that happen. Measured 2026-08-22: BE-15
+  merged upstream at 20:07:54 and the sibling's local `master` had last moved at 19:20:28, so it still
+  pointed at BE-14. This repo's handoff report, written at 20:21, said "backend master is 41 codes,
+  BE-15 unmerged" and put it in a PR body. BE-15 had been merged for thirteen minutes. Absorbing the
+  seven codes had been right; the reason given for it was false.
+
+  So fetch first and read the remote-tracking ref, which no one else's habits can leave behind:
+
+  ```bash
+  git -C ../sky-filme-studio-be fetch origin
+  git -C ../sky-filme-studio-be show origin/master:src/contracts/enums/error-code.ts \
+    | grep -oE "'[A-Z_]+'" | tr -d "'" | sort > /tmp/committed.txt
+  ```
+
+  `git.md` says a zero is not a fact until the instrument has produced a true positive. This is the
+  same rule one level up: a ref is not a fact until you know what moves it.
+
   Record in the phase file which codes are branch-only, and re-run the `master:` diff at commit time
   rather than once per session — `git.md` already says to re-read the backend before merging and not
   only before committing, and this is that rule with a command attached.
