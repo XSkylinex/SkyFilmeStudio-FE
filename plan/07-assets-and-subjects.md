@@ -436,7 +436,7 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
       `GET …/canonical-sets`, so a draft survives a reload and can be found again. Subject Review now
       has an *Open draft* section that lists the `PENDING` set, shows what it depicts, and offers a
       single **Approve** named for its subject. **The first mutation in this app** — no optimistic
-      update, the control disables on the server's own pending state, and both the collection and the
+      update, the control disables while the request is in flight, and both the collection and the
       approved-head queries are invalidated after the server answers. `POST …/:setId/approve` takes
       no body, so nothing here guesses a request shape. Opening a draft is still not offered, and that
       one *is* an unpublished request shape: `createCanonicalDraftRequestSchema` is
