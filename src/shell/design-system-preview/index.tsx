@@ -14,6 +14,7 @@ import { IconButton } from '@/lib/components/icon-button';
 import { Field } from '@/lib/components/field';
 import { Select } from '@/lib/components/select';
 import { Input } from '@/lib/components/input';
+import { Textarea } from '@/lib/components/textarea';
 import { Icon } from '@/lib/components/icon';
 import { Dialog } from '@/lib/components/dialog';
 import { Tooltip } from '@/lib/components/tooltip';
@@ -289,6 +290,9 @@ export const DesignSystemPreview: FC = () => {
           </Field>
           <Field label="Seed" error="Must be a whole number">
             <Input defaultValue="not a number" />
+          </Field>
+          <Field label="Brief" hint="A paragraph or treatment, not required">
+            <Textarea placeholder="What happens in this production?" />
           </Field>
         </div>
       </section>
