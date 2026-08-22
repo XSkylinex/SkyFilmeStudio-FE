@@ -4,6 +4,7 @@ import { ERROR_CODE, RUNTIME_VERDICT } from 'sky-filme-studio-be/contracts';
 import type { RuntimeSegmentShare } from 'sky-filme-studio-be/contracts';
 import { Badge } from '@/lib/components/badge';
 import { ContentText } from '@/lib/components/content-text';
+import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { ProgressBar } from '@/lib/components/progress-bar';
 import { Skeleton } from '@/lib/components/skeleton';
@@ -47,25 +48,27 @@ export const RuntimeBudgetPanel: FC<RuntimeBudgetPanelProps> = ({
         <h2 className="runtime-budget-panel__title">
           {translate('planner.budget.heading')}
         </h2>
-        <ErrorState
-          title={translate(
-            undeclared
-              ? 'planner.budget.undeclared.title'
-              : 'planner.budget.error.title',
-          )}
-          description={
-            undeclared
-              ? translate('planner.budget.undeclared.description')
-              : composeRouteErrorDescription(view, translate)
-          }
-          detail={view.detail}
-          headingLevel={3}
-        />
-        {undeclared && view.descriptionDetail !== undefined ? (
-          <p className="runtime-budget-panel__server">
-            <ContentText>{view.descriptionDetail}</ContentText>
-          </p>
-        ) : null}
+        {undeclared ? (
+          <>
+            <EmptyState
+              title={translate('planner.budget.undeclared.title')}
+              description={translate('planner.budget.undeclared.description')}
+              headingLevel={3}
+            />
+            {view.descriptionDetail === undefined ? null : (
+              <p className="runtime-budget-panel__server">
+                <ContentText>{view.descriptionDetail}</ContentText>
+              </p>
+            )}
+          </>
+        ) : (
+          <ErrorState
+            title={translate('planner.budget.error.title')}
+            description={composeRouteErrorDescription(view, translate)}
+            detail={view.detail}
+            headingLevel={3}
+          />
+        )}
       </section>
     );
   }
