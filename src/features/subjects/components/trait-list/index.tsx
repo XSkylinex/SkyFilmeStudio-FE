@@ -15,8 +15,8 @@ export const TraitList: FC<TraitListProps> = ({
       <p className="trait-list__empty">{emptyLabel}</p>
     ) : (
       <ul className="trait-list__items">
-        {traits.map((trait) => (
-          <li key={trait}>
+        {traits.map((trait, index) => (
+          <li key={index}>
             <ContentText>{trait}</ContentText>
           </li>
         ))}
