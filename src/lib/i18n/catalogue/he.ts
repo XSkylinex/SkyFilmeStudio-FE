@@ -728,8 +728,13 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'productions.create.failed.title': 'ההפקה לא נוצרה',
   'planner.error.title': 'לא ניתן היה לקרוא את ההפקה הזו',
   'planner.loading': 'קורא את ההפקה…',
-  'planner.summary.state': 'מצב:',
   'planner.summary.kind': 'סוג:',
+  'planner.summary.styleProfile': 'פרופיל סגנון:',
+  'planner.summary.styleVersion': 'גרסת סגנון:',
+  'planner.summary.styleUnresolved':
+    'ההפקה הזו מציינת גרסת סגנון שה-orchestrator לא החזיר.',
+  'planner.summary.stylePinned':
+    'הפקה נשארת עם גרסת הסגנון שאיתה נוצרה. אישור גרסה מאוחרת יותר של אותו פרופיל אינו מזיז אותה.',
   'planner.summary.mode': 'מצב נרטיבי:',
   'planner.summary.target': 'אורך היעד:',
   'planner.budget.heading': 'האם התוכנית הזו מסתכמת?',
@@ -751,7 +756,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'planner.budget.progress': 'הסכום המתוכנן מול היעד',
   'planner.budget.segments.heading': 'לאן הולך הזמן',
   'planner.budget.segments.empty':
-    'להפקה הזו אין סצנות ואין חומר חוזר, ולכן אין מה לסכם. שלב מתווה הסצנות הוא זה שיוצר אותן.',
+    'להפקה הזו אין סצנות ואין חומר חוזר, ולכן אין מה לסכם. מה שהיא צריכה שיתוכנן מופיע למטה.',
   'planner.budget.segments.duration': 'אורך',
   'planner.budget.segments.share': 'חלק מהיעד',
   'planner.budget.segments.label': 'מקטע',
@@ -803,11 +808,9 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'planner.gaps.stages':
     'להריץ או להריץ מחדש שלב תכנון. ל-orchestrator יש את השירות והוא מסרב לשלב שהמצב אינו זקוק לו, אך אין נתיב שמגיע אליו.',
   'planner.gaps.scenes':
-    'לקרוא, להוסיף או לערוך סצנה. ה-orchestrator יודע להחליף סצנות במלואן, ואין נתיב שמחזיר אותן, ולכן המסך הזה רואה אותן רק כשורות בתקציב שלמעלה.',
+    'לקרוא, להוסיף או לערוך סצנה. הנתיב היחיד שנוגע בהן מחליף את כל הסט בבת אחת ומחזיר רשימה בלי טיפוס, ולכן המסך הזה רואה סצנה רק כשורה בתקציב שלמעלה.',
   'planner.gaps.dialogue':
     'לכתוב שורת דיאלוג, לבחור לה קול, או לדעת כמה זמן ייקח להגיד אותה. אין בכלל נתיב לדיאלוג, ואורך דיבור נמדד על ידי מנוע ההקראה ולא מנוחש מספירת מילים.',
   'planner.gaps.continuity':
     'להציג ממצאי רציפות או טון ליד הסצנות שהם נוגעים להן. לשניהם יש סכמה ולאף אחד אין נתיב.',
-  'planner.gaps.styleProfile':
-    'לנקוב בגרסת הסגנון שההפקה מוצמדת אליה. ההצמדה היא לפי מזהה גרסה, ופענוח שלו דורש חיפוש לפי שושלת שהמסך הזה אינו יכול להרכיב.',
 };

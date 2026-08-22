@@ -117,13 +117,23 @@ response shape is published through `./contracts`.
   not need, and refuses `RUNTIME_ESTIMATE` outright as arithmetic — and no controller reaches it. Its
   parameters are a local-LLM provider, a request and an abort signal, all server-internal. Re-measured
   at commit time: `grep -rn runStage src --include="*.ts"` in the sibling finds its definition and one
-  service-to-service call added by BE-16, and no controller. So steps 2 and 3 are unbuildable, not
-  unbuilt.
+  more line, and no controller. **The second hit is a docblock in BE-16's `DirectorService`, prose
+  about `runStage` rather than a call to it** — this file said "one service-to-service call" and that
+  was a grep hit read as evidence without opening the line, which is the fourth time on 2026-08-22
+  that shape has produced a false sentence here. The conclusion is unaffected and the reason for it is
+  corrected. `ContinuityReviewService` is in the same position: referenced by its own module and by
+  `DirectorService`, by no controller. So steps 2, 3 and 6 are unbuildable, not unbuilt.
 - **No `GET` for a production's scenes.** `PUT /planning/scenes` replaces them wholesale and returns
   `readonly unknown[]`. This screen therefore sees scenes only as rows in the budget report, which is
   why step 5 is unbuildable.
 - **No dialogue-line controller of any kind**, so steps 5's second half and every dialogue box in
   *Done when* wait on a backend that has not written them.
+- **A production's pinned style version, on the other hand, is resolvable and this file said it was
+  not.** `GET /projects/:projectId/style-profiles/:id` takes exactly the id `Production.styleProfileId`
+  carries; the lineage-scoped routes are the other two on that controller. The screen said the lookup
+  could not be formed, which was a claim that the orchestrator lacked something it had. It is built
+  now, which also ticks `plan/08`'s "which version a production is pinned to" — that box was blocked
+  on a production having no route, and BE-15 gave it one.
 - `continuityReviewSchema` and `toneReviewSchema` are published contracts with no route, so step 6 has
   a shape and no data. `GET /productions/:id/planning-context` exists and returns **markdown**, not
   findings.
@@ -212,11 +222,20 @@ Measured live: a `SCREENPLAY` production returns seven stages including `SCREENP
 production returns four and none of them is it. §3.2's clearest rule, and it holds because the answer
 comes off the wire.
 
-One local judgement is recorded here rather than hidden: `RUNTIME_ESTIMATE` is marked *answered by the
-budget above*. The association is not in the contract — it comes from reading the backend's
-`PLANNING_STAGE_EXECUTION` table, where that stage alone is `DETERMINISTIC`, and from its refusal
-message telling a caller to read the budget instead. The stage name itself comes from the contract's
-own `PLANNING_STAGE`, not a string literal.
+**Two constants in `planner.constants.ts` mirror backend tables the contract does not publish, and a
+later phase should re-check them rather than inherit them.** Neither `PLANNING_STAGE_EXECUTION` nor
+`PRODUCTION_TRANSITIONS` is exported through `./contracts` — measured, not assumed. So:
+
+- `RUNTIME_ESTIMATE` is marked *answered by the budget above* because it is the single
+  `DETERMINISTIC` entry in the backend's stage table and its refusal message tells a caller to read
+  the budget. If another stage ever becomes deterministic, this screen badges the wrong one.
+- approval is offered only from `PLANNING`, because `STORYBOARDING` appears as a destination nowhere
+  else in the transition table. If another state ever reaches it, this screen hides a control that
+  would work.
+
+Both fail silently through a green gate, because the values are contract enum members and only the
+*tables* are unpublished. Both were re-checked at commit time. The stage name and the state name come
+from the contract's own `PLANNING_STAGE` and `PRODUCTION_STATE`, never from a string literal.
 
 ## Verification
 

@@ -56,5 +56,4 @@ export const PLANNER_GAP_KEYS = [
   'planner.gaps.scenes',
   'planner.gaps.dialogue',
   'planner.gaps.continuity',
-  'planner.gaps.styleProfile',
 ] satisfies readonly TranslationKey[];

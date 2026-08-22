@@ -735,8 +735,13 @@ export const EN_CATALOGUE = {
   'productions.create.failed.title': 'The production was not created',
   'planner.error.title': 'This production could not be read',
   'planner.loading': 'Reading this production…',
-  'planner.summary.state': 'State:',
   'planner.summary.kind': 'Kind:',
+  'planner.summary.styleProfile': 'Style profile:',
+  'planner.summary.styleVersion': 'Style version:',
+  'planner.summary.styleUnresolved':
+    'This production names a style version the orchestrator did not return.',
+  'planner.summary.stylePinned':
+    'A production keeps the style version it was created with. Approving a later version of that profile does not move this one.',
   'planner.summary.mode': 'Narrative mode:',
   'planner.summary.target': 'Target runtime:',
   'planner.budget.heading': 'Does this plan add up?',
@@ -758,7 +763,7 @@ export const EN_CATALOGUE = {
   'planner.budget.progress': 'Planned total against the target',
   'planner.budget.segments.heading': 'Where the time goes',
   'planner.budget.segments.empty':
-    'This production has no scenes and no reusable material, so there is nothing to total. The scene-outline stage is what creates them.',
+    'This production has no scenes and no reusable material, so there is nothing to total. What it needs planned is listed below.',
   'planner.budget.segments.duration': 'Duration',
   'planner.budget.segments.share': 'Share of target',
   'planner.budget.segments.label': 'Segment',
@@ -813,13 +818,11 @@ export const EN_CATALOGUE = {
   'planner.gaps.stages':
     'Run or re-run a planning stage. The orchestrator has the service and refuses a stage the mode does not need, but no route reaches it.',
   'planner.gaps.scenes':
-    'Read, add or edit a scene. Scenes can be replaced wholesale by the orchestrator, and there is no route that returns them, so this screen sees them only as rows in the budget above.',
+    'Read, add or edit a scene. The only route that touches them replaces the whole set at once and hands back an untyped list, so this screen sees a scene only as a row in the budget above.',
   'planner.gaps.dialogue':
     'Write a dialogue line, pick a voice for it, or see how long it will take to speak. There is no dialogue route at all, and a spoken duration is measured by the speech engine rather than guessed from a word count.',
   'planner.gaps.continuity':
     'Show continuity or tone findings beside the scenes they concern. Both have a schema and neither has a route.',
-  'planner.gaps.styleProfile':
-    'Name the style version this production is pinned to. It is pinned by version id, and resolving one needs a lineage-scoped lookup this screen cannot form.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

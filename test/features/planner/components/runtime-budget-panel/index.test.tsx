@@ -158,7 +158,7 @@ describe('RuntimeBudgetPanel', () => {
 
     expect(
       await screen.findByText(
-        'This production has no scenes and no reusable material, so there is nothing to total. The scene-outline stage is what creates them.',
+        'This production has no scenes and no reusable material, so there is nothing to total. What it needs planned is listed below.',
       ),
     ).toBeInTheDocument();
     expect(
