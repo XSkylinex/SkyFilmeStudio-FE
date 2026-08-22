@@ -427,8 +427,20 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'subjectReview.references.generated':
     'תוצר שנוצר — המתזמר עדיין אינו מגיש עבורו תמונה.',
   'subjectReview.references.alt': 'הפניית {role} עבור הסובייקט הזה',
-  'subjectReview.approve.unavailable':
-    'המסך הזה מציג את המערך המאושר. אישור מתבצע על טיוטה, והמתזמר אינו מפרסם דרך לרשום את הטיוטות של סובייקט, ולכן אין כאן מה לאשר.',
+  'subjectReview.draft.title': 'טיוטה פתוחה',
+  'subjectReview.draft.error.title':
+    'לא ניתן היה לקרוא את הטיוטות של הסובייקט הזה',
+  'subjectReview.draft.none.title': 'אין טיוטה פתוחה',
+  'subjectReview.draft.none.description':
+    'אישור מתבצע על טיוטה, לעולם לא על המערך המאושר. לסובייקט הזה אין טיוטה פתוחה.',
+  'subjectReview.draft.cannotOpen':
+    'פתיחת טיוטה אינה מוצעת כאן: היא דורשת גוף בקשה שהמתזמר אינו מפרסם את צורתו בחבילת החוזה, והבנייה הזו לא תנחש אותה.',
+  'subjectReview.draft.opened': 'נפתחה:',
+  'subjectReview.draft.notes': 'הערות',
+  'subjectReview.draft.context': 'המערך הקנוני של {subject}',
+  'subjectReview.draft.explained':
+    'אישור מקפיא את המערך הזה. התיאור שלו וה-SHA-256 שלו נרשמים, הוא הופך לגרסה שכל יצירה עוגנת אליה, ולא ניתן לשנות בו דבר לאחר מכן — כולל ביטול האישור.',
+  'subjectReview.draft.approveError.title': 'הטיוטה הזו לא אושרה',
 
   'page.subjects.title': 'סובייקטים',
   'page.subjects.description':

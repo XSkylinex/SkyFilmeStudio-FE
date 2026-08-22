@@ -75,8 +75,7 @@
     line-height: var(--line-height-relaxed);
   }
 
-  .canonical-set-panel__explained,
-  .canonical-set-panel__unavailable {
+  .canonical-set-panel__explained {
     margin: 0;
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);

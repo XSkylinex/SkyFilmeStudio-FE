@@ -89,10 +89,6 @@ export const CanonicalSetPanel: FC<CanonicalSetPanelProps> = ({ set }) => {
               </p>
             </div>
           ) : null}
-
-          <p className="canonical-set-panel__unavailable">
-            {translate('subjectReview.approve.unavailable')}
-          </p>
         </>
       )}
     </section>

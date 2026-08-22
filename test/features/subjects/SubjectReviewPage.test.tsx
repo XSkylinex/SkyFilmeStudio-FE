@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import {
   canonicalAssetSetIdSchema,
@@ -26,6 +27,9 @@ const SUBJECT_ID = subjectIdSchema.parse(
 const SET_ID = canonicalAssetSetIdSchema.parse(
   '77777777-7777-4777-8777-777777777777',
 );
+const DRAFT_ID = canonicalAssetSetIdSchema.parse(
+  '88888888-8888-4888-8888-888888888888',
+);
 
 const FROZEN_SHA = sha256Schema.parse('b'.repeat(64));
 
@@ -50,6 +54,30 @@ const servesSubject = (
   server.use(
     http.get(API_PATH.projectSubject(PROJECT_ID, SUBJECT_ID), () =>
       HttpResponse.json(buildSubject(overrides)),
+    ),
+    http.get(API_PATH.canonicalSets(PROJECT_ID, SUBJECT_ID), () =>
+      HttpResponse.json([]),
+    ),
+  );
+};
+
+const servesOpenDraft = (): void => {
+  server.use(
+    http.get(API_PATH.canonicalSets(PROJECT_ID, SUBJECT_ID), () =>
+      HttpResponse.json([
+        buildCanonicalAssetSet({
+          id: DRAFT_ID,
+          approvalState: 'PENDING',
+          notes: 'Turnaround gathered, awaiting review.',
+        }),
+      ]),
+    ),
+    http.get(
+      API_PATH.canonicalReferences(PROJECT_ID, SUBJECT_ID, DRAFT_ID),
+      () =>
+        HttpResponse.json([
+          buildCanonicalReference({ role: 'FRONT_VIEW', anchorEligible: true }),
+        ]),
     ),
   );
 };
@@ -145,18 +173,107 @@ describe('SubjectReviewPage', () => {
     expect(screen.getByText('Anchor eligible')).toBeInTheDocument();
   });
 
-  it('names the missing route, not a missing request shape, as why it cannot approve', async () => {
+  it('offers approval of the open draft, named for the subject it belongs to', async () => {
+    servesSubject();
+    servesApprovedSet();
+    servesOpenDraft();
+
+    renderAt(PATH);
+
+    expect(
+      await screen.findByRole('button', {
+        name: 'Approve the canonical set for Mira',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', {
+        name: 'Reject the canonical set for Mira',
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('says a draft cannot be opened here rather than offering a control that fails', async () => {
     servesSubject();
     servesApprovedSet();
 
     renderAt(PATH);
 
     expect(
-      await screen.findByText(/no way to list a subject's drafts/i),
+      await screen.findByRole('heading', { name: 'No open draft' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/does not publish/i)).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /^Approve/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('waits for the server before letting the draft leave review', async () => {
+    const user = userEvent.setup();
+    let approvals = 0;
+    servesSubject();
+    servesApprovedSet();
+    servesOpenDraft();
+    server.use(
+      http.post(
+        API_PATH.approveCanonicalSet(PROJECT_ID, SUBJECT_ID, DRAFT_ID),
+        async () => {
+          approvals += 1;
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          return HttpResponse.json(
+            buildCanonicalAssetSet({ id: DRAFT_ID, approvalVersion: 3 }),
+          );
+        },
+      ),
+    );
+
+    renderAt(PATH);
+    const approveButton = await screen.findByRole('button', {
+      name: 'Approve the canonical set for Mira',
+    });
+    await user.click(approveButton);
+
+    expect(approveButton).toBeDisabled();
+    await user.click(approveButton);
+    await waitFor(() => {
+      expect(approvals).toBe(1);
+    });
+  });
+
+  it('shows the orchestrator’s own refusal when a draft has nothing to anchor to', async () => {
+    const user = userEvent.setup();
+    servesSubject();
+    servesApprovedSet();
+    servesOpenDraft();
+    server.use(
+      http.post(
+        API_PATH.approveCanonicalSet(PROJECT_ID, SUBJECT_ID, DRAFT_ID),
+        () =>
+          HttpResponse.json(
+            {
+              statusCode: 400,
+              code: 'CANONICAL_ANCHOR_REQUIRED',
+              message: 'Canonical set has no references.',
+            },
+            { status: 400 },
+          ),
+      ),
+    );
+
+    renderAt(PATH);
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Approve the canonical set for Mira',
+      }),
+    );
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'This draft was not approved',
+      }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: /approve/i }),
-    ).not.toBeInTheDocument();
+      screen.getByText(/without naming the approved reference/i),
+    ).toBeInTheDocument();
   });
 
   it('never asks about a canonical set for a subject it could not read', async () => {

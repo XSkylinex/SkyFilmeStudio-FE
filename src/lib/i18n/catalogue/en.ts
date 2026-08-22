@@ -432,8 +432,19 @@ export const EN_CATALOGUE = {
   'subjectReview.references.generated':
     'Generated artifact — the orchestrator serves no image for one yet.',
   'subjectReview.references.alt': 'Reference {role} for this subject',
-  'subjectReview.approve.unavailable':
-    "This screen shows the approved set. Approving happens to a draft, and the orchestrator publishes no way to list a subject's drafts, so there is nothing here to approve.",
+  'subjectReview.draft.title': 'Open draft',
+  'subjectReview.draft.error.title': "This subject's drafts could not be read",
+  'subjectReview.draft.none.title': 'No open draft',
+  'subjectReview.draft.none.description':
+    'Approving happens to a draft, never to the approved set. This subject has no draft open.',
+  'subjectReview.draft.cannotOpen':
+    'Opening one is not offered here: it needs a request body whose shape the orchestrator does not publish through its contract package, and this build will not guess at it.',
+  'subjectReview.draft.opened': 'Opened:',
+  'subjectReview.draft.notes': 'Notes',
+  'subjectReview.draft.context': 'the canonical set for {subject}',
+  'subjectReview.draft.explained':
+    'Approving freezes this set. Its descriptor and that descriptor’s SHA-256 are recorded, it becomes the version every generation is anchored to, and nothing about it can be changed afterwards — including un-approving it.',
+  'subjectReview.draft.approveError.title': 'This draft was not approved',
 
   'page.subjects.title': 'Subjects',
   'page.subjects.description':
