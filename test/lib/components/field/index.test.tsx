@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import { renderInStore } from '../../../render-in-store';
 import { Field } from '@/lib/components/field';
+import { Input } from '@/lib/components/input';
 
 describe('Field', () => {
   it('associates its label with the control, so querying by label finds the control', () => {
@@ -76,5 +77,31 @@ describe('Field', () => {
     const describedBy = control.getAttribute('aria-describedby');
 
     expect(describedBy?.split(' ')).toHaveLength(2);
+  });
+
+  it('keeps an aria-invalid the caller set, for an error that belongs to a pair of controls', () => {
+    renderInStore(
+      <Field label="Minutes">
+        <Input placeholder="Minutes" aria-invalid />
+      </Field>,
+    );
+
+    expect(screen.getByPlaceholderText('Minutes')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+  });
+
+  it('still marks its own control invalid when it carries the error itself', () => {
+    renderInStore(
+      <Field label="Seed" error="Must be a whole number">
+        <Input placeholder="Seed" />
+      </Field>,
+    );
+
+    expect(screen.getByPlaceholderText('Seed')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
   });
 });
