@@ -188,18 +188,18 @@ describe('approveCanonicalSetMutationOptions', () => {
     expect(approvedHeadCalls).toBe(2);
   });
 
-  it('rejects with CANONICAL_ANCHOR_REQUIRED when the set has no references to anchor on', async () => {
+  it('rejects with CANONICAL_ANCHOR_REQUIRED when the set has no references at all', async () => {
     server.use(
       http.post(
         API_PATH.approveCanonicalSet(PROJECT_ID, SUBJECT_ID, SET_ID),
         () =>
           HttpResponse.json(
             {
-              statusCode: 409,
+              statusCode: 400,
               code: ERROR_CODE.CANONICAL_ANCHOR_REQUIRED,
-              message: 'The set has no anchor-eligible references.',
+              message: 'The set has no references.',
             },
-            { status: 409 },
+            { status: 400 },
           ),
       ),
     );
@@ -211,7 +211,7 @@ describe('approveCanonicalSetMutationOptions', () => {
     ).rejects.toMatchObject({
       kind: 'HTTP',
       code: ERROR_CODE.CANONICAL_ANCHOR_REQUIRED,
-      status: 409,
+      status: 400,
     });
   });
 

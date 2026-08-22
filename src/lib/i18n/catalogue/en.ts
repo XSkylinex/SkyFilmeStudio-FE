@@ -49,7 +49,7 @@ export const EN_CATALOGUE = {
   'error.CANONICAL_SET_IMMUTABLE':
     'This canonical set has been approved, so it can no longer be changed. Approved sets are frozen deliberately — a production already pinned to this one must not shift underneath it. A change means a new version.',
   'error.CANONICAL_ANCHOR_REQUIRED':
-    'This asked for a generation derived from a subject without naming the approved reference it is anchored to. Without an anchor the identity it produced could not be traced back to anything.',
+    'This set has no references, so approving it would freeze a version that depicts nothing. Add at least one reference, then approve.',
   'error.CANONICAL_DRAFT_EXISTS':
     'This subject already has an open canonical draft. Only one draft exists at a time, so the open one has to be approved or discarded before another can start.',
   'error.STYLE_PROFILE_IMMUTABLE':

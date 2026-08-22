@@ -273,7 +273,9 @@ describe('SubjectReviewPage', () => {
       screen.getByRole('heading', { name: 'This draft was not approved' }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/without naming the approved reference/i),
+      screen.getByText(
+        /approving it would freeze a version that depicts nothing/i,
+      ),
     ).toBeInTheDocument();
   });
 
