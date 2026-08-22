@@ -163,8 +163,10 @@ turning `?` off would otherwise strand the control that turns it back on.
 
 Everything else in `plan/16` needs a screen that does not exist — storyboard, shot review, the
 render queue — and the phase file names which phase each unticked box waits for rather than leaving
-them blank. In particular "media code is out of the entry chunk" is **vacuously** true today and
-stays unticked: there is no `<video>`, `<audio>` or `<canvas>` anywhere in `src/`.
+them blank. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
+is the first `<video>` in this codebase, its route is `lazy`, and it builds as its own chunk rather
+than into the entry. `plan/16` carries the measurement and the one caveat — React DOM's own media
+event plumbing is in the entry either way and is not ours to move.
 
 Two things FE-03 established that later phases inherit. **The router is v7, not v8** —
 `react-router-dom` has never published an 8.x and is a re-export shim over `react-router@7.18.2`, so
