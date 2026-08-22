@@ -1,0 +1,58 @@
+@layer features {
+  .planning-stage-list {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-raised);
+  }
+
+  .planning-stage-list__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .planning-stage-list__loading,
+  .planning-stage-list__note {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .planning-stage-list__stages {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding-inline-start: var(--space-5);
+  }
+
+  .planning-stage-list__stage {
+    color: var(--color-text);
+
+    &[data-computed='true'] {
+      color: var(--color-text-secondary);
+    }
+  }
+
+  .planning-stage-list__stage-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2);
+  }
+
+  .planning-stage-list__stage-name {
+    font-size: var(--font-size-md);
+  }
+
+  .planning-stage-list__stage-note {
+    display: block;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+}

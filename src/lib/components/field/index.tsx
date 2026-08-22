@@ -22,7 +22,7 @@ export const Field: FC<FieldProps> = ({ label, hint, error, id, children }) => {
         {cloneElement(children, {
           id: controlId,
           'aria-describedby': describedBy,
-          'aria-invalid': error ? true : undefined,
+          'aria-invalid': error ? true : children.props['aria-invalid'],
         })}
       </div>
       {hint ? (

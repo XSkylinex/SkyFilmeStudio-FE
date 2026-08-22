@@ -637,6 +637,192 @@ export const EN_CATALOGUE = {
   'page.system.title': 'System',
   'page.system.description':
     'Hardware profile, installed models, disk space, preflight and the operating mode of this installation.',
+  'form.invalid.required': 'This needs a value.',
+  'form.invalid.tooSmall': 'This number is too small.',
+  'form.invalid.tooBig': 'This number is too large.',
+  'form.invalid.type': 'This is not the kind of value this field takes.',
+  'form.invalid.value': 'The contract will not accept this value.',
+  'productions.heading': 'Productions in this project',
+  'productions.loading': 'Reading this project’s productions…',
+  'productions.error.title': 'The production list could not be read',
+  'productions.empty.title': 'No productions yet',
+  'productions.empty.description':
+    'A production is one finished piece — an episode, a music video, a trailer. Create one to start planning it.',
+  'productions.truncated':
+    'The orchestrator has more productions than this. Only the first page is read here.',
+  'productions.card.open': 'Open the plan for {title}',
+  'productions.card.sequence': 'Number in sequence:',
+  'productions.card.target': 'Target runtime:',
+  'productions.card.tolerance': 'Tolerance:',
+  'productions.card.toleranceFromProfile': 'Declared by its structure profile',
+  'productions.card.toleranceUndeclared': 'None declared',
+  'productions.card.toleranceUndeclared.detail':
+    'Neither this production nor a structure profile declares a runtime tolerance, so the orchestrator refuses to judge whether the plan adds up. There is no default, because a tolerance that suits a twenty-minute episode is wrong for a thirty-second trailer.',
+  'productions.card.planVersion': 'Plan version:',
+  'productions.card.screenplayVersion': 'Screenplay version:',
+  'productions.card.noScreenplayVersion': 'No screenplay version yet',
+  'productions.kind.label': 'Kind',
+  'productions.kind.EPISODE': 'Episode',
+  'productions.kind.SHORT_FILM': 'Short film',
+  'productions.kind.FILM': 'Film',
+  'productions.kind.MUSIC_VIDEO': 'Music video',
+  'productions.kind.TRAILER': 'Trailer',
+  'productions.kind.MONTAGE': 'Montage',
+  'productions.kind.NARRATED_STORY': 'Narrated story',
+  'productions.kind.CUSTOM': 'Custom kind',
+  'productions.mode.label': 'Narrative mode',
+  'productions.mode.SCREENPLAY': 'Screenplay',
+  'productions.mode.TREATMENT': 'Treatment',
+  'productions.mode.MUSIC_DRIVEN': 'Music-driven',
+  'productions.mode.VISUAL_ONLY': 'Visual only',
+  'productions.mode.IMPORTED_TIMELINE': 'Imported timeline',
+  'productions.mode.CUSTOM': 'Custom mode',
+  'productions.state.IDEA': 'Idea',
+  'productions.state.OUTLINE_DRAFT': 'Outline draft',
+  'productions.state.OUTLINE_APPROVED': 'Outline approved',
+  'productions.state.SCREENPLAY_DRAFT': 'Screenplay draft',
+  'productions.state.SCREENPLAY_APPROVED': 'Screenplay approved',
+  'productions.state.PLANNING': 'Planning',
+  'productions.state.STORYBOARDING': 'Storyboarding',
+  'productions.state.STORYBOARD_REVIEW': 'Storyboard review',
+  'productions.state.AUDIO_RENDER': 'Audio render',
+  'productions.state.VIDEO_RENDER': 'Video render',
+  'productions.state.SHOT_REVIEW': 'Shot review',
+  'productions.state.ASSEMBLY': 'Assembly',
+  'productions.state.FINAL_QC': 'Final QC',
+  'productions.state.COMPLETE': 'Complete',
+  'productions.state.ARCHIVED': 'Archived',
+  'productions.create.open': 'New production',
+  'productions.create.cancel': 'Cancel',
+  'productions.create.heading': 'New production',
+  'productions.create.submit': 'Create production',
+  'productions.create.submitting': 'Creating…',
+  'productions.create.title': 'Title',
+  'productions.create.title.hint':
+    'What this piece is called. It is content, so it may be in any language.',
+  'productions.create.logline': 'Logline',
+  'productions.create.logline.hint':
+    'One sentence. Optional here — a planning stage can produce it later.',
+  'productions.create.brief': 'Brief',
+  'productions.create.brief.hint':
+    'A paragraph, a treatment, a lesson, a musical brief. Whatever the planner should start from.',
+  'productions.create.sequenceNumber': 'Number in sequence',
+  'productions.create.sequenceNumber.hint':
+    'For a production that belongs in an order, such as an episode.',
+  'productions.create.targetRuntime': 'Target runtime',
+  'productions.create.targetRuntime.minutes': 'Minutes',
+  'productions.create.targetRuntime.seconds': 'Seconds',
+  'productions.create.targetRuntime.hint':
+    'Nothing here assumes twenty minutes. Thirty seconds and forty-five minutes are equally ordinary.',
+  'productions.create.targetRuntime.preview': 'That is:',
+  'productions.create.tolerance': 'Runtime tolerance in seconds',
+  'productions.create.tolerance.hint':
+    'How far the planned total may sit from the target before approval is refused. Leave it empty only if the structure profile below declares one — otherwise the runtime budget cannot judge the plan at all.',
+  'productions.create.styleProfile': 'Style profile',
+  'productions.create.styleProfile.hint':
+    'Required. A production is pinned to one style version for its whole life.',
+  'productions.create.styleProfile.version': 'version {version}',
+  'productions.create.productionProfile': 'Structure profile',
+  'productions.create.productionProfile.none': 'No structure profile',
+  'productions.create.productionProfile.hint':
+    'Optional. Its reusable sections count toward the runtime budget, and its tolerance stands in for one this production does not declare.',
+  'productions.create.blocked.title':
+    'A production needs a style profile first',
+  'productions.create.blocked.description':
+    'Every production is pinned to a style version, and this project has none. The style library can approve one but cannot yet create one, so this has to be done through the orchestrator.',
+  'productions.create.invalid':
+    'The orchestrator’s own contract rejected this before it was sent.',
+  'productions.create.failed.title': 'The production was not created',
+  'planner.error.title': 'This production could not be read',
+  'planner.loading': 'Reading this production…',
+  'planner.summary.kind': 'Kind:',
+  'planner.summary.styleProfile': 'Style profile:',
+  'planner.summary.styleVersion': 'Style version:',
+  'planner.summary.styleUnresolved':
+    'This production names a style version the orchestrator did not return.',
+  'planner.summary.stylePinned':
+    'A production keeps the style version it was created with. Approving a later version of that profile does not move this one.',
+  'planner.summary.mode': 'Narrative mode:',
+  'planner.summary.target': 'Target runtime:',
+  'planner.budget.heading': 'Does this plan add up?',
+  'planner.budget.loading': 'Totalling the plan…',
+  'planner.budget.error.title': 'The runtime budget could not be read',
+  'planner.budget.undeclared.title': 'Nothing here declares a tolerance',
+  'planner.budget.undeclared.description':
+    'The orchestrator will not judge this plan, because neither the production nor a structure profile says how far from the target is close enough. There is no default: what is generous for a twenty-minute episode is the whole runtime of a thirty-second trailer.',
+  'planner.budget.verdict.WITHIN_TOLERANCE': 'The plan adds up',
+  'planner.budget.verdict.SHORT': 'The plan is short',
+  'planner.budget.verdict.LONG': 'The plan runs long',
+  'planner.budget.target': 'Target:',
+  'planner.budget.planned': 'Planned scenes:',
+  'planner.budget.reused': 'Reused material:',
+  'planner.budget.total': 'Total:',
+  'planner.budget.variance.SHORT': 'Missing:',
+  'planner.budget.variance.LONG': 'Over:',
+  'planner.budget.toleranceLabel': 'Allowed either way:',
+  'planner.budget.progress': 'Planned total against the target',
+  'planner.budget.segments.heading': 'Where the time goes',
+  'planner.budget.segments.empty':
+    'This production has no scenes and no reusable material, so there is nothing to total. What it needs planned is listed below.',
+  'planner.budget.segments.duration': 'Duration',
+  'planner.budget.segments.share': 'Share of target',
+  'planner.budget.segments.label': 'Segment',
+  'planner.budget.segments.reused': 'Reused',
+  'planner.budget.offMean.heading.SHORT': 'Which scenes are underweight',
+  'planner.budget.offMean.heading.LONG': 'Which scenes are overweight',
+  'planner.budget.offMean.mean': 'This plan’s own average scene:',
+  'planner.budget.offMean.spread': 'Spread evenly, each scene would move by:',
+  'planner.budget.offMean.none.SHORT':
+    'No scene is shorter than this plan’s own average, so the shortfall is spread across all of them rather than sitting in one place.',
+  'planner.budget.offMean.none.LONG':
+    'No scene is longer than this plan’s own average, so the overrun is spread across all of them rather than sitting in one place.',
+  'planner.budget.offMean.explain':
+    'Underweight is measured against this plan’s own average scene, not against a target per scene — the orchestrator publishes no such target, and inventing one would be a number this screen made up.',
+  'planner.budget.reusedNote':
+    'Reused material comes from the structure profile’s reusable sections. It counts toward the total and is not newly written time.',
+  'planner.stages.heading': 'What this production needs planned',
+  'planner.stages.loading': 'Asking which stages this production needs…',
+  'planner.stages.error.title': 'The stage list could not be read',
+  'planner.stages.source':
+    'This list comes from the orchestrator, which derives it from the production’s narrative mode. It is not assembled here, so a mode that needs no screenplay simply has no screenplay stage in it.',
+  'planner.stages.blocked':
+    'None of these stages can be run from this screen. The orchestrator has the planning service but publishes no route that runs a stage, so a plan is written through the orchestrator rather than here.',
+  'planner.stages.computed': 'Answered by the budget above',
+  'planner.stages.computedNote':
+    'This one is arithmetic over the scene durations rather than something a model writes, and the orchestrator refuses to generate it.',
+  'planner.stage.LOGLINE': 'Logline',
+  'planner.stage.BEAT_SHEET': 'Beat sheet',
+  'planner.stage.MUSIC_SECTIONS': 'Music sections',
+  'planner.stage.VISUAL_BEATS': 'Visual beats',
+  'planner.stage.SCENE_OUTLINE': 'Timed scene outline',
+  'planner.stage.SCREENPLAY': 'Screenplay and dialogue',
+  'planner.stage.CONTINUITY_REVIEW': 'Continuity review',
+  'planner.stage.TONE_REVIEW': 'Audience and tone review',
+  'planner.stage.RUNTIME_ESTIMATE': 'Runtime estimate',
+  'planner.approval.heading': 'Approve the plan',
+  'planner.approval.context': 'the plan for {title}',
+  'planner.approval.ready':
+    'The plan adds up. Approving it moves this production on to storyboarding, and that is a one-way door for this gate.',
+  'planner.approval.blocked.title':
+    'Approval is refused while the plan does not add up',
+  'planner.approval.blocked.description':
+    'The orchestrator checks the budget itself, so this is not a control being hidden — the same request made any other way is refused the same way.',
+  'planner.approval.wrongState.title':
+    'This production is not at the planning gate',
+  'planner.approval.wrongState.description':
+    'Plan approval is the move out of planning, and this production is somewhere else in its life. The orchestrator names where a production may go next when it refuses a move; this screen does not carry that map, because the orchestrator does not publish it.',
+  'planner.approval.approved':
+    'The plan is approved. This production has moved on to storyboarding.',
+  'planner.approval.failed.title': 'The plan was not approved',
+  'planner.gaps.heading': 'What this screen cannot do yet',
+  'planner.gaps.stages':
+    'Run or re-run a planning stage. The orchestrator has the service and refuses a stage the mode does not need, but no route reaches it.',
+  'planner.gaps.scenes':
+    'Read, add or edit a scene. The only route that touches them replaces the whole set at once and hands back an untyped list, so this screen sees a scene only as a row in the budget above.',
+  'planner.gaps.dialogue':
+    'Write a dialogue line, pick a voice for it, or see how long it will take to speak. There is no dialogue route at all, and a spoken duration is measured by the speech engine rather than guessed from a word count.',
+  'planner.gaps.continuity':
+    'Show continuity or tone findings beside the scenes they concern. Both have a schema and neither has a route.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

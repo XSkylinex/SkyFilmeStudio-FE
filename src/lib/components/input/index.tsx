@@ -16,6 +16,7 @@ export const Input: FC<InputProps> = ({
   <input
     className="input"
     id={id}
+    dir="auto"
     type={type}
     value={value}
     defaultValue={defaultValue}

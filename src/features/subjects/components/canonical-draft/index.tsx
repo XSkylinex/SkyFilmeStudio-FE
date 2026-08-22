@@ -7,6 +7,7 @@ import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
 import { formatDateTime } from '@/lib/format/format-date-time';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
@@ -17,10 +18,6 @@ import { approveCanonicalSetMutationOptions } from '@/features/subjects/api/appr
 import { CanonicalReferences } from '@/features/subjects/components/canonical-references';
 import type { CanonicalDraftProps } from './canonical-draft.interface';
 import './canonical-draft.css';
-
-const focusWhenShown = (node: HTMLElement | null): void => {
-  node?.focus();
-};
 
 export const CanonicalDraft: FC<CanonicalDraftProps> = ({
   projectId,

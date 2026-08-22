@@ -61,4 +61,10 @@ describe('Input', () => {
       'Must be a whole number',
     );
   });
+
+  it('takes its direction from what is typed, so a Hebrew title reads correctly in an English shell', () => {
+    renderInStore(<Input placeholder="Seed" />);
+
+    expect(screen.getByPlaceholderText('Seed')).toHaveAttribute('dir', 'auto');
+  });
 });

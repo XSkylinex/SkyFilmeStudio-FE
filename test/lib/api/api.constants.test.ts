@@ -2,6 +2,8 @@ import {
   canonicalAssetSetIdSchema,
   locationIdSchema,
   locationPlateIdSchema,
+  productionIdSchema,
+  productionProfileIdSchema,
   projectIdSchema,
   pronunciationDictionaryIdSchema,
   propIdSchema,
@@ -55,6 +57,14 @@ const SAMPLE_LOCATION_PLATE_ID = locationPlateIdSchema.parse(
 
 const SAMPLE_PROP_ID = propIdSchema.parse(
   'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
+);
+
+const SAMPLE_PRODUCTION_ID = productionIdSchema.parse(
+  'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',
+);
+
+const SAMPLE_PRODUCTION_PROFILE_ID = productionProfileIdSchema.parse(
+  'ffffffff-ffff-4fff-8fff-ffffffffffff',
 );
 
 const everyPath: Record<string, string> = {
@@ -144,6 +154,20 @@ const everyPath: Record<string, string> = {
   projectProps: API_PATH.projectProps(SAMPLE_PROJECT_ID),
   projectProp: API_PATH.projectProp(SAMPLE_PROJECT_ID, SAMPLE_PROP_ID),
   approveProp: API_PATH.approveProp(SAMPLE_PROJECT_ID, SAMPLE_PROP_ID),
+  productions: API_PATH.productions(SAMPLE_PROJECT_ID),
+  production: API_PATH.production(SAMPLE_PROJECT_ID, SAMPLE_PRODUCTION_ID),
+  productionTransitions: API_PATH.productionTransitions(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PRODUCTION_ID,
+  ),
+  productionProfiles: API_PATH.productionProfiles(SAMPLE_PROJECT_ID),
+  productionProfile: API_PATH.productionProfile(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PRODUCTION_PROFILE_ID,
+  ),
+  planningStages: API_PATH.planningStages(SAMPLE_PRODUCTION_ID),
+  planningBudget: API_PATH.planningBudget(SAMPLE_PRODUCTION_ID),
+  planningApproval: API_PATH.planningApproval(SAMPLE_PRODUCTION_ID),
   renderJob: API_PATH.renderJob(SAMPLE_RENDER_JOB_ID),
 };
 

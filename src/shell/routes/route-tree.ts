@@ -14,7 +14,6 @@ import { VoicesPage } from '@/features/voices/VoicesPage';
 import { LocationsPage } from '@/features/locations/LocationsPage';
 import { PropsPage } from '@/features/props/PropsPage';
 import { ProductionListPage } from '@/features/productions/ProductionListPage';
-import { PlannerPage } from '@/features/planner/PlannerPage';
 import { RenderQueuePage } from '@/features/render-queue/RenderQueuePage';
 import { NotFoundPage } from './not-found-page';
 import { RouteHydrateFallback } from './route-hydrate-fallback';
@@ -68,7 +67,11 @@ const productionRoutes: RouteObject[] = [
   },
   {
     path: PLAN_SEGMENT,
-    Component: PlannerPage,
+    lazy: () =>
+      import('@/features/planner/PlannerPage').then((routeModule) => ({
+        Component: routeModule.PlannerPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.planner.title'),
   },
