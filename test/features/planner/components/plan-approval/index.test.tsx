@@ -167,27 +167,4 @@ describe('PlanApproval', () => {
       screen.queryByRole('button', { name: APPROVE_BUTTON }),
     ).not.toBeInTheDocument();
   });
-
-  it('says nothing at all while the budget cannot be read, rather than an empty panel', async () => {
-    server.use(
-      http.get(API_PATH.planningBudget(PRODUCTION_ID), () =>
-        HttpResponse.json(
-          {
-            statusCode: 409,
-            code: 'RUNTIME_TOLERANCE_UNDECLARED',
-            message: 'Production x declares no runtime tolerance.',
-          },
-          { status: 409 },
-        ),
-      ),
-    );
-
-    render(buildProduction({ id: PRODUCTION_ID }));
-
-    await waitFor(() => {
-      expect(
-        screen.queryByRole('heading', { name: 'Approve the plan' }),
-      ).not.toBeInTheDocument();
-    });
-  });
 });

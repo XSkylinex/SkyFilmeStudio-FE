@@ -108,4 +108,38 @@ describe('PlannerPage', () => {
       }),
     ).toBeInTheDocument();
   });
+
+  it('offers no approval heading at all when the budget cannot be judged', async () => {
+    server.use(
+      http.get(API_PATH.production(PROJECT_ID, PRODUCTION_ID), () =>
+        HttpResponse.json(
+          buildProduction({ id: PRODUCTION_ID, projectId: PROJECT_ID }),
+        ),
+      ),
+      http.get(API_PATH.planningStages(PRODUCTION_ID), () =>
+        HttpResponse.json(['RUNTIME_ESTIMATE']),
+      ),
+      http.get(API_PATH.planningBudget(PRODUCTION_ID), () =>
+        HttpResponse.json(
+          {
+            statusCode: 409,
+            code: 'RUNTIME_TOLERANCE_UNDECLARED',
+            message: 'Production x declares no runtime tolerance.',
+          },
+          { status: 409 },
+        ),
+      ),
+    );
+
+    renderAt(`/projects/${PROJECT_ID}/productions/${PRODUCTION_ID}/plan`);
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'Nothing here declares a tolerance',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Approve the plan' }),
+    ).not.toBeInTheDocument();
+  });
 });
