@@ -7,7 +7,7 @@ export interface RegenerationModeOption {
 export interface ApprovalControlsProps {
   contextLabel: string;
   onApprove: () => void;
-  onReject: () => void;
+  onReject?: (() => void) | undefined;
   regenerationModes: RegenerationModeOption[];
   onRegenerate: (modeId: string) => void;
   pending: boolean;

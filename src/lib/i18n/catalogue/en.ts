@@ -49,7 +49,7 @@ export const EN_CATALOGUE = {
   'error.CANONICAL_SET_IMMUTABLE':
     'This canonical set has been approved, so it can no longer be changed. Approved sets are frozen deliberately — a production already pinned to this one must not shift underneath it. A change means a new version.',
   'error.CANONICAL_ANCHOR_REQUIRED':
-    'This asked for a generation derived from a subject without naming the approved reference it is anchored to. Without an anchor the identity it produced could not be traced back to anything.',
+    'This set has no references, so approving it would freeze a version that depicts nothing. Add at least one reference, then approve.',
   'error.CANONICAL_DRAFT_EXISTS':
     'This subject already has an open canonical draft. Only one draft exists at a time, so the open one has to be approved or discarded before another can start.',
   'error.STYLE_PROFILE_IMMUTABLE':
@@ -432,8 +432,21 @@ export const EN_CATALOGUE = {
   'subjectReview.references.generated':
     'Generated artifact — the orchestrator serves no image for one yet.',
   'subjectReview.references.alt': 'Reference {role} for this subject',
-  'subjectReview.approve.unavailable':
-    "This screen shows the approved set. Approving happens to a draft, and the orchestrator publishes no way to list a subject's drafts, so there is nothing here to approve.",
+  'subjectReview.draft.title': 'Open draft',
+  'subjectReview.draft.error.title': "This subject's drafts could not be read",
+  'subjectReview.draft.none.title': 'No open draft',
+  'subjectReview.draft.none.description':
+    'Approving happens to a draft, never to the approved set. This subject has no draft open.',
+  'subjectReview.draft.cannotOpen':
+    'Opening one is not offered here: it needs a request body whose shape the orchestrator does not publish through its contract package, and this build will not guess at it.',
+  'subjectReview.draft.opened': 'Opened:',
+  'subjectReview.draft.notes': 'Notes',
+  'subjectReview.draft.context': 'the canonical set for {subject}',
+  'subjectReview.draft.explained':
+    'Approving freezes this set. Its descriptor is recorded and hashed, it becomes the version every generation is anchored to, and nothing about it can be changed afterwards — including un-approving it.',
+  'subjectReview.draft.approveError.title': 'This draft was not approved',
+  'subjectReview.draft.approved':
+    'Approved. This set is now the version every generation of this subject is anchored to, and it can no longer be changed.',
 
   'page.subjects.title': 'Subjects',
   'page.subjects.description':

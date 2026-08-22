@@ -26,8 +26,16 @@ export const API_PATH = {
     `/projects/${projectId}/subjects`,
   projectSubject: (projectId: ProjectId, subjectId: SubjectId): string =>
     `/projects/${projectId}/subjects/${subjectId}`,
+  canonicalSets: (projectId: ProjectId, subjectId: SubjectId): string =>
+    `/projects/${projectId}/subjects/${subjectId}/canonical-sets`,
   approvedCanonicalSet: (projectId: ProjectId, subjectId: SubjectId): string =>
     `/projects/${projectId}/subjects/${subjectId}/canonical-sets/approved`,
+  approveCanonicalSet: (
+    projectId: ProjectId,
+    subjectId: SubjectId,
+    setId: CanonicalAssetSetId,
+  ): string =>
+    `/projects/${projectId}/subjects/${subjectId}/canonical-sets/${setId}/approve`,
   canonicalReferences: (
     projectId: ProjectId,
     subjectId: SubjectId,

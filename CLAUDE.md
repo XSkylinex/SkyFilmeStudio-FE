@@ -148,6 +148,19 @@ bidi-neutral and takes the paragraph's direction, not the run's. That is FE-06's
 up, on a whole sentence rather than on notation. `ContentText` with no language gives each string a
 `<bdi dir="auto">`; the gate was fully green while the defect was on screen.
 
+**FE-07's approval gate is the first mutation this app has ever made, and it sets the pattern.** The
+*Open draft* section on Subject Review finds a subject's `PENDING` canonical set, shows what it
+depicts, and offers one **Approve** named for its subject. Nothing is optimistic: the control disables
+while the request is in flight, and only after the server answers are the collection and the
+approved-head queries invalidated. **The guard that survives a reload is structural, not a prop**:
+the refetched list contains no `PENDING` set, so the control is not rendered at all. That distinction
+is the part a later phase must copy — on a shot, a reload may well still show a `PENDING` row, and
+then a client-side `isPending` is worth exactly nothing and the disabled state has to come from the
+row's own server-given state. `ApprovalControls` grew
+an optional `onReject` for it, because the orchestrator has no reject route for a canonical set and
+approval is one-way by database trigger; rendering a control that cannot work is the same defect as
+reporting a capability that does not exist.
+
 FE-16 was taken out of order, because 07–14 are all backend-gated and it needs no backend. **The
 lesson worth carrying is that `yarn lint` was green before it and after it.** `jsx-a11y` has been on
 since FE-00 and reports nothing on `src/` even at `pedantic`; every defect FE-16 fixed was live in a

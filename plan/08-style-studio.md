@@ -116,10 +116,22 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 ## What landed 2026-08-22 while this phase was blocked
 
 Two pieces of this phase need no backend at all, so they were taken while the routes are still being
-written. Nothing else was: BE-13 has entities, migrations, an immutability trigger and a
-`StyleProfilesRepository` that is now a registered provider — but **no controller and no route**, so
-not one of the seven steps above has an endpoint to call. Six of seven screens would have been a stub
-apiece.
+written. Nothing else was: at the time, BE-13 had entities, migrations, an immutability trigger and a
+registered `StyleProfilesRepository`, but no controller and no route, so not one of the seven steps
+above had an endpoint to call.
+
+**Corrected the same evening — style profiles now have a full surface.** `0d2bc37` published eight
+routes under `/projects/:projectId/style-profiles`, including the `GET /versions?lineageId=` this file
+asked for below, `POST /:id/approve`, and a `PATCH` that returns a real 409 `STYLE_PROFILE_IMMUTABLE`
+rather than the raw 500 recorded above. `GET /approved?lineageId=` is 404 before approval and 200
+after, which is the same shape as the canonical head and maps to `null` here rather than to a failure.
+The request DTOs are published through `./contracts`, with the direction in the name, so a create and
+an edit form are both buildable.
+
+**The phase stays blocked, because one surface of four is not a phase.** Voices, the pronunciation
+dictionary, locations and props still have no controller, and the project bible needs BE-14 on top.
+Building step 1 alone would mean one screen and six explanations of absence, which is worse for a
+reader than an honest status line. Start this phase when all four have a surface.
 
 **The vocabulary guard** — `test/style-and-language-agnostic.test.ts`. Step 1 says the application is
 style-agnostic and that "the UI is where that either holds or quietly stops holding", which until now

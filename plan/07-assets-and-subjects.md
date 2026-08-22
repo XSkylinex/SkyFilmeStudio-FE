@@ -427,14 +427,21 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
       makes a checklist stop being evidence; restored 2026-08-22 by review
 - [x] every canonical *reference* shows whether it is anchor-eligible — a badge and a border, with a
       sentence saying what an anchor is for. A smaller claim than the box above, and a separate one
-- [ ] the comparison view is large enough to judge drift — needs a second set to compare against, and
-      only the approved head is served; a draft-versus-approved view has no endpoint pairing yet
-- [ ] approving a set from the UI — **blocked on a missing route, not a missing export.**
-      `POST …/canonical-sets/:setId/approve` takes three path params and **no body**, and returns the
-      published `CanonicalAssetSet`, so nothing about it is unexported. What is missing is a route
-      that lists a subject's sets: only `approved`, `:setId` and `:setId/references` exist, and
-      `approve` transitions `PENDING → APPROVED`, so this build cannot discover a draft to approve.
-      Approving the head would be a no-op by construction
+- [ ] the comparison view is large enough to judge drift — **no longer blocked, just unbuilt.** The
+      blocker recorded here was that only the approved head was served; `edb38a3` added the collection
+      route, so every set for a subject including drafts is now readable and a draft-versus-approved
+      pairing has an endpoint. Nothing renders that comparison yet
+- [x] approving a set from the UI — **done 2026-08-22.** The blocker recorded here was a missing
+      route rather than a missing export, and that was right: `edb38a3` added
+      `GET …/canonical-sets`, so a draft survives a reload and can be found again. Subject Review now
+      has an *Open draft* section that lists the `PENDING` set, shows what it depicts, and offers a
+      single **Approve** named for its subject. **The first mutation in this app** — no optimistic
+      update, the control disables while the request is in flight, and both the collection and the
+      approved-head queries are invalidated after the server answers. `POST …/:setId/approve` takes
+      no body, so nothing here guesses a request shape. Opening a draft is still not offered, and that
+      one *is* an unpublished request shape: `createCanonicalDraftRequestSchema` is
+      `z.strictObject({ notes: z.string().default('') })` and lives outside `./contracts`, so a `{}`
+      body would work today and would break silently the day a required field is added
 
 ## Traps
 

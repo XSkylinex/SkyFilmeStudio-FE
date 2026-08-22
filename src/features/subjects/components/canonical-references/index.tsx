@@ -13,6 +13,7 @@ export const CanonicalReferences: FC<CanonicalReferencesProps> = ({
   projectId,
   subjectId,
   setId,
+  headingLevel,
 }) => {
   const translate = useTranslate();
   const { data, error, isPending } = useQuery(
@@ -27,7 +28,7 @@ export const CanonicalReferences: FC<CanonicalReferencesProps> = ({
         title={translate('subjectReview.references.error.title')}
         description={composeRouteErrorDescription(errorView, translate)}
         detail={errorView.detail}
-        headingLevel={2}
+        headingLevel={headingLevel}
       />
     );
   }
@@ -36,5 +37,11 @@ export const CanonicalReferences: FC<CanonicalReferencesProps> = ({
     return <Skeleton shape="rect" />;
   }
 
-  return <CanonicalReferenceGrid projectId={projectId} references={data} />;
+  return (
+    <CanonicalReferenceGrid
+      projectId={projectId}
+      references={data}
+      headingLevel={headingLevel}
+    />
+  );
 };

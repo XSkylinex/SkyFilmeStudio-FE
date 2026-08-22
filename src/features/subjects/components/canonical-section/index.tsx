@@ -44,6 +44,7 @@ export const CanonicalSection: FC<CanonicalSectionProps> = ({
           projectId={projectId}
           subjectId={subjectId}
           setId={data.id}
+          headingLevel={2}
         />
       )}
     </>

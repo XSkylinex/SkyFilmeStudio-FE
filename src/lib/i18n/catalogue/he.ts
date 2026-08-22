@@ -49,7 +49,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'error.CANONICAL_SET_IMMUTABLE':
     'המערך הקנוני הזה אושר, ולכן לא ניתן עוד לשנות אותו. מערכים מאושרים מוקפאים במכוון — הפקה שכבר נצמדה למערך הזה לא אמורה להשתנות תחתיה. שינוי פירושו גרסה חדשה.',
   'error.CANONICAL_ANCHOR_REQUIRED':
-    'הבקשה ביקשה יצירה הנגזרת מסובייקט בלי לציין את ההפניה המאושרת שאליה היא עוגנת. בלי עוגן לא ניתן היה לייחס את הזהות שנוצרה לשום מקור.',
+    'למערך הזה אין הפניות, ולכן אישורו יקפיא גרסה שאינה מתארת דבר. יש להוסיף לפחות הפניה אחת, ואז לאשר.',
   'error.CANONICAL_DRAFT_EXISTS':
     'לסובייקט הזה כבר יש טיוטה קנונית פתוחה. קיימת טיוטה אחת בכל רגע, ולכן יש לאשר או לבטל את הפתוחה לפני שמתחילים אחרת.',
   'error.STYLE_PROFILE_IMMUTABLE':
@@ -427,8 +427,22 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'subjectReview.references.generated':
     'תוצר שנוצר — המתזמר עדיין אינו מגיש עבורו תמונה.',
   'subjectReview.references.alt': 'הפניית {role} עבור הסובייקט הזה',
-  'subjectReview.approve.unavailable':
-    'המסך הזה מציג את המערך המאושר. אישור מתבצע על טיוטה, והמתזמר אינו מפרסם דרך לרשום את הטיוטות של סובייקט, ולכן אין כאן מה לאשר.',
+  'subjectReview.draft.title': 'טיוטה פתוחה',
+  'subjectReview.draft.error.title':
+    'לא ניתן היה לקרוא את הטיוטות של הסובייקט הזה',
+  'subjectReview.draft.none.title': 'אין טיוטה פתוחה',
+  'subjectReview.draft.none.description':
+    'אישור מתבצע על טיוטה, לעולם לא על המערך המאושר. לסובייקט הזה אין טיוטה פתוחה.',
+  'subjectReview.draft.cannotOpen':
+    'פתיחת טיוטה אינה מוצעת כאן: היא דורשת גוף בקשה שהמתזמר אינו מפרסם את צורתו בחבילת החוזה, והבנייה הזו לא תנחש אותה.',
+  'subjectReview.draft.opened': 'נפתחה:',
+  'subjectReview.draft.notes': 'הערות',
+  'subjectReview.draft.context': 'המערך הקנוני של {subject}',
+  'subjectReview.draft.explained':
+    'אישור מקפיא את המערך הזה. התיאור שלו נרשם ומגובב, הוא הופך לגרסה שכל יצירה מעוגנת אליה, ולא ניתן לשנות בו דבר לאחר מכן — כולל ביטול האישור.',
+  'subjectReview.draft.approveError.title': 'הטיוטה הזו לא אושרה',
+  'subjectReview.draft.approved':
+    'אושר. המערך הזה הוא מעכשיו הגרסה שכל יצירה של הסובייקט הזה מעוגנת אליה, ולא ניתן עוד לשנות אותו.',
 
   'page.subjects.title': 'סובייקטים',
   'page.subjects.description':
