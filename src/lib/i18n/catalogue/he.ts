@@ -792,6 +792,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'planner.approval.wrongState.title': 'ההפקה הזו אינה בשער התכנון',
   'planner.approval.wrongState.description':
     'אישור תוכנית הוא המעבר החוצה מתכנון, וההפקה הזו נמצאת במקום אחר בחייה. ה-orchestrator מציין לאן הפקה רשאית לעבור כשהוא דוחה מעבר; המסך הזה אינו נושא את המפה הזו, כי ה-orchestrator אינו מפרסם אותה.',
+  'planner.approval.approved': 'התוכנית אושרה. ההפקה עברה לשלב הסטוריבורד.',
   'planner.approval.failed.title': 'התוכנית לא אושרה',
   'planner.gaps.heading': 'מה המסך הזה עדיין לא יודע לעשות',
   'planner.gaps.stages':

@@ -21,4 +21,10 @@
     font-size: var(--font-size-sm);
     line-height: var(--line-height-relaxed);
   }
+
+  .plan-approval__announcement {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
 }

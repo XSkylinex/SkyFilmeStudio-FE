@@ -138,4 +138,33 @@ describe('PlanApproval', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/has no scenes/)).toBeInTheDocument();
   });
+
+  it('announces the approval and takes focus, so the removed button is not a dead end', async () => {
+    const user = userEvent.setup();
+
+    budgetIs(ADDS_UP);
+    server.use(
+      http.post(API_PATH.planningApproval(PRODUCTION_ID), () =>
+        HttpResponse.json(
+          buildProduction({ id: PRODUCTION_ID, state: 'STORYBOARDING' }),
+        ),
+      ),
+    );
+
+    render(buildProduction({ id: PRODUCTION_ID }));
+
+    await user.click(
+      await screen.findByRole('button', { name: APPROVE_BUTTON }),
+    );
+
+    const announcement = await screen.findByText(
+      'The plan is approved. This production has moved on to storyboarding.',
+    );
+
+    expect(announcement.tagName).toBe('OUTPUT');
+    expect(announcement).toHaveFocus();
+    expect(
+      screen.queryByRole('button', { name: APPROVE_BUTTON }),
+    ).not.toBeInTheDocument();
+  });
 });

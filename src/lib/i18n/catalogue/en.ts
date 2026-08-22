@@ -801,6 +801,8 @@ export const EN_CATALOGUE = {
     'This production is not at the planning gate',
   'planner.approval.wrongState.description':
     'Plan approval is the move out of planning, and this production is somewhere else in its life. The orchestrator names where a production may go next when it refuses a move; this screen does not carry that map, because the orchestrator does not publish it.',
+  'planner.approval.approved':
+    'The plan is approved. This production has moved on to storyboarding.',
   'planner.approval.failed.title': 'The plan was not approved',
   'planner.gaps.heading': 'What this screen cannot do yet',
   'planner.gaps.stages':

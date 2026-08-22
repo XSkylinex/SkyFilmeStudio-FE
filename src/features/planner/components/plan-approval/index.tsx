@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApprovalControls } from '@/lib/components/approval-controls';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
@@ -24,25 +25,8 @@ export const PlanApproval: FC<PlanApprovalProps> = ({ production }) => {
     ),
   );
 
-  if (production.state !== PLAN_APPROVAL_STATE) {
-    return (
-      <section className="plan-approval">
-        <h2 className="plan-approval__title">
-          {translate('planner.approval.heading')}
-        </h2>
-        <EmptyState
-          title={translate('planner.approval.wrongState.title')}
-          description={translate('planner.approval.wrongState.description')}
-          headingLevel={3}
-        />
-      </section>
-    );
-  }
-
-  if (budget.data === undefined) {
-    return null;
-  }
-
+  const atTheGate =
+    !approve.isSuccess && production.state === PLAN_APPROVAL_STATE;
   const failure =
     approve.error === null ? null : resolveRouteErrorView(approve.error);
 
@@ -52,7 +36,17 @@ export const PlanApproval: FC<PlanApprovalProps> = ({ production }) => {
         {translate('planner.approval.heading')}
       </h2>
 
-      {budget.data.withinTolerance ? (
+      {approve.isSuccess ? (
+        <output
+          className="plan-approval__announcement"
+          ref={focusWhenShown}
+          tabIndex={-1}
+        >
+          {translate('planner.approval.approved')}
+        </output>
+      ) : null}
+
+      {atTheGate && budget.data?.withinTolerance === true ? (
         <>
           <p className="plan-approval__note">
             {translate('planner.approval.ready')}
@@ -68,10 +62,20 @@ export const PlanApproval: FC<PlanApprovalProps> = ({ production }) => {
             decided={false}
           />
         </>
-      ) : (
+      ) : null}
+
+      {atTheGate && budget.data?.withinTolerance === false ? (
         <EmptyState
           title={translate('planner.approval.blocked.title')}
           description={translate('planner.approval.blocked.description')}
+          headingLevel={3}
+        />
+      ) : null}
+
+      {approve.isSuccess || atTheGate ? null : (
+        <EmptyState
+          title={translate('planner.approval.wrongState.title')}
+          description={translate('planner.approval.wrongState.description')}
           headingLevel={3}
         />
       )}

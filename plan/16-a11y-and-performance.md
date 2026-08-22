@@ -147,7 +147,15 @@ What the gate did not tell us, and was checked by loading the app in Chrome agai
       ring, and the first paint is left alone
 - [x] character-key shortcuts satisfy SC 2.1.4, with the off switch reachable without a shortcut
 - [x] approval controls have contextual accessible names, enforced by a required prop
-- [x] live regions announce decisions, not progress; progress uses `progressbar`
+- [~] live regions announce decisions, not progress; progress uses `progressbar` — **narrowed
+      2026-08-22, and the narrowing is smaller than it first looked.** Every approve control in this
+      app replaces itself when the decision lands, so the focused button disappears. FE-07's canonical
+      draft already handles it: an `<output tabIndex={-1}>` that takes focus, which is what actually
+      makes a screen reader read the outcome — a live region inserted at the same moment is the
+      unreliable case. FE-09's plan approval copies it, and the two-line ref moved to
+      `src/lib/helpers/focus-when-shown.ts` on its second consumer.
+      **Four still do nothing** — style, voice, location and prop, all from FE-08 — and the fix is one
+      sweep here rather than four divergent ones, once FE-10 to FE-14 have added the rest
 - [x] control boundaries satisfy SC 1.4.11, measured rather than eyeballed
 - [x] reduced motion is honoured in CSS — every transition in `src/` uses a duration token, and the
       three keyframe loops each also set `animation: none`
