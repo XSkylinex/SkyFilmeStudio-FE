@@ -116,9 +116,10 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 ## What landed 2026-08-22 while this phase was blocked
 
 Two pieces of this phase need no backend at all, so they were taken while the routes are still being
-written. Nothing else was: BE-13 has entities, migrations, an immutability trigger and
-`StyleProfilesRepository`, but no controller and nothing registered in `app.module.ts`, so not one of
-the seven steps above has an endpoint to call. Six of seven screens would have been a stub apiece.
+written. Nothing else was: BE-13 has entities, migrations, an immutability trigger and a
+`StyleProfilesRepository` that is now a registered provider — but **no controller and no route**, so
+not one of the seven steps above has an endpoint to call. Six of seven screens would have been a stub
+apiece.
 
 **The vocabulary guard** — `test/style-and-language-agnostic.test.ts`. Step 1 says the application is
 style-agnostic and that "the UI is where that either holds or quietly stops holding", which until now
@@ -140,9 +141,12 @@ inside `createVersion`, which allocates `coalesce(max(version), 0) + 1` and lose
 concurrent writer, so the remedy is to send the same request again. Corrected after asking the backend
 session and then reading its `style-profiles.repository.ts` rather than taking the answer on trust.
 
-`STYLE_PROFILE_IMMUTABLE` **currently escapes as a 500**, not a 409: the immutability trigger raises
-`P0001` and nothing translates it yet. Do not build the "editing an approved profile creates v2" path
-against that response until the backend says it is fixed.
+`STYLE_PROFILE_IMMUTABLE` is a real 409 and the sentence for it can be trusted. An earlier version of
+this paragraph said it escaped as a 500 because the `P0001` the trigger raises was untranslated; that
+was true for about two minutes on the afternoon of 2026-08-22 and `0811ae4` fixed it. `throwIfImmutable`
+catches the raised exception and rethrows it as `StudioError('STYLE_PROFILE_IMMUTABLE')` from all three
+update paths — `approve`, `update` and `softDelete` — and the backend has a database test asserting the
+translation. Nothing here needs to handle a 500 for this case.
 
 ## Two things to settle before this phase resumes
 
@@ -155,7 +159,8 @@ against that response until the backend says it is fixed.
   included. The equivalent route for a style lineage is the thing to check for before this phase
   starts, not after.
 - **Request DTOs must reach `./contracts`.** Confirmed by the backend: `src/contracts/` re-exports no
-  module DTO at all, and ten request and query schemas sit outside the barrel. BE-13 will export its
+  module DTO at all, and eleven request and query schemas across ten files sit outside the barrel —
+`import-asset-request.schema.ts` and `list-assets-query.schema.ts` each carry two. BE-13 will export its
   own as it writes them; the ten existing ones are Alex's call. This repo asked for the direction to
   be visible in the name — `createStyleProfileRequestSchema` beside `styleProfileSchema` — because
   confusing a published response shape for a published request shape has been this repo's single most
