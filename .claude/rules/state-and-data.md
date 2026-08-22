@@ -170,6 +170,21 @@ alias also lets the bundle tree-shake: 456.68 kB and 17 zod modules, against 759
   `contracts/index.ts` while still importing through the backend's own `@/` alias produced seven
   errors here, six `TS2307` and one `TS7006` that was a *symptom* of the six — an unresolved schema
   makes a `.refine` callback's parameter implicitly `any`. Nothing was wrong on this side.
+- **Then confirm it against the *committed* contract, which is one command.** A dirty tree says you
+  are probably reading a draft; this says whether this repo is actually behind. Diff the codes the
+  backend has committed against the ones the taxonomy covers:
+
+  ```bash
+  git -C ../sky-filme-studio-be show HEAD:src/contracts/enums/error-code.ts \
+    | grep -oE "'[A-Z_]+'" | tr -d "'" | sort > /tmp/committed.txt
+  grep -oE '^  [A-Z_]+:' src/lib/api/error-taxonomy.ts | tr -d ' :' | sort | diff /tmp/committed.txt -
+  ```
+
+  Empty diff means the gate is red purely because the sibling is mid-edit, and **there is nothing to
+  fix here** — do not open a PR absorbing codes from an uncommitted file, because the names can still
+  change and the sentences would be written with no throw site to read. Measured 2026-08-22: master
+  showed 17 failures and `typecheck` exit 1 against 32 dirty upstream files, while this diff was empty
+  and all 17 failures were in the three tests that enumerate `ERROR_CODE`.
 - **Anything reachable from the contracts barrel must import relatively.** A `paths` alias does not
   cross a package boundary: `@/` resolves against *this* repo's `tsconfig`, so a contract file that
   uses one is unresolvable here. The barrel stopped being a directory boundary the moment it began
