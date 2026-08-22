@@ -5,12 +5,16 @@ import { ERROR_CODE } from 'sky-filme-studio-be/contracts';
 
 const CONTRACT_PACKAGE = 'sky-filme-studio-be';
 const CONTRACT_ENTRY = 'contracts';
-const ERROR_CODE_FILE = join('enums', 'error-code.ts');
+const ERROR_CODE_SOURCE = join('src', 'contracts', 'enums', 'error-code.ts');
 
 interface ContractPackage {
   readonly exports: Record<
     string,
-    { readonly types: string; readonly default: string }
+    {
+      readonly types: string;
+      readonly import: string;
+      readonly require: string;
+    }
   >;
 }
 
@@ -23,11 +27,9 @@ const packageJsonPath = resolveFromHere.resolve(
 const conditions = (resolveFromHere(packageJsonPath) as ContractPackage)
   .exports[`./${CONTRACT_ENTRY}`];
 
-const typesPath = resolve(dirname(packageJsonPath), conditions?.types ?? '');
-
 const codesDeclaredInSource = (): string[] => {
   const source = readFileSync(
-    join(dirname(typesPath), ERROR_CODE_FILE),
+    join(dirname(packageJsonPath), ERROR_CODE_SOURCE),
     'utf8',
   );
 
@@ -36,26 +38,28 @@ const codesDeclaredInSource = (): string[] => {
   );
 };
 
-const viteConfig = readFileSync(
-  resolve(process.cwd(), 'vite.config.ts'),
-  'utf8',
-);
-
-describe('the contract this app loads is the contract it typechecks', () => {
-  it('publishes a types and a default condition that point at different trees', () => {
-    expect(conditions?.types).toContain('/src/');
-    expect(conditions?.default).toContain('/dist/');
+describe('the contract this app loads is one build, not two', () => {
+  it('resolves types out of the build, never back into the source tree', () => {
+    expect(conditions?.types).toContain('/dist/');
+    expect(conditions?.types).not.toContain('/src/');
   });
 
-  it('would reach the build output on bare resolution, which is the trap', () => {
+  it('loads the tree-shakeable build, because the CommonJS one costs 312 kB', () => {
+    expect(conditions?.import).toContain('dist-esm');
+    expect(conditions?.require).not.toContain('dist-esm');
     expect(
       import.meta.resolve(`${CONTRACT_PACKAGE}/${CONTRACT_ENTRY}`),
-    ).toContain('/dist/');
+    ).toContain('dist-esm');
   });
 
-  it('is aliased away from that trap by vite.config.ts, which load-bears', () => {
-    expect(viteConfig).toContain(`'${CONTRACT_PACKAGE}/${CONTRACT_ENTRY}'`);
-    expect(viteConfig).toContain(`${CONTRACT_PACKAGE}/src/${CONTRACT_ENTRY}`);
+  it('is not aliased back onto the source, which no resolver would report', () => {
+    const viteConfig = readFileSync(
+      resolve(process.cwd(), 'vite.config.ts'),
+      'utf8',
+    );
+
+    expect(viteConfig).toContain('tsconfigPaths');
+    expect(viteConfig).not.toContain(`${CONTRACT_PACKAGE}/${CONTRACT_ENTRY}`);
   });
 
   it('serves the error codes the source declares, read as text so it cannot self-compare', () => {
