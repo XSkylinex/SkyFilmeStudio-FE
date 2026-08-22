@@ -1,0 +1,60 @@
+@layer features {
+  .production-plan {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .production-plan__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .production-plan__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .production-plan__loading {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .production-plan__summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin: 0;
+  }
+
+  .production-plan__figure {
+    display: grid;
+    gap: var(--space-1);
+
+    & dt {
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+    }
+
+    & dd {
+      margin: 0;
+      color: var(--color-text);
+      font-size: var(--font-size-md);
+    }
+  }
+
+  .production-plan__notation {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .production-plan__logline {
+    margin: 0;
+    max-inline-size: 60ch;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-relaxed);
+  }
+}
