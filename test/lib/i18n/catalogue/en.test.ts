@@ -36,7 +36,9 @@ describe('EN_CATALOGUE', () => {
   it('does not send the reader to a screen or an action this build does not have', () => {
     const dangling = Object.entries(EN_CATALOGUE)
       .filter(([, value]) =>
-        /model setup screen|run the benchmark/i.test(value),
+        /model setup screen|run the benchmark|run the verification|verify them before/i.test(
+          value,
+        ),
       )
       .map(([key]) => key);
 

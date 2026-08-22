@@ -90,9 +90,11 @@ describe('ModelSetupPanel', () => {
     expect(
       await screen.findByText(/at the size the manifest declares/),
     ).toBeInTheDocument();
-    expect(screen.getByText(/nothing here reads a hash/)).toBeInTheDocument();
     expect(
-      screen.getByText(/MODEL_HASHES_MATCH preflight check is what does/),
+      screen.getByText(/nothing on this screen opens a file/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/this screen has no control for it/),
     ).toBeInTheDocument();
   });
 

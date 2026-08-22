@@ -311,7 +311,7 @@ export const EN_CATALOGUE = {
   'system.models.filesPresent': 'Files ready',
   'system.models.filesMissing': 'Files not ready',
   'system.models.readyMeaning':
-    'Files ready means every file is on disk at the size the manifest declares. It does not mean the file is intact: nothing here reads a hash, and the MODEL_HASHES_MATCH preflight check is what does. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
+    'Files ready means every file is on disk at the size the manifest declares. It does not mean the file is intact: nothing on this screen opens a file, and neither does the MODEL_HASHES_MATCH preflight check — both report what an earlier verification recorded, so a file changed since then reads as not yet verified rather than as wrong. Starting a fresh verification is a separate request, and this screen has no control for it. It does not mean the model has been benchmarked on this hardware either — the orchestrator does not publish that classification yet, so nothing here should be read as tested.',
   'system.models.noDownload':
     'Local AI Studio never downloads a model. Run this yourself:',
   'system.models.files': 'Files',
