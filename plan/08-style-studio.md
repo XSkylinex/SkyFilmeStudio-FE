@@ -1,7 +1,7 @@
 # FE-08 — Style, voice, location & prop studio
 
 > **Depends on:** 07 · **Blocks:** 09 · **Backend needs:** BE-13 · **Plan authority:** §3.5, §11.5–11.8, §13, §29
-> **Status:** not started
+> **Status:** blocked 2026-08-22 — BE-13 is in progress but serves no route; the ungated half landed
 
 ## Goal
 
@@ -112,6 +112,69 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
   than as an error;
 - open a `MUSIC_DRIVEN` project's bible and confirm **no narrative fields appear**;
 - `dir="rtl"` — the editors and previews mirror correctly.
+
+## What landed 2026-08-22 while this phase was blocked
+
+Two pieces of this phase need no backend at all, so they were taken while the routes are still being
+written. Nothing else was: BE-13 has entities, migrations, an immutability trigger and a
+`StyleProfilesRepository` that is now a registered provider — but **no controller and no route**, so
+not one of the seven steps above has an endpoint to call. Six of seven screens would have been a stub
+apiece.
+
+**The vocabulary guard** — `test/style-and-language-agnostic.test.ts`. Step 1 says the application is
+style-agnostic and that "the UI is where that either holds or quietly stops holding", which until now
+nothing enforced. It fails on a style mode written anywhere in `src/`, on the word *anime*, on a quoted
+language tag outside the three files that own the interface-language mechanism, and on a
+language-named identifier.
+
+Its first version matched only single-quoted names, which a review showed left eight ways through —
+double quotes, a template literal, a bare object key, and most realistically an i18n key like
+`'style.mode.PHOTOREAL_CINEMATIC'`, which is precisely the second source of truth this rule exists to
+stop. Prettier's default double-quotes JSX attributes, so `lang="he"` was reformatted past the guard by
+`yarn format` itself. Matching is now on word boundaries rather than on quoting. Proved by a deliberate four-rule violation that failed exactly four of its five
+tests; the fifth asserts the walker read more than 150 files, so an empty result means agnostic rather
+than nothing scanned. There are 267.
+
+The rule is deliberately stricter than the backend's equivalent: **this repo gets no allowlist for
+style modes**. `SUGGESTED_STYLE_MODES` is exported through `./contracts`, so a picker reads the nine
+from the wire and a mode written here would be a second source of truth that could drift from the
+first. That answers Decision 1's mechanism, though not its UI.
+
+**The two error codes BE-13 reserved** — `STYLE_PROFILE_IMMUTABLE` and `STYLE_VERSION_CONFLICT`, both
+409s. The second was shipped with a wrong sentence first: it was read as optimistic concurrency and
+told the reader to reload and reapply an edit that was never at risk. It is a version-allocation race
+inside `createVersion`, which allocates `coalesce(max(version), 0) + 1` and loses a unique index to a
+concurrent writer, so the remedy is to send the same request again. Corrected after asking the backend
+session and then reading its `style-profiles.repository.ts` rather than taking the answer on trust.
+
+`STYLE_PROFILE_IMMUTABLE` is a real 409 and the sentence for it can be trusted. An earlier version of
+this paragraph said it escaped as a 500 because the `P0001` the trigger raises was untranslated; that
+was true for about two minutes on the afternoon of 2026-08-22 and `0811ae4` fixed it. `throwIfImmutable`
+catches the raised exception and rethrows it as `StudioError('STYLE_PROFILE_IMMUTABLE')` from all three
+update paths — `approve`, `update` and `softDelete` — and the backend has a database test asserting the
+translation. Nothing here needs to handle a 500 for this case.
+
+## Two things to settle before this phase resumes
+
+- **A lineage needs a list route.** `canonical-sets` shipped without one and the consequence was
+  total: a draft could be created but never rediscovered after a reload, which is why FE-07's
+  approval half is still unbuilt. Versioning is this phase's whole feature — which version a
+  production is pinned to, and what changed between versions, are both unanswerable from a head
+  pointer alone. Raised with the backend session on 2026-08-22, **and fixed the same afternoon**:
+  `edb38a3` added `GET .../canonical-sets`, returning every non-deleted set for a subject, drafts
+  included. The equivalent route for a style lineage is the thing to check for before this phase
+  starts, not after.
+- **Request DTOs must reach `./contracts`.** Confirmed by the backend: `src/contracts/` re-exports no
+  module DTO at all — **not one**, which is the durable fact and the one worth acting on. Every request
+and query schema lives in a `*/dto/*.schema.ts` under a feature module and is invisible to this repo.
+No count is recorded here on purpose: it was ten, then eleven, then twelve within a day, and a number
+that rots is what sent two earlier paragraphs in this file wrong. Count it when you need it —
+`find src -path '*/dto/*.schema.ts'` in the backend, and `grep -rn dto src/contracts/` to confirm the
+barrel still re-exports none of them. BE-13 will export its
+  own as it writes them; the ten existing ones are Alex's call. This repo asked for the direction to
+  be visible in the name — `createStyleProfileRequestSchema` beside `styleProfileSchema` — because
+  confusing a published response shape for a published request shape has been this repo's single most
+  repeated defect.
 
 ## Done when
 

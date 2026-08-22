@@ -33,31 +33,52 @@ FE-02 added the token system (`src/styles/`) and a primitive layer of seventeen 
 it contributes no styles of its own (`icon-button` composes `button` and so has none):
 `badge`, `button`, `icon`, `icon-button`, `field`, `input`, `select`, `status-dot`, `progress-bar`,
 `skeleton`, `dialog`, `tooltip`, `toast`, `empty-state`, `error-state`, `media-tile`,
-`approval-controls`. `src/shell/design-system-preview/` renders all of them and is the only place
+`approval-controls`. **The layer is eighteen today** — FE-15 added `content-text`, the `<bdi>`
+wrapper that makes a Hebrew record read correctly inside an English UI.
+`src/shell/design-system-preview/` renders all of them and is the only place
 any of it can be looked at.
 
 FE-03 added the app shell: `react-router-dom@7.18.2`, the full route tree in `src/shell/routes/`,
 and shell chrome under `src/shell/` — `app-shell`, `production-shell`, `production-nav`,
 `route-error-boundary`, `root-error-boundary`, `fatal-boundary`, `offline-indicator`,
-`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` now holds eighteen
-route-level page stubs; the preview gallery lives at `/design-system`.
+`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` holds **nineteen**
+route-level pages — eighteen stubs when FE-03 landed, plus asset detail from FE-07. Which of them are
+no longer stubs is recorded in the FE-06 and FE-07 paragraphs above rather than counted here, because
+"real" is a judgement and a number would go stale the way the others did. The preview gallery lives
+at `/design-system`.
 
 FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **twenty-five as of
-2026-08-22**, four of them added by BE-12 in a single day, each one breaking `yarn typecheck` here the
-moment it landed, read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **twenty-seven as of
+2026-08-22**, six of them added in one day, four by BE-12 and two by BE-13, each one breaking
+`yarn typecheck` here the moment it landed, read from
+`../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL;
+**The backend publishes two files under one specifier, and one line of `vite.config.ts` decides which
+one this app runs.** `exports["./contracts"]` sends `types` to the backend's
+`src/contracts/index.ts` and `default` to its `dist/contracts/index.js`. FE-04 saw this and aliased the
+specifier to the source, so the compiler and the runtime read the same file. Delete that alias and the
+runtime silently falls back to `dist/`: a stale build would then give a green `yarn typecheck` over an
+`errorCodeSchema` that rejects the very code the types just accepted — FE-04's dead-error-path defect
+with nothing to see it. `test/contract-source-matches-runtime.test.ts` pins the alias, and was proved
+by removing it.
+
+**`import.meta.resolve` does not know about Vite aliases.** It is Node's resolver and answers
+`dist/`, which is the correct answer to a question this app never asks. Settle "which module is
+actually loaded" by comparing module identity against a direct import of the file, never by resolving
+a specifier.
+
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
 `StatusTone` — six from FE-04 and model file status from FE-06 — which is the mapping FE-02 deferred
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **204 keys in English and
-Hebrew** — 109 when FE-15 closed, FE-06 added the system screen's copy, and FE-16 paid off the
-primitive layer FE-15's migration never reached. English is the source of
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **357 keys in English and
+Hebrew**, counted at runtime on 2026-08-22 — 109 when FE-15 closed, then the system screen, the
+primitive layer FE-15's migration never reached, the asset library, asset detail and subject review.
+This number has been wrong more than once; count it rather than increment it. English is the source of
 truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
 The interface language lives in the shell slice, persists to
 `localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`
@@ -69,6 +90,17 @@ the reader.
 **Never use `:dir()` in this repo.** It is outside the browser floor, and Lightning CSS lowers it to a
 `:lang()` list — which keys off language rather than direction and so breaks the exact case this
 product needs. Use `[dir='rtl']`. `.claude/rules/css.md` carries the measurement.
+
+**`src/` never names a style mode or a language.** `test/style-and-language-agnostic.test.ts` scans
+every `.ts`/`.tsx` under `src/` and fails on a style mode written **anywhere** — quoted either way, in
+a template literal, as a bare object key, or buried inside a longer i18n key — on the word *anime*, on
+a quoted language tag outside the three files that own the interface-language mechanism, and on a
+language-named identifier. The suggestion list for a style picker is `SUGGESTED_STYLE_MODES` from the
+contract; a mode spelled out here would be a second source of truth. Interface language is a closed set
+of two, declared across those three files and nowhere else; **content** language is open data that
+travels with each record. Proved by deliberate violation, not by watching it pass — including the eight
+bypasses a review found in its first version, every one of which the pattern had missed because it
+required a single quote on each side.
 
 FE-06 made three screens real. `src/shell/api/` now owns the installation-status queries — system
 mode, preflight and the model setup report — and `src/shell/system-readiness/` renders the first
@@ -134,8 +166,10 @@ turning `?` off would otherwise strand the control that turns it back on.
 
 Everything else in `plan/16` needs a screen that does not exist — storyboard, shot review, the
 render queue — and the phase file names which phase each unticked box waits for rather than leaving
-them blank. In particular "media code is out of the entry chunk" is **vacuously** true today and
-stays unticked: there is no `<video>`, `<audio>` or `<canvas>` anywhere in `src/`.
+them blank. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
+is the first `<video>` in this codebase, its route is `lazy`, and it builds as its own chunk rather
+than into the entry. `plan/16` carries the measurement and the one caveat — React DOM's own media
+event plumbing is in the entry either way and is not ours to move.
 
 Two things FE-03 established that later phases inherit. **The router is v7, not v8** —
 `react-router-dom` has never published an 8.x and is a re-export shim over `react-router@7.18.2`, so

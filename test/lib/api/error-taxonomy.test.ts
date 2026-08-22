@@ -35,4 +35,13 @@ describe('ERROR_CODE_GUIDANCE', () => {
       expect(ERROR_CODE_GUIDANCE[code].presentation).toBe('PERSISTENT');
     },
   );
+
+  it('classifies the version-allocation race as the one conflict that clears itself', () => {
+    expect(ERROR_CODE_GUIDANCE.STYLE_VERSION_CONFLICT.presentation).toBe(
+      'TRANSIENT',
+    );
+    expect(ERROR_CODE_GUIDANCE.STYLE_PROFILE_IMMUTABLE.presentation).toBe(
+      'PERSISTENT',
+    );
+  });
 });

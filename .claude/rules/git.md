@@ -65,6 +65,11 @@ Rule 6 in `CLAUDE.md` evicts rationale from `.ts`/`.tsx`. This is where it goes 
 - **Say what you deliberately did not do, and why.** That is the part a future reader cannot
   reconstruct from the diff.
 - **Do not restate the diff.** "Renamed `x` to `y`" is already visible. Why it had to move is not.
+- **Cite the backend by symbol, not by line.** `../sky-filme-studio-be` is a live working tree this
+  repo reads through a `portal:` link, and it is often being written while a message is being drafted.
+  A citation like `style-profiles.repository.ts:88-94` was already stale by the time the commit
+  landed; `createVersion`'s unique-violation `catch` still finds it. The same goes for any claim about
+  what that repo currently does — re-read it before merging, not only before committing.
 - `git show 0d5b581` is the model for body shape. Its only defect was that it should have been six
   commits.
 
