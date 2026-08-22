@@ -509,9 +509,32 @@ export const EN_CATALOGUE = {
   'page.voices.title': 'Voices',
   'page.voices.description':
     'The voices available for narration and dialogue in this project. Not connected to the orchestrator yet.',
+  'locations.loading': 'Loading locations…',
+  'locations.error.title': 'The locations could not be read',
+  'locations.empty.title': 'No locations yet',
+  'locations.empty.description':
+    'A location holds the immutable features and canonical plates a scene is framed against. This project has none, and there is no way to create one here yet.',
+  'locations.truncated':
+    'More locations exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'locations.coverageNote':
+    'Plate kinds are open text, not a fixed list, so coverage below is what each location actually has. The four suggested kinds are a starting point, never a requirement, and a lighting variant such as a night plate is not a kind the orchestrator publishes at all.',
+  'locations.card.approved': 'Approved',
+  'locations.card.draft': 'Draft',
+  'locations.card.immutableFeatures': 'Immutable features:',
+  'locations.card.context': 'the location {name}',
+  'locations.approveError.title': 'That location was not approved',
+  'locations.plates.title': 'Plate coverage',
+  'locations.plates.none':
+    'No plates at all, so any scene here resolves from text rather than from a canonical image.',
+  'locations.plates.approved': 'Approved',
+  'locations.plates.draftsOnly': '{count} drafts, none approved',
+  'locations.plates.suggestedMissing':
+    'Suggested kinds with no plate yet: {kinds}. Suggestions, not requirements.',
+  'locations.plates.unreadable':
+    'The plates for this location could not be read, so coverage is unknown rather than empty.',
   'page.locations.title': 'Locations',
   'page.locations.description':
-    'The locations available to this project. Not connected to the orchestrator yet.',
+    'The locations this project shoots against, with the canonical plate coverage each one has.',
   'props.loading': 'Loading props…',
   'props.error.title': 'The props could not be read',
   'props.empty.title': 'No props yet',
