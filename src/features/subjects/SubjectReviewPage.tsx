@@ -23,8 +23,8 @@ export const SubjectReviewPage: FC = () => {
   if (!projectId.success) {
     return (
       <ErrorState
-        title={translate('assets.invalidProject.title')}
-        description={translate('assets.invalidProject.description')}
+        title={translate('project.invalidId.title')}
+        description={translate('project.invalidId.description')}
       />
     );
   }

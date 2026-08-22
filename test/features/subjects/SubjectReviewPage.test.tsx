@@ -145,14 +145,14 @@ describe('SubjectReviewPage', () => {
     expect(screen.getByText('Anchor eligible')).toBeInTheDocument();
   });
 
-  it('says approving is unwired rather than offering a control that does nothing', async () => {
+  it('names the missing route, not a missing request shape, as why it cannot approve', async () => {
     servesSubject();
     servesApprovedSet();
 
     renderAt(PATH);
 
     expect(
-      await screen.findByText(/Approving a set is not wired up/i),
+      await screen.findByText(/no way to list a subject's drafts/i),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: /approve/i }),

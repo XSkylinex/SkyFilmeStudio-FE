@@ -172,15 +172,15 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'captureGuide.show': 'הצגת מדריך הצילום',
   'captureGuide.error.title': 'לא ניתן היה לקרוא את מדריך הצילום',
 
+  'project.invalidId.title': 'זה אינו מזהה פרויקט',
+  'project.invalidId.description':
+    'הכתובת מכילה ערך שהמתזמר היה דוחה. פתח את הפרויקט מתוך רשימת הפרויקטים במקום לערוך את הכתובת.',
   'assets.title': 'נכסי מקור',
   'assets.loading': 'טוען נכסי מקור',
   'assets.error.title': 'לא ניתן היה לקרוא את רשימת הנכסים',
   'assets.empty.title': 'אין עדיין נכסי מקור',
   'assets.empty.description':
     'שום דבר לא יובא לפרויקט הזה. הייבוא אינו מחובר בגרסה הזו — המתזמר מקבל גם העלאה וגם ייבוא מנתיב מקומי, אך אף אחד ממבני הבקשה אינו מפורסם בחוזה המשותף.',
-  'assets.invalidProject.title': 'זה אינו מזהה פרויקט',
-  'assets.invalidProject.description':
-    'הכתובת מכילה ערך שהמתזמר היה דוחה. פתח את הפרויקט מתוך רשימת הפרויקטים במקום לערוך את הכתובת.',
   'assets.thumbnailAlt': 'תמונה ממוזערת של {path}',
   'assets.immutable': 'מקור, לעולם לא נערך במקום',
   'assets.captured': 'צולם:',
@@ -345,7 +345,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'subjects.empty.description':
     'שום דבר לא נרשם בפרויקט הזה. הרישום אינו מחובר בגרסה הזו — המתזמר מקבל סובייקט, אך מבנה הבקשה אינו מפורסם בחוזה המשותף.',
   'subjects.inactive': 'לא פעיל',
-  'subjects.open': 'פתח את {name}',
   'subjects.type.HUMAN': 'אדם',
   'subjects.type.ANIMAL': 'בעל חיים',
   'subjects.type.OBJECT': 'עצם',
@@ -425,7 +424,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'תוצר שנוצר — המתזמר עדיין אינו מגיש עבורו תמונה.',
   'subjectReview.references.alt': 'הפניית {role} עבור הסובייקט הזה',
   'subjectReview.approve.unavailable':
-    'אישור מערך אינו מחובר בגרסה הזו. המתזמר מקבל זאת, אך מבנה הבקשה אינו מפורסם בחוזה המשותף.',
+    'המסך הזה מציג את המערך המאושר. אישור מתבצע על טיוטה, והמתזמר אינו מפרסם דרך לרשום את הטיוטות של סובייקט, ולכן אין כאן מה לאשר.',
 
   'page.subjects.title': 'סובייקטים',
   'page.subjects.description':

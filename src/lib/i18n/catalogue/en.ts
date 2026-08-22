@@ -172,15 +172,15 @@ export const EN_CATALOGUE = {
   'captureGuide.show': 'Show the capture guide',
   'captureGuide.error.title': 'The capture guide could not be read',
 
+  'project.invalidId.title': 'That is not a project id',
+  'project.invalidId.description':
+    'The address carries something the orchestrator would refuse. Open the project from the project list rather than editing the URL.',
   'assets.title': 'Source assets',
   'assets.loading': 'Loading source assets',
   'assets.error.title': 'The asset list could not be read',
   'assets.empty.title': 'No source assets yet',
   'assets.empty.description':
     'Nothing has been imported into this project. Importing is not wired up in this build yet — the orchestrator accepts both an upload and a point-at-a-path import, but neither request shape is published through the shared contract.',
-  'assets.invalidProject.title': 'That is not a project id',
-  'assets.invalidProject.description':
-    'The address carries something the orchestrator would refuse. Open the project from the project list rather than editing the URL.',
   'assets.thumbnailAlt': 'Thumbnail of {path}',
   'assets.immutable': 'Original, never edited in place',
   'assets.captured': 'Captured:',
@@ -350,7 +350,6 @@ export const EN_CATALOGUE = {
   'subjects.empty.description':
     'Nothing has been registered in this project. Registering is not wired up in this build yet — the orchestrator accepts a subject, but the request shape is not published through the shared contract.',
   'subjects.inactive': 'Inactive',
-  'subjects.open': 'Open {name}',
   'subjects.type.HUMAN': 'Human',
   'subjects.type.ANIMAL': 'Animal',
   'subjects.type.OBJECT': 'Object',
@@ -430,7 +429,7 @@ export const EN_CATALOGUE = {
     'Generated artifact — the orchestrator serves no image for one yet.',
   'subjectReview.references.alt': 'Reference {role} for this subject',
   'subjectReview.approve.unavailable':
-    'Approving a set is not wired up in this build. The orchestrator accepts it, but the request shape is not published through the shared contract.',
+    "This screen shows the approved set. Approving happens to a draft, and the orchestrator publishes no way to list a subject's drafts, so there is nothing here to approve.",
 
   'page.subjects.title': 'Subjects',
   'page.subjects.description':
