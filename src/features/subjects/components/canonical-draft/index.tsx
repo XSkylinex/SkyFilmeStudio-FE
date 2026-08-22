@@ -98,15 +98,17 @@ export const CanonicalDraft: FC<CanonicalDraftProps> = ({
           </p>
 
           {approve.error ? (
-            <ErrorState
-              title={translate('subjectReview.draft.approveError.title')}
-              description={composeRouteErrorDescription(
-                resolveRouteErrorView(approve.error),
-                translate,
-              )}
-              detail={resolveRouteErrorView(approve.error).detail}
-              headingLevel={3}
-            />
+            <div className="canonical-draft__refusal" role="alert">
+              <ErrorState
+                title={translate('subjectReview.draft.approveError.title')}
+                description={composeRouteErrorDescription(
+                  resolveRouteErrorView(approve.error),
+                  translate,
+                )}
+                detail={resolveRouteErrorView(approve.error).detail}
+                headingLevel={3}
+              />
+            </div>
           ) : null}
 
           <ApprovalControls

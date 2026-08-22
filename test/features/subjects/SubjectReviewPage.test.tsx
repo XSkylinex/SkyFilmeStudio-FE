@@ -266,10 +266,11 @@ describe('SubjectReviewPage', () => {
       }),
     );
 
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'This draft was not approved',
+    );
     expect(
-      await screen.findByRole('heading', {
-        name: 'This draft was not approved',
-      }),
+      screen.getByRole('heading', { name: 'This draft was not approved' }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/without naming the approved reference/i),
