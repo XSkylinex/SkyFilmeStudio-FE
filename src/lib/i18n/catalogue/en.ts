@@ -52,6 +52,10 @@ export const EN_CATALOGUE = {
     'This asked for a generation derived from a subject without naming the approved reference it is anchored to. Without an anchor the identity it produced could not be traced back to anything.',
   'error.CANONICAL_DRAFT_EXISTS':
     'This subject already has an open canonical draft. Only one draft exists at a time, so the open one has to be approved or discarded before another can start.',
+  'error.STYLE_PROFILE_IMMUTABLE':
+    'This style profile version has been approved, so it can no longer be edited in place. A production already pinned to it must not shift underneath itself — a change becomes a new version instead.',
+  'error.STYLE_VERSION_CONFLICT':
+    'This style profile moved on while the change was being made, so the version it was based on is no longer the current one. Reload the profile and reapply the change so the new version builds on what is actually there.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':

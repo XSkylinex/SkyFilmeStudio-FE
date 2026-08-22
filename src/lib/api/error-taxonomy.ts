@@ -102,4 +102,12 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.CANONICAL_DRAFT_EXISTS',
   },
+  STYLE_PROFILE_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.STYLE_PROFILE_IMMUTABLE',
+  },
+  STYLE_VERSION_CONFLICT: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.STYLE_VERSION_CONFLICT',
+  },
 };
