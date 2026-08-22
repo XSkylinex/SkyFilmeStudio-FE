@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { Badge } from '@/lib/components/badge';
+import { HEADING_TAG } from '@/lib/heading-level.constants';
 import { MediaTile } from '@/lib/components/media-tile';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { API_PATH } from '@/lib/api/api.constants';
@@ -12,14 +13,16 @@ import './canonical-reference-grid.css';
 export const CanonicalReferenceGrid: FC<CanonicalReferenceGridProps> = ({
   projectId,
   references,
+  headingLevel,
 }) => {
   const translate = useTranslate();
+  const Heading = HEADING_TAG[headingLevel];
 
   return (
     <section className="canonical-reference-grid">
-      <h2 className="canonical-reference-grid__title">
+      <Heading className="canonical-reference-grid__title">
         {translate('subjectReview.references.title')}
-      </h2>
+      </Heading>
 
       {references.length === 0 ? (
         <p className="canonical-reference-grid__empty">

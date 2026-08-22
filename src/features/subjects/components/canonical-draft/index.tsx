@@ -91,6 +91,7 @@ export const CanonicalDraft: FC<CanonicalDraftProps> = ({
             projectId={projectId}
             subjectId={subjectId}
             setId={draft.id}
+            headingLevel={3}
           />
 
           <p className="canonical-draft__explained">
