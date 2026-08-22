@@ -484,9 +484,28 @@ export const EN_CATALOGUE = {
   'page.subjectReview.title': 'Subject review',
   'page.subjectReview.description':
     "Compare a subject's candidate reference images and approve the ones that define it. Not connected to the orchestrator yet.",
+  'styles.heading': 'Style profiles',
+  'styles.loading': 'Loading style profiles…',
+  'styles.error.title': 'The style profiles could not be read',
+  'styles.empty.title': 'No style profiles yet',
+  'styles.empty.description':
+    'A style profile records the palette, lighting, camera, texture and motion rules a production is generated against. This project has none, and there is no way to create one here yet.',
+  'styles.pinning':
+    'A profile is a lineage and each row below is one version of it. Which version a production is pinned to is not shown, because the orchestrator publishes no route that reads a production.',
+  'styles.truncated':
+    'More style profiles exist than are shown. This screen reads the first page only, and paging is not built yet.',
+  'styles.lineage.versionCount': '{count} versions',
+  'styles.lineage.noApproved': 'No approved version',
+  'styles.lineage.approvedIs': 'Approved: v{version}',
+  'styles.version.label': 'v{version}',
+  'styles.version.approved': 'Approved',
+  'styles.version.frozen':
+    'An approved version is frozen, so a change becomes a new version rather than an edit.',
+  'styles.version.context': 'version {version} of {name}',
+  'styles.approveError.title': 'That version was not approved',
   'page.styles.title': 'Styles',
   'page.styles.description':
-    'The visual styles available to this project. Not connected to the orchestrator yet.',
+    'The visual styles this project generates against, grouped into lineages with their versions.',
   'page.voices.title': 'Voices',
   'page.voices.description':
     'The voices available for narration and dialogue in this project. Not connected to the orchestrator yet.',

@@ -479,9 +479,28 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.subjectReview.title': 'סקירת סובייקט',
   'page.subjectReview.description':
     'השוואה בין תמונות הרפרנס המועמדות של סובייקט ואישור אלה שמגדירות אותו. אין עדיין חיבור ל-orchestrator.',
+  'styles.heading': 'פרופילי סגנון',
+  'styles.loading': 'טוען פרופילי סגנון…',
+  'styles.error.title': 'לא ניתן לקרוא את פרופילי הסגנון',
+  'styles.empty.title': 'אין עדיין פרופילי סגנון',
+  'styles.empty.description':
+    'פרופיל סגנון מתעד את כללי הפלטה, התאורה, המצלמה, המרקם והתנועה שמולם מיוצרת הפקה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+  'styles.pinning':
+    'פרופיל הוא שושלת, וכל שורה למטה היא גרסה אחת שלו. לאיזו גרסה הפקה מוצמדת אינו מוצג, מכיוון שהאורקסטרטור אינו מפרסם מסלול שקורא הפקה.',
+  'styles.truncated':
+    'קיימים יותר פרופילי סגנון ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
+  'styles.lineage.versionCount': '{count} גרסאות',
+  'styles.lineage.noApproved': 'אין גרסה מאושרת',
+  'styles.lineage.approvedIs': 'מאושרת: גרסה {version}',
+  'styles.version.label': 'גרסה {version}',
+  'styles.version.approved': 'מאושרת',
+  'styles.version.frozen':
+    'גרסה מאושרת מוקפאת, ולכן שינוי הופך לגרסה חדשה ולא לעריכה.',
+  'styles.version.context': 'גרסה {version} של {name}',
+  'styles.approveError.title': 'הגרסה הזו לא אושרה',
   'page.styles.title': 'סגנונות',
   'page.styles.description':
-    'הסגנונות הוויזואליים הזמינים לפרויקט הזה. אין עדיין חיבור ל-orchestrator.',
+    'הסגנונות הוויזואליים שמולם הפרויקט הזה מייצר, מקובצים לשושלות עם הגרסאות שלהן.',
   'page.voices.title': 'קולות',
   'page.voices.description':
     'הקולות הזמינים לקריינות ולדיאלוג בפרויקט הזה. אין עדיין חיבור ל-orchestrator.',

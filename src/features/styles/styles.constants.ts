@@ -1,0 +1,1 @@
+export const STYLE_LINEAGE_SKELETON_COUNT = 3;
