@@ -63,7 +63,7 @@ export const EN_CATALOGUE = {
   'error.PRONUNCIATION_DICTIONARY_EXISTS':
     'This project already has a pronunciation dictionary for that language, and there is one per language. Add the entry to the dictionary that exists rather than starting a second.',
   'error.PRONUNCIATION_ENTRY_EXISTS':
-    'The dictionary already holds an entry that normalises to the same term as this one. Two spellings can normalise together — a decomposed accent, a stray direction mark, a doubled space — so the entry already there may not look identical to what was typed. Edit that one instead of adding a second.',
+    'The dictionary already holds an entry that normalises to the same term as this one. Two spellings can normalise together — a decomposed accent, a stray direction mark, a doubled space — so the entry already there may not look identical to what was typed. There is no route to edit an entry, so changing what a term sounds like means deleting the one that is there and adding its replacement.',
   'error.LOCATION_IMMUTABLE':
     'This location has been approved, so it can no longer be edited or approved again. Approved locations are frozen deliberately — shots already planned against this one must not have the place change underneath them. The freeze does not block deleting it, and a change means a new location rather than an edit.',
   'error.PROP_IMMUTABLE':
