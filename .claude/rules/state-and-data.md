@@ -162,6 +162,19 @@ alias also lets the bundle tree-shake: 456.68 kB and 17 zod modules, against 759
   string, never a `Date`.
 - When a contract changes, the frontend build should break. That is the feature. Do not add a
   permissive `Record<string, unknown>` to make it compile.
+- **A red build against the backend? Check `git -C ../sky-filme-studio-be status --porcelain` first.**
+  The portal link reads that repository's *working tree*, so this build sees every intermediate state
+  it passes through — including files written by an agent that has not run its own gate yet. A dirty
+  tree means you are reading a draft, not a contract, and the cheapest first move is to wait or ask
+  rather than to read the error. Measured 2026-08-22: four style-profile DTOs re-exported from
+  `contracts/index.ts` while still importing through the backend's own `@/` alias produced seven
+  errors here, six `TS2307` and one `TS7006` that was a *symptom* of the six — an unresolved schema
+  makes a `.refine` callback's parameter implicitly `any`. Nothing was wrong on this side.
+- **Anything reachable from the contracts barrel must import relatively.** A `paths` alias does not
+  cross a package boundary: `@/` resolves against *this* repo's `tsconfig`, so a contract file that
+  uses one is unresolvable here. The barrel stopped being a directory boundary the moment it began
+  re-exporting upward out of `src/contracts/`, and that is also how the browser-safety guarantee two
+  bullets up gets lost.
 
 ## Errors are typed, and the taxonomy is exhaustive
 
