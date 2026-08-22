@@ -46,10 +46,19 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **twenty-five as of
-2026-08-22**, four of them added by BE-12 in a single day, each one breaking `yarn typecheck` here the
-moment it landed, read from `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **twenty-seven as of
+2026-08-22**, six of them added in one day, four by BE-12 and two by BE-13, each one breaking
+`yarn typecheck` here the moment it landed, read from
+`../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL;
+**The contract is two files, not one.** `exports["./contracts"]` sends `types` to the backend's
+`src/contracts/index.ts` and `default` to its `dist/contracts/index.js`, so `yarn typecheck` reads the
+source while the app and every test load the build output — measured with `import.meta.resolve`, not
+inferred. The imports are not type-only: `errorCodeSchema.safeParse` runs on the wire. A stale `dist/`
+therefore gives a green typecheck over a schema that rejects the very code the types just accepted,
+which is FE-04's dead-error-path defect with no way to see it. `test/contract-source-matches-runtime.test.ts`
+compares the two.
+
 `src/lib/query/` holds the `QueryClient`; `src/lib/status-tone/` maps seven contract enums onto
 `StatusTone` — six from FE-04 and model file status from FE-06 — which is the mapping FE-02 deferred
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
@@ -69,6 +78,14 @@ the reader.
 **Never use `:dir()` in this repo.** It is outside the browser floor, and Lightning CSS lowers it to a
 `:lang()` list — which keys off language rather than direction and so breaks the exact case this
 product needs. Use `[dir='rtl']`. `.claude/rules/css.md` carries the measurement.
+
+**`src/` never names a style mode or a language.** `test/style-and-language-agnostic.test.ts` scans
+every `.ts`/`.tsx` under `src/` and fails on a style-mode literal, on the word *anime*, on a language
+tag outside the three files that own the interface-language mechanism, and on a language-named field.
+The suggestion list for a style picker is `SUGGESTED_STYLE_MODES` from the contract — a mode spelled
+out here would be a second source of truth. Interface language is a closed set of two and says so in
+one place; **content** language is open data that travels with each record. The guard was proved by a
+deliberate four-rule violation, not by watching it pass.
 
 FE-06 made three screens real. `src/shell/api/` now owns the installation-status queries — system
 mode, preflight and the model setup report — and `src/shell/system-readiness/` renders the first
