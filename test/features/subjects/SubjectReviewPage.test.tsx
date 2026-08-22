@@ -289,6 +289,57 @@ describe('SubjectReviewPage', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('keeps a completed approval on screen when the refresh behind it fails', async () => {
+    const user = userEvent.setup();
+    let listCalls = 0;
+    servesSubject();
+    servesApprovedSet();
+    server.use(
+      http.get(API_PATH.canonicalSets(PROJECT_ID, SUBJECT_ID), () => {
+        listCalls += 1;
+        return listCalls === 1
+          ? HttpResponse.json([
+              buildCanonicalAssetSet({
+                id: DRAFT_ID,
+                approvalState: 'PENDING',
+              }),
+            ])
+          : HttpResponse.json(
+              { statusCode: 503, message: 'orchestrator busy' },
+              { status: 503 },
+            );
+      }),
+      http.get(
+        API_PATH.canonicalReferences(PROJECT_ID, SUBJECT_ID, DRAFT_ID),
+        () =>
+          HttpResponse.json([buildCanonicalReference({ role: 'FRONT_VIEW' })]),
+      ),
+      http.post(
+        API_PATH.approveCanonicalSet(PROJECT_ID, SUBJECT_ID, DRAFT_ID),
+        () =>
+          HttpResponse.json(
+            buildCanonicalAssetSet({ id: DRAFT_ID, approvalVersion: 3 }),
+          ),
+      ),
+    );
+
+    renderAt(PATH);
+    await user.click(
+      await screen.findByRole('button', {
+        name: 'Approve the canonical set for Mira',
+      }),
+    );
+
+    await waitFor(() => {
+      expect(listCalls).toBeGreaterThan(1);
+    });
+    expect(
+      screen.queryByRole('heading', {
+        name: "This subject's drafts could not be read",
+      }),
+    ).not.toBeInTheDocument();
+  });
+
   it('shows the orchestrator’s own refusal when a draft has nothing to anchor to', async () => {
     const user = userEvent.setup();
     servesSubject();

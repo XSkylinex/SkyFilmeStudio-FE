@@ -35,7 +35,7 @@ export const CanonicalDraft: FC<CanonicalDraftProps> = ({
     approveCanonicalSetMutationOptions(projectId, subjectId, queryClient),
   );
 
-  if (sets.error) {
+  if (sets.error && sets.data === undefined) {
     const errorView = resolveRouteErrorView(sets.error);
 
     return (
