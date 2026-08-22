@@ -110,4 +110,20 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'TRANSIENT',
     messageKey: 'error.STYLE_VERSION_CONFLICT',
   },
+  VOICE_PROFILE_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.VOICE_PROFILE_IMMUTABLE',
+  },
+  VOICE_ALREADY_APPROVED_FOR_SUBJECT: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.VOICE_ALREADY_APPROVED_FOR_SUBJECT',
+  },
+  PRONUNCIATION_DICTIONARY_EXISTS: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PRONUNCIATION_DICTIONARY_EXISTS',
+  },
+  PRONUNCIATION_ENTRY_EXISTS: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PRONUNCIATION_ENTRY_EXISTS',
+  },
 };
