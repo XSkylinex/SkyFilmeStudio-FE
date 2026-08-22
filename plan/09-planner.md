@@ -1,7 +1,9 @@
 # FE-09 — Screenplay & production planner
 
 > **Depends on:** 06 · **Blocks:** 10, 13 · **Backend needs:** BE-15 · **Plan authority:** §14, §22 Phase A, §23, §39
-> **Status:** not started
+> **Status:** partly done 2026-08-22 — the runtime budget and the approval gate are real; the staged
+> planning process is blocked on a route that runs a stage, and scene and dialogue editing on a read
+> surface that does not exist
 
 ## Goal
 
@@ -99,6 +101,123 @@ The production state machine (§23) drives what is available. `SCREENPLAY_APPROV
 `OUTLINE_APPROVED` are transitions with consequences: **final rendering is not permitted before the
 required approvals**. Make the gate visible so a refused render is not a mystery.
 
+## What landed, and what the orchestrator does not offer
+
+BE-15 merged upstream as `31b4713` and published three surfaces: productions, structure profiles, and
+planning. Measured against a running orchestrator on 2026-08-22 rather than read off a route table.
+
+**Readable and built.** `GET /projects/:id/productions` and `GET :id`; `POST`, `PATCH` and
+`POST :id/transitions`; `GET /projects/:id/production-profiles`; and the three planning routes —
+`GET /productions/:id/planning/stages`, `GET …/budget` and `POST …/approval`. Every request and
+response shape is published through `./contracts`.
+
+**Not offered at all, and this is what blocks most of this phase.**
+
+- **No route runs a planning stage.** `PlanningService.runStage` exists, refuses a stage the mode does
+  not need, and refuses `RUNTIME_ESTIMATE` outright as arithmetic — and no controller reaches it. Its
+  parameters are a local-LLM provider, a request and an abort signal, all server-internal. Re-measured
+  at commit time: `grep -rn runStage src --include="*.ts"` in the sibling finds its definition and one
+  service-to-service call added by BE-16, and no controller. So steps 2 and 3 are unbuildable, not
+  unbuilt.
+- **No `GET` for a production's scenes.** `PUT /planning/scenes` replaces them wholesale and returns
+  `readonly unknown[]`. This screen therefore sees scenes only as rows in the budget report, which is
+  why step 5 is unbuildable.
+- **No dialogue-line controller of any kind**, so steps 5's second half and every dialogue box in
+  *Done when* wait on a backend that has not written them.
+- `continuityReviewSchema` and `toneReviewSchema` are published contracts with no route, so step 6 has
+  a shape and no data. `GET /productions/:id/planning-context` exists and returns **markdown**, not
+  findings.
+
+## Step 1 is real, and it is the first create form in this app
+
+`/projects/:projectId/productions` lists a project's productions and creates one. All eight kinds and
+all six narrative modes come from `productionKindSchema.options` and `narrativeModeSchema.options`;
+their labels are `satisfies Record<X, TranslationKey>` maps, so a member added upstream breaks the
+build here rather than rendering as a raw token.
+
+**Nothing defaults to twenty minutes.** Target runtime is a minute field and a second field, both
+starting empty, with a live clock under them. An unedited submit fails the contract rather than
+sending a target nobody chose.
+
+**The contract is the validator.** The body is assembled and run through
+`createProductionRequestSchema`; there are no hand-written rules to drift from it. What a rejected
+field *says*, though, is translated: `fieldErrorsFromIssues` maps the issue's own `code` and `origin`
+onto a catalogue key, because Zod's `Too small: expected string to have >=1 characters` is developer
+prose and a Hebrew reader would have got an English assertion about character counts.
+
+`styleProfileId` is required and this project may have none, so the form is replaced by a sentence
+saying where one comes from. The style library can approve a profile and cannot yet create one, which
+is `plan/08`'s gap surfacing here as a chain rather than a mystery.
+
+**A production's tolerance is three states and the third one is load-bearing:** declared here,
+declared by its bound structure profile, or declared by neither — in which case the orchestrator
+refuses to compute a budget at all. The card says so rather than leaving the user to meet
+`RUNTIME_TOLERANCE_UNDECLARED` as a refusal on the next screen.
+
+## The runtime budget is the part that is real, and it is the reason for the phase
+
+`RuntimeBudgetReport` carries target, tolerance, planned, reused, total, variance, a verdict, a
+server-authored sentence, and one `RuntimeSegmentShare` per segment. The panel renders all of it:
+every figure as a clock in its own inline `dir="ltr"` element, the sentence through `ContentText`
+untranslated, and the segments in plan order with reused material marked.
+
+**"Which scenes are underweight" is measured, not invented.** The report gives no per-scene target and
+inventing one — an even split, a profile section mapped onto a scene — would be a number this repo made
+up, which is the same mistake `plan/08` refused for `NIGHT`. So underweight means *below this plan's
+own mean planned scene*, the screen says so in as many words, and it publishes the mean and the
+per-scene move that would close the gap beside it. When every scene sits on the mean it says the
+shortfall is spread rather than naming nothing.
+
+The mean is over planned scenes only. A structure profile's **reusable** sections enter the budget as
+segments; letting a 45-second recap into the mean would move it.
+
+**A structure profile's non-reusable sections are not checked by anything.** `collectRuntimeSegments`
+filters to `reusable`, so the acts a profile declares are structure the budget ignores. That is why
+step 7's "show the selected structure against the actual scene plan so an overrun act is visible" is
+only half met: the reusable half is in the budget, the act shape is not compared by the orchestrator
+and this screen does not invent the comparison.
+
+## Approval, and the two guards that survive a reload
+
+`POST /planning/approval` is the second mutation in this app and follows FE-07's pattern: nothing
+optimistic, disabled in flight, every affected query invalidated and awaited before it settles.
+
+Both guards are **server-given state, not client flags**. The control renders only when the production
+is in the one state the transition table allows the move from, and only when the server's own report
+says `withinTolerance`. A reload re-reads both. Confirmed end to end against the orchestrator: with a
+plan totalling 20m 0s against a 20m target the control appeared, approving it moved the production to
+`STORYBOARDING`, and the refetch replaced the control with the sentence saying the production is no
+longer at the planning gate.
+
+There is no reject, so `ApprovalControls` gets no `onReject`. There is no regeneration, so it gets an
+empty `regenerationModes`. Rendering a control the orchestrator cannot serve is the defect FE-07 named.
+
+The three refusals were exercised live: `RUNTIME_BUDGET_OUT_OF_TOLERANCE` on a short plan,
+`PLANNING_STAGE_MISSING` on a production with no scenes, and `RUNTIME_TOLERANCE_UNDECLARED` on one
+bound to no structure profile. The last is a state of the production rather than a failure of the
+request, so it gets its own panel naming what is missing and why there is no default.
+
+`PLANNING_STAGE_MISSING` is checked **before** the state, so a production at `IDEA` with no scenes is
+refused for the scenes rather than for the transition. That ordering is why the approval control still
+surfaces a refusal rather than assuming its two guards are sufficient.
+
+## The stage list is read, never derived
+
+`GET /planning/stages` is the authority. The contract also publishes
+`REQUIRED_STAGES_BY_PLANNING_MODE` and `requiredStagesForNarrativeMode`, and this repo deliberately
+uses neither: the route is what a given production actually needs, and a table is a second place for
+it to be true. A test hands the component a single stage no mode produces and asserts it renders that.
+
+Measured live: a `SCREENPLAY` production returns seven stages including `SCREENPLAY`; a `MUSIC_DRIVEN`
+production returns four and none of them is it. §3.2's clearest rule, and it holds because the answer
+comes off the wire.
+
+One local judgement is recorded here rather than hidden: `RUNTIME_ESTIMATE` is marked *answered by the
+budget above*. The association is not in the contract — it comes from reading the backend's
+`PLANNING_STAGE_EXECUTION` table, where that stage alone is `DETERMINISTIC`, and from its refusal
+message telling a caller to read the budget instead. The stage name itself comes from the contract's
+own `PLANNING_STAGE`, not a string literal.
+
 ## Verification
 
 ```bash
@@ -118,16 +237,31 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 
 ## Done when
 
-- [ ] all 8 kinds and 6 modes; stages derive from the backend's per-mode table
-- [ ] every §14.1 input path is reachable
-- [ ] stages are individually re-runnable, with explicit consequences
-- [ ] the runtime budget is always visible and names underweight scenes
-- [ ] scenes and dialogue lines are structured; speaker is optional
-- [ ] language is per line, with `dir` from the data; no language toggle
-- [ ] dialogue duration is measured or blank, never estimated
-- [ ] continuity findings are inline and advisory, with dismissal reasons kept
-- [ ] structure profiles are selectable and compared against the plan
-- [ ] approval gates are visible and enforced
+- [x] all 8 kinds and 6 modes; stages derive from the backend's per-mode table — and from the *route*
+      rather than the table the contract also publishes, so a production's own answer is what renders
+- [ ] every §14.1 input path is reachable — **two of ten.** A one-sentence idea is `logline` and a
+      paragraph or treatment is `brief`, both on the create form. The other eight — a complete
+      screenplay, a shot list, a music track, reference images, required subjects or locations, an
+      imported timeline, "propose ideas" — all need a route that runs a planning stage, and there is
+      none
+- [ ] stages are individually re-runnable, with explicit consequences — **unbuildable, same reason**
+- [x] the runtime budget is always visible and names underweight scenes
+- [ ] scenes and dialogue lines are structured; speaker is optional — **unbuildable: `PUT
+      /planning/scenes` writes and returns `readonly unknown[]`, there is no `GET`, and no dialogue
+      controller exists**
+- [ ] language is per line, with `dir` from the data; no language toggle — **no dialogue line exists to
+      carry a language. The mechanism is in place and proven on scene labels, which arrive with no
+      language field and so render through `ContentText` as `<bdi dir="auto">`; a Hebrew slugline reads
+      correctly inside the English budget table and an English one inside the Hebrew page**
+- [ ] dialogue duration is measured or blank, never estimated — **nothing estimates one, because
+      nothing shows one**
+- [ ] continuity findings are inline and advisory, with dismissal reasons kept — **contract, no route**
+- [ ] structure profiles are selectable and compared against the plan — **selectable, half compared.**
+      A production is bound to one when it is created, and its reusable sections are in the budget,
+      marked as reused, and named. Its non-reusable act shape is compared by nothing:
+      `collectRuntimeSegments` filters to `reusable`, so an overrun act is not visible and this screen
+      does not invent the comparison
+- [x] approval gates are visible and enforced
 
 ## Traps
 

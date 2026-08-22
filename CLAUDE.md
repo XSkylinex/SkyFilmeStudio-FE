@@ -33,8 +33,9 @@ FE-02 added the token system (`src/styles/`) and a primitive layer of seventeen 
 it contributes no styles of its own (`icon-button` composes `button` and so has none):
 `badge`, `button`, `icon`, `icon-button`, `field`, `input`, `select`, `status-dot`, `progress-bar`,
 `skeleton`, `dialog`, `tooltip`, `toast`, `empty-state`, `error-state`, `media-tile`,
-`approval-controls`. **The layer is eighteen today** — FE-15 added `content-text`, the `<bdi>`
-wrapper that makes a Hebrew record read correctly inside an English UI.
+`approval-controls`. **The layer is nineteen today** — FE-15 added `content-text`, the `<bdi>` wrapper
+that makes a Hebrew record read correctly inside an English UI, and FE-09 added `textarea`, because a
+production's brief is a paragraph and `Input` is the wrong element for one.
 `src/shell/design-system-preview/` renders all of them and is the only place
 any of it can be looked at.
 
@@ -84,9 +85,10 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **453 keys in English and
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **612 keys in English and
 Hebrew**, counted 2026-08-22 — 109 when FE-15 closed, then the system screen, the
-primitive layer FE-15's migration never reached, the asset library, asset detail and subject review.
+primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
+four creative-library screens, and FE-09's production list, create form and planner.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
 tree held 371, so the warning had already failed once on the paragraph carrying it. Count both
 catalogues and require them equal:
@@ -229,6 +231,39 @@ and `SUGGESTED_PLATE_KINDS` carries four, none of them it — so "flag a missing
 this repo inventing the constant; `test/style-and-language-agnostic.test.ts` now fails on `NIGHT`, `DAY` and `DAMAGED` in
 `src/` for exactly that reason. And there is no synthesis preview route, so a voice is judged from its
 engine, model and transcript rather than from sound.
+
+FE-09 made the planner answer one question: **does this plan add up, and if not, which scenes is it
+short by?** BE-15 merged upstream as `31b4713`, and `/projects/:id/productions` and
+`/projects/:id/productions/:id/plan` both read the orchestrator now.
+`src/features/productions/` lists a project's productions and **creates** one — the first create form
+in this app, all eight kinds and six narrative modes off the contract's own `options`, with
+`createProductionRequestSchema` as the only validator. `src/features/planner/` renders the runtime
+budget, the stages the production needs, and the approval gate.
+
+**"Which scenes are underweight" is measured against this plan's own mean, and the screen says so.**
+The wire gives no per-scene target — a segment carries `shareOfTarget` and nothing else — so an even
+split or a profile section mapped onto a scene would be a number this repo invented, which is what
+`plan/08` refused when it declined to invent a `NIGHT` plate kind. The mean is over planned scenes
+only, because a structure profile's reusable sections enter the budget too and a 45-second recap
+would move it.
+
+**The stage list comes from `GET /planning/stages`, never from
+`REQUIRED_STAGES_BY_PLANNING_MODE`** — which the contract also publishes, and which would be a second
+place for the answer to be true. A test hands the component a stage no mode produces and asserts it
+renders it. That is why a music-driven production shows no screenplay stage: the wire has none.
+
+**Plan approval is gated on server state twice over** — the production must be in the one state the
+transition table allows the move from, and the server's own report must say `withinTolerance` — so a
+reload cannot reopen either. It also announces itself: approving removes the button that was pressed,
+and FE-07's `<output tabIndex={-1}>` pattern is what tells a screen reader and lands focus.
+`focusWhenShown` moved to `src/lib/helpers/` on its second consumer.
+
+**Most of `plan/09` is unbuildable rather than unbuilt, and the reasons are three missing routes.**
+`PlanningService.runStage` exists and no controller reaches it, so no stage can be run or re-run.
+`PUT /planning/scenes` writes and returns `readonly unknown[]` with no `GET`, so scenes are visible
+only as rows in the budget. There is no dialogue-line controller at all. `continuityReviewSchema` and
+`toneReviewSchema` are published contracts with no route. Every one of those is a sentence on screen
+under "What this screen cannot do yet", not a note in a plan file.
 
 ## The six rules that outrank everything else
 
