@@ -109,15 +109,6 @@ describe('approveCanonicalSetMutationOptions', () => {
       ),
     ).toEqual([draftSet]);
 
-    await Promise.resolve();
-    await Promise.resolve();
-
-    expect(
-      queryClient.getQueryData(
-        canonicalSetsQueryOptions(PROJECT_ID, SUBJECT_ID).queryKey,
-      ),
-    ).toEqual([draftSet]);
-
     resolveResponse?.();
     await expect(pending).resolves.toEqual(approvedSet);
 
@@ -126,6 +117,11 @@ describe('approveCanonicalSetMutationOptions', () => {
         canonicalSetsQueryOptions(PROJECT_ID, SUBJECT_ID).queryKey,
       ),
     ).toEqual([draftSet]);
+    expect(
+      queryClient.getQueryData(
+        approvedCanonicalSetQueryOptions(PROJECT_ID, SUBJECT_ID).queryKey,
+      ),
+    ).toBeUndefined();
   });
 
   it('invalidates the canonical-sets list and the approved-head query once the server confirms the approval', async () => {
