@@ -507,8 +507,10 @@ export const EN_CATALOGUE = {
   'styles.pinning':
     'A profile is a lineage and each row below is one version of it. Which version a production is pinned to is not shown: a production records the version it used, but no published route returns a production, so nothing here can read that record.',
   'styles.truncated':
-    'More style profiles exist than are shown. This screen reads the first page only, and paging is not built yet.',
-  'styles.lineage.versionCount': '{count} versions',
+    'More style profiles exist than are shown, so a lineage may be missing from this list. Each lineage shown reads its own full version history, so the counts above are not affected.',
+  'styles.lineage.unreadable':
+    'The versions of this lineage could not be read, so how many there are and which is approved is unknown rather than none.',
+  'styles.lineage.versionCount': 'Versions: {count}',
   'styles.lineage.noApproved': 'No approved version',
   'styles.lineage.approvedIs': 'Approved: v{version}',
   'styles.version.label': 'v{version}',
@@ -576,7 +578,7 @@ export const EN_CATALOGUE = {
   'locations.plates.none':
     'No plates at all, so any scene here resolves from text rather than from a canonical image.',
   'locations.plates.approved': 'Approved',
-  'locations.plates.draftsOnly': '{count} drafts, none approved',
+  'locations.plates.draftsOnly': 'None approved — drafts: {count}',
   'locations.plates.suggestedMissing':
     'Suggested kinds with no plate yet: {kinds}. Suggestions, not requirements.',
   'locations.plates.unreadable':

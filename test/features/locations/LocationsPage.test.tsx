@@ -98,7 +98,7 @@ describe('LocationsPage', () => {
 
     expect(await screen.findByText('WIDE_ESTABLISHING')).toBeInTheDocument();
     expect(screen.getByText('MEDIUM_LEFT')).toBeInTheDocument();
-    expect(screen.getByText('1 drafts, none approved')).toBeInTheDocument();
+    expect(screen.getByText('None approved — drafts: 1')).toBeInTheDocument();
   });
 
   it('shows a kind the orchestrator invented, not only the suggested four', async () => {

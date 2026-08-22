@@ -9,6 +9,7 @@ import type {
 import { API_PATH } from '@/lib/api/api.constants';
 import { requestJson } from '@/lib/api/request-json';
 import { styleProfilesQueryKey } from '@/features/styles/api/style-profiles.query';
+import { styleProfileVersionsQueryKey } from '@/features/styles/api/style-profile-versions.query';
 
 const approveStyleProfile = (
   projectId: ProjectId,
@@ -22,14 +23,20 @@ const approveStyleProfile = (
 
 export const approveStyleProfileMutationOptions = (
   projectId: ProjectId,
+  lineageId: StyleProfileId,
   queryClient: QueryClient,
 ) =>
   mutationOptions({
     mutationFn: (styleProfileId: StyleProfileId) =>
       approveStyleProfile(projectId, styleProfileId),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: styleProfilesQueryKey(projectId),
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: styleProfilesQueryKey(projectId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: styleProfileVersionsQueryKey(projectId, lineageId),
+        }),
+      ]);
     },
   });

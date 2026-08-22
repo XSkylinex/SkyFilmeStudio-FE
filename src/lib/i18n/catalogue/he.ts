@@ -502,8 +502,10 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'styles.pinning':
     'פרופיל הוא שושלת, וכל שורה למטה היא גרסה אחת שלו. לאיזו גרסה הפקה מוצמדת אינו מוצג: הפקה רושמת את הגרסה שבה השתמשה, אבל אף מסלול שפורסם אינו מחזיר הפקה, ולכן שום דבר כאן לא יכול לקרוא את הרישום הזה.',
   'styles.truncated':
-    'קיימים יותר פרופילי סגנון ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
-  'styles.lineage.versionCount': '{count} גרסאות',
+    'קיימים יותר פרופילי סגנון ממה שמוצג, ולכן ייתכן ששושלת חסרה מהרשימה הזו. כל שושלת שמוצגת קוראת את היסטוריית הגרסאות המלאה שלה, ולכן הספירות למעלה אינן מושפעות.',
+  'styles.lineage.unreadable':
+    'לא ניתן לקרוא את הגרסאות של השושלת הזו, ולכן כמה יש ואיזו מאושרת אינו ידוע ולא אפס.',
+  'styles.lineage.versionCount': 'גרסאות: {count}',
   'styles.lineage.noApproved': 'אין גרסה מאושרת',
   'styles.lineage.approvedIs': 'מאושרת: גרסה {version}',
   'styles.version.label': 'גרסה {version}',
@@ -570,7 +572,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'locations.plates.none':
     'אין plates בכלל, ולכן כל סצנה כאן נפתרת מטקסט ולא מתמונה קנונית.',
   'locations.plates.approved': 'מאושר',
-  'locations.plates.draftsOnly': '{count} טיוטות, אף אחת לא מאושרת',
+  'locations.plates.draftsOnly': 'אף אחת לא מאושרת — טיוטות: {count}',
   'locations.plates.suggestedMissing':
     'סוגים מוצעים שאין להם עדיין plate: {kinds}. הצעות, לא דרישות.',
   'locations.plates.unreadable':
