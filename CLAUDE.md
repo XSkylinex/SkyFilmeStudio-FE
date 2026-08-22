@@ -33,14 +33,19 @@ FE-02 added the token system (`src/styles/`) and a primitive layer of seventeen 
 it contributes no styles of its own (`icon-button` composes `button` and so has none):
 `badge`, `button`, `icon`, `icon-button`, `field`, `input`, `select`, `status-dot`, `progress-bar`,
 `skeleton`, `dialog`, `tooltip`, `toast`, `empty-state`, `error-state`, `media-tile`,
-`approval-controls`. `src/shell/design-system-preview/` renders all of them and is the only place
+`approval-controls`. **The layer is eighteen today** — FE-15 added `content-text`, the `<bdi>`
+wrapper that makes a Hebrew record read correctly inside an English UI.
+`src/shell/design-system-preview/` renders all of them and is the only place
 any of it can be looked at.
 
 FE-03 added the app shell: `react-router-dom@7.18.2`, the full route tree in `src/shell/routes/`,
 and shell chrome under `src/shell/` — `app-shell`, `production-shell`, `production-nav`,
 `route-error-boundary`, `root-error-boundary`, `fatal-boundary`, `offline-indicator`,
-`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` now holds eighteen
-route-level page stubs; the preview gallery lives at `/design-system`.
+`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` holds **nineteen**
+route-level pages — eighteen stubs when FE-03 landed, plus asset detail from FE-07. Which of them are
+no longer stubs is recorded in the FE-06 and FE-07 paragraphs above rather than counted here, because
+"real" is a judgement and a number would go stale the way the others did. The preview gallery lives
+at `/design-system`.
 
 FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
