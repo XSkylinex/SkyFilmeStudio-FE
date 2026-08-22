@@ -84,6 +84,20 @@ export const EN_CATALOGUE = {
     "This fact's scope is not a valid one: either its start or end scene is not part of this production, or the end scene comes before the start. Pick both scenes from this production, with the end no earlier than the start.",
   'error.CONTINUITY_CONTEXT_REQUIRED':
     'The orchestrator asked a model to reason about a single scene without supplying that scene, so nothing was generated. The model remembers nothing between turns, which is why that context is not optional — this is a fault in the orchestrator rather than something to correct here.',
+  'error.PRODUCTION_TRANSITION_INVALID':
+    'This production cannot move to that state from the one it is in. Either the workflow does not allow the move — the message names where it can go from here — or another transition reached it first, which means the state on screen is already stale. Re-read it before deciding again.',
+  'error.PRODUCTION_PROFILE_SECTIONS_OVERLAP':
+    'Two sections of this structure profile cover the same stretch of time. Sections may share a boundary but not a span, so shorten one or move where it starts.',
+  'error.PRODUCTION_PROFILE_IN_USE':
+    'This structure profile is still pinned by productions that were planned against its runtime budget, so removing it would change what they were planned against. Point those productions at another profile first.',
+  'error.PRODUCTION_RENDER_NOT_PERMITTED':
+    'This production is not in a state that permits the render that was queued. Rendering waits on approvals its current state has not passed, which is what stops hours of work running against a plan nobody signed off.',
+  'error.PLANNING_STAGE_MISSING':
+    'A planning stage this production needs has not been run. The message names which one, and lists everything this kind of production requires — a kind that needs no screenplay will not ask for one.',
+  'error.RUNTIME_BUDGET_OUT_OF_TOLERANCE':
+    'This production cannot leave planning because its scenes do not reach the target runtime within the tolerance that was set. The message says by how much. Add, cut or re-time scenes, or change the target.',
+  'error.RUNTIME_TOLERANCE_UNDECLARED':
+    'Neither this production nor the structure profile it is bound to declares a runtime tolerance, and there is deliberately no default — a tolerance that suits a twenty-minute film does not suit a thirty-second one. Set one on either.',
   'error.network':
     'The orchestrator is not answering. It is the process that runs every render, so nothing can start until it is back.',
   'error.malformed':
