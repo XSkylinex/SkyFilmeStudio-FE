@@ -13,7 +13,6 @@ import { StylesPage } from '@/features/styles/StylesPage';
 import { VoicesPage } from '@/features/voices/VoicesPage';
 import { LocationsPage } from '@/features/locations/LocationsPage';
 import { PropsPage } from '@/features/props/PropsPage';
-import { BiblePage } from '@/features/bible/BiblePage';
 import { ProductionListPage } from '@/features/productions/ProductionListPage';
 import { RenderQueuePage } from '@/features/render-queue/RenderQueuePage';
 import { NotFoundPage } from './not-found-page';
@@ -200,7 +199,11 @@ const projectRoutes: RouteObject[] = [
   },
   {
     path: BIBLE_SEGMENT,
-    Component: BiblePage,
+    lazy: () =>
+      import('@/features/bible/BiblePage').then((routeModule) => ({
+        Component: routeModule.BiblePage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.bible.title'),
   },
