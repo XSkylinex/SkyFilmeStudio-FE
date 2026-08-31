@@ -41,6 +41,16 @@ export const EN_CATALOGUE = {
     'One of this scene’s shots already carries a compiled prompt, which is the record of how something was rendered and is never overwritten. Withdraw or supersede that shot deliberately rather than replacing the whole scene.',
   'error.LIMITED_ANIMATION_OVERUSED':
     'More of this scene is limited animation than the plan allows, which is how a production becomes a slideshow without anyone choosing that. If it is deliberate, raise the ceiling on the request explicitly.',
+  'error.VOICE_PROFILE_NOT_APPROVED':
+    'This line would be spoken by a voice that is not the approved one for its speaker — either the profile is still a draft, or it belongs to a different subject. A recurring subject gets one approved voice, or the production ends up with a different voice per line. Approve that subject’s voice profile, or point the line at it.',
+  'error.VOICE_LANGUAGE_UNSUPPORTED':
+    'The voice profile for this line does not declare the language the line is written in. Add that language to the profile that already exists — a second voice for the same subject would make them sound like two different people.',
+  'error.DIALOGUE_AUDIO_IMMUTABLE':
+    'This dialogue line is approved, and its audio was generated from the text as it stands. Editing the words or the timing now would leave approved audio saying something else — withdraw the approval first.',
+  'error.ASR_UNAVAILABLE':
+    'The advisory check that listens back to generated speech could not run, because no local speech-recognition model is available. The audio itself is unaffected — it simply was not transcribed and compared.',
+  'error.TIER_REQUIRES_BENCHMARK':
+    'The dialogue animation tier that was asked for is held behind a hardware benchmark and a subject-consistency test, and neither has run on this machine. Nothing waits for it — choose another tier.',
   'error.OFFLINE_POLICY_VIOLATION':
     'A provider was pointed off this machine and generation was stopped. Nothing may leave this computer — find the provider that was reconfigured before running anything else.',
   'error.DISK_SPACE_LOW':
