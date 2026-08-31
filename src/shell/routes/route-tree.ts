@@ -13,6 +13,7 @@ import { StylesPage } from '@/features/styles/StylesPage';
 import { VoicesPage } from '@/features/voices/VoicesPage';
 import { LocationsPage } from '@/features/locations/LocationsPage';
 import { PropsPage } from '@/features/props/PropsPage';
+import { BiblePage } from '@/features/bible/BiblePage';
 import { ProductionListPage } from '@/features/productions/ProductionListPage';
 import { RenderQueuePage } from '@/features/render-queue/RenderQueuePage';
 import { NotFoundPage } from './not-found-page';
@@ -22,6 +23,7 @@ import {
   ASSETS_SEGMENT,
   ASSET_ID_PARAM,
   AUDIO_SEGMENT,
+  BIBLE_SEGMENT,
   DESIGN_SYSTEM_SEGMENT,
   LOCATIONS_SEGMENT,
   PLAN_SEGMENT,
@@ -195,6 +197,12 @@ const projectRoutes: RouteObject[] = [
     Component: PropsPage,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.props.title'),
+  },
+  {
+    path: BIBLE_SEGMENT,
+    Component: BiblePage,
+    ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('page.bible.title'),
   },
   {
     path: PRODUCTIONS_SEGMENT,

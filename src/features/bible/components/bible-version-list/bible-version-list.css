@@ -1,0 +1,38 @@
+@layer features {
+  .bible-version-list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .bible-version-list__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .bible-version-list__items {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bible-version-list__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .bible-version-list__number {
+    display: inline-block;
+    font-family: var(--font-family-mono);
+  }
+
+  .bible-version-list__when {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+}

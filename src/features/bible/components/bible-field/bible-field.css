@@ -1,0 +1,23 @@
+@layer features {
+  .bible-field {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .bible-field__label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .bible-field__value {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .bible-field__absent {
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+}
