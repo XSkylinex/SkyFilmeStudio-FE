@@ -1,7 +1,7 @@
 # FE-10 — Storyboard review
 
 > **Depends on:** 09 · **Blocks:** 12 · **Backend needs:** BE-18 · **Plan authority:** §17, §39, §49.4
-> **Status:** not started
+> **Status:** blocked — BE-18 not started, and no route yields a `SceneId`
 
 ## Goal
 
@@ -10,6 +10,39 @@ pleasant to use at two hundred shots, the pipeline works. If it is not, people w
 §17's whole point is that they must not.
 
 > "Never send an unreviewed screenplay directly into hundreds of final video renders." — §17
+
+## Why this cannot start yet — measured 2026-08-31
+
+Two blockers, and the second is the one that would not have been guessed from the dependency line.
+
+**BE-18 has not started.** The backend's own table says so, and there is no storyboard, keyframe or
+artifact controller on its `master`. Steps 2, 3, 5 and 6 — Level 1 versus Level 2, the comparison
+overlay, the keyframe gate and motion drafts — have nothing to read.
+
+**The shot half that BE-16 *did* publish is unreachable.** BE-16 merged as `d658f69` and shipped
+`shots.controller.ts`, which is real: `GET /scenes/:sceneId/shots`, `GET /shots/:id`,
+`GET`/`POST /shots/:id/prompt` and `POST /shots/:id/transition`. Every one of them is keyed on an id
+this repo cannot obtain.
+
+- Enumerating every `@Controller` on backend `master`, the only route whose path contains `scenes` is
+  `@Controller('scenes/:sceneId/shots')` itself. There is no scene collection and no scene resource.
+- `PUT /productions/:productionId/planning/scenes` writes the outline and returns
+  `readonly unknown[]`, so the ids it creates are not in its own response.
+- The two places a scene otherwise surfaces carry no id. `runtimeSegmentShareSchema` has `order`,
+  `label`, `targetDurationSeconds`, `reused` and `shareOfTarget`; `sceneOutlineEntrySchema` is
+  `scenePlanSchema.omit({ shots: true })`, and `scenePlanSchema` has no `id` field.
+
+So a scene strip cannot be assembled from anything published, and neither can a single shot card.
+`shotSchema` itself is a published contract and carries everything a card needs — order, type,
+target duration, subjects, location, props, framing, `generationStrategy`, `approvedKeyframeId` and
+`state` — which is what makes this worth recording rather than waiting: **the missing piece is a
+`GET` that returns a production's scenes, not a contract.**
+
+Two smaller gaps sit behind the same wall. `ShotPromptSpec` is typed from
+`src/shots/prompt-specs.repository`, not from `src/contracts/`, so the compiled prompt has no
+published response shape; and no `../shots/dto/*` appears in the backend's `src/contracts/index.ts`,
+so `transitionShotRequestSchema` and `planSceneRequestSchema` are unpublished the same way the
+render-job DTO is. Approve and reject would have no validated request body even with an id in hand.
 
 ## Decisions
 
