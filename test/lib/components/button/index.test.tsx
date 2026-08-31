@@ -70,6 +70,16 @@ describe('Button', () => {
     expect(handleClick).toHaveBeenCalledOnce();
   });
 
+  it('forwards aria-pressed, so a selected-state control reports it rather than relying on colour', () => {
+    renderInStore(
+      <Button variant="primary" size="md" aria-pressed>
+        Version
+      </Button>,
+    );
+
+    expect(screen.getByRole('button', { pressed: true })).toBeInTheDocument();
+  });
+
   it('forwards aria-describedby, so a wrapping Tooltip actually describes it', () => {
     renderInStore(
       <>

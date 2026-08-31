@@ -15,5 +15,6 @@ export interface ButtonProps {
   'aria-expanded'?: boolean | undefined;
   'aria-controls'?: string | undefined;
   'aria-describedby'?: string | undefined;
+  'aria-pressed'?: boolean | undefined;
   children: ReactNode;
 }
