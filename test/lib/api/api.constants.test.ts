@@ -4,6 +4,7 @@ import {
   locationPlateIdSchema,
   productionIdSchema,
   productionProfileIdSchema,
+  projectBibleVersionIdSchema,
   projectIdSchema,
   pronunciationDictionaryIdSchema,
   propIdSchema,
@@ -65,6 +66,10 @@ const SAMPLE_PRODUCTION_ID = productionIdSchema.parse(
 
 const SAMPLE_PRODUCTION_PROFILE_ID = productionProfileIdSchema.parse(
   'ffffffff-ffff-4fff-8fff-ffffffffffff',
+);
+
+const SAMPLE_PROJECT_BIBLE_VERSION_ID = projectBibleVersionIdSchema.parse(
+  '77777777-7777-4777-8777-777777777777',
 );
 
 const everyPath: Record<string, string> = {
@@ -154,6 +159,20 @@ const everyPath: Record<string, string> = {
   projectProps: API_PATH.projectProps(SAMPLE_PROJECT_ID),
   projectProp: API_PATH.projectProp(SAMPLE_PROJECT_ID, SAMPLE_PROP_ID),
   approveProp: API_PATH.approveProp(SAMPLE_PROJECT_ID, SAMPLE_PROP_ID),
+  projectBibles: API_PATH.projectBibles(SAMPLE_PROJECT_ID),
+  activeProjectBible: API_PATH.activeProjectBible(SAMPLE_PROJECT_ID),
+  projectBible: API_PATH.projectBible(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PROJECT_BIBLE_VERSION_ID,
+  ),
+  projectBibleMarkdown: API_PATH.projectBibleMarkdown(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PROJECT_BIBLE_VERSION_ID,
+  ),
+  publishProjectBible: API_PATH.publishProjectBible(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PROJECT_BIBLE_VERSION_ID,
+  ),
   productions: API_PATH.productions(SAMPLE_PROJECT_ID),
   production: API_PATH.production(SAMPLE_PROJECT_ID, SAMPLE_PRODUCTION_ID),
   productionTransitions: API_PATH.productionTransitions(
