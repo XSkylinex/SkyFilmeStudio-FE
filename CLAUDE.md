@@ -42,8 +42,9 @@ any of it can be looked at.
 FE-03 added the app shell: `react-router-dom@7.18.2`, the full route tree in `src/shell/routes/`,
 and shell chrome under `src/shell/` — `app-shell`, `production-shell`, `production-nav`,
 `route-error-boundary`, `root-error-boundary`, `fatal-boundary`, `offline-indicator`,
-`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` holds **nineteen**
-route-level pages — eighteen stubs when FE-03 landed, plus asset detail from FE-07. Which of them are
+`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` holds **twenty**
+route-level pages — counted 2026-09-01 with `ls src/features/*/[A-Z]*.tsx`, the project bible being
+the twentieth — eighteen stubs when FE-03 landed, plus asset detail from FE-07. Which of them are
 no longer stubs is recorded in the FE-06 and FE-07 paragraphs above rather than counted here, because
 "real" is a judgement and a number would go stale the way the others did. The preview gallery lives
 at `/design-system`.
@@ -85,10 +86,11 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **612 keys in English and
-Hebrew**, counted 2026-08-22 — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **690 keys in English and
+Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
-four creative-library screens, and FE-09's production list, create form and planner.
+four creative-library screens, FE-09's production list, create form and planner, and the project
+bible.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
 tree held 371, so the warning had already failed once on the paragraph carrying it. Count both
 catalogues and require them equal:
@@ -264,6 +266,54 @@ and FE-07's `<output tabIndex={-1}>` pattern is what tells a screen reader and l
 only as rows in the budget. There is no dialogue-line controller at all. `continuityReviewSchema` and
 `toneReviewSchema` are published contracts with no route. Every one of those is a sentence on screen
 under "What this screen cannot do yet", not a note in a plan file.
+
+**The project bible is real as of 2026-09-01, and it is FE-08's step 7 rather than a new phase.**
+`plan/10` and `plan/11` are the next two in the table and both are blocked the same way — a published
+contract with no route that reaches it. FE-10 needs a `SceneId` and **nothing published yields one**:
+the only route whose path contains `scenes` is `@Controller('scenes/:sceneId/shots')` itself,
+`PUT /planning/scenes` returns `readonly unknown[]`, and neither `runtimeSegmentShareSchema` nor
+`sceneOutlineEntrySchema` carries an id. FE-11 has no `GET /render-jobs` at all. So the phase taken
+was the one BE-14 unblocked and `plan/08` had deferred with "one phase is one phase".
+`src/features/bible/` reads every version of a project bible, marks the one the orchestrator calls
+active, renders world, narrative, audio and subject rules, shows the generated Markdown view, and
+**publishes a draft**.
+
+**Which sections a bible shows comes from `bibleCarriesNarrative`, never from a list in this repo** —
+and a kind that carries no narrative section says so on screen rather than rendering a blank one.
+"Active" is **derived, not a flag**: `findActive` returns the highest published version, so the screen
+asks `/bible/active` instead of reading a field. **Publishing is the second approval-class mutation
+here and copies FE-07's structure exactly** — no optimistic update, disabled in flight, both queries
+invalidated only after the server answers, and the guard that survives a reload is the refetched
+version carrying `published: true` rather than any client flag. It is a *publish*, not an approval:
+`ApprovalControls` hard-codes its own label, §46 makes publishing a named transition, and the backend
+spells it `/publish` while style profiles get `/approve` — so the control composes `Button` rather
+than bending a shared primitive to a one-off label.
+
+**`request-text.ts` is the third caller of `fetch` in this repo, and the bar it had to clear was that
+the other two genuinely cannot express it.** `GET /bible/:id/markdown` returns `text/markdown`; a
+JSON parse of it is a `MALFORMED` throw. It also refuses a 200 whose `Content-Type` is not markdown,
+because a single-page-app fallback would otherwise be handed to the caller as the bible's own text.
+
+**The bidi lesson this phase adds: `dir="auto"` is wrong for a document.** The generated Markdown view
+first shipped inside `ContentText`. Under `<html dir="rtl">` the whole document mirrors —
+`  - ללא אלימות גרפית` loses its indentation and its bullet jumps to the far edge — because a
+Markdown document's `#`, `-` and leading spaces are *structure*, not prose. The view is `dir="ltr"`
+and the Hebrew inside it still reads correctly as its own run. All four gate stages were green over
+the broken version; it was found by loading the page in Hebrew.
+
+**A test that looks right and proves nothing is still the expensive failure.** The publish mutation's
+"no optimistic update" test counted refetches through `fetchQuery` — and `invalidateQueries` does not
+refetch a query with no observers, so an optimistic `onMutate` was added on purpose and the test still
+passed. It now spies on `invalidateQueries` and fails on `expected "invalidateQueries" to not be
+called at all, but actually been called 1 times`. `git.md`'s rule is the general form: **watch the
+assertion fail, not the test.**
+
+**What the screen cannot do, and says so.** `PUT /productions/:productionId/bible` exists, but
+`pinProjectBibleRequestSchema` compiles into **zero** files under `dist-esm/` while
+`createProjectBibleRequestSchema` compiles into two — so a production's pinned bible can be read and
+not set. Creating and editing a draft are published and unbuilt. A subject block is identified by its
+id alone, because `subjectRules` carries no name and resolving one would mean reaching into another
+feature's `api/`.
 
 ## The six rules that outrank everything else
 
