@@ -34,13 +34,6 @@
     font-weight: var(--font-weight-medium);
   }
 
-  .create-production-form__invalid {
-    margin: 0;
-    color: var(--tone-danger-fg);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-  }
-
   .create-production-form__runtime {
     display: grid;
     gap: var(--space-2);

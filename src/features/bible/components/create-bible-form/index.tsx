@@ -7,6 +7,7 @@ import { Field } from '@/lib/components/field';
 import { Input } from '@/lib/components/input';
 import { Select } from '@/lib/components/select';
 import { Textarea } from '@/lib/components/textarea';
+import { ValidationSummary } from '@/lib/components/validation-summary';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
@@ -46,6 +47,7 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
+  const [attempt, setAttempt] = useState(0);
 
   const set = (field: BibleFormField, value: string): void => {
     setValues((previous) => ({ ...previous, [field]: value }));
@@ -94,6 +96,7 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
 
     if (!result.success) {
       setFieldErrors(fieldErrorsFromIssues(result.error));
+      setAttempt((count) => count + 1);
       return;
     }
 
@@ -137,6 +140,13 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
 
   return (
     <form className="create-bible-form" onSubmit={handleSubmit}>
+      {Object.keys(fieldErrors).length === 0 ? null : (
+        <ValidationSummary
+          count={Object.keys(fieldErrors).length}
+          attempt={attempt}
+        />
+      )}
+
       {prefilledFromVersion === undefined ? null : (
         <p className="create-bible-form__note">
           {translate('bible.create.prefilled', {

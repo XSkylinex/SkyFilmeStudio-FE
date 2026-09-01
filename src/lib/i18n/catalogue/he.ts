@@ -812,8 +812,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'productions.create.blocked.title': 'הפקה זקוקה קודם לפרופיל סגנון',
   'productions.create.blocked.description':
     'כל הפקה מוצמדת לגרסת סגנון, ולפרויקט הזה עדיין אין אף אחת. צרו את הראשונה בספריית הסגנונות ואז חזרו לכאן.',
-  'productions.create.invalid':
-    'החוזה של ה-orchestrator עצמו דחה את זה עוד לפני השליחה.',
   'productions.create.failed.title': 'ההפקה לא נוצרה',
   'planner.error.title': 'לא ניתן היה לקרוא את ההפקה הזו',
   'planner.loading': 'קורא את ההפקה…',

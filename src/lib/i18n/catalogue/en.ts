@@ -820,8 +820,6 @@ export const EN_CATALOGUE = {
     'A production needs a style profile first',
   'productions.create.blocked.description':
     'Every production is pinned to a style version, and this project has none yet. Create the first one in the style library, then come back here.',
-  'productions.create.invalid':
-    'The orchestrator’s own contract rejected this before it was sent.',
   'productions.create.failed.title': 'The production was not created',
   'planner.error.title': 'This production could not be read',
   'planner.loading': 'Reading this production…',

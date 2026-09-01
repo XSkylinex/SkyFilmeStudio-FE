@@ -9,6 +9,7 @@ import { Button } from '@/lib/components/button';
 import { Field } from '@/lib/components/field';
 import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
+import { ValidationSummary } from '@/lib/components/validation-summary';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { parseLines } from '@/lib/helpers/parse-lines';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
@@ -63,6 +64,7 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
+  const [attempt, setAttempt] = useState(0);
 
   const errorFor = (field: string): string => {
     const key = fieldErrors[field];
@@ -108,6 +110,7 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
 
     if (!result.success) {
       setFieldErrors(fieldErrorsFromIssues(result.error));
+      setAttempt((count) => count + 1);
       return;
     }
 
@@ -127,6 +130,13 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
       )}
 
       <form className="create-style-profile-form__form" onSubmit={handleSubmit}>
+        {Object.keys(fieldErrors).length === 0 ? null : (
+          <ValidationSummary
+            count={Object.keys(fieldErrors).length}
+            attempt={attempt}
+          />
+        )}
+
         <Field
           label={translate('library.field.name')}
           required

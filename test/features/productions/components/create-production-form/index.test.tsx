@@ -104,7 +104,7 @@ describe('CreateProductionForm', () => {
     expect(created).not.toHaveProperty('runtimeToleranceSeconds');
   });
 
-  it('refuses to submit an empty title, and says so on the field itself', async () => {
+  it('refuses to submit an empty title, announces it, and says so on the field itself', async () => {
     const user = userEvent.setup();
 
     orchestratorServes([buildStyleProfile()]);
@@ -114,11 +114,10 @@ describe('CreateProductionForm', () => {
     await screen.findByLabelText('Title');
     await user.click(screen.getByRole('button', { name: 'Create production' }));
 
-    expect(
-      await screen.findByText(
-        'The orchestrator’s own contract rejected this before it was sent.',
-      ),
-    ).toBeInTheDocument();
+    const summary = await screen.findByRole('status');
+
+    expect(summary).toHaveTextContent('Fields needing attention: 2');
+    expect(summary).toHaveFocus();
     expect(screen.getByLabelText('Title')).toHaveAttribute(
       'aria-invalid',
       'true',
