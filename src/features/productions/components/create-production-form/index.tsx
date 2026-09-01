@@ -21,6 +21,7 @@ import { Select } from '@/lib/components/select';
 import { Skeleton } from '@/lib/components/skeleton';
 import { Textarea } from '@/lib/components/textarea';
 import { formatDuration } from '@/lib/format/format-duration';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
@@ -168,8 +169,20 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
       }
 
       setFieldErrors({});
-      create.mutate(result.data, { onSuccess: onClose });
+      create.mutate(result.data);
     };
+
+    if (create.isSuccess) {
+      return (
+        <output
+          className="create-production-form__done"
+          ref={focusWhenShown}
+          tabIndex={-1}
+        >
+          {translate('library.created')}
+        </output>
+      );
+    }
 
     const failure =
       create.error === null ? null : resolveRouteErrorView(create.error);
@@ -179,7 +192,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
       <>
         <form className="create-production-form__form" onSubmit={handleSubmit}>
           {hasFieldErrors ? (
-            <p className="create-production-form__invalid">
+            <p className="create-production-form__invalid" role="alert">
               {translate('productions.create.invalid')}
             </p>
           ) : null}
