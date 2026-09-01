@@ -8,7 +8,10 @@ import {
 import { API_PATH } from '@/lib/api/api.constants';
 import { approveDialogueAudioMutationOptions } from '@/features/audio/api/approve-dialogue-audio.mutation';
 import { unapproveDialogueAudioMutationOptions } from '@/features/audio/api/unapprove-dialogue-audio.mutation';
-import { sceneDialogueLinesQueryOptions } from '@/features/audio/api/scene-dialogue-lines.query';
+import {
+  sceneDialogueLinesQueryKey,
+  sceneDialogueLinesQueryOptions,
+} from '@/features/audio/api/scene-dialogue-lines.query';
 import { dialogueLineSpeechQueryOptions } from '@/features/audio/api/dialogue-line-speech.query';
 import { dialogueLineQueryKey } from '@/features/audio/helpers/dialogue-line-query-key';
 import { buildDialogueLine } from '../../../fixtures/dialogue-line.fixture';
@@ -120,6 +123,9 @@ describe('approveDialogueAudioMutationOptions', () => {
       http.get(API_PATH.dialogueLineSpeech(LINE_ID), () =>
         HttpResponse.json([buildSpeechSynthesis()]),
       ),
+      http.get(API_PATH.sceneDialogueLines(SCENE_ID), () =>
+        HttpResponse.json({ items: [buildDialogueLine()] }),
+      ),
       http.post(API_PATH.dialogueLineSpeechApproval(LINE_ID), async () => {
         await gate;
         return HttpResponse.json(
@@ -133,11 +139,15 @@ describe('approveDialogueAudioMutationOptions', () => {
 
     const queryClient = buildQueryClient();
     await queryClient.fetchQuery(dialogueLineSpeechQueryOptions(LINE_ID));
+    await queryClient.fetchQuery(sceneDialogueLinesQueryOptions(SCENE_ID));
 
     const readCache = (): string =>
-      JSON.stringify(
+      JSON.stringify([
         queryClient.getQueriesData({ queryKey: dialogueLineQueryKey(LINE_ID) }),
-      );
+        queryClient.getQueriesData({
+          queryKey: sceneDialogueLinesQueryKey(SCENE_ID),
+        }),
+      ]);
 
     const before = readCache();
     const pending = approval(queryClient).execute(undefined);

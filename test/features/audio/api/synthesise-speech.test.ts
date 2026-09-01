@@ -6,7 +6,10 @@ import {
 } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { dialogueLineSpeechQueryOptions } from '@/features/audio/api/dialogue-line-speech.query';
-import { sceneDialogueLinesQueryOptions } from '@/features/audio/api/scene-dialogue-lines.query';
+import {
+  sceneDialogueLinesQueryKey,
+  sceneDialogueLinesQueryOptions,
+} from '@/features/audio/api/scene-dialogue-lines.query';
 import { synthesiseSpeechMutationOptions } from '@/features/audio/api/synthesise-speech.mutation';
 import { dialogueLineQueryKey } from '@/features/audio/helpers/dialogue-line-query-key';
 import { buildDialogueLine } from '../../../fixtures/dialogue-line.fixture';
@@ -74,6 +77,9 @@ describe('synthesiseSpeechMutationOptions', () => {
       http.get(API_PATH.dialogueLineSpeech(LINE_ID), () =>
         HttpResponse.json([buildSpeechSynthesis()]),
       ),
+      http.get(API_PATH.sceneDialogueLines(SCENE_ID), () =>
+        HttpResponse.json({ items: [buildDialogueLine()] }),
+      ),
       http.post(API_PATH.dialogueLineSpeech(LINE_ID), async () => {
         await gate;
         return HttpResponse.json({ renderJobId: 'x', attempt: 2 });
@@ -82,11 +88,15 @@ describe('synthesiseSpeechMutationOptions', () => {
 
     const queryClient = buildQueryClient();
     await queryClient.fetchQuery(dialogueLineSpeechQueryOptions(LINE_ID));
+    await queryClient.fetchQuery(sceneDialogueLinesQueryOptions(SCENE_ID));
 
     const readCache = (): string =>
-      JSON.stringify(
+      JSON.stringify([
         queryClient.getQueriesData({ queryKey: dialogueLineQueryKey(LINE_ID) }),
-      );
+        queryClient.getQueriesData({
+          queryKey: sceneDialogueLinesQueryKey(SCENE_ID),
+        }),
+      ]);
 
     const before = readCache();
     const pending = buildMutation(queryClient).execute({ pass: 'DRAFT' });
@@ -100,16 +110,12 @@ describe('synthesiseSpeechMutationOptions', () => {
     await pending;
   });
 
-  it('refreshes the line row too, because a synthesis writes the line and not only its takes', async () => {
+  it('re-reads the scene list, which a prefix invalidation on the line cannot reach', async () => {
     let lineCalls = 0;
     server.use(
       http.get(API_PATH.sceneDialogueLines(SCENE_ID), () => {
         lineCalls += 1;
-        return HttpResponse.json({
-          items: [
-            buildDialogueLine(lineCalls === 1 ? {} : { durationMs: 2_480 }),
-          ],
-        });
+        return HttpResponse.json({ items: [buildDialogueLine()] });
       }),
       http.post(API_PATH.dialogueLineSpeech(LINE_ID), () =>
         HttpResponse.json({ renderJobId: 'x', attempt: 1 }),
@@ -118,19 +124,11 @@ describe('synthesiseSpeechMutationOptions', () => {
 
     const queryClient = buildQueryClient();
 
-    const before = await queryClient.fetchQuery(
-      sceneDialogueLinesQueryOptions(SCENE_ID),
-    );
-    expect(before.items[0]?.durationMs).toBeUndefined();
-
+    await queryClient.fetchQuery(sceneDialogueLinesQueryOptions(SCENE_ID));
     await buildMutation(queryClient).execute({ pass: 'DRAFT' });
-
-    const after = await queryClient.fetchQuery(
-      sceneDialogueLinesQueryOptions(SCENE_ID),
-    );
+    await queryClient.fetchQuery(sceneDialogueLinesQueryOptions(SCENE_ID));
 
     expect(lineCalls).toBe(2);
-    expect(after.items[0]?.durationMs).toBe(2_480);
   });
 
   it('surfaces the approved-line refusal as the typed code the orchestrator raises', async () => {
