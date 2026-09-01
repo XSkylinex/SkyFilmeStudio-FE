@@ -86,7 +86,7 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **742 keys in English and
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **745 keys in English and
 Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, and the project
@@ -196,9 +196,34 @@ panel's is `--color-border`**; only the first is held to 3:1, and `.claude/rules
 measured table. And **single-key shortcuts have an off switch reachable without a shortcut**, since
 turning `?` off would otherwise strand the control that turns it back on.
 
+**FE-16 ran a second pass on 2026-09-01, for the same reason and with the same result.** The surface
+had roughly doubled since August — four creative-library screens, eight create and edit forms, the
+production list, the planner, the project bible — and `yarn lint` was green over all of it, again.
+What that green tree was hiding: approving a style, voice, location or prop dropped focus to `<body>`
+and announced nothing; saving a style or voice edit left the card with **no** Approve, Edit or Cancel
+until a reload, so a version you had just edited could never be approved; opening those forms
+unmounted the button that opened them; a location's features shared one `<bdi>`, so a mixed-direction
+list put its separating comma on the wrong side; and the runtime budget's own stylesheet put
+`display: flex` on a `<th scope="row">`, which is the one declaration that takes a cell out of its
+table. None of it is reachable by `jsx-a11y`, and that is now the fourth time this has held.
+
+**Two of the defects were sentences, not code, and they are the FE-08 class exactly.** The planner
+said "There is no dialogue route at all" after BE-17 published five of them, and the create-production
+form told the user to go to the orchestrator for a style profile hours after `/styles` grew an Add
+control. `test/lib/i18n/catalogue/en.test.ts` now greps for both phrasings, alongside the sentences
+that were wrong once before.
+
+**Making seven route-level pages lazy took the entry chunk from 597.00 kB to 473.88 kB** (gzip 175.91
+→ 144.93) and its CSS from 65.86 kB to 36.96 kB, which is smaller than the 516.30 kB measured before
+four screens, eight forms and the bible existed. Vite's ">500 kB" warning stopped firing. The four
+library screens and the production list had been statically imported while the *smaller* bible and
+planner were lazy — `plan/16` had already named that inversion for the render queue.
+
 Everything else in `plan/16` needs a screen that does not exist — storyboard, shot review, the
 render queue — and the phase file names which phase each unticked box waits for rather than leaving
-them blank. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
+them blank. Two exceptions are named there rather than blamed on a missing screen: **a failed
+validation is announced on one form out of nine**, and **nothing tells anyone which fields are
+required**. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
 is the first `<video>` in this codebase, its route is `lazy`, and it builds as its own chunk rather
 than into the entry. `plan/16` carries the measurement and the one caveat — React DOM's own media
 event plumbing is in the entry either way and is not ours to move.

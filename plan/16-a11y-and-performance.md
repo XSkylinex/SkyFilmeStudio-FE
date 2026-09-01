@@ -1,7 +1,7 @@
 # FE-16 — Accessibility & performance
 
 > **Depends on:** all UI phases · **Blocks:** 17 · **Backend needs:** — · **Plan authority:** §39, §48
-> **Status:** partly done 2026-08-21
+> **Status:** partly done 2026-08-21 · second pass 2026-09-01
 
 ## Goal
 
@@ -86,6 +86,12 @@ Worth recording *how* they were nearly missed. A grep for capitalised text betwe
 - **The compiler is genuinely on and clean.** Zero `react/react-compiler` violations, zero
   suppressions, and zero `useMemo` / `useCallback` / `memo` in `src/` or `test/`. The entry chunk
   contains 213 `_c(n)` memo-cache calls, which is the compiler emitting rather than being configured.
+  **That last instrument does not survive a rebuild and should not be re-run as written.** Re-measured
+  2026-09-01: `grep -c '_c('` on the entry returns **5**, not because the compiler stopped emitting but
+  because the minifier aliased the import — the entry carries `useMemoCache:mo` and `useMemoCache:Oo`,
+  and `useMemoCache` appears in it four times. A count keyed to a minified local name measures the
+  mangler, not the compiler. What is stable is the presence of `useMemoCache` in the bundle plus a
+  clean `react/react-compiler`; use those.
 
 ## What this phase could not do, and what each waits for
 
@@ -109,6 +115,103 @@ so it stays unticked.
 Decision 3 has the same shape. INP and CLS are the two metrics `plan/16` says will fail, on the two
 pages it names — the render queue and the storyboard. Both are stubs and there is no socket, so
 there is nothing to profile. Measuring them on this build would produce a number that means nothing.
+
+## The second pass — 2026-09-01
+
+Run for the same reason as the first: 10, 11 and 12 are all blocked, this time on one missing
+controller method. Measured against backend `origin/master` @ `aa2c3db` after a fetch — 27
+controllers, 139 route decorators, validated lossless by counting the decorators directly and by
+finding `POST /render-jobs` where `CLAUDE.md` says it is. Five routes contain "scene"; four of them
+*take* a `sceneId`, and the fifth is the destructive `PUT`. `ScenesRepository.listForProduction` is
+called by three services and no controller. Continuity facts looked reachable — controller keyed on
+`:productionId`, all four symbols through the barrel — and are not: `continuityFactSchema` scopes by
+`sceneIdSchema`, and its own docblock says "scoped by scene id, never by scene number".
+
+Since 2026-08-21 the surface roughly doubled and none of it had been audited: four creative-library
+screens, eight create and edit forms, the production list and its create form, the planner, the
+project bible. Three reviewers went over it in parallel.
+
+### What landed
+
+- **The four library approvals announce and take focus.** `plan/16` had named this exact remainder
+  and it was still true. The guard is *which record* was approved — `approve.variables === version.id`
+  on style profiles, because one mutation serves a whole lineage — so an already-approved row does not
+  steal focus on mount.
+- **A saved style or voice no longer strands the user.** The success branch returned only an
+  `<output>`, replacing its own Cancel, while the parent hid Approve and Edit for as long as its
+  `isEditing` flag was set and nothing ever cleared it. A style version you had just edited could not
+  be approved. The five style and voice call sites moved into `Dialog`, which is what locations and
+  props already used, so all eight siblings now answer focus-on-open, Escape and focus-restore the
+  same way.
+- **The edit forms stopped diffing against a stale record.** `hasChanges` and the patch body were two
+  hand-written lists of the same ten comparisons; both now derive from one
+  `baseline = update.data ?? record`, which is why "Saved." can clear itself.
+- **Two screens stopped claiming the orchestrator cannot do what it does.** The planner said "There
+  is no dialogue route at all" (BE-17 published five) and the create-production form sent the user to
+  the orchestrator for a style profile (`/styles` has had an Add control since that morning). Both are
+  the FE-08 stale-sentence class, and the catalogue's existing "wrong once" guard now greps for them.
+- **The subject list stopped truncating silently** — the fifth, which `CLAUDE.md` names by number.
+- **A location's features stopped sharing one `<bdi>`**, which put the separating comma on the wrong
+  side of a mixed-direction list, and the runtime budget's `<th scope="row">` stopped being
+  `display: flex`, which is the one declaration that takes a cell out of its table.
+
+### Measured
+
+| | before | after |
+| - | ------ | ----- |
+| entry JS | 597.00 kB (gzip 175.91) | **473.88 kB** (gzip 144.93) |
+| entry CSS | 65.86 kB (gzip 8.21) | **36.96 kB** (gzip 5.89) |
+| Vite's >500 kB warning | fires | does not fire |
+
+Seven route-level pages were statically imported while smaller ones beside them were lazy — the same
+inversion this file already recorded for the render queue. The entry is now smaller than the
+516.30 kB measured on 2026-08-21, with roughly twice the app behind it.
+
+Control-border contrast re-measured in Chrome against the actual rendered background: secondary
+**3.29:1**, primary **7.74:1**. The 3.29 matches 2026-08-21 exactly, so `--color-border-control` has
+not regressed. **The first two instruments were wrong and were discarded** — resolving the token
+string through a detached element returned `1.00:1` for every pair, and parsing
+`getComputedStyle`'s `oklch(0.52 0.018 264)` with an rgb regex read those three numbers as sRGB. The
+third resolves through a canvas and was validated on black-on-white (21.00), white-on-white (1.00)
+and an oklch that must not come back black. This is the trap at the bottom of this file, met three
+times in one session.
+
+## Recorded rather than fixed
+
+- **A failed validation is silent in eight forms.** `Field` associates the error correctly —
+  `aria-describedby` and `aria-invalid`, pinned by its own tests — but nothing announces it and focus
+  does not move, so a screen-reader user presses Save and learns nothing. `src/` contains no
+  `aria-live` at all. The create-production form got `role="alert"` on its banner as part of the
+  commit that gave it a success announcement; the other eight need the `<output tabIndex={-1}>`
+  treatment this file already settled on, and that is one sweep rather than eight.
+- **Nothing conveys which fields are required.** Twelve are, read off the contract:
+  three on locations, two on props, four on voices, three on styles. `FieldProps` has no `required`
+  and `src/` has no `aria-required`. Do **not** reach for the native `required` attribute — no form
+  sets `noValidate`, so the browser would block submit before `handleSubmit` runs and the Zod schema
+  would stop being the only validator, which is a property the style form's tests exist to hold.
+- **Both language catalogues ship on first paint.** `use-translate` is a 180.53 kB chunk that
+  `index.html` links and the entry statically imports, and it contains **24,672** Hebrew characters —
+  measured with a grep validated on a four-character probe. An English reader parses the whole Hebrew
+  catalogue. Splitting it means making the catalogue load asynchronously, which is FE-15's mechanism
+  and a real redesign, so it is named here rather than half-done. Note this is a localhost product:
+  the cost is parse time, not transfer.
+- **Two approval announcements are keyed on `isSuccess` rather than on the record** — plan approval
+  and the canonical draft — which is the shape the bible publish button was fixed for. Latent today,
+  because the only links to those routes come from a different route, so React unmounts the component
+  in between. It goes live the moment anything links review→review or plan→plan.
+- **`role="alert"` sits on a `display: contents` wrapper in five places.** Consistent across the
+  repo rather than a divergence, so it is a repo-wide question. Worth one browser check.
+- **Heading levels skip on three of the four library screens** — `h1 → h3` on locations and props,
+  and `/voices` runs 1 → 3 → 4 → 2 → 4. Advisory under SC 1.3.1 rather than a listed failure, and
+  invisible to `jsx-a11y` because the levels are split across components.
+- **A style approval refusal is not attributable to the version that caused it.** One mutation per
+  lineage means one card-level alert saying "That version was not approved" when three drafts exist,
+  and `pending` disables every version's Approve at once.
+- **Locations and props drop `failure.detail` on a server refusal** while styles and voices render
+  it. The code is what a user can search for, and `ErrorState` shows it everywhere else.
+- **The four Edit accessible names are assembled in `src/`** with a hardcoded space and word order.
+  SC 2.5.3 passes in both languages today; a `library.editContext` slot key, like
+  `approval.approveContext`, is the correct shape.
 
 ## Two findings recorded rather than fixed
 
@@ -147,20 +250,27 @@ What the gate did not tell us, and was checked by loading the app in Chrome agai
       ring, and the first paint is left alone
 - [x] character-key shortcuts satisfy SC 2.1.4, with the off switch reachable without a shortcut
 - [x] approval controls have contextual accessible names, enforced by a required prop
-- [~] live regions announce decisions, not progress; progress uses `progressbar` — **narrowed
-      2026-08-22, and the narrowing is smaller than it first looked.** Every approve control in this
-      app replaces itself when the decision lands, so the focused button disappears. FE-07's canonical
-      draft already handles it: an `<output tabIndex={-1}>` that takes focus, which is what actually
-      makes a screen reader read the outcome — a live region inserted at the same moment is the
-      unreliable case. FE-09's plan approval copies it, and the two-line ref moved to
-      `src/lib/helpers/focus-when-shown.ts` on its second consumer.
-      **Four still do nothing** — style, voice, location and prop, all from FE-08 — and the fix is one
-      sweep here rather than four divergent ones, once FE-10 to FE-14 have added the rest
+- [x] live regions announce decisions, not progress; progress uses `progressbar` — **narrowed
+      2026-08-22, closed 2026-09-01.** Every approve control in this app replaces itself when the
+      decision lands, so the focused button disappears. FE-07's canonical draft already handled it: an
+      `<output tabIndex={-1}>` that takes focus, which is what actually makes a screen reader read the
+      outcome — a live region inserted at the same moment is the unreliable case. FE-09's plan
+      approval copies it, and the two-line ref moved to `src/lib/helpers/focus-when-shown.ts` on its
+      second consumer. The four that did nothing — style, voice, location and prop — now announce,
+      each scoped to the record it approved rather than to "an approval happened", and
+      `CreateProductionForm` was the last create form saying nothing at all. **A failed validation is
+      still silent on eight forms**, which is recorded above as its own sweep rather than left implied
+      by this box
 - [x] control boundaries satisfy SC 1.4.11, measured rather than eyeballed
 - [x] reduced motion is honoured in CSS — every transition in `src/` uses a duration token, and the
       three keyframe loops each also set `animation: none`
 - [x] no `react/react-compiler` errors, and no suppressions
-- [ ] every workflow is keyboard-completable — **FE-10, FE-12**
+- [~] every workflow is keyboard-completable — **the library workflows are, as of 2026-09-01.**
+      Creating, editing and approving a style, voice, location or prop can be completed and left by
+      keyboard: the forms open in a modal `Dialog` that takes focus and gives it back, and a
+      successful save no longer removes every control on the card. Before this, saving a voice edit
+      left the card with no Approve, no Edit and no Cancel until a reload. The storyboard and shot
+      review remain **FE-10, FE-12**
 - [ ] the automated-pass vs human-approved distinction survives being read aloud — **FE-12**
 - [ ] reduced motion is honoured in the React layer, including autoplay — **FE-12.** The one media
       element that exists does not autoplay, so there is nothing here for the query to damp yet; the
