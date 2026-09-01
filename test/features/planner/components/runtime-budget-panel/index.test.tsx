@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
 import { productionIdSchema } from 'sky-filme-studio-be/contracts';
@@ -167,5 +169,44 @@ describe('RuntimeBudgetPanel', () => {
     expect(
       screen.queryByText('This plan\u2019s own average scene:'),
     ).not.toBeInTheDocument();
+  });
+
+  it('makes the segments table reachable by keyboard, because it scrolls sideways', async () => {
+    orchestratorServes(ELEVEN_MINUTES_AGAINST_TWENTY);
+
+    renderInApp(<RuntimeBudgetPanel productionId={PRODUCTION_ID} />);
+
+    const scroller = await screen.findByRole('region', {
+      name: 'Where the time goes',
+    });
+
+    expect(scroller).toHaveAttribute('tabindex', '0');
+  });
+
+  it('renders each scene as a real row header', async () => {
+    orchestratorServes(ELEVEN_MINUTES_AGAINST_TWENTY);
+
+    renderInApp(<RuntimeBudgetPanel productionId={PRODUCTION_ID} />);
+
+    const rowHeader = await screen.findByRole('rowheader', {
+      name: /INT\. TRAM — CONTINUOUS/,
+    });
+
+    expect(rowHeader.tagName).toBe('TH');
+    expect(rowHeader).toHaveAttribute('scope', 'row');
+  });
+
+  it('does not let the stylesheet take the table semantics back off the row header', () => {
+    const stylesheet = readFileSync(
+      join(
+        process.cwd(),
+        'src/features/planner/components/runtime-budget-panel/runtime-budget-panel.css',
+      ),
+      'utf8',
+    );
+    const rowHeaderRule = /&\s*tbody th \{([^}]*)\}/.exec(stylesheet)?.[1];
+
+    expect(rowHeaderRule).toBeDefined();
+    expect(rowHeaderRule).not.toMatch(/display\s*:/);
   });
 });

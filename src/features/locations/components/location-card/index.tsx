@@ -52,10 +52,18 @@ export const LocationCard: FC<LocationCardProps> = ({
       ) : null}
 
       {location.immutableFeatures.length === 0 ? null : (
-        <p className="location-card__features">
-          {translate('locations.card.immutableFeatures')}{' '}
-          <ContentText>{location.immutableFeatures.join(', ')}</ContentText>
-        </p>
+        <div className="location-card__features">
+          <p className="location-card__features-label">
+            {translate('locations.card.immutableFeatures')}
+          </p>
+          <ul className="location-card__features-list">
+            {location.immutableFeatures.map((feature) => (
+              <li key={feature}>
+                <ContentText>{feature}</ContentText>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       <PlateCoverage projectId={projectId} locationId={location.id} />

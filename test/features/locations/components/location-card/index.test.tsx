@@ -87,4 +87,25 @@ describe('LocationCard', () => {
     expect(announcement.tagName).toBe('OUTPUT');
     expect(announcement).toHaveFocus();
   });
+
+  it('isolates each immutable feature on its own, so a mixed-direction list keeps its separators', () => {
+    renderInApp(
+      <ul>
+        <LocationCard
+          projectId={PROJECT_ID}
+          location={buildLocation({
+            immutableFeatures: ['spiral stair', 'דלת המחסן'],
+          })}
+        />
+      </ul>,
+    );
+
+    const latin = screen.getByText('spiral stair');
+    const hebrew = screen.getByText('דלת המחסן');
+
+    expect(latin.tagName).toBe('BDI');
+    expect(hebrew.tagName).toBe('BDI');
+    expect(latin).not.toBe(hebrew);
+    expect(latin.closest('li')).not.toBe(hebrew.closest('li'));
+  });
 });
