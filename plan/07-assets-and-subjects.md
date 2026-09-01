@@ -427,10 +427,12 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
       makes a checklist stop being evidence; restored 2026-08-22 by review
 - [x] every canonical *reference* shows whether it is anchor-eligible — a badge and a border, with a
       sentence saying what an anchor is for. A smaller claim than the box above, and a separate one
-- [ ] the comparison view is large enough to judge drift — **no longer blocked, just unbuilt.** The
-      blocker recorded here was that only the approved head was served; `edb38a3` added the collection
-      route, so every set for a subject including drafts is now readable and a draft-versus-approved
-      pairing has an endpoint. Nothing renders that comparison yet
+- [x] the comparison view is large enough to judge drift — **built 2026-09-01.** The blocker
+      recorded here was that only the approved head was served; `edb38a3` added the collection route,
+      and `CanonicalComparison` now pairs the approved set against the open draft by role, one square
+      tile per side up to 36 rem wide, between the approved head and the draft's approve control. A side
+      that lacks a role says so in the cell. Thumbnails come from the source-asset thumbnail route,
+      which is why this is the one comparison in the app made of pictures
 - [x] approving a set from the UI — **done 2026-08-22.** The blocker recorded here was a missing
       route rather than a missing export, and that was right: `edb38a3` added
       `GET …/canonical-sets`, so a draft survives a reload and can be found again. Subject Review now

@@ -516,6 +516,18 @@ export const EN_CATALOGUE = {
   'subjectReview.references.generated':
     'Generated artifact — the orchestrator serves no image for one yet.',
   'subjectReview.references.alt': 'Reference {role} for this subject',
+  'subjectReview.comparison.title': 'Approved against the draft',
+  'subjectReview.comparison.explained':
+    'The approved set on one side, the open draft on the other, matched by role and shown large. Identity drift is judged here — the grids above are for finding a reference, not for comparing two.',
+  'subjectReview.comparison.noApproved':
+    'There is a draft but no approved set yet, so there is nothing to compare it against. Approving this draft makes it the head every later one is judged from.',
+  'subjectReview.comparison.noDraft':
+    'There is an approved set and no open draft, so there is nothing to compare. A comparison appears when a draft is opened.',
+  'subjectReview.comparison.approvedSide': 'Approved',
+  'subjectReview.comparison.draftSide': 'Draft',
+  'subjectReview.comparison.missingSide':
+    'No {role} reference on the {side} side',
+  'subjectReview.comparison.alt': '{side} {role} reference',
   'subjectReview.draft.title': 'Open draft',
   'subjectReview.draft.error.title': "This subject's drafts could not be read",
   'subjectReview.draft.none.title': 'No open draft',

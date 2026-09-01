@@ -510,6 +510,17 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'subjectReview.references.generated':
     'תוצר שנוצר — המתזמר עדיין אינו מגיש עבורו תמונה.',
   'subjectReview.references.alt': 'הפניית {role} עבור הסובייקט הזה',
+  'subjectReview.comparison.title': 'המאושר מול הטיוטה',
+  'subjectReview.comparison.explained':
+    'הסט המאושר מצד אחד, הטיוטה הפתוחה מהצד השני, מותאמים לפי תפקיד ומוצגים בגדול. סחיפת זהות נשפטת כאן — הרשתות למעלה נועדו למצוא רפרנס, לא להשוות בין שניים.',
+  'subjectReview.comparison.noApproved':
+    'יש טיוטה אך עדיין אין סט מאושר, ולכן אין מול מה להשוות אותה. אישור הטיוטה הזאת הופך אותה לראש שכל טיוטה מאוחרת נשפטת ממנו.',
+  'subjectReview.comparison.noDraft':
+    'יש סט מאושר ואין טיוטה פתוחה, ולכן אין מה להשוות. השוואה מופיעה כשנפתחת טיוטה.',
+  'subjectReview.comparison.approvedSide': 'מאושר',
+  'subjectReview.comparison.draftSide': 'טיוטה',
+  'subjectReview.comparison.missingSide': 'אין רפרנס {role} בצד {side}',
+  'subjectReview.comparison.alt': 'רפרנס {role} — {side}',
   'subjectReview.draft.title': 'טיוטה פתוחה',
   'subjectReview.draft.error.title':
     'לא ניתן היה לקרוא את הטיוטות של הסובייקט הזה',
