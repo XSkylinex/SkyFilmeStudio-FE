@@ -24,7 +24,7 @@
     "react-redux": "^9.3.0",
     "react-router-dom": "7.18.2",
     "sky-filme-studio-be": "portal:../sky-filme-studio-be",
-    "zod": "4.4.3"
+    "zod": "4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",

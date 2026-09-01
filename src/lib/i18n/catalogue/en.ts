@@ -118,6 +118,8 @@ export const EN_CATALOGUE = {
     'This subject is not recorded as one that speaks, so it cannot carry voice rules. Either clear the voice rules, or record the subject as speaking first.',
   'error.CONTINUITY_SCOPE_INVALID':
     "This fact's scope is not a valid one: either its start or end scene is not part of this production, or the end scene comes before the start. Pick both scenes from this production, with the end no earlier than the start.",
+  'error.SCENE_IN_USE':
+    'This production cannot be re-planned: its scenes already carry shots, dialogue lines or render jobs, and applying an outline replaces the whole scene set. The orchestrator refuses rather than orphaning that work — revise the scenes individually, or withdraw what depends on them first.',
   'error.CONTINUITY_CONTEXT_REQUIRED':
     'The orchestrator asked a model to reason about a single scene without supplying that scene, so nothing was generated. The model remembers nothing between turns, which is why that context is not optional — this is a fault in the orchestrator rather than something to correct here.',
   'error.PRODUCTION_TRANSITION_INVALID':

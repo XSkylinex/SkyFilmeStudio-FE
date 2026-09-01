@@ -162,6 +162,10 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.CONTINUITY_SCOPE_INVALID',
   },
+  SCENE_IN_USE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SCENE_IN_USE',
+  },
   CONTINUITY_CONTEXT_REQUIRED: {
     presentation: 'PERSISTENT',
     messageKey: 'error.CONTINUITY_CONTEXT_REQUIRED',
