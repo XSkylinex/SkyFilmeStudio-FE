@@ -27,7 +27,11 @@ import './shot-frames.css';
 
 const KEYFRAME_LEVEL = 'KEYFRAME';
 
-export const ShotFrames: FC<ShotFramesProps> = ({ shotId, shotOrder }) => {
+export const ShotFrames: FC<ShotFramesProps> = ({
+  shotId,
+  sceneId,
+  shotOrder,
+}) => {
   const translate = useTranslate();
   const queryClient = useQueryClient();
   const interfaceLanguage = useAppSelector(selectInterfaceLanguage);
@@ -36,10 +40,10 @@ export const ShotFrames: FC<ShotFramesProps> = ({ shotId, shotOrder }) => {
   const frames = useQuery(shotStoryboardFramesQueryOptions(shotId));
   const status = useQuery(shotKeyframeStatusQueryOptions(shotId));
   const approve = useMutation(
-    approveStoryboardFrameMutationOptions(shotId, queryClient),
+    approveStoryboardFrameMutationOptions(shotId, sceneId, queryClient),
   );
   const reject = useMutation(
-    rejectStoryboardFrameMutationOptions(shotId, queryClient),
+    rejectStoryboardFrameMutationOptions(shotId, sceneId, queryClient),
   );
 
   if (frames.error && frames.data === undefined) {

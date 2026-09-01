@@ -1,21 +1,25 @@
 import { http, HttpResponse } from 'msw';
 import { QueryClient } from '@tanstack/react-query';
 import {
-  ERROR_CODE,
   artifactIdSchema,
+  sceneIdSchema,
   shotIdSchema,
   storyboardFrameIdSchema,
 } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { approveStoryboardFrameMutationOptions } from '@/features/storyboard/api/approve-storyboard-frame.mutation';
 import { shotKeyframeStatusQueryOptions } from '@/features/storyboard/api/shot-keyframe-status.query';
+import { sceneShotsQueryOptions } from '@/features/storyboard/api/scene-shots.query';
 import { shotStoryboardFramesQueryOptions } from '@/features/storyboard/api/shot-storyboard-frames.query';
 import { shotStoryboardQueryKey } from '@/features/storyboard/helpers/shot-storyboard-query-key';
 import { buildShotKeyframeStatus } from '../../../fixtures/shot-keyframe-status.fixture';
+import { buildShot } from '../../../fixtures/shot.fixture';
 import { buildStoryboardFrame } from '../../../fixtures/storyboard-frame.fixture';
 import { mockOrchestratorServer } from '../../../lib/api/msw-server';
 
 const server = mockOrchestratorServer();
+
+const SCENE_ID = sceneIdSchema.parse('44444444-4444-4444-8444-444444444444');
 
 const SHOT_ID = shotIdSchema.parse('55555555-5555-4555-8555-555555555555');
 
@@ -35,7 +39,7 @@ const buildMutation = (queryClient: QueryClient) =>
     .getMutationCache()
     .build(
       queryClient,
-      approveStoryboardFrameMutationOptions(SHOT_ID, queryClient),
+      approveStoryboardFrameMutationOptions(SHOT_ID, SCENE_ID, queryClient),
     );
 
 describe('approveStoryboardFrameMutationOptions', () => {
@@ -66,8 +70,16 @@ describe('approveStoryboardFrameMutationOptions', () => {
     await expect(capturedRequest?.text()).resolves.toBe('');
   });
 
-  it('does not invalidate the shot-storyboard cache before the server confirms the approval', async () => {
-    const status = buildShotKeyframeStatus({ videoPermitted: true });
+  it('shows nothing the server has not confirmed while the approval is in flight', async () => {
+    const before = buildShotKeyframeStatus({
+      videoPermitted: false,
+      detail: 'No keyframe has been approved for this shot yet.',
+    });
+    const after = buildShotKeyframeStatus({
+      approvedKeyframeId: APPROVED_KEYFRAME_ARTIFACT_ID,
+      videoPermitted: true,
+      detail: 'The approved keyframe now anchors the video render.',
+    });
 
     let resolveResponse: (() => void) | undefined;
     const gate = new Promise<void>((resolve) => {
@@ -75,26 +87,78 @@ describe('approveStoryboardFrameMutationOptions', () => {
     });
 
     server.use(
+      http.get(API_PATH.shotKeyframeStatus(SHOT_ID), () =>
+        HttpResponse.json(before),
+      ),
+      http.get(API_PATH.shotStoryboardFrames(SHOT_ID), () =>
+        HttpResponse.json([buildStoryboardFrame()]),
+      ),
       http.post(API_PATH.storyboardFrameApproval(FRAME_ID), async () => {
         await gate;
-        return HttpResponse.json(status);
+        return HttpResponse.json(after);
       }),
     );
 
     const queryClient = buildQueryClient();
-    const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+    await queryClient.fetchQuery(shotKeyframeStatusQueryOptions(SHOT_ID));
+    await queryClient.fetchQuery(shotStoryboardFramesQueryOptions(SHOT_ID));
 
+    const readCache = (): string =>
+      JSON.stringify(
+        queryClient.getQueriesData({
+          queryKey: shotStoryboardQueryKey(SHOT_ID),
+        }),
+      );
+
+    const beforeMutating = readCache();
     const pending = buildMutation(queryClient).execute(FRAME_ID);
-    await Promise.resolve();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
 
-    expect(invalidate).not.toHaveBeenCalled();
+    expect(readCache()).toBe(beforeMutating);
 
     resolveResponse?.();
-    await expect(pending).resolves.toEqual(status);
+    await expect(pending).resolves.toEqual(after);
+  });
 
-    expect(invalidate).toHaveBeenCalledWith({
-      queryKey: shotStoryboardQueryKey(SHOT_ID),
+  it('refreshes the shot row too, because approving writes the shot and not only the frame', async () => {
+    const confirmedStatus = buildShotKeyframeStatus({
+      approvedKeyframeId: APPROVED_KEYFRAME_ARTIFACT_ID,
+      videoPermitted: true,
+      detail: 'The approved keyframe now anchors the video render.',
     });
+
+    let shotCalls = 0;
+    server.use(
+      http.get(API_PATH.sceneShots(SCENE_ID), () => {
+        shotCalls += 1;
+        return HttpResponse.json([
+          buildShot({
+            state: shotCalls === 1 ? 'STORYBOARD_READY' : 'STORYBOARD_APPROVED',
+          }),
+        ]);
+      }),
+      http.post(API_PATH.storyboardFrameApproval(FRAME_ID), () =>
+        HttpResponse.json(confirmedStatus),
+      ),
+    );
+
+    const queryClient = buildQueryClient();
+
+    const before = await queryClient.fetchQuery(
+      sceneShotsQueryOptions(SCENE_ID),
+    );
+    expect(before[0]?.state).toBe('STORYBOARD_READY');
+
+    await buildMutation(queryClient).execute(FRAME_ID);
+
+    const after = await queryClient.fetchQuery(
+      sceneShotsQueryOptions(SCENE_ID),
+    );
+
+    expect(shotCalls).toBe(2);
+    expect(after[0]?.state).toBe('STORYBOARD_APPROVED');
   });
 
   it('invalidating the shared prefix refreshes both the frame list and the keyframe status', async () => {
@@ -141,16 +205,17 @@ describe('approveStoryboardFrameMutationOptions', () => {
     expect(statusCalls).toBe(2);
   });
 
-  it('rejects with STORYBOARD_FRAME_IMMUTABLE when the frame can no longer be decided', async () => {
+  it('surfaces the draft refusal as a codeless 400, which is what that guard actually returns', async () => {
     server.use(
       http.post(API_PATH.storyboardFrameApproval(FRAME_ID), () =>
         HttpResponse.json(
           {
-            statusCode: 409,
-            code: ERROR_CODE.STORYBOARD_FRAME_IMMUTABLE,
-            message: 'This storyboard frame can no longer be decided.',
+            statusCode: 400,
+            error: 'Bad Request',
+            message:
+              'Frame is a DRAFT, and only a KEYFRAME may anchor image-to-video.',
           },
-          { status: 409 },
+          { status: 400 },
         ),
       ),
     );
@@ -161,8 +226,8 @@ describe('approveStoryboardFrameMutationOptions', () => {
       buildMutation(queryClient).execute(FRAME_ID),
     ).rejects.toMatchObject({
       kind: 'HTTP',
-      code: ERROR_CODE.STORYBOARD_FRAME_IMMUTABLE,
-      status: 409,
+      status: 400,
+      code: undefined,
     });
   });
 });

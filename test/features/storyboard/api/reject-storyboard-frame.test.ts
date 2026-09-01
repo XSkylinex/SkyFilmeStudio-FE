@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { QueryClient } from '@tanstack/react-query';
 import {
   ERROR_CODE,
+  sceneIdSchema,
   shotIdSchema,
   storyboardFrameIdSchema,
 } from 'sky-filme-studio-be/contracts';
@@ -15,6 +16,8 @@ import { buildStoryboardFrame } from '../../../fixtures/storyboard-frame.fixture
 import { mockOrchestratorServer } from '../../../lib/api/msw-server';
 
 const server = mockOrchestratorServer();
+
+const SCENE_ID = sceneIdSchema.parse('44444444-4444-4444-8444-444444444444');
 
 const SHOT_ID = shotIdSchema.parse('55555555-5555-4555-8555-555555555555');
 
@@ -30,7 +33,7 @@ const buildMutation = (queryClient: QueryClient) =>
     .getMutationCache()
     .build(
       queryClient,
-      rejectStoryboardFrameMutationOptions(SHOT_ID, queryClient),
+      rejectStoryboardFrameMutationOptions(SHOT_ID, SCENE_ID, queryClient),
     );
 
 describe('rejectStoryboardFrameMutationOptions', () => {
@@ -59,8 +62,15 @@ describe('rejectStoryboardFrameMutationOptions', () => {
     await expect(capturedRequest?.text()).resolves.toBe('');
   });
 
-  it('does not invalidate the shot-storyboard cache before the server confirms the rejection', async () => {
-    const status = buildShotKeyframeStatus({ videoPermitted: false });
+  it('shows nothing the server has not confirmed while the rejection is in flight', async () => {
+    const before = buildShotKeyframeStatus({
+      videoPermitted: true,
+      detail: 'The approved keyframe anchors the video render.',
+    });
+    const after = buildShotKeyframeStatus({
+      videoPermitted: false,
+      detail: 'The keyframe was rejected, so video is not permitted.',
+    });
 
     let resolveResponse: (() => void) | undefined;
     const gate = new Promise<void>((resolve) => {
@@ -68,26 +78,39 @@ describe('rejectStoryboardFrameMutationOptions', () => {
     });
 
     server.use(
+      http.get(API_PATH.shotKeyframeStatus(SHOT_ID), () =>
+        HttpResponse.json(before),
+      ),
+      http.get(API_PATH.shotStoryboardFrames(SHOT_ID), () =>
+        HttpResponse.json([buildStoryboardFrame()]),
+      ),
       http.delete(API_PATH.storyboardFrameApproval(FRAME_ID), async () => {
         await gate;
-        return HttpResponse.json(status);
+        return HttpResponse.json(after);
       }),
     );
 
     const queryClient = buildQueryClient();
-    const invalidate = vi.spyOn(queryClient, 'invalidateQueries');
+    await queryClient.fetchQuery(shotKeyframeStatusQueryOptions(SHOT_ID));
+    await queryClient.fetchQuery(shotStoryboardFramesQueryOptions(SHOT_ID));
 
+    const readCache = (): string =>
+      JSON.stringify(
+        queryClient.getQueriesData({
+          queryKey: shotStoryboardQueryKey(SHOT_ID),
+        }),
+      );
+
+    const beforeMutating = readCache();
     const pending = buildMutation(queryClient).execute(FRAME_ID);
-    await Promise.resolve();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
 
-    expect(invalidate).not.toHaveBeenCalled();
+    expect(readCache()).toBe(beforeMutating);
 
     resolveResponse?.();
-    await expect(pending).resolves.toEqual(status);
-
-    expect(invalidate).toHaveBeenCalledWith({
-      queryKey: shotStoryboardQueryKey(SHOT_ID),
-    });
+    await expect(pending).resolves.toEqual(after);
   });
 
   it('invalidating the shared prefix refreshes both the frame list and the keyframe status', async () => {

@@ -1,6 +1,10 @@
 import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
-import { artifactIdSchema, shotIdSchema } from 'sky-filme-studio-be/contracts';
+import {
+  artifactIdSchema,
+  sceneIdSchema,
+  shotIdSchema,
+} from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { ShotFrames } from '@/features/storyboard/components/shot-frames';
 import { renderInApp } from '../../../../render-in-app';
@@ -9,6 +13,7 @@ import { buildStoryboardFrame } from '../../../../fixtures/storyboard-frame.fixt
 import { buildShotKeyframeStatus } from '../../../../fixtures/shot-keyframe-status.fixture';
 
 const SHOT_ID = shotIdSchema.parse('55555555-5555-4555-8555-555555555555');
+const SCENE_ID = sceneIdSchema.parse('44444444-4444-4444-8444-444444444444');
 const APPROVED_ARTIFACT = artifactIdSchema.parse(
   '88888888-8888-4888-8888-888888888888',
 );
@@ -36,7 +41,9 @@ describe('ShotFrames', () => {
       buildShotKeyframeStatus(),
     );
 
-    renderInApp(<ShotFrames shotId={SHOT_ID} shotOrder={3} />);
+    renderInApp(
+      <ShotFrames shotId={SHOT_ID} sceneId={SCENE_ID} shotOrder={3} />,
+    );
 
     expect(
       await screen.findByText(/A draft cannot be approved/),
@@ -48,7 +55,9 @@ describe('ShotFrames', () => {
   it('names the shot and attempt in the approval control, not just "Approve"', async () => {
     serve([buildStoryboardFrame({ attempt: 2 })], buildShotKeyframeStatus());
 
-    renderInApp(<ShotFrames shotId={SHOT_ID} shotOrder={3} />);
+    renderInApp(
+      <ShotFrames shotId={SHOT_ID} sceneId={SCENE_ID} shotOrder={3} />,
+    );
 
     expect(
       await screen.findByRole('button', {
@@ -66,7 +75,9 @@ describe('ShotFrames', () => {
       }),
     );
 
-    renderInApp(<ShotFrames shotId={SHOT_ID} shotOrder={3} />);
+    renderInApp(
+      <ShotFrames shotId={SHOT_ID} sceneId={SCENE_ID} shotOrder={3} />,
+    );
 
     expect(
       await screen.findByText('This frame is the approved keyframe.'),
@@ -77,7 +88,9 @@ describe('ShotFrames', () => {
   it('says the picture is not shown rather than rendering a broken box', async () => {
     serve([buildStoryboardFrame()], buildShotKeyframeStatus());
 
-    renderInApp(<ShotFrames shotId={SHOT_ID} shotOrder={3} />);
+    renderInApp(
+      <ShotFrames shotId={SHOT_ID} sceneId={SCENE_ID} shotOrder={3} />,
+    );
 
     expect(
       await screen.findByText(/The picture itself is not shown/),
