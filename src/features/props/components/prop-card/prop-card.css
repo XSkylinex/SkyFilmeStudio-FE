@@ -60,6 +60,12 @@
     justify-content: flex-end;
   }
 
+  .prop-card__approved {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
   .prop-card__frozen {
     margin: 0;
     color: var(--color-text-secondary);

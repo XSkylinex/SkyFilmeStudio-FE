@@ -6,9 +6,11 @@ import { ApprovalControls } from '@/lib/components/approval-controls';
 import { Badge } from '@/lib/components/badge';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
+import { Dialog } from '@/lib/components/dialog';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
@@ -123,51 +125,58 @@ export const StyleLineageCard: FC<StyleLineageCardProps> = ({
                     tone={STATUS_TONE.SUCCESS}
                     label={translate('styles.version.approved')}
                   />
+                  {approve.isSuccess && approve.variables === version.id ? (
+                    <output
+                      className="style-lineage-card__approved"
+                      ref={focusWhenShown}
+                      tabIndex={-1}
+                    >
+                      {translate('library.approved')}
+                    </output>
+                  ) : null}
                   <span className="style-lineage-card__frozen">
                     {translate('library.frozen.styleVersion')}
                   </span>
                 </>
               ) : null}
 
-              {version.approved && nextVersionOfId === version.id ? (
-                <CreateStyleProfileForm
-                  projectId={projectId}
-                  onClose={() => setNextVersionOfId(null)}
-                  nextVersionOf={{
-                    lineageId,
-                    name: version.name,
-                    description: version.description,
-                    mode: version.mode,
-                    realismLevel: version.realismLevel,
-                    paletteRules: version.paletteRules,
-                    lightingRules: version.lightingRules,
-                    cameraRules: version.cameraRules,
-                    textureRules: version.textureRules,
-                    motionRules: version.motionRules,
-                    prohibitedStyleDrift: version.prohibitedStyleDrift,
-                  }}
-                />
-              ) : null}
-              {version.approved && nextVersionOfId !== version.id ? (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  aria-label={`${translate('library.newVersion')} ${contextLabel}`}
-                  onClick={() => setNextVersionOfId(version.id)}
-                >
-                  {translate('library.newVersion')}
-                </Button>
-              ) : null}
-
-              {!version.approved && editingVersionId === version.id ? (
-                <EditStyleProfileForm
-                  projectId={projectId}
-                  lineageId={lineageId}
-                  styleProfile={version}
-                  onClose={() => setEditingVersionId(null)}
-                />
-              ) : null}
-              {!version.approved && editingVersionId !== version.id ? (
+              {version.approved ? (
+                <>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    aria-label={`${translate('library.newVersion')} ${contextLabel}`}
+                    onClick={() => setNextVersionOfId(version.id)}
+                  >
+                    {translate('library.newVersion')}
+                  </Button>
+                  <Dialog
+                    open={nextVersionOfId === version.id}
+                    title={translate('library.newVersion.title')}
+                    onClose={() => setNextVersionOfId(null)}
+                  >
+                    {nextVersionOfId === version.id ? (
+                      <CreateStyleProfileForm
+                        projectId={projectId}
+                        onClose={() => setNextVersionOfId(null)}
+                        nextVersionOf={{
+                          lineageId,
+                          name: version.name,
+                          description: version.description,
+                          mode: version.mode,
+                          realismLevel: version.realismLevel,
+                          paletteRules: version.paletteRules,
+                          lightingRules: version.lightingRules,
+                          cameraRules: version.cameraRules,
+                          textureRules: version.textureRules,
+                          motionRules: version.motionRules,
+                          prohibitedStyleDrift: version.prohibitedStyleDrift,
+                        }}
+                      />
+                    ) : null}
+                  </Dialog>
+                </>
+              ) : (
                 <>
                   <ApprovalControls
                     contextLabel={contextLabel}
@@ -185,8 +194,22 @@ export const StyleLineageCard: FC<StyleLineageCardProps> = ({
                   >
                     {translate('library.edit')}
                   </Button>
+                  <Dialog
+                    open={editingVersionId === version.id}
+                    title={translate('styles.edit.title')}
+                    onClose={() => setEditingVersionId(null)}
+                  >
+                    {editingVersionId === version.id ? (
+                      <EditStyleProfileForm
+                        projectId={projectId}
+                        lineageId={lineageId}
+                        styleProfile={version}
+                        onClose={() => setEditingVersionId(null)}
+                      />
+                    ) : null}
+                  </Dialog>
                 </>
-              ) : null}
+              )}
             </li>
           );
         })}

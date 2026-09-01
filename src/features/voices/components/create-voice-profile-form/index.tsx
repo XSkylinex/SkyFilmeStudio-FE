@@ -46,13 +46,20 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
   if (create.isSuccess) {
     return (
-      <output
-        className="create-voice-profile-form__done"
-        ref={focusWhenShown}
-        tabIndex={-1}
-      >
-        {translate('library.created')}
-      </output>
+      <div className="create-voice-profile-form">
+        <output
+          className="create-voice-profile-form__done"
+          ref={focusWhenShown}
+          tabIndex={-1}
+        >
+          {translate('library.created')}
+        </output>
+        <div className="create-voice-profile-form__actions">
+          <Button type="button" variant="ghost" size="md" onClick={onClose}>
+            {translate('library.cancel')}
+          </Button>
+        </div>
+      </div>
     );
   }
 
@@ -84,10 +91,6 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
   return (
     <section className="create-voice-profile-form">
-      <h4 className="create-voice-profile-form__heading">
-        {translate('voices.create.title')}
-      </h4>
-
       <form className="create-voice-profile-form__form" onSubmit={handleSubmit}>
         <Field
           label={translate('library.field.displayName')}

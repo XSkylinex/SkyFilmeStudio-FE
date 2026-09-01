@@ -15,24 +15,6 @@ const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
 );
 
-beforeAll(() => {
-  if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
-    HTMLDialogElement.prototype.showModal = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = true;
-    };
-  }
-  if (typeof HTMLDialogElement.prototype.close !== 'function') {
-    HTMLDialogElement.prototype.close = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = false;
-      this.dispatchEvent(new Event('close'));
-    };
-  }
-});
-
 const serveNoPlates = (locationId: LocationId): void => {
   server.use(
     http.get(API_PATH.locationPlates(PROJECT_ID, locationId), () =>
@@ -73,5 +55,57 @@ describe('LocationCard', () => {
     expect(
       screen.queryByRole('button', { name: /^Edit/ }),
     ).not.toBeInTheDocument();
+  });
+
+  it('announces the approval it just made, and lands focus on it', async () => {
+    const user = userEvent.setup();
+    const draft = buildLocation();
+    const approved = buildLocation({ id: draft.id, approved: true });
+
+    server.use(
+      http.post(API_PATH.approveLocation(PROJECT_ID, draft.id), () =>
+        HttpResponse.json(approved),
+      ),
+    );
+
+    const view = renderInApp(
+      <ul>
+        <LocationCard projectId={PROJECT_ID} location={draft} />
+      </ul>,
+    );
+
+    await user.click(await screen.findByRole('button', { name: /^Approve/ }));
+
+    view.rerender(
+      <ul>
+        <LocationCard projectId={PROJECT_ID} location={approved} />
+      </ul>,
+    );
+
+    const announcement = await screen.findByText('Approved.');
+
+    expect(announcement.tagName).toBe('OUTPUT');
+    expect(announcement).toHaveFocus();
+  });
+
+  it('isolates each immutable feature on its own, so a mixed-direction list keeps its separators', () => {
+    renderInApp(
+      <ul>
+        <LocationCard
+          projectId={PROJECT_ID}
+          location={buildLocation({
+            immutableFeatures: ['spiral stair', 'דלת המחסן'],
+          })}
+        />
+      </ul>,
+    );
+
+    const latin = screen.getByText('spiral stair');
+    const hebrew = screen.getByText('דלת המחסן');
+
+    expect(latin.tagName).toBe('BDI');
+    expect(hebrew.tagName).toBe('BDI');
+    expect(latin).not.toBe(hebrew);
+    expect(latin.closest('li')).not.toBe(hebrew.closest('li'));
   });
 });

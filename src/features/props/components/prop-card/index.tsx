@@ -8,6 +8,7 @@ import { ContentText } from '@/lib/components/content-text';
 import { Dialog } from '@/lib/components/dialog';
 import { ErrorState } from '@/lib/components/error-state';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
@@ -86,7 +87,18 @@ export const PropCard: FC<PropCardProps> = ({ projectId, prop }) => {
       ) : null}
 
       {prop.approved ? (
-        <p className="prop-card__frozen">{translate('library.frozen')}</p>
+        <>
+          {approve.isSuccess ? (
+            <output
+              className="prop-card__approved"
+              ref={focusWhenShown}
+              tabIndex={-1}
+            >
+              {translate('library.approved')}
+            </output>
+          ) : null}
+          <p className="prop-card__frozen">{translate('library.frozen')}</p>
+        </>
       ) : (
         <>
           <div className="prop-card__actions">

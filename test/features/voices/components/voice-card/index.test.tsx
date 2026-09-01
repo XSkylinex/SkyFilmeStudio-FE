@@ -1,12 +1,14 @@
+import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { projectIdSchema } from 'sky-filme-studio-be/contracts';
+import { API_PATH } from '@/lib/api/api.constants';
 import { VoiceCard } from '@/features/voices/components/voice-card';
 import { renderInApp } from '../../../../render-in-app';
 import { buildVoiceProfile } from '../../../../fixtures/voice-profile.fixture';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
-mockOrchestratorServer();
+const server = mockOrchestratorServer();
 
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
@@ -33,7 +35,7 @@ describe('VoiceCard', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('offers editing on a draft voice, in place beside its approve control', async () => {
+  it('opens editing in a dialog and keeps the approve control behind it', async () => {
     const user = userEvent.setup();
 
     renderCard(false);
@@ -50,5 +52,54 @@ describe('VoiceCard', () => {
     expect(
       screen.getByRole('button', { name: 'Save changes' }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Edit this voice profile' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /^Approve/ }),
+    ).toBeInTheDocument();
+    expect(editButton).toBeInTheDocument();
+  });
+
+  it('announces the approval it just made, and lands focus on it', async () => {
+    const user = userEvent.setup();
+    const draft = buildVoiceProfile({ displayName: 'Mira' });
+    const approved = buildVoiceProfile({
+      id: draft.id,
+      displayName: 'Mira',
+      approved: true,
+    });
+
+    server.use(
+      http.post(API_PATH.approveVoiceProfile(PROJECT_ID, draft.id), () =>
+        HttpResponse.json(approved),
+      ),
+    );
+
+    const view = renderInApp(
+      <ul>
+        <VoiceCard projectId={PROJECT_ID} voice={draft} />
+      </ul>,
+    );
+
+    await user.click(await screen.findByRole('button', { name: /^Approve/ }));
+
+    view.rerender(
+      <ul>
+        <VoiceCard projectId={PROJECT_ID} voice={approved} />
+      </ul>,
+    );
+
+    const announcement = await screen.findByText('Approved.');
+
+    expect(announcement.tagName).toBe('OUTPUT');
+    expect(announcement).toHaveFocus();
+  });
+
+  it('does not announce an approval it did not make', () => {
+    renderCard(true);
+
+    expect(screen.queryByText('Approved.')).not.toBeInTheDocument();
+    expect(document.body).toHaveFocus();
   });
 });

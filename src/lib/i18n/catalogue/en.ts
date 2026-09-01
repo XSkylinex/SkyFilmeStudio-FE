@@ -59,6 +59,10 @@ export const EN_CATALOGUE = {
     'A keyframe for this shot has to be anchored to the approved look of what it contains — the subject, the location, the props — and no anchor was available. That anchoring is what stops the same character drifting from shot to shot.',
   'error.REGENERATION_MODE_REQUIRED':
     'Regenerating this frame needs the mode stated: the same prompt with a new seed, a controlled revision of the prompt, or a fresh keyframe. Those are different operations, and an unlabelled retry makes the attempt history impossible to read afterwards.',
+  'error.QC_RUN_SCOPE_REQUIRED':
+    'A quality-control run has to be attached to something — either one shot or a whole production. This one named neither, so nothing could say what it had checked. Sending it again unchanged will fail the same way.',
+  'error.PRODUCTION_QC_REPORT_VERSION_EXISTS':
+    'This production already has a quality-control report at that version. Reports are numbered and never overwritten, so the next one has to be a new version rather than a reuse of this one.',
   'error.KEYFRAME_REQUIREMENT_DERIVED':
     'Whether a keyframe is required by the subjects in a shot is worked out when the scene is planned, so it cannot be chosen by hand — say instead that a person is asking for the keyframe. And once a shot carries a canonical subject the requirement cannot be changed at all: record a waiver with a reason if this shot may skip the gate.',
   'error.OFFLINE_POLICY_VIOLATION':
@@ -426,6 +430,8 @@ export const EN_CATALOGUE = {
   'subjects.title': 'Subjects',
   'subjects.loading': 'Loading subjects',
   'subjects.error.title': 'The subject list could not be read',
+  'subjects.truncated':
+    'More subjects exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'subjects.empty.title': 'No subjects yet',
   'subjects.empty.description':
     'Nothing has been registered in this project. Registering is not wired up in this build yet — the orchestrator accepts a subject, but the request shape is not published through the shared contract.',
@@ -547,8 +553,6 @@ export const EN_CATALOGUE = {
   'styles.lineage.approvedIs': 'Approved: v{version}',
   'styles.version.label': 'v{version}',
   'styles.version.approved': 'Approved',
-  'styles.version.frozen':
-    'An approved version is frozen, so a change becomes a new version rather than an edit.',
   'styles.version.context': 'version {version} of {name}',
   'styles.approveError.title': 'That version was not approved',
   'page.styles.title': 'Styles',
@@ -682,6 +686,7 @@ export const EN_CATALOGUE = {
   'library.creating': 'Creating…',
   'library.saved': 'Saved.',
   'library.created': 'Created.',
+  'library.approved': 'Approved.',
   'library.frozen':
     'This record is approved, so it is frozen and cannot be edited. That is what makes it safe for anything already pointing at it — the freeze is enforced by the database, not by this screen.',
   'library.frozen.styleVersion':
@@ -814,7 +819,7 @@ export const EN_CATALOGUE = {
   'productions.create.blocked.title':
     'A production needs a style profile first',
   'productions.create.blocked.description':
-    'Every production is pinned to a style version, and this project has none. The style library can approve one but cannot yet create one, so this has to be done through the orchestrator.',
+    'Every production is pinned to a style version, and this project has none yet. Create the first one in the style library, then come back here.',
   'productions.create.invalid':
     'The orchestrator’s own contract rejected this before it was sent.',
   'productions.create.failed.title': 'The production was not created',
@@ -905,7 +910,7 @@ export const EN_CATALOGUE = {
   'planner.gaps.scenes':
     'Read, add or edit a scene. The only route that touches them replaces the whole set at once and hands back an untyped list, so this screen sees a scene only as a row in the budget above.',
   'planner.gaps.dialogue':
-    'Write a dialogue line, pick a voice for it, or see how long it will take to speak. There is no dialogue route at all, and a spoken duration is measured by the speech engine rather than guessed from a word count.',
+    'Write a dialogue line, pick a voice for it, or see how long it will take to speak. Every one of those routes exists. All of them are keyed on a scene, and nothing published hands this screen a scene id — the same missing route the scenes gap above names.',
   'planner.gaps.continuity':
     'Show continuity or tone findings beside the scenes they concern. Both have a schema and neither has a route.',
   'page.bible.title': 'Project bible',

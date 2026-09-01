@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { projectIdSchema } from 'sky-filme-studio-be/contracts';
 import type { StyleProfile } from 'sky-filme-studio-be/contracts';
@@ -86,9 +86,15 @@ describe('CreateProductionForm', () => {
     await user.type(screen.getByLabelText('Seconds'), '30');
     await user.click(screen.getByRole('button', { name: 'Create production' }));
 
-    await waitFor(() => {
-      expect(onClose).toHaveBeenCalledTimes(1);
-    });
+    const announcement = await screen.findByText('Created.');
+
+    expect(announcement.tagName).toBe('OUTPUT');
+    expect(announcement).toHaveFocus();
+    expect(onClose).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
 
     expect(created).toMatchObject({
       title: 'Trailer',

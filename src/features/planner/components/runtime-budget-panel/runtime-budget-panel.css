@@ -77,6 +77,13 @@
     overflow-x: auto;
   }
 
+  .runtime-budget-panel__segment-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
   .runtime-budget-panel__segments {
     inline-size: 100%;
     border-collapse: collapse;
@@ -97,10 +104,6 @@
     }
 
     & tbody th {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--space-2);
       color: var(--color-text);
       font-weight: var(--font-weight-regular);
     }

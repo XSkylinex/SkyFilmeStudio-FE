@@ -69,46 +69,32 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
     return key === undefined ? '' : translate(key);
   };
 
-  if (update.isSuccess) {
-    return (
-      <output
-        className="edit-style-profile-form__done"
-        ref={focusWhenShown}
-        tabIndex={-1}
-      >
-        {translate('library.saved')}
-      </output>
-    );
-  }
-
-  const hasChanges =
-    name !== styleProfile.name ||
-    description !== styleProfile.description ||
-    mode !== styleProfile.mode ||
-    realismLevel !== originalRealismLevel ||
-    paletteRules !== originalPalette ||
-    lightingRules !== originalLighting ||
-    cameraRules !== originalCamera ||
-    textureRules !== originalTexture ||
-    motionRules !== originalMotion ||
-    prohibitedStyleDrift !== originalDrift;
+  const baseline = update.data ?? styleProfile;
+  const patch = {
+    name: name === baseline.name ? undefined : name,
+    description: description === baseline.description ? undefined : description,
+    mode: mode === baseline.mode ? undefined : mode,
+    realismLevel: diffNullableText(realismLevel, baseline.realismLevel),
+    paletteRules: linesChange(paletteRules, baseline.paletteRules.join('\n')),
+    lightingRules: linesChange(
+      lightingRules,
+      baseline.lightingRules.join('\n'),
+    ),
+    cameraRules: linesChange(cameraRules, baseline.cameraRules.join('\n')),
+    textureRules: linesChange(textureRules, baseline.textureRules.join('\n')),
+    motionRules: linesChange(motionRules, baseline.motionRules.join('\n')),
+    prohibitedStyleDrift: linesChange(
+      prohibitedStyleDrift,
+      baseline.prohibitedStyleDrift.join('\n'),
+    ),
+  };
+  const hasChanges = Object.values(patch).some((value) => value !== undefined);
+  const justSaved = update.isSuccess && !hasChanges;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    const result = updateStyleProfileRequestSchema.safeParse({
-      name: name === styleProfile.name ? undefined : name,
-      description:
-        description === styleProfile.description ? undefined : description,
-      mode: mode === styleProfile.mode ? undefined : mode,
-      realismLevel: diffNullableText(realismLevel, originalRealismLevel),
-      paletteRules: linesChange(paletteRules, originalPalette),
-      lightingRules: linesChange(lightingRules, originalLighting),
-      cameraRules: linesChange(cameraRules, originalCamera),
-      textureRules: linesChange(textureRules, originalTexture),
-      motionRules: linesChange(motionRules, originalMotion),
-      prohibitedStyleDrift: linesChange(prohibitedStyleDrift, originalDrift),
-    });
+    const result = updateStyleProfileRequestSchema.safeParse(patch);
 
     if (!result.success) {
       setFieldErrors(fieldErrorsFromIssues(result.error));
@@ -124,10 +110,6 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
 
   return (
     <section className="edit-style-profile-form">
-      <h4 className="edit-style-profile-form__heading">
-        {translate('styles.edit.title')}
-      </h4>
-
       <form className="edit-style-profile-form__form" onSubmit={handleSubmit}>
         <Field label={translate('library.field.name')} error={errorFor('name')}>
           <Input
@@ -239,6 +221,16 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
             rows={RULE_ROWS}
           />
         </Field>
+
+        {justSaved ? (
+          <output
+            className="edit-style-profile-form__done"
+            ref={focusWhenShown}
+            tabIndex={-1}
+          >
+            {translate('library.saved')}
+          </output>
+        ) : null}
 
         <div className="edit-style-profile-form__actions">
           <Button type="button" variant="ghost" size="md" onClick={onClose}>

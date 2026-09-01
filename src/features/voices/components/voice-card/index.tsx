@@ -5,8 +5,10 @@ import { ApprovalControls } from '@/lib/components/approval-controls';
 import { Badge } from '@/lib/components/badge';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
+import { Dialog } from '@/lib/components/dialog';
 import { ErrorState } from '@/lib/components/error-state';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
@@ -81,17 +83,34 @@ export const VoiceCard: FC<VoiceCardProps> = ({ projectId, voice }) => {
       ) : null}
 
       {voice.approved ? (
-        <p className="voice-card__frozen">{translate('library.frozen')}</p>
+        <>
+          {approve.isSuccess ? (
+            <output
+              className="voice-card__approved"
+              ref={focusWhenShown}
+              tabIndex={-1}
+            >
+              {translate('library.approved')}
+            </output>
+          ) : null}
+          <p className="voice-card__frozen">{translate('library.frozen')}</p>
+        </>
       ) : null}
 
-      {voice.approved || !isEditing ? null : (
-        <EditVoiceProfileForm
-          projectId={projectId}
-          voiceProfile={voice}
-          onClose={() => setIsEditing(false)}
-        />
-      )}
-      {voice.approved || isEditing ? null : (
+      <Dialog
+        open={isEditing}
+        title={translate('voices.edit.title')}
+        onClose={() => setIsEditing(false)}
+      >
+        {isEditing ? (
+          <EditVoiceProfileForm
+            projectId={projectId}
+            voiceProfile={voice}
+            onClose={() => setIsEditing(false)}
+          />
+        ) : null}
+      </Dialog>
+      {voice.approved ? null : (
         <>
           <ApprovalControls
             contextLabel={translate('voices.card.context', {

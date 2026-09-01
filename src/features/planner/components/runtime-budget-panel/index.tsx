@@ -162,7 +162,12 @@ export const RuntimeBudgetPanel: FC<RuntimeBudgetPanelProps> = ({
           {translate('planner.budget.segments.empty')}
         </p>
       ) : (
-        <div className="runtime-budget-panel__scroller">
+        <div
+          className="runtime-budget-panel__scroller"
+          role="region"
+          aria-label={translate('planner.budget.segments.heading')}
+          tabIndex={0}
+        >
           <table className="runtime-budget-panel__segments">
             <thead>
               <tr>
@@ -185,13 +190,15 @@ export const RuntimeBudgetPanel: FC<RuntimeBudgetPanelProps> = ({
                   data-off-mean={summary.offMeanSegments.includes(segment)}
                 >
                   <th scope="row">
-                    <ContentText>{segment.label}</ContentText>
-                    {segment.reused ? (
-                      <Badge
-                        tone={STATUS_TONE.NEUTRAL}
-                        label={translate('planner.budget.segments.reused')}
-                      />
-                    ) : null}
+                    <span className="runtime-budget-panel__segment-label">
+                      <ContentText>{segment.label}</ContentText>
+                      {segment.reused ? (
+                        <Badge
+                          tone={STATUS_TONE.NEUTRAL}
+                          label={translate('planner.budget.segments.reused')}
+                        />
+                      ) : null}
+                    </span>
                   </th>
                   <td>
                     <span className="runtime-budget-panel__notation" dir="ltr">

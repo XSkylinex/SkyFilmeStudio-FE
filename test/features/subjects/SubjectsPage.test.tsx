@@ -75,4 +75,33 @@ describe('SubjectsPage', () => {
       screen.getByRole('heading', { name: 'That is not a project id' }),
     ).toBeInTheDocument();
   });
+
+  it('says the list is partial when the server offers another page', async () => {
+    server.use(
+      http.get(API_PATH.projectSubjects(PROJECT_ID), () =>
+        HttpResponse.json({
+          items: [buildSubject({ displayName: 'Mira' })],
+          nextCursor: 'next-page',
+        }),
+      ),
+    );
+
+    renderAt(`/projects/${PROJECT_ID}/subjects`);
+
+    expect(await screen.findByText('Mira')).toBeInTheDocument();
+    expect(
+      await screen.findByText(/More subjects exist than are shown/),
+    ).toBeInTheDocument();
+  });
+
+  it('stays silent about paging when the server offers no next page', async () => {
+    orchestratorServes(buildSubject({ displayName: 'Mira' }));
+
+    renderAt(`/projects/${PROJECT_ID}/subjects`);
+
+    expect(await screen.findByText('Mira')).toBeInTheDocument();
+    expect(
+      screen.queryByText(/More subjects exist than are shown/),
+    ).not.toBeInTheDocument();
+  });
 });

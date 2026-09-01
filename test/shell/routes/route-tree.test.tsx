@@ -64,17 +64,24 @@ describe('routeTree', () => {
       .sort((a, b) => (a ?? '').localeCompare(b ?? ''));
 
     expect(lazyPaths).toEqual([
+      'assets',
       'assets/:assetId',
       'audio',
       'bible',
       'design-system',
+      'locations',
       'plan',
+      'productions',
+      'props',
       'shots',
       'shots/:shotId',
       'storyboard',
+      'styles',
+      'subjects',
       'subjects/:subjectId',
       'system',
       'timeline',
+      'voices',
     ]);
     expect(lazyRoutes.every((route) => route.hasHydrateFallback)).toBe(true);
   });

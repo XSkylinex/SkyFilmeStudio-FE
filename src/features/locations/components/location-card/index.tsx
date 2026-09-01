@@ -8,6 +8,7 @@ import { ContentText } from '@/lib/components/content-text';
 import { Dialog } from '@/lib/components/dialog';
 import { ErrorState } from '@/lib/components/error-state';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
@@ -51,10 +52,18 @@ export const LocationCard: FC<LocationCardProps> = ({
       ) : null}
 
       {location.immutableFeatures.length === 0 ? null : (
-        <p className="location-card__features">
-          {translate('locations.card.immutableFeatures')}{' '}
-          <ContentText>{location.immutableFeatures.join(', ')}</ContentText>
-        </p>
+        <div className="location-card__features">
+          <p className="location-card__features-label">
+            {translate('locations.card.immutableFeatures')}
+          </p>
+          <ul className="location-card__features-list">
+            {location.immutableFeatures.map((feature) => (
+              <li key={feature}>
+                <ContentText>{feature}</ContentText>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       <PlateCoverage projectId={projectId} locationId={location.id} />
@@ -74,7 +83,18 @@ export const LocationCard: FC<LocationCardProps> = ({
       ) : null}
 
       {location.approved ? (
-        <p className="location-card__frozen">{translate('library.frozen')}</p>
+        <>
+          {approve.isSuccess ? (
+            <output
+              className="location-card__approved"
+              ref={focusWhenShown}
+              tabIndex={-1}
+            >
+              {translate('library.approved')}
+            </output>
+          ) : null}
+          <p className="location-card__frozen">{translate('library.frozen')}</p>
+        </>
       ) : (
         <>
           <div className="location-card__actions">

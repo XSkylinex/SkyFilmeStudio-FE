@@ -28,6 +28,12 @@
     gap: var(--space-4);
   }
 
+  .create-production-form__done {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
   .create-production-form__invalid {
     margin: 0;
     color: var(--tone-danger-fg);

@@ -75,4 +75,37 @@ describe('CreateVoiceProfileForm', () => {
       'true',
     );
   });
+
+  it('still offers a way out after a successful create, so the screen is not a dead end', async () => {
+    const user = userEvent.setup();
+    let closed = false;
+
+    server.use(
+      http.post(API_PATH.voiceProfiles(PROJECT_ID), () =>
+        HttpResponse.json(buildVoiceProfile({ displayName: 'Mira' })),
+      ),
+    );
+
+    renderInApp(
+      <CreateVoiceProfileForm
+        projectId={PROJECT_ID}
+        onClose={() => {
+          closed = true;
+        }}
+      />,
+    );
+
+    await user.type(screen.getByLabelText('Display name'), 'Mira');
+    await user.type(screen.getByLabelText('Engine'), 'moss-tts');
+    await user.type(screen.getByLabelText('Model id'), 'moss-ttsd-v0.5');
+    await user.type(screen.getByLabelText('Language tag'), 'en-GB');
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+
+    expect(await screen.findByText('Created.')).toBeInTheDocument();
+
+    const dismiss = screen.getByRole('button', { name: 'Cancel' });
+    await user.click(dismiss);
+
+    expect(closed).toBe(true);
+  });
 });

@@ -47,4 +47,16 @@ describe('EN_CATALOGUE', () => {
 
     expect(dangling).toEqual([]);
   });
+
+  it('does not deny a capability this build has since gained', () => {
+    const outdated = Object.entries(EN_CATALOGUE)
+      .filter(([, value]) =>
+        /no dialogue route|cannot yet create one|done through the orchestrator|no way to create one here/i.test(
+          value,
+        ),
+      )
+      .map(([key]) => key);
+
+    expect(outdated).toEqual([]);
+  });
 });

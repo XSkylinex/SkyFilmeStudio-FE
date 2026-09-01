@@ -26,10 +26,18 @@
 
   .location-card__description,
   .location-card__features {
-    margin: 0;
     color: var(--color-text-secondary);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-relaxed);
+  }
+
+  .location-card__features-label {
+    margin: 0;
+  }
+
+  .location-card__features-list {
+    margin: 0;
+    padding-inline-start: var(--space-4);
   }
 
   .location-card__refusal {
@@ -39,6 +47,12 @@
   .location-card__actions {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .location-card__approved {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
   }
 
   .location-card__frozen {

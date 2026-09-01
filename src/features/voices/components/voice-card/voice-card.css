@@ -58,6 +58,12 @@
     display: contents;
   }
 
+  .voice-card__approved {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
   .voice-card__frozen {
     margin: 0;
     color: var(--color-text-secondary);

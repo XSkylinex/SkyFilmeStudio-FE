@@ -9,24 +9,6 @@ import { characterShortcutsEnabledSet } from '@/shell/shell.slice';
 import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-provider';
 import { useKeyboardShortcut } from '@/shell/keyboard/use-keyboard-shortcut';
 
-beforeAll(() => {
-  if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
-    HTMLDialogElement.prototype.showModal = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = true;
-    };
-  }
-  if (typeof HTMLDialogElement.prototype.close !== 'function') {
-    HTMLDialogElement.prototype.close = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = false;
-      this.dispatchEvent(new Event('close'));
-    };
-  }
-});
-
 const ApproveProbe: FC<{ onApprove: () => void }> = ({ onApprove }) => {
   useKeyboardShortcut('approve', onApprove);
   return <p>approve probe mounted</p>;

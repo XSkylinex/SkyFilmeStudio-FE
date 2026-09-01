@@ -7,13 +7,6 @@ import { RouteErrorBoundary } from '@/shell/route-error-boundary';
 import { RootErrorBoundary } from '@/shell/root-error-boundary';
 import { ProjectListPage } from '@/features/projects/ProjectListPage';
 import { DashboardPage } from '@/features/dashboard/DashboardPage';
-import { AssetsPage } from '@/features/assets/AssetsPage';
-import { SubjectsPage } from '@/features/subjects/SubjectsPage';
-import { StylesPage } from '@/features/styles/StylesPage';
-import { VoicesPage } from '@/features/voices/VoicesPage';
-import { LocationsPage } from '@/features/locations/LocationsPage';
-import { PropsPage } from '@/features/props/PropsPage';
-import { ProductionListPage } from '@/features/productions/ProductionListPage';
 import { RenderQueuePage } from '@/features/render-queue/RenderQueuePage';
 import { NotFoundPage } from './not-found-page';
 import { RouteHydrateFallback } from './route-hydrate-fallback';
@@ -143,7 +136,11 @@ const projectRoutes: RouteObject[] = [
   },
   {
     path: ASSETS_SEGMENT,
-    Component: AssetsPage,
+    lazy: () =>
+      import('@/features/assets/AssetsPage').then((routeModule) => ({
+        Component: routeModule.AssetsPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.assets.title'),
   },
@@ -159,7 +156,11 @@ const projectRoutes: RouteObject[] = [
   },
   {
     path: SUBJECTS_SEGMENT,
-    Component: SubjectsPage,
+    lazy: () =>
+      import('@/features/subjects/SubjectsPage').then((routeModule) => ({
+        Component: routeModule.SubjectsPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.subjects.title'),
   },
@@ -175,25 +176,41 @@ const projectRoutes: RouteObject[] = [
   },
   {
     path: STYLES_SEGMENT,
-    Component: StylesPage,
+    lazy: () =>
+      import('@/features/styles/StylesPage').then((routeModule) => ({
+        Component: routeModule.StylesPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.styles.title'),
   },
   {
     path: VOICES_SEGMENT,
-    Component: VoicesPage,
+    lazy: () =>
+      import('@/features/voices/VoicesPage').then((routeModule) => ({
+        Component: routeModule.VoicesPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.voices.title'),
   },
   {
     path: LOCATIONS_SEGMENT,
-    Component: LocationsPage,
+    lazy: () =>
+      import('@/features/locations/LocationsPage').then((routeModule) => ({
+        Component: routeModule.LocationsPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.locations.title'),
   },
   {
     path: PROPS_SEGMENT,
-    Component: PropsPage,
+    lazy: () =>
+      import('@/features/props/PropsPage').then((routeModule) => ({
+        Component: routeModule.PropsPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.props.title'),
   },
@@ -209,7 +226,13 @@ const projectRoutes: RouteObject[] = [
   },
   {
     path: PRODUCTIONS_SEGMENT,
-    Component: ProductionListPage,
+    lazy: () =>
+      import('@/features/productions/ProductionListPage').then(
+        (routeModule) => ({
+          Component: routeModule.ProductionListPage,
+        }),
+      ),
+    HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.productions.title'),
   },
