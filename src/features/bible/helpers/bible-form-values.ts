@@ -1,0 +1,46 @@
+import type { ProjectBible } from 'sky-filme-studio-be/contracts';
+import type { BibleFormValues } from '@/features/bible/interfaces/bible-form-values';
+
+export const EMPTY_BIBLE_FORM_VALUES: BibleFormValues = {
+  genre: '',
+  tone: '',
+  audienceProfile: '',
+  contentBoundaries: '',
+  recurringThemes: '',
+  introOutroRules: '',
+  continuityConstraints: '',
+  narrativeWorldRules: '',
+  humourDramaLanguage: '',
+  chronology: '',
+  languages: '',
+  narratorPolicy: '',
+  musicIdentity: '',
+  recurringMotifs: '',
+  ambienceRules: '',
+  sfxAesthetic: '',
+  dialogueMusicPriority: '',
+  loudnessProfile: '',
+  styleProfileId: '',
+};
+
+export const bibleFormValuesFrom = (bible: ProjectBible): BibleFormValues => ({
+  genre: bible.world.genre ?? '',
+  tone: bible.world.tone ?? '',
+  audienceProfile: bible.world.audienceProfile ?? '',
+  contentBoundaries: bible.world.contentBoundaries.join('\n'),
+  recurringThemes: bible.world.recurringThemes.join('\n'),
+  introOutroRules: bible.world.introOutroRules.join('\n'),
+  continuityConstraints: bible.world.continuityConstraints.join('\n'),
+  narrativeWorldRules: bible.narrative?.worldRules.join('\n') ?? '',
+  humourDramaLanguage: bible.narrative?.humourDramaLanguage ?? '',
+  chronology: bible.narrative?.chronology ?? '',
+  languages: bible.audio.languages.join('\n'),
+  narratorPolicy: bible.audio.narratorPolicy ?? '',
+  musicIdentity: bible.audio.musicIdentity ?? '',
+  recurringMotifs: bible.audio.recurringMotifs.join('\n'),
+  ambienceRules: bible.audio.ambienceRules.join('\n'),
+  sfxAesthetic: bible.audio.sfxAesthetic ?? '',
+  dialogueMusicPriority: bible.audio.dialogueMusicPriority ?? '',
+  loudnessProfile: bible.audio.loudnessProfile ?? '',
+  styleProfileId: bible.styleProfileId ?? '',
+});
