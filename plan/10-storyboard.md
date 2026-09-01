@@ -44,6 +44,14 @@ published response shape; and no `../shots/dto/*` appears in the backend's `src/
 so `transitionShotRequestSchema` and `planSceneRequestSchema` are unpublished the same way the
 render-job DTO is. Approve and reject would have no validated request body even with an id in hand.
 
+**Updated 2026-09-01: the missing scene `GET` now gates three surfaces, not one.** BE-17 merged as
+`014712e` and published dialogue lines, speech synthesis, speech approval, the §19 tier choice and
+`POST /productions/:id/dialogue-timing`, with every DTO exported through the barrel and — unlike the
+shot DTOs — properly published. Its collection is `@Controller('scenes/:sceneId/dialogue-lines')`.
+So a third fully-contracted surface is now unreachable for exactly the same reason as the first two.
+**One route that returns a production's scenes would unblock shots, dialogue and this phase's strip
+together**, which makes it the single highest-value thing the backend could add for this repo.
+
 ## Decisions
 
 | # | Decision | Options | Recommendation |

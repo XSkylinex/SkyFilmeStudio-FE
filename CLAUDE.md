@@ -263,7 +263,12 @@ and FE-07's `<output tabIndex={-1}>` pattern is what tells a screen reader and l
 **Most of `plan/09` is unbuildable rather than unbuilt, and the reasons are three missing routes.**
 `PlanningService.runStage` exists and no controller reaches it, so no stage can be run or re-run.
 `PUT /planning/scenes` writes and returns `readonly unknown[]` with no `GET`, so scenes are visible
-only as rows in the budget. There is no dialogue-line controller at all. `continuityReviewSchema` and
+only as rows in the budget. **Corrected 2026-09-01: there is a dialogue-line controller now** — BE-17
+merged as `014712e` and published `POST`/`GET /scenes/:sceneId/dialogue-lines` and
+`GET`/`PATCH`/`DELETE /dialogue-lines/:id`, plus speech synthesis, approval and
+`POST /productions/:id/dialogue-timing`, all five DTOs through the barrel. It changes nothing here,
+and that is the point: the collection is keyed on `sceneId`, so it is the **third** controller gated
+behind the one missing `GET`. `continuityReviewSchema` and
 `toneReviewSchema` are published contracts with no route. Every one of those is a sentence on screen
 under "What this screen cannot do yet", not a note in a plan file.
 
