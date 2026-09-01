@@ -815,7 +815,7 @@ export const EN_CATALOGUE = {
   'productions.create.blocked.title':
     'A production needs a style profile first',
   'productions.create.blocked.description':
-    'Every production is pinned to a style version, and this project has none. The style library can approve one but cannot yet create one, so this has to be done through the orchestrator.',
+    'Every production is pinned to a style version, and this project has none yet. Create the first one in the style library, then come back here.',
   'productions.create.invalid':
     'The orchestrator’s own contract rejected this before it was sent.',
   'productions.create.failed.title': 'The production was not created',
@@ -906,7 +906,7 @@ export const EN_CATALOGUE = {
   'planner.gaps.scenes':
     'Read, add or edit a scene. The only route that touches them replaces the whole set at once and hands back an untyped list, so this screen sees a scene only as a row in the budget above.',
   'planner.gaps.dialogue':
-    'Write a dialogue line, pick a voice for it, or see how long it will take to speak. There is no dialogue route at all, and a spoken duration is measured by the speech engine rather than guessed from a word count.',
+    'Write a dialogue line, pick a voice for it, or see how long it will take to speak. Every one of those routes exists. All of them are keyed on a scene, and nothing published hands this screen a scene id — the same missing route the scenes gap above names.',
   'planner.gaps.continuity':
     'Show continuity or tone findings beside the scenes they concern. Both have a schema and neither has a route.',
   'page.bible.title': 'Project bible',

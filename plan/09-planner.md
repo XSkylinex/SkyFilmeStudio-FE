@@ -126,8 +126,14 @@ response shape is published through `./contracts`.
 - **No `GET` for a production's scenes.** `PUT /planning/scenes` replaces them wholesale and returns
   `readonly unknown[]`. This screen therefore sees scenes only as rows in the budget report, which is
   why step 5 is unbuildable.
-- **No dialogue-line controller of any kind**, so steps 5's second half and every dialogue box in
-  *Done when* wait on a backend that has not written them.
+- **Corrected 2026-09-01: the dialogue-line controller exists, and it changes nothing here.** BE-17
+  merged as `014712e` and published `POST`/`GET /scenes/:sceneId/dialogue-lines`,
+  `GET`/`PATCH`/`DELETE /dialogue-lines/:id`, speech synthesis and dialogue timing, with every DTO
+  through the barrel. Its collection is keyed on `sceneId`, so it is the third surface behind the
+  missing scene `GET` rather than a fourth thing to build. This file said "no dialogue-line controller
+  of any kind" and the screen said "There is no dialogue route at all"; both were false for a day, and
+  both named the wrong blocker even while they were true. **Track the missing route, not the phase
+  number** — the same lesson `plan/10` records.
 - **A production's pinned style version, on the other hand, is resolvable and this file said it was
   not.** `GET /projects/:projectId/style-profiles/:id` takes exactly the id `Production.styleProfileId`
   carries; the lineage-scoped routes are the other two on that controller. The screen said the lookup
@@ -156,8 +162,11 @@ onto a catalogue key, because Zod's `Too small: expected string to have >=1 char
 prose and a Hebrew reader would have got an English assertion about character counts.
 
 `styleProfileId` is required and this project may have none, so the form is replaced by a sentence
-saying where one comes from. The style library can approve a profile and cannot yet create one, which
-is `plan/08`'s gap surfacing here as a chain rather than a mystery.
+saying where one comes from. **Corrected 2026-09-01: that sentence used to send the user to the
+orchestrator**, because the style library could approve a profile and not create one. FE-08's write
+half closed that gap the same morning, and the sentence outlived it by hours — it now points at
+`/styles`, which is where the first version actually gets made. The chain is still a chain; it just
+no longer leaves the app.
 
 **A production's tolerance is three states and the third one is load-bearing:** declared here,
 declared by its bound structure profile, or declared by neither — in which case the orchestrator
