@@ -1154,6 +1154,12 @@ export const EN_CATALOGUE = {
     'A shot’s keyframe requirement cannot be set here, and no waiver can be recorded, for the same reason: both routes take a body the contract does not publish.',
   'storyboard.gaps.progress':
     'Frames that are still rendering do not update on their own. Progress arrives over a websocket the orchestrator does not yet serve, so this screen shows what was true when it was last read.',
+  'error.MUSIC_CUE_NOT_APPROVED':
+    'That step needs an approved music cue, and this one is not approved. Approve the cue first, or choose one that already is.',
+  'error.MUSIC_CUE_IMMUTABLE':
+    'This music cue is approved, so it is frozen — a production may already be built on it. Add the next cue rather than editing this one.',
+  'error.MUSIC_CUE_EXISTS':
+    'This project already has that cue. A cue is identified by its audio rather than its name, and one render becomes one library entry — so revise the cue that is already there, or generate another take.',
   'error.malformedText':
     'The orchestrator answered that request with something other than the document that was asked for. Nothing here can be trusted to be the bible’s own text.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;

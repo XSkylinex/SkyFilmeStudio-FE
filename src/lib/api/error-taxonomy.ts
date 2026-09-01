@@ -270,4 +270,16 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.PRODUCTION_QC_REPORT_VERSION_EXISTS',
   },
+  MUSIC_CUE_NOT_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MUSIC_CUE_NOT_APPROVED',
+  },
+  MUSIC_CUE_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MUSIC_CUE_IMMUTABLE',
+  },
+  MUSIC_CUE_EXISTS: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MUSIC_CUE_EXISTS',
+  },
 };
