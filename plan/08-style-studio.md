@@ -431,11 +431,65 @@ version; a test now asserts the direction and fails when it is removed.
 
 **Step 8 (libraries)** has wire types and no controller, deliberately on the backend's side.
 
+## How writing actually works, measured 2026-09-01 on backend `master` @ `f14098e`
+
+The write half was built in this phase, and the mechanism is not the one the steps above describe.
+Read this before touching any editor here.
+
+**Step 1's sentence "changing a style creates a new version" is the product requirement, not the
+API.** `PATCH /projects/:projectId/style-profiles/:id` **mutates that row in place**. It leaves
+`version` and `lineageId` untouched and creates nothing. A new version is a **`POST` carrying
+`lineageId`**, because `StyleProfilesService.createVersion` computes
+`lineageId = request.lineageId ?? id`. An editor wired to `PATCH` from the plan's sentence would have
+silently rewritten a version other productions are pinned to — the exact loss of trust step 1 is
+about.
+
+**The freeze is a database trigger, not a service check.** Each of the five tables carries a
+`BEFORE UPDATE` trigger that raises `P0001` when the row is `approved` and any column other than
+`deleted_at`/`updated_at` would change; the repository translates it into `STYLE_PROFILE_IMMUTABLE`,
+`VOICE_PROFILE_IMMUTABLE`, `LOCATION_IMMUTABLE`, `PROP_IMMUTABLE` or `LOCATION_PLATE_IMMUTABLE`. No
+service pre-checks `approved`. So the guard survives everything, and the screen's job is to show it
+before a user runs into it rather than to enforce it.
+
+**Approval does not demote anything on a style profile.** `style_profiles_lineage_approved_version_idx`
+is a plain index, not a unique one, and the approved head is `ORDER BY version DESC LIMIT 1` among
+approved rows — so **several versions of one lineage can be approved at once**. Voice profiles and
+location plates are the opposite: real unique indexes enforce one approved voice per subject and one
+approved plate per kind. Any "approving replaces the previous" wording is right for two of the five
+and wrong for style profiles.
+
+**Four things that would surprise a form built from the DTO shape alone.**
+
+- **Every update DTO refuses an empty body** with a `.refine()`, so a no-op save is a `400`. A form
+  must send only the fields that changed — which it should do anyway, since sending them all
+  overwrites what the user never touched.
+- **`subjectId` on a voice profile and `ownerSubjectId` on a prop are fixed at creation.** Both are
+  structurally omitted from the update DTO, and every base schema is `strictObject`, so sending one
+  is a hard `400` rather than a dropped field. There is no reassign.
+- **A style profile's `mode` *is* patchable** on a draft, despite reading like an identity field.
+- **Three different error envelopes reach the browser, and only one carries a `code`.** `StudioError`
+  gives `{ statusCode, code, message }`; a Nest `NotFoundException` gives `{ statusCode, message,
+  error }`; a Zod rejection gives `{ statusCode: 400, message: "Validation failed", errors: [] }`.
+  `request-json.ts` already falls back to the status-only sentence when `code` is absent, so this
+  degrades rather than breaks — but nothing may assume the taxonomy covers every failure. This is
+  FE-04's envelope lesson a second time, and the reason it does not bite here is that the forms
+  validate with the *same* contract schema before sending: a server-side validation refusal would
+  mean the client and server schemas had diverged, which is a contract bug rather than a user error.
+
+**Deletion is soft and works on an approved row**, because the trigger's diff excludes `deleted_at`.
+Approval freezes content, not the lifecycle. No screen offers it, and no sentence here claims an
+approved record cannot be removed at all.
+
 ## What no screen does yet
 
-**Create, edit, approve-with-a-form.** Every screen here reads and approves. The create and update
-DTOs are published for all five domains, so the forms are buildable; they are a phase of their own,
-and the empty states say "there is no way to create one here yet" rather than implying one exists.
+**Canonical plates cannot be created or edited here, and that is deliberate.** Their DTOs are
+published like the other four, but a plate is anchored to exactly one of a source asset or an
+artifact — enforced by a `.refine()`, by a service-level merge check and by a
+`num_nonnulls(...) = 1` database `CHECK`. The service merges the request against the **stored** row
+before counting, so switching a plate from one anchor to the other must be a **single `PATCH` sending
+both fields**; a natural "clear the old, then set the new" flow `400`s on its first step, with no
+`ErrorCode` to explain it. That deserves its own design rather than being appended to four forms that
+share a shape it does not.
 
 **Paging.** Every list reads the first page. `Page<T>` carries `nextCursor` and an absent one means
 the end, so each screen says "reads the first page only" when the server offers more. The asset
