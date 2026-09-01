@@ -892,7 +892,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'הדמות הזו אינה מדברת, ולכן כללי קול אינם יכולים לחול עליה.',
   'bible.subjects.relationships': 'יחסים',
   'bible.publish.action': 'פרסמו את הגרסה הזו',
-  'bible.publish.context': 'פרסמו את גרסה {version} של ביבל הפרויקט',
+  'bible.publish.context': 'פרסמו את הגרסה הזו של ביבל הפרויקט, גרסה {version}',
   'bible.publish.explained':
     'פרסום מקפיא את הגרסה הזו. הפקה שתכננה מולה שומרת על מה שתכננה מולו, ולכן שינוי מאוחר יותר פירושו פרסום הגרסה הבאה ולא עריכה של זו — ואין דרך לבטל את זה.',
   'bible.publish.done': 'פורסמה. זו עכשיו הגרסה שהפקה חדשה מתכננת מולה.',

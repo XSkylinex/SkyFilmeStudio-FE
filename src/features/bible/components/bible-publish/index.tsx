@@ -17,8 +17,10 @@ export const BiblePublish: FC<BiblePublishProps> = ({ projectId, bible }) => {
     publishProjectBibleMutationOptions(projectId, queryClient),
   );
 
+  const announced = publish.data?.id === bible.id;
+
   if (bible.published) {
-    return publish.isSuccess ? (
+    return announced ? (
       <output
         className="bible-publish__done"
         ref={focusWhenShown}

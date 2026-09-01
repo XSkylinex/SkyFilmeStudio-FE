@@ -299,12 +299,25 @@ the other two genuinely cannot express it.** `GET /bible/:id/markdown` returns `
 JSON parse of it is a `MALFORMED` throw. It also refuses a 200 whose `Content-Type` is not markdown,
 because a single-page-app fallback would otherwise be handed to the caller as the bible's own text.
 
-**The bidi lesson this phase adds: `dir="auto"` is wrong for a document.** The generated Markdown view
-first shipped inside `ContentText`. Under `<html dir="rtl">` the whole document mirrors —
-`  - ללא אלימות גרפית` loses its indentation and its bullet jumps to the far edge — because a
-Markdown document's `#`, `-` and leading spaces are *structure*, not prose. The view is `dir="ltr"`
-and the Hebrew inside it still reads correctly as its own run. All four gate stages were green over
-the broken version; it was found by loading the page in Hebrew.
+**The bidi lesson this phase adds: on a `<pre>`, put `dir` on the `<pre>`.** The generated Markdown
+view shipped as `<pre>` wrapping `ContentText` — `<bdi dir="auto">` — and under `<html dir="rtl">`
+the whole document mirrored, a nested `  - ` bullet losing its indentation. The cause was **not**
+`auto`: `dir` was on the inner `<bdi>` while the `<pre>` inherited `direction: rtl` from the page.
+The first fix, `<pre dir="ltr">`, was also wrong and review caught it — it puts a Hebrew line's
+sentence-final period at the wrong end, FE-07's defect once per line. Measured in Chrome across all
+three: `dir="ltr"` computes `unicode-bidi: isolate`; **`dir="auto"` on the `<pre>` computes
+`unicode-bidi: plaintext`**, which HTML's rendering section specifies for `pre[dir=auto]` and which
+resolves direction **per bidi paragraph** — and with `white-space: pre` every line is a paragraph. So
+each line takes its own first-strong direction and its punctuation lands correctly. **All four gate
+stages were green over both wrong versions.**
+
+**`jsx-a11y` reported nothing on two real defects, again.** The publish button failed SC 2.5.3 Label
+in Name — visible "Publish this version" against an accessible name that did not contain it, so
+speech input could not activate it. And the success message was keyed on `publish.isSuccess`, which
+never resets while the component is mounted, so selecting any other already-published version
+re-announced a stale publish and stole focus out of the version list. It is keyed on
+`publish.data?.id === bible.id` now. Both were found by review, not by the linter — the third time
+`plan/16`'s point has held.
 
 **A test that looks right and proves nothing is still the expensive failure.** The publish mutation's
 "no optimistic update" test counted refetches through `fetchQuery` — and `invalidateQueries` does not

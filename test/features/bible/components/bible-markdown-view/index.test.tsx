@@ -5,17 +5,33 @@ import { renderInApp } from '../../../../render-in-app';
 const DOCUMENT = '## World rules\n- Genre: תעודה קצרה\n  - ללא אלימות גרפית';
 
 describe('BibleMarkdownView', () => {
-  it('holds the document to one direction, so its bullets and indentation survive an RTL interface', () => {
-    renderInApp(<BibleMarkdownView markdown={DOCUMENT} />);
+  it('resolves direction per line, so a Hebrew line keeps its own sentence order', () => {
+    renderInApp(
+      <BibleMarkdownView markdown={DOCUMENT} label="Generated view" />,
+    );
 
-    const view = screen.getByText(/World rules/u);
+    expect(
+      screen.getByRole('region', { name: 'Generated view' }),
+    ).toHaveAttribute('dir', 'auto');
+  });
 
-    expect(view).toHaveAttribute('dir', 'ltr');
+  it('is reachable by keyboard, because it is a scroll container', () => {
+    renderInApp(
+      <BibleMarkdownView markdown={DOCUMENT} label="Generated view" />,
+    );
+
+    expect(
+      screen.getByRole('region', { name: 'Generated view' }),
+    ).toHaveAttribute('tabindex', '0');
   });
 
   it('keeps the document exactly as the orchestrator wrote it', () => {
-    renderInApp(<BibleMarkdownView markdown={DOCUMENT} />);
+    renderInApp(
+      <BibleMarkdownView markdown={DOCUMENT} label="Generated view" />,
+    );
 
-    expect(screen.getByText(/World rules/u).textContent).toBe(DOCUMENT);
+    expect(
+      screen.getByRole('region', { name: 'Generated view' }).textContent,
+    ).toBe(DOCUMENT);
   });
 });

@@ -902,7 +902,8 @@ export const EN_CATALOGUE = {
     'This subject does not speak, so voice rules cannot apply to it.',
   'bible.subjects.relationships': 'Relationships',
   'bible.publish.action': 'Publish this version',
-  'bible.publish.context': 'Publish version {version} of the project bible',
+  'bible.publish.context':
+    'Publish this version of the project bible, version {version}',
   'bible.publish.explained':
     'Publishing freezes this version. A production that planned against it keeps what it planned against, so a later change means publishing the next version rather than editing this one, and there is no way to undo it.',
   'bible.publish.done':

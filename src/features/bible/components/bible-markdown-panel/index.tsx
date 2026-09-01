@@ -43,7 +43,10 @@ export const BibleMarkdownPanel: FC<BibleMarkdownPanelProps> = ({
       {isPending ? (
         <Skeleton shape="rect" />
       ) : (
-        <BibleMarkdownView markdown={data} />
+        <BibleMarkdownView
+          markdown={data}
+          label={translate('bible.markdown.title')}
+        />
       )}
     </section>
   );
