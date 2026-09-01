@@ -1,26 +1,28 @@
-.storyboard-review {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
+@layer features {
+  .storyboard-review {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
 
-.storyboard-review__title {
-  margin: 0;
-  font-size: var(--font-size-xl);
-}
+  .storyboard-review__title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+  }
 
-.storyboard-review__intro {
-  margin: 0;
-  color: var(--color-text-secondary);
-  line-height: var(--line-height-relaxed);
-  max-inline-size: 60ch;
-}
+  .storyboard-review__intro {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    max-inline-size: 60ch;
+  }
 
-.storyboard-review__scenes {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+  .storyboard-review__scenes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
 }

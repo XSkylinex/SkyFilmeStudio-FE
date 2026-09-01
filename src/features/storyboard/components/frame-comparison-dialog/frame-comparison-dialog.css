@@ -1,63 +1,65 @@
-.frame-comparison {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
+@layer features {
+  .frame-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
 
-.frame-comparison__note {
-  margin: 0;
-  color: var(--color-text-secondary);
-  line-height: var(--line-height-relaxed);
-}
+  .frame-comparison__note {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
 
-.frame-comparison__heading {
-  margin: 0;
-  font-size: var(--font-size-md);
-}
+  .frame-comparison__heading {
+    margin: 0;
+    font-size: var(--font-size-md);
+  }
 
-.frame-comparison__facts {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
+  .frame-comparison__facts {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
 
-.frame-comparison__fact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
+  .frame-comparison__fact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
 
-.frame-comparison__fact dt {
-  color: var(--color-text-secondary);
-}
+  .frame-comparison__fact dt {
+    color: var(--color-text-secondary);
+  }
 
-.frame-comparison__fact dd {
-  margin: 0;
-}
+  .frame-comparison__fact dd {
+    margin: 0;
+  }
 
-.frame-comparison__anchors {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
+  .frame-comparison__anchors {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
 
-.frame-comparison__anchor {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  align-items: baseline;
-}
+  .frame-comparison__anchor {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
 
-.frame-comparison__kind {
-  font-weight: var(--font-weight-medium);
-}
+  .frame-comparison__kind {
+    font-weight: var(--font-weight-medium);
+  }
 
-.frame-comparison__id {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  overflow-wrap: anywhere;
+  .frame-comparison__id {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    overflow-wrap: anywhere;
+  }
 }
