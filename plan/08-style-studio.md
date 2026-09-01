@@ -484,9 +484,10 @@ precedents in `create-production-form` and elsewhere. Adding the subject library
 phase that cannot fix the underlying question was not worth it.
 
 **Measured, both trees built in one session rather than compared against a recorded figure.** The
-bible route is lazy, so the forms land in its own chunk: `BiblePage` goes 21.00 kB → **59.04 kB** JS
+bible route is lazy, so the forms land in its own chunk: `BiblePage` goes 21.00 kB → **58.93 kB** JS
 and 6.07 kB → **8.49 kB** CSS, while the entry chunk moves 475.38 kB → **475.47 kB** and its CSS not
-at all. Both catalogues go 745 → **759**, counted per file.
+at all. The JS figure was 59.04 kB before the review pass; collapsing the screen's two `return`
+statements into one took 0.11 kB out with the defect. Both catalogues go 745 → **760**, counted per file.
 
 **Note on the entry figure.** `plan/16` and this session's earlier handoff record master's entry at
 475.10 kB; rebuilt today it is 475.38 kB on an unchanged master. The 0.28 kB is not explained here,

@@ -58,6 +58,52 @@ describe('ProjectBibleView writes', () => {
     ).toBeInTheDocument();
   });
 
+  it('keeps the confirmation when the very first draft is created, though the page stops being empty underneath it', async () => {
+    const created = buildProjectBible({ published: false });
+    let versions: ProjectBible[] = [];
+
+    server.use(
+      http.get(API_PATH.project(PROJECT_ID), () =>
+        HttpResponse.json(buildProject()),
+      ),
+      http.get(API_PATH.projectBibles(PROJECT_ID), () =>
+        HttpResponse.json({ items: versions }),
+      ),
+      http.get(API_PATH.activeProjectBible(PROJECT_ID), () =>
+        HttpResponse.json(
+          { statusCode: 404, message: 'no active bible' },
+          { status: 404 },
+        ),
+      ),
+      http.get(`${API_PATH.projectBibles(PROJECT_ID)}/:id/markdown`, () =>
+        HttpResponse.text('# Project bible', {
+          headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
+        }),
+      ),
+      http.get(API_PATH.styleProfiles(PROJECT_ID), () =>
+        HttpResponse.json({ items: [] }),
+      ),
+      http.post(API_PATH.projectBibles(PROJECT_ID), () => {
+        versions = [created];
+        return HttpResponse.json(created);
+      }),
+    );
+
+    renderInApp(<ProjectBibleView projectId={PROJECT_ID} />);
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Start a draft' }),
+    );
+    await userEvent.click(await screen.findByRole('button', { name: 'Add' }));
+
+    const announcement = await screen.findByText('Created.');
+
+    expect(announcement).toHaveFocus();
+    expect(
+      screen.queryByRole('button', { name: 'Add' }),
+    ).not.toBeInTheDocument();
+  });
+
   it('calls it the next version once one exists, since a POST always creates a new one', async () => {
     const published = buildProjectBible({
       published: true,

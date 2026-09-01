@@ -46,7 +46,10 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
     Record<string, TranslationKey>
   >({});
 
+  const [touchedSinceSave, setTouchedSinceSave] = useState(false);
+
   const set = (field: BibleFormField, value: string): void => {
+    setTouchedSinceSave(true);
     setValues((previous) => ({ ...previous, [field]: value }));
   };
 
@@ -60,7 +63,7 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
   const baseline = update.data ?? bible;
   const patch = bibleEditDiff(baseline, values, carriesNarrative);
   const hasChanges = Object.keys(patch).length > 0;
-  const justSaved = update.isSuccess && !hasChanges;
+  const justSaved = update.isSuccess && !hasChanges && !touchedSinceSave;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -77,6 +80,7 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
     }
 
     setFieldErrors({});
+    setTouchedSinceSave(false);
     update.mutate(result.data);
   };
 
@@ -105,6 +109,13 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
           onChange={(value) => set('styleProfileId', value)}
         />
       </Field>
+    );
+
+  const styleProfileTruncated =
+    styleProfiles.data?.nextCursor === undefined ? null : (
+      <p className="edit-bible-form__note">
+        {translate('bible.form.styleProfile.firstPageOnly')}
+      </p>
     );
 
   return (
@@ -330,6 +341,7 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
       </fieldset>
 
       {styleProfileField}
+      {styleProfileTruncated}
 
       {justSaved ? (
         <output

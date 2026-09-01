@@ -1,4 +1,7 @@
-import type { ProjectBible } from 'sky-filme-studio-be/contracts';
+import type {
+  ProjectBible,
+  UpdateProjectBibleRequest,
+} from 'sky-filme-studio-be/contracts';
 import { parseLines } from '@/lib/helpers/parse-lines';
 import type {
   BibleFormField,
@@ -10,18 +13,15 @@ import {
   narrativeFromValues,
   worldFromValues,
 } from '@/features/bible/helpers/bible-sections-from-values';
-import type {
-  BibleAudioInput,
-  BibleNarrativeInput,
-  BibleWorldInput,
-} from '@/features/bible/helpers/bible-sections-from-values';
+import type { BibleAudioInput } from '@/features/bible/helpers/bible-sections-from-values';
 
-export interface BibleEditPatch {
-  world?: BibleWorldInput;
-  narrative?: BibleNarrativeInput | null;
+export type BibleEditPatch = Omit<
+  UpdateProjectBibleRequest,
+  'audio' | 'styleProfileId'
+> & {
   audio?: BibleAudioInput;
   styleProfileId?: string | null;
-}
+};
 
 const WORLD_FIELDS: readonly BibleFormField[] = [
   'genre',

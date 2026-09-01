@@ -116,6 +116,42 @@ describe('EditBibleForm', () => {
     expect(screen.getByRole('button', { name: 'Save changes' })).toBeEnabled();
   });
 
+  it('does not re-announce a save when a later edit is undone back to what was saved', async () => {
+    styleLibraryServes();
+    const bible = buildProjectBible();
+
+    server.use(
+      http.patch(API_PATH.projectBible(PROJECT_ID, bible.id), async () =>
+        HttpResponse.json({
+          ...bible,
+          world: { ...bible.world, tone: 'Restrained' },
+        }),
+      ),
+    );
+
+    renderInApp(
+      <EditBibleForm
+        projectId={PROJECT_ID}
+        bible={bible}
+        onClose={() => undefined}
+      />,
+    );
+
+    const tone = await screen.findByLabelText('Tone');
+    await userEvent.type(tone, 'Restrained');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    await screen.findByText('Saved.');
+
+    await userEvent.type(tone, 'x');
+
+    expect(screen.queryByText('Saved.')).not.toBeInTheDocument();
+
+    await userEvent.type(tone, '{backspace}');
+
+    expect(screen.queryByText('Saved.')).not.toBeInTheDocument();
+    expect(tone).toHaveFocus();
+  });
+
   it('offers no narrative fields on a kind that carries none, and says why', async () => {
     styleLibraryServes();
     const bible = buildProjectBible({ projectKind: 'MUSIC' });

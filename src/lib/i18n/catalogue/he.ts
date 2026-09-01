@@ -964,7 +964,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'bible.create.explain':
     'אפשר ליצור טיוטה ריקה ולמלא אותה ככל שהפרויקט מתגבש. שום דבר אינו מוקפא עד שהיא מפורסמת, ומספר הגרסה נקבע על ידי האורקסטרטור.',
   'bible.create.prefilled':
-    'השדות האלה מתחילים מגרסה {version}. שמירה יוצרת טיוטה חדשה; גרסה {version} אינה נוגעת בכך.',
+    'השדות האלה מתחילים מגרסה {version}. שמירה יוצרת טיוטה חדשה, וגרסה {version} עצמה נשארת כפי שהיא.',
   'bible.edit.action': 'ערכו את הטיוטה הזו',
   'bible.edit.context': 'של ביבל הפרויקט, גרסה {version}',
   'bible.edit.title': 'ערכו את הטיוטה הזו',
@@ -974,6 +974,8 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'bible.form.styleProfile.none': 'ללא',
   'bible.form.styleProfile.unreadable':
     'לא ניתן היה לקרוא את ספריית הסגנונות, ולכן אי אפשר לבחור כאן פרופיל סגנון. כל השאר בטופס הזה עדיין נשמר.',
+  'bible.form.styleProfile.firstPageOnly':
+    'הרשימה הזו כוללת רק את העמוד הראשון של פרופילי הסגנון. באורקסטרטור יש יותר ממה שמוצג כאן.',
   'bible.form.languages.hint': 'תג שפה אחד בכל שורה.',
   'bible.form.subjectRules':
     'כללי דמויות אינם נכתבים כאן. כל בלוק מזוהה לפי מזהה של דמות, והמסך הזה אינו מושיט יד לספריית הדמויות כדי להציע אחד.',

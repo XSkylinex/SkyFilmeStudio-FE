@@ -985,6 +985,8 @@ export const EN_CATALOGUE = {
   'bible.form.styleProfile.none': 'None',
   'bible.form.styleProfile.unreadable':
     'The style library could not be read, so no style profile can be chosen here. Everything else on this form still saves.',
+  'bible.form.styleProfile.firstPageOnly':
+    'This lists the first page of style profiles only. The orchestrator holds more than are shown here.',
   'bible.form.languages.hint': 'One language tag per line.',
   'bible.form.subjectRules':
     'Subject rules are not written here. Each block is keyed on a subject id, and this screen does not reach into the subject library to offer one.',

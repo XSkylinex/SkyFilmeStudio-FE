@@ -86,7 +86,7 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **759 keys in English and
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **760 keys in English and
 Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible

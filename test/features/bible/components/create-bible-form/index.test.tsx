@@ -1,7 +1,10 @@
 import { http, HttpResponse } from 'msw';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { projectIdSchema } from 'sky-filme-studio-be/contracts';
+import {
+  projectIdSchema,
+  subjectIdSchema,
+} from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { CreateBibleForm } from '@/features/bible/components/create-bible-form';
 import { EMPTY_BIBLE_FORM_VALUES } from '@/features/bible/helpers/bible-form-values';
@@ -145,6 +148,72 @@ describe('CreateBibleForm', () => {
     expect(posted.body()).toBeUndefined();
     expect(
       await screen.findByText('The contract will not accept this value.'),
+    ).toBeInTheDocument();
+  });
+
+  it('carries the source version’s subject rules into the next version rather than dropping them', async () => {
+    styleLibraryServes();
+    const posted = capturePost();
+    const source = buildProjectBible({
+      subjectRules: [
+        {
+          subjectId: subjectIdSchema.parse(
+            '99999999-9999-4999-8999-999999999999',
+          ),
+          immutableVisualTraits: ['A chipped left horn'],
+          allowedVariations: [],
+          prohibitedChanges: [],
+          scaleRelationships: [],
+          wardrobeVariants: [],
+          speaks: false,
+          voiceRules: [],
+          relationships: [],
+        },
+      ],
+    });
+
+    renderInApp(
+      <CreateBibleForm
+        projectId={PROJECT_ID}
+        carriesNarrative
+        initialValues={EMPTY_BIBLE_FORM_VALUES}
+        carriedSubjectRules={source.subjectRules}
+        prefilledFromVersion={source.version}
+        onClose={() => undefined}
+      />,
+    );
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Add' }));
+
+    await waitFor(() => {
+      expect(posted.body()).toBeDefined();
+    });
+    expect(posted.body()).toMatchObject({
+      subjectRules: [{ immutableVisualTraits: ['A chipped left horn'] }],
+    });
+  });
+
+  it('says so when the style library offers more profiles than it listed', async () => {
+    server.use(
+      http.get(API_PATH.styleProfiles(PROJECT_ID), () =>
+        HttpResponse.json({
+          items: [buildStyleProfile()],
+          nextCursor: 'eyJpZCI6MX0',
+        }),
+      ),
+    );
+
+    renderInApp(
+      <CreateBibleForm
+        projectId={PROJECT_ID}
+        carriesNarrative
+        initialValues={EMPTY_BIBLE_FORM_VALUES}
+        onClose={() => undefined}
+      />,
+    );
+
+    expect(
+      await screen.findByText(/first page of style profiles only/i),
     ).toBeInTheDocument();
   });
 

@@ -31,6 +31,7 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
   projectId,
   carriesNarrative,
   initialValues,
+  carriedSubjectRules,
   prefilledFromVersion,
   onClose,
 }) => {
@@ -83,6 +84,7 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
       world: worldFromValues(values),
       ...(carriesNarrative && narrative !== undefined ? { narrative } : {}),
       audio: audioFromValues(values),
+      subjectRules: carriedSubjectRules ?? [],
       ...(values.styleProfileId === ''
         ? {}
         : { styleProfileId: values.styleProfileId }),
@@ -124,6 +126,13 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
           onChange={(value) => set('styleProfileId', value)}
         />
       </Field>
+    );
+
+  const styleProfileTruncated =
+    styleProfiles.data?.nextCursor === undefined ? null : (
+      <p className="create-bible-form__note">
+        {translate('bible.form.styleProfile.firstPageOnly')}
+      </p>
     );
 
   return (
@@ -356,6 +365,7 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
       </fieldset>
 
       {styleProfileField}
+      {styleProfileTruncated}
 
       <p className="create-bible-form__note">
         {translate('bible.form.subjectRules')}

@@ -81,6 +81,7 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
         type="button"
         variant="primary"
         size="md"
+        disabled={project.isPending}
         onClick={() => setCreating(true)}
       >
         {translate(
@@ -107,6 +108,7 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
           projectId={projectId}
           carriesNarrative={carriesNarrative}
           initialValues={initialValues}
+          carriedSubjectRules={selected?.subjectRules}
           prefilledFromVersion={selected?.version}
           onClose={() => setCreating(false)}
         />
@@ -114,32 +116,24 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
     </Dialog>
   );
 
-  if (selected === undefined) {
-    return (
-      <section className="project-bible">
-        <h1 className="project-bible__title">{translate('bible.title')}</h1>
+  return (
+    <section className="project-bible">
+      <h1 className="project-bible__title">{translate('bible.title')}</h1>
+
+      {selected === undefined ? (
         <EmptyState
           title={translate('bible.empty.title')}
           description={translate('bible.empty.description')}
           headingLevel={2}
         />
-        <div className="project-bible__actions">{createButton}</div>
-        {createDialog}
-        <BibleGaps />
-      </section>
-    );
-  }
-
-  return (
-    <section className="project-bible">
-      <h1 className="project-bible__title">{translate('bible.title')}</h1>
-
-      <BibleVersionList
-        versions={items}
-        activeId={active.data?.id}
-        selectedId={selected.id}
-        onSelect={setChosenId}
-      />
+      ) : (
+        <BibleVersionList
+          versions={items}
+          activeId={active.data?.id}
+          selectedId={selected.id}
+          onSelect={setChosenId}
+        />
+      )}
 
       {versions.data.nextCursor === undefined ? null : (
         <p className="project-bible__truncated">
@@ -147,21 +141,24 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
         </p>
       )}
 
-      <div className="project-bible__sections">
-        <BibleWorldSection world={selected.world} />
-        <BibleNarrativeSection
-          narrative={selected.narrative}
-          projectKind={selected.projectKind}
-        />
-        <BibleAudioSection audio={selected.audio} />
-        <BibleSubjectRulesSection subjectRules={selected.subjectRules} />
-      </div>
+      {selected === undefined ? null : (
+        <div className="project-bible__sections">
+          <BibleWorldSection world={selected.world} />
+          <BibleNarrativeSection
+            narrative={selected.narrative}
+            projectKind={selected.projectKind}
+          />
+          <BibleAudioSection audio={selected.audio} />
+          <BibleSubjectRulesSection subjectRules={selected.subjectRules} />
+        </div>
+      )}
 
       <div className="project-bible__actions">
         {createButton}
-        {selected.published ? (
+        {selected !== undefined && selected.published ? (
           <p className="project-bible__frozen">{translate('bible.frozen')}</p>
-        ) : (
+        ) : null}
+        {selected !== undefined && !selected.published ? (
           <Button
             type="button"
             variant="secondary"
@@ -171,7 +168,7 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
           >
             {translate('bible.edit.action')}
           </Button>
-        )}
+        ) : null}
       </div>
 
       {createDialog}
@@ -181,7 +178,7 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
         title={translate('bible.edit.title')}
         onClose={() => setEditing(false)}
       >
-        {editing ? (
+        {editing && selected !== undefined ? (
           <EditBibleForm
             projectId={projectId}
             bible={selected}
@@ -190,8 +187,12 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
         ) : null}
       </Dialog>
 
-      <BiblePublish projectId={projectId} bible={selected} />
-      <BibleMarkdownPanel projectId={projectId} bibleId={selected.id} />
+      {selected === undefined ? null : (
+        <BiblePublish projectId={projectId} bible={selected} />
+      )}
+      {selected === undefined ? null : (
+        <BibleMarkdownPanel projectId={projectId} bibleId={selected.id} />
+      )}
       <BibleGaps />
     </section>
   );
