@@ -958,6 +958,27 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'bible.subjects.voiceRules.notApplicable':
     'הדמות הזו אינה מדברת, ולכן כללי קול אינם יכולים לחול עליה.',
   'bible.subjects.relationships': 'יחסים',
+  'bible.create.action': 'התחילו טיוטה',
+  'bible.create.next': 'התחילו את הגרסה הבאה',
+  'bible.create.title': 'טיוטה חדשה של ביבל הפרויקט',
+  'bible.create.explain':
+    'אפשר ליצור טיוטה ריקה ולמלא אותה ככל שהפרויקט מתגבש. שום דבר אינו מוקפא עד שהיא מפורסמת, ומספר הגרסה נקבע על ידי האורקסטרטור.',
+  'bible.create.prefilled':
+    'השדות האלה מתחילים מגרסה {version}. שמירה יוצרת טיוטה חדשה; גרסה {version} אינה נוגעת בכך.',
+  'bible.edit.action': 'ערכו את הטיוטה הזו',
+  'bible.edit.context': 'של ביבל הפרויקט, גרסה {version}',
+  'bible.edit.title': 'ערכו את הטיוטה הזו',
+  'bible.frozen':
+    'הגרסה הזו מפורסמת, ולכן כבר אי אפשר לערוך אותה. התחילו במקום זאת את הגרסה הבאה.',
+  'bible.form.styleProfile': 'פרופיל סגנון',
+  'bible.form.styleProfile.none': 'ללא',
+  'bible.form.styleProfile.unreadable':
+    'לא ניתן היה לקרוא את ספריית הסגנונות, ולכן אי אפשר לבחור כאן פרופיל סגנון. כל השאר בטופס הזה עדיין נשמר.',
+  'bible.form.languages.hint': 'תג שפה אחד בכל שורה.',
+  'bible.form.subjectRules':
+    'כללי דמויות אינם נכתבים כאן. כל בלוק מזוהה לפי מזהה של דמות, והמסך הזה אינו מושיט יד לספריית הדמויות כדי להציע אחד.',
+  'bible.form.kindUnreadable':
+    'לא ניתן היה לקרוא את הפרויקט הזה, ולכן לא ידוע אם סוגו נושא כללי נרטיב. החלק הזה מושמט במקום להיות מוצע במקום שבו האורקסטרטור היה דוחה אותו.',
   'bible.publish.action': 'פרסמו את הגרסה הזו',
   'bible.publish.context': 'פרסמו את הגרסה הזו של ביבל הפרויקט, גרסה {version}',
   'bible.publish.explained':
