@@ -77,6 +77,7 @@ const everyPath: Record<string, string> = {
   preflight: API_PATH.preflight(),
   modelSetup: API_PATH.modelSetup(),
   projects: API_PATH.projects(),
+  project: API_PATH.project(SAMPLE_PROJECT_ID),
   captureGuide: API_PATH.captureGuide(),
   projectAssets: API_PATH.projectAssets(SAMPLE_PROJECT_ID),
   projectAsset: API_PATH.projectAsset(

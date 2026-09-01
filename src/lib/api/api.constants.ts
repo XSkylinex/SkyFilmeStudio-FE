@@ -20,6 +20,7 @@ export const API_PATH = {
   preflight: (): string => '/preflight',
   modelSetup: (): string => '/preflight/models',
   projects: (): string => '/projects',
+  project: (projectId: ProjectId): string => `/projects/${projectId}`,
   captureGuide: (): string => '/capture-guide',
   projectAssets: (projectId: ProjectId): string =>
     `/projects/${projectId}/assets`,
