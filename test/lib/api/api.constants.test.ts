@@ -1,5 +1,6 @@
 import {
   canonicalAssetSetIdSchema,
+  dialogueLineIdSchema,
   locationIdSchema,
   locationPlateIdSchema,
   productionIdSchema,
@@ -22,6 +23,10 @@ import { ORCHESTRATOR_ROUTE_PREFIXES } from '@/lib/api/orchestrator-routes.const
 
 const SAMPLE_RENDER_JOB_ID = renderJobIdSchema.parse(
   '33333333-3333-4333-8333-333333333333',
+);
+
+const SAMPLE_DIALOGUE_LINE_ID = dialogueLineIdSchema.parse(
+  'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
 );
 
 const SAMPLE_PROJECT_ID = projectIdSchema.parse(
@@ -218,6 +223,14 @@ const everyPath: Record<string, string> = {
     SAMPLE_SCENE_ID,
   ),
   renderJob: API_PATH.renderJob(SAMPLE_RENDER_JOB_ID),
+  sceneDialogueLines: API_PATH.sceneDialogueLines(SAMPLE_SCENE_ID),
+  dialogueLineSpeech: API_PATH.dialogueLineSpeech(SAMPLE_DIALOGUE_LINE_ID),
+  dialogueLineSpeechApproval: API_PATH.dialogueLineSpeechApproval(
+    SAMPLE_DIALOGUE_LINE_ID,
+  ),
+  dialogueLineTier: API_PATH.dialogueLineTier(SAMPLE_DIALOGUE_LINE_ID),
+  productionDialogueTiming:
+    API_PATH.productionDialogueTiming(SAMPLE_PRODUCTION_ID),
 };
 
 describe('API_PATH', () => {

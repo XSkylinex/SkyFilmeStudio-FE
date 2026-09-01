@@ -1,0 +1,92 @@
+@layer features {
+  .speech-takes {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .speech-takes__title {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .speech-takes__note {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .speech-takes__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .speech-takes__take {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .speech-takes__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .speech-takes__explained {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .speech-takes__spoken {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .speech-takes__spoken-line {
+    margin: 0;
+  }
+
+  .speech-takes__field-label {
+    color: var(--color-text-secondary);
+  }
+
+  .speech-takes__facts {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-2);
+  }
+
+  .speech-takes__fact dt {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .speech-takes__fact dd {
+    margin: 0;
+  }
+
+  .speech-takes__hash {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    overflow-wrap: anywhere;
+  }
+
+  .speech-takes__overrides {
+    margin: 0;
+    padding-inline-start: var(--space-4);
+  }
+}

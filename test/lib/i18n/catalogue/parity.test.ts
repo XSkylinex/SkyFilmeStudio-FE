@@ -11,9 +11,13 @@ describe('the catalogues', () => {
   });
 
   it('leaves no Hebrew string empty, or still carrying its English', () => {
-    const ownNames = ['language.en', 'language.he'];
+    const sharedAcrossLanguages = [
+      'language.en',
+      'language.he',
+      'audio.tier.dubit',
+    ];
     const untranslated = Object.entries(HE_CATALOGUE)
-      .filter(([key]) => !ownNames.includes(key))
+      .filter(([key]) => !sharedAcrossLanguages.includes(key))
       .filter(
         ([key, value]) =>
           value === '' ||

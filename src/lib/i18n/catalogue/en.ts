@@ -1154,6 +1154,126 @@ export const EN_CATALOGUE = {
     'A shot’s keyframe requirement cannot be set here, and no waiver can be recorded, for the same reason: both routes take a body the contract does not publish.',
   'storyboard.gaps.progress':
     'Frames that are still rendering do not update on their own. Progress arrives over a websocket the orchestrator does not yet serve, so this screen shows what was true when it was last read.',
+  'audio.line.label': 'Line {order}',
+  'audio.line.emotion': 'Emotion',
+  'audio.line.pace': 'Pace',
+  'audio.line.pauseBefore': 'Pause before',
+  'audio.line.pauseAfter': 'Pause after',
+  'audio.line.language': 'Language',
+  'audio.line.approved': 'Audio approved',
+  'audio.line.notApproved': 'No audio approved',
+  'audio.line.measured': 'Measured duration',
+  'audio.line.noAudioYet':
+    'This line has never been voiced, so there is nothing to approve yet.',
+  'audio.line.spokenDiffers':
+    'What is spoken differs from the written line, because a pronunciation dictionary was applied.',
+  'audio.line.spoken': 'Spoken',
+  'audio.takes.title': 'Takes',
+  'audio.takes.error': 'The takes for this line could not be read.',
+  'audio.takes.empty': 'No take has been generated for this line yet.',
+  'audio.take.label': '{pass}, attempt {attempt}',
+  'audio.take.current': 'Current audio',
+  'audio.take.approvedTake': 'Approved',
+  'audio.take.model': 'Model',
+  'audio.take.seed': 'Seed',
+  'audio.take.voiceHash': 'Voice profile hash',
+  'audio.take.audioHash': 'Audio hash',
+  'audio.take.path': 'File',
+  'audio.take.duration': 'Duration',
+  'audio.take.sampleRate': 'Sample rate',
+  'audio.take.resampled': 'Resampled from',
+  'audio.take.peak': 'Peak level',
+  'audio.take.created': 'Generated',
+  'audio.take.pronunciation': 'Pronunciation overrides',
+  'audio.take.noPlayback':
+    'The file cannot be played here. The orchestrator serves no route for an artifact’s bytes, so this is the record of the audio rather than the audio.',
+  'audio.pass.draft': 'Draft',
+  'audio.pass.final': 'Final',
+  'audio.pass.draft.explained':
+    'A draft exists to measure how long the line takes to say, before shot timing is fixed.',
+  'audio.pass.final.explained':
+    'A final is regenerated once the plan holds, and is what the production uses.',
+  'audio.synthesise.draft': 'Generate draft',
+  'audio.synthesise.final': 'Generate final',
+  'audio.synthesise.pending': 'Submitting…',
+  'audio.synthesise.context': 'for line {order}',
+  'audio.synthesise.submitted':
+    'Submitted. A take appears here once the render finishes, which is not immediate.',
+  'audio.synthesise.blocked':
+    'This line’s audio is approved, so it cannot be re-voiced. Remove the approval first.',
+  'audio.approve.action': 'Approve this audio',
+  'audio.approve.context': 'for line {order}',
+  'audio.approve.done': 'The audio for this line is approved.',
+  'audio.unapprove.action': 'Remove approval',
+  'audio.unapprove.done':
+    'The approval was removed. This line can be re-voiced.',
+  'audio.tier.title': 'Animation tier',
+  'audio.tier.action': 'Ask which tier',
+  'audio.tier.pending': 'Choosing…',
+  'audio.tier.editedAcrossShots': 'This line plays across more than one shot',
+  'audio.tier.acrossShots.no': 'No',
+  'audio.tier.acrossShots.yes': 'Yes',
+  'audio.tier.chosen': 'Would be: {tier}',
+  'audio.tier.rationale': 'Why: {rationale}',
+  'audio.tier.audioConditioned': 'Audio-conditioned',
+  'audio.tier.rhythmAnimation': 'Rhythm animation',
+  'audio.tier.reactionEditing': 'Reaction editing',
+  'audio.tier.dubit': 'DubIt',
+  'audio.tier.gated':
+    'DubIt cannot be requested from here. The contract marks it as gated behind a hardware benchmark and a subject-consistency test, and whether this workstation has passed them is not on the wire — so a request could only be sent hopefully, and refused.',
+  'audio.title': 'Dialogue audio',
+  'audio.description':
+    'Every spoken line in this production, the takes generated for it, and the one a person approved.',
+  'audio.scenes.error': 'The scenes for this production could not be read.',
+  'audio.scenes.loading': 'Reading the scenes…',
+  'audio.scenes.empty':
+    'This production has no scenes yet. Plan it first, and its dialogue will appear here.',
+  'audio.scene.label': 'Scene {order}',
+  'audio.scene.show': 'Show dialogue',
+  'audio.scene.hide': 'Hide dialogue',
+  'audio.scene.toggleContext': 'for scene {order}',
+  'audio.lines.error': 'The dialogue for this scene could not be read.',
+  'audio.lines.loading': 'Reading the dialogue…',
+  'audio.lines.empty': 'This scene carries no dialogue.',
+  'audio.lines.firstPageOnly':
+    'This is the first page of dialogue only. The orchestrator has more lines for this scene than are shown here.',
+  'audio.timing.title': 'Runtime, measured from the dialogue',
+  'audio.timing.explain':
+    'The planner’s budget is built from durations a person typed. This reads the generated audio instead and retimes every shot it can, which changes those durations.',
+  'audio.timing.run': 'Retime from dialogue',
+  'audio.timing.running': 'Retiming…',
+  'audio.timing.noReport': 'Not run yet.',
+  'audio.timing.measured': 'Scenes measured: {count}',
+  'audio.timing.estimated': 'Scenes still estimated: {count}',
+  'audio.timing.estimatedWarning':
+    'An estimated scene’s total is the Director’s clamped request rather than a measurement, and is not reported as one.',
+  'audio.timing.scene': 'Scene {order}',
+  'audio.timing.status.retimed': 'Retimed',
+  'audio.timing.status.estimated': 'Estimated',
+  'audio.timing.status.unmeasured': 'Unmeasured',
+  'audio.timing.status.noShots': 'No shots',
+  'audio.timing.total': 'Total after retiming',
+  'audio.timing.target': 'Target',
+  'audio.tier.field': 'Tier',
+  'audio.tier.automatic': 'Let the orchestrator choose',
+  'audio.tier.notStored':
+    'This is a calculation, not a saved decision. The orchestrator works the tier out from the speaker and the shot count each time it is asked, and stores nothing — so nothing downstream reads it, and it will not be here when you come back.',
+  'audio.gaps.tierNotStored':
+    'An animation tier cannot be recorded against a line. The route computes one and returns it, and the orchestrator has no column, no table and no read route for the answer.',
+  'audio.takes.forLine': 'Takes for line {order}',
+  'audio.gaps.heading': 'What this screen cannot do yet',
+  'audio.gaps.playback':
+    'No audio can be played. Nothing in the orchestrator serves an artifact’s bytes, so a take is shown as its record — duration, peak level, hashes — rather than as sound.',
+  'audio.gaps.music':
+    'The project soundtrack, cue assignment and scene scoring are not here. The orchestrator publishes no route for any of them.',
+  'audio.gaps.sfx':
+    'The SFX and ambience library has no routes at all, so nothing can be indexed, assigned, or shown with the licence metadata that makes it safe to use.',
+  'audio.gaps.stems':
+    'Stems and the mix — dialogue, music, effects and ambience, with levels, solo and mute — have no routes, so no level can be set here.',
+  'audio.gaps.loudness':
+    'The loudness numbers that decide whether an export is acceptable are not served, so this screen cannot show a measured value against its target.',
+  'audio.gaps.asr':
+    'The advisory ASR round-trip is a published contract with no route, so a line cannot be checked against what a recogniser heard.',
   'error.MUSIC_CUE_NOT_APPROVED':
     'That step needs an approved music cue, and this one is not approved. Approve the cue first, or choose one that already is.',
   'error.MUSIC_CUE_IMMUTABLE':

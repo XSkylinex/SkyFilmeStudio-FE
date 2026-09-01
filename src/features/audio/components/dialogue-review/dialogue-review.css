@@ -1,0 +1,38 @@
+@layer features {
+  .dialogue-review {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .dialogue-review__header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .dialogue-review__title {
+    margin: 0;
+  }
+
+  .dialogue-review__description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .dialogue-review__note {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .dialogue-review__scenes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}

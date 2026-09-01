@@ -1,7 +1,8 @@
 # FE-14 — Timeline & final production
 
 > **Depends on:** 12, 13 · **Blocks:** 17 · **Backend needs:** BE-22 · **Plan authority:** §35, §36, §37, §38.2, §39, §51
-> **Status:** not started
+> **Status:** blocked — `contracts/media/timeline.ts` and `contracts/media/delivery.ts` are published
+> and no controller reaches either. Measured 2026-09-01.
 
 ## Goal
 

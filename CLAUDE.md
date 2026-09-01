@@ -86,13 +86,15 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **881 keys in English and
-Hebrew**, counted 2026-09-01 after FE-10 — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **977 keys in English and
+Hebrew**, counted 2026-09-01 after FE-13 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
-and its two write forms, and the storyboard review, whose 120 keys include a label for every value of
+and its two write forms, the storyboard review, whose 120 keys include a label for every value of
 six contract enums — sixteen shot types, fifteen shot states, nine generation strategies, five
-regeneration modes, three keyframe requirements, two storyboard levels.
+regeneration modes, three keyframe requirements, two storyboard levels — and the dialogue audio
+screen, whose 93 include both TTS passes, all four animation tiers and the four scene-timing
+statuses.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
 tree held 371, so the warning had already failed once on the paragraph carrying it. It then failed a
 second time on the same paragraph: it read 690 while the tree held 694, because absorbing four
@@ -467,6 +469,46 @@ anchors the orchestrator records rather than two images side by side.
 keyframe from a copy of the backend's unpublished `NEEDS_NO_KEYFRAME` list would have disagreed
 silently the day a strategy was added to it, and it stated one of the two causes of `NOT_REQUIRED` as
 if it were the only one. The gate reports what the wire returns.
+
+**FE-13 made the dialogue audio real on 2026-09-01, and its stated dependency gated none of it.**
+`/productions/:id/audio` was an `EmptyState`; it now reads a production's scenes, the lines each
+carries, and every take a line has produced — model, seed, voice-profile SHA-256, audio hash, sample
+rate, peak level and the **measured** duration. It writes too: a line is synthesised in either §22
+pass, its audio is approved and un-approved, and the §19 animation tier it would get is shown —
+computed on request and stored nowhere, which review caught this repo presenting as a recorded
+decision. The phase's
+dependency line says BE-21, and BE-21 blocks none of that: the whole dialogue and speech surface has
+an explicit publishing block in `src/contracts/index.ts`, and what had made it unreachable was the
+same single missing route that blocked FE-10. **That is the second phase running whose blocker was
+not the phase on its dependency line.**
+
+**Approval here is not take-selectable, and that shapes the screen.** `POST` and `DELETE
+/dialogue-lines/:id/speech/approval` take no request body because the route approves whatever
+synthesis matches the line's own `generatedAudioPath`, and refuses if that matches no recorded row —
+approving a file with no provenance is what it exists to prevent. So the screen marks which take is
+current rather than offering a choice the route cannot express. Re-voicing an approved line is
+refused with `DIALOGUE_AUDIO_IMMUTABLE`, so un-approval is the only way back and both directions
+shipped together.
+
+**The runtime budget stopped being an estimate.** FE-09 answers "does this plan add up" from
+durations a person typed. `POST /productions/:id/dialogue-timing` answers it from the audio that
+exists, retiming every shot it can, and the report keeps `measuredSceneCount` and
+`estimatedSceneCount` apart because an `ESTIMATED` scene's total is the Director's clamped request
+and the contract says in as many words that it must not be reported as a measurement. It is a write,
+so it invalidates the shots it retimed and the planner budget computed from them.
+
+**Nothing on this screen can be played, for the same reason no storyboard frame is a picture.** No
+route in the orchestrator serves an artifact's bytes — `src/artifacts/` has a module and a repository
+and no controller, and the only `StreamableFile` responses in the whole backend are the source-asset
+thumbnail and proxy. One missing controller holds back both phases.
+
+**Two other phases were re-measured at the same time and their rows corrected.** FE-12 read "not
+started" while every route it needs had already landed; it is blocked, on three separate things —
+the missing artifact bytes, two request DTOs that are not re-exported, and a hero-shot field that
+exists nowhere in the contract. FE-14 is a published contract with no controller. **A grep of
+`dist-esm/contracts/` is the wrong instrument for "is this published"** — the barrel also re-exports
+DTOs from `src/<feature>/dto/`, so that grep called `createProductionRequestSchema` unpublished while
+this repo imports it. Ask the resolver this repo compiles with.
 
 ## The six rules that outrank everything else
 

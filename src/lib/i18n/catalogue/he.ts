@@ -1136,6 +1136,125 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'לא ניתן לקבוע כאן את דרישת הקיפריים של שוט, ולא ניתן לרשום ויתור, מאותה סיבה: שני הנתיבים מקבלים גוף בקשה שהחוזה אינו מפרסם.',
   'storyboard.gaps.progress':
     'פריימים שעדיין ברינדור אינם מתעדכנים מעצמם. התקדמות מגיעה דרך websocket שהאורקסטרטור אינו מגיש עדיין, ולכן המסך הזה מציג את מה שהיה נכון בקריאה האחרונה.',
+  'audio.line.label': 'שורה {order}',
+  'audio.line.emotion': 'רגש',
+  'audio.line.pace': 'קצב',
+  'audio.line.pauseBefore': 'השהיה לפני',
+  'audio.line.pauseAfter': 'השהיה אחרי',
+  'audio.line.language': 'שפה',
+  'audio.line.approved': 'האודיו אושר',
+  'audio.line.notApproved': 'לא אושר אודיו',
+  'audio.line.measured': 'משך שנמדד',
+  'audio.line.noAudioYet':
+    'השורה הזאת מעולם לא סונתזה, ולכן אין עדיין מה לאשר.',
+  'audio.line.spokenDiffers':
+    'מה שנאמר שונה מהשורה הכתובה, משום שהוחל מילון הגייה.',
+  'audio.line.spoken': 'נאמר',
+  'audio.takes.title': 'טייקים',
+  'audio.takes.error': 'לא ניתן היה לקרוא את הטייקים של השורה הזאת.',
+  'audio.takes.empty': 'עדיין לא נוצר טייק לשורה הזאת.',
+  'audio.take.label': '{pass}, ניסיון {attempt}',
+  'audio.take.current': 'האודיו הנוכחי',
+  'audio.take.approvedTake': 'מאושר',
+  'audio.take.model': 'מודל',
+  'audio.take.seed': 'זרע',
+  'audio.take.voiceHash': 'גיבוב של פרופיל הקול',
+  'audio.take.audioHash': 'גיבוב של האודיו',
+  'audio.take.path': 'קובץ',
+  'audio.take.duration': 'משך',
+  'audio.take.sampleRate': 'תדר דגימה',
+  'audio.take.resampled': 'נדגם מחדש מתוך',
+  'audio.take.peak': 'רמת שיא',
+  'audio.take.created': 'נוצר',
+  'audio.take.pronunciation': 'חריגי הגייה',
+  'audio.take.noPlayback':
+    'לא ניתן לנגן כאן את הקובץ. האורקסטרטור אינו מגיש נתיב לבייטים של תוצר, ולכן זהו הרישום של האודיו ולא האודיו עצמו.',
+  'audio.pass.draft': 'טיוטה',
+  'audio.pass.final': 'סופי',
+  'audio.pass.draft.explained':
+    'טיוטה קיימת כדי למדוד כמה זמן לוקח לומר את השורה, לפני שתזמון השוטים נקבע.',
+  'audio.pass.final.explained':
+    'גרסה סופית נוצרת מחדש אחרי שהתוכנית מתייצבת, והיא זו שההפקה משתמשת בה.',
+  'audio.synthesise.draft': 'צור טיוטה',
+  'audio.synthesise.final': 'צור גרסה סופית',
+  'audio.synthesise.pending': 'שולח…',
+  'audio.synthesise.context': 'לשורה {order}',
+  'audio.synthesise.submitted':
+    'נשלח. טייק יופיע כאן לאחר שהרינדור יסתיים, וזה אינו מיידי.',
+  'audio.synthesise.blocked':
+    'האודיו של השורה הזאת מאושר, ולכן לא ניתן לסנתז אותה מחדש. יש להסיר את האישור תחילה.',
+  'audio.approve.action': 'אשר את האודיו הזה',
+  'audio.approve.context': 'לשורה {order}',
+  'audio.approve.done': 'האודיו של השורה הזאת אושר.',
+  'audio.unapprove.action': 'הסר אישור',
+  'audio.unapprove.done': 'האישור הוסר. ניתן לסנתז את השורה מחדש.',
+  'audio.tier.title': 'רמת אנימציה',
+  'audio.tier.action': 'שאל איזו רמה',
+  'audio.tier.pending': 'בוחר…',
+  'audio.tier.editedAcrossShots': 'השורה הזאת נפרסת על יותר משוט אחד',
+  'audio.tier.acrossShots.no': 'לא',
+  'audio.tier.acrossShots.yes': 'כן',
+  'audio.tier.chosen': 'היה יוצא: {tier}',
+  'audio.tier.rationale': 'מדוע: {rationale}',
+  'audio.tier.audioConditioned': 'מותנה אודיו',
+  'audio.tier.rhythmAnimation': 'אנימציה לפי קצב',
+  'audio.tier.reactionEditing': 'עריכת תגובות',
+  'audio.tier.dubit': 'DubIt',
+  'audio.tier.gated':
+    'לא ניתן לבקש כאן DubIt. החוזה מסמן אותו כחסום מאחורי בדיקת ביצועי חומרה ומבחן עקביות דמות, והשאלה אם התחנה הזאת עברה אותם אינה מגיעה בחוזה — כך שבקשה עבורו הייתה נשלחת בתקווה בלבד, ומסורבת.',
+  'audio.title': 'אודיו של דיאלוג',
+  'audio.description':
+    'כל שורה מדוברת בהפקה הזאת, הטייקים שנוצרו עבורה, והטייק שאדם אישר.',
+  'audio.scenes.error': 'לא ניתן היה לקרוא את הסצנות של ההפקה הזאת.',
+  'audio.scenes.loading': 'קורא את הסצנות…',
+  'audio.scenes.empty':
+    'להפקה הזאת אין עדיין סצנות. יש לתכנן אותה תחילה, והדיאלוג יופיע כאן.',
+  'audio.scene.label': 'סצנה {order}',
+  'audio.scene.show': 'הצג דיאלוג',
+  'audio.scene.hide': 'הסתר דיאלוג',
+  'audio.scene.toggleContext': 'לסצנה {order}',
+  'audio.lines.error': 'לא ניתן היה לקרוא את הדיאלוג של הסצנה הזאת.',
+  'audio.lines.loading': 'קורא את הדיאלוג…',
+  'audio.lines.empty': 'בסצנה הזאת אין דיאלוג.',
+  'audio.lines.firstPageOnly':
+    'זהו העמוד הראשון של הדיאלוג בלבד. לאורקסטרטור יש לסצנה הזאת יותר שורות ממה שמוצג כאן.',
+  'audio.timing.title': 'משך ריצה, נמדד מתוך הדיאלוג',
+  'audio.timing.explain':
+    'תקציב המתכנן נבנה ממשכים שאדם הקליד. כאן נקרא האודיו שנוצר במקום זאת, וכל שוט שניתן מתוזמן מחדש — מה שמשנה את אותם משכים.',
+  'audio.timing.run': 'תזמן מחדש מתוך הדיאלוג',
+  'audio.timing.running': 'מתזמן מחדש…',
+  'audio.timing.noReport': 'טרם הורץ.',
+  'audio.timing.measured': 'סצנות שנמדדו: {count}',
+  'audio.timing.estimated': 'סצנות שעדיין בהערכה: {count}',
+  'audio.timing.estimatedWarning':
+    'הסך של סצנה משוערת הוא בקשת הבמאי לאחר הגבלה ולא מדידה, ואינו מדווח כמדידה.',
+  'audio.timing.scene': 'סצנה {order}',
+  'audio.timing.status.retimed': 'תוזמן מחדש',
+  'audio.timing.status.estimated': 'משוער',
+  'audio.timing.status.unmeasured': 'לא נמדד',
+  'audio.timing.status.noShots': 'אין שוטים',
+  'audio.timing.total': 'סך הכול לאחר התזמון',
+  'audio.timing.target': 'יעד',
+  'audio.tier.field': 'רמה',
+  'audio.tier.automatic': 'שהאורקסטרטור יבחר',
+  'audio.tier.notStored':
+    'זהו חישוב ולא החלטה שנשמרת. האורקסטרטור מחשב את הרמה מהדובר וממספר השוטים בכל פנייה, ואינו שומר דבר — ולכן שום שלב בהמשך אינו קורא אותה, והיא לא תהיה כאן בחזרה.',
+  'audio.gaps.tierNotStored':
+    'לא ניתן לרשום רמת אנימציה עבור שורה. הנתיב מחשב אחת ומחזיר אותה, ולאורקסטרטור אין עמודה, אין טבלה ואין נתיב קריאה לתשובה.',
+  'audio.takes.forLine': 'טייקים לשורה {order}',
+  'audio.gaps.heading': 'מה המסך הזה עדיין אינו יכול לעשות',
+  'audio.gaps.playback':
+    'לא ניתן לנגן אודיו. שום דבר באורקסטרטור אינו מגיש את הבייטים של תוצר, ולכן טייק מוצג כרישום שלו — משך, רמת שיא, גיבובים — ולא כצליל.',
+  'audio.gaps.music':
+    'פסקול ההפקה, שיבוץ קטעי המוזיקה והלחנה לסצנות אינם כאן. האורקסטרטור אינו מפרסם עבורם שום נתיב.',
+  'audio.gaps.sfx':
+    'לספריית האפקטים והאמביינס אין נתיבים כלל, ולכן לא ניתן לאנדקס, לשייך, או להציג את מידע הרישוי שהופך אותה לבטוחה לשימוש.',
+  'audio.gaps.stems':
+    'סטמים והמיקס — דיאלוג, מוזיקה, אפקטים ואמביינס, עם רמות, סולו והשתקה — חסרי נתיבים, ולכן לא ניתן לקבוע כאן שום רמה.',
+  'audio.gaps.loudness':
+    'מספרי העוצמה שקובעים אם ייצוא קביל אינם מוגשים, ולכן המסך הזה אינו יכול להציג ערך שנמדד מול היעד שלו.',
+  'audio.gaps.asr':
+    'סבב ה-ASR המייעץ הוא חוזה מפורסם ללא נתיב, ולכן לא ניתן להשוות שורה למה שמנוע זיהוי דיבור שמע.',
   'error.MUSIC_CUE_NOT_APPROVED':
     'השלב הזה דורש קיו מוזיקלי מאושר, והקיו הזה אינו מאושר. יש לאשר אותו תחילה, או לבחור אחד שכבר מאושר.',
   'error.MUSIC_CUE_IMMUTABLE':

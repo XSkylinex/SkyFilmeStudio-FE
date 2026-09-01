@@ -1,7 +1,34 @@
 # FE-13 — Audio & music
 
 > **Depends on:** 09 · **Blocks:** 14 · **Backend needs:** BE-21 · **Plan authority:** §32, §33, §34, §18
-> **Status:** not started
+> **Status:** partly done 2026-09-01 — the dialogue half is real; the music, effects and mix
+> halves are not, for three different reasons. See "What was buildable, and what was not" below.
+
+## What was buildable, and what was not
+
+Measured 2026-09-01 against the orchestrator's `origin/master`, not against this file's dependency
+line.
+
+**The dialogue surface was fully published and had been for weeks.** `src/contracts/index.ts` carries
+an explicit block for it — the three dialogue-line DTOs, `synthesiseSpeechRequestSchema`,
+`chooseDialogueTierRequestSchema` and the dialogue-timing report — so reading, writing, synthesising,
+approving and retiming were all buildable. What had made them unreachable was the same single missing
+route that blocked FE-10: nothing produced a `sceneId` until `dcf6d49` added
+`GET /productions/:productionId/planning/scenes`. **Track the missing route, not the phase number** —
+BE-21 is this phase's stated dependency and it gates none of what landed.
+
+**The music half is not on master.** BE-21's cue and profile work exists on an unmerged
+`be-21-audio` branch. `.claude/rules/state-and-data.md` permits mapping a refusal from a branch and
+forbids building a screen on one, so nothing here reads it.
+
+**The effects, stems, mix and loudness halves have no routes at all** — not unpublished shapes, no
+controllers. That is a different blocker from the music half and is recorded separately rather than
+merged into one line.
+
+**Nothing can be played.** No route in the orchestrator serves an artifact's bytes; the only
+`StreamableFile` responses are the source-asset thumbnail and proxy. So a take is shown as its record
+— measured duration, peak level, sample rate, both hashes, the file path — rather than as sound. This
+is the same wall FE-10 hit on frames, and it is one missing controller away from moving for both.
 
 ## Goal
 
@@ -90,6 +117,21 @@ Reusing them is part of why a 20-minute production does not require twenty new m
 yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 ```
 
+**What was run, 2026-09-01:** `yarn typecheck` 0 · `yarn lint` 0, with the five documented warnings
+and no new one · `yarn test` 1,469 tests across 218 files · `yarn build` 0 · `yarn format:check` 0.
+Both catalogues hold 977 keys and are equal. Every commit on the branch was checked out and
+typechecked on its own, because a green tip proved nothing about the eleven underneath it in FE-10.
+
+**What was not run, and why.** None of the list below it was exercised against a seeded production —
+there is no seeded dialogue on this machine, so no line has ever been synthesised here. The `dir="rtl"`
+pass and the repeated-cue check are therefore unverified rather than passed, and are not claimed. Each
+guard that could be checked was checked by watching it fail first — and one of them was wrong the
+first time. The no-optimistic-update snapshot originally covered only `['dialogue-line', id]`, while
+the badge and the control choice read `['scene-dialogue-lines', sceneId]`, a sibling key the prefix
+cannot reach; review demonstrated with `@tanstack/query-core` that a `setQueryData` on the scene list
+left that snapshot byte-identical. It now snapshots both keys, and a planted optimistic update on the
+scene list fails it. Each invalidation was proven by deleting it and watching `expected 1 to be 2`.
+
 - generate and approve 6–10 cues; confirm each stored bpm, mood, loopable and safe dialogue level;
 - score a 5-scene production and confirm **cue reuse is the easy action**;
 - confirm a repeated cue across consecutive scenes is visible on the strip;
@@ -102,15 +144,49 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 
 ## Done when
 
-- [ ] the OST library exists with full per-cue metadata; reuse is the obvious action
-- [ ] scene scoring with a visible cue-vs-scene strip
-- [ ] SFX/ambience library with tags and licence provenance shown
-- [ ] per-line dialogue audio with measured duration and QC results; single-line regeneration
-- [ ] ASR round-trip presented as advisory
-- [ ] DX/MX/FX/AMB stems with level, solo and mute, then scene and production mixes
-- [ ] loudness shown as measured numbers against the target, not a tick
-- [ ] the ducking envelope is visualised against dialogue timings
-- [ ] reusable OP/ED and title audio surfaced
+Each unticked box names what it waits for, rather than being left blank.
+
+- [ ] the OST library exists with full per-cue metadata; reuse is the obvious action — **waits for
+      BE-21 to reach master**
+- [ ] scene scoring with a visible cue-vs-scene strip — **waits for BE-21**; there is no cue to score
+      a scene with
+- [ ] SFX/ambience library with tags and licence provenance shown — **no controller exists**, which is
+      a different blocker from the two above
+- [x] per-line dialogue audio with measured duration and single-line regeneration — **done, with one
+      part of the box unmet**: the duration is the measured `durationMs`, the voice profile is
+      identified by id and SHA-256, and each line is re-voiced on its own in either pass. The QC
+      results named in step 4 are not shown, because the QC controller is scoped to a shot rather
+      than to a dialogue line and no route returns an `AUDIO` run for one. `peakLevelDb` is shown,
+      so "peak not clipped" is answerable; "decodes" and "not silent" are not
+- [ ] ASR round-trip presented as advisory — `asrReviewSchema` is **a published contract with no
+      route**, the same shape as `continuityReviewSchema` in phase 09
+- [ ] DX/MX/FX/AMB stems with level, solo and mute, then scene and production mixes — **no routes**
+- [ ] loudness shown as measured numbers against the target, not a tick — **no route serves a
+      measured LUFS or true peak**, so a number here would be invented
+- [ ] the ducking envelope is visualised against dialogue timings — half its inputs exist (each
+      line's measured duration) and the other half is a cue's safe dialogue level, which **waits for
+      BE-21**
+- [ ] reusable OP/ED and title audio surfaced — **waits for BE-21**
+
+## Delivered beyond this list
+
+`POST /productions/:productionId/dialogue-timing` is not in the boxes above — it is §15.3 and §14.4
+rather than §32–34 — and it is the most useful thing this phase landed. FE-09's runtime budget is
+computed from target durations a person typed; this route reads the generated audio and retimes every
+shot it can, then recomputes the budget on top. The screen reports `measuredSceneCount` and
+`estimatedSceneCount` separately and states on screen that an `ESTIMATED` scene's total is the
+Director's clamped request rather than a measurement, because the contract is explicit that it must
+not be reported as one.
+
+The animation tier from §19 is also here, **and it is a calculation rather than a recorded
+decision** — review caught this repo presenting it as the latter. `POST /dialogue-lines/:id/dialogue-tier`
+reads the line and the speaker's subject type, runs a pure helper and returns; `SpeechService.chooseTier`
+makes no repository call, and there is no column, no table and no `GET` for the answer. The screen now
+says so in its own copy and lists it under what the screen cannot do. Three of the four tiers can be
+requested and the list of gated ones is read from the published `BENCHMARK_GATED_TIERS` rather than
+copied — the first version hard-coded `['DUBIT']`, which is the `NEEDS_NO_KEYFRAME` defect FE-10
+removed one phase earlier. Whether this workstation has *passed* the gate lives in a private
+`BENCHMARKED_TIERS` in the service and is on no wire, so the copy no longer claims to know.
 
 ## Traps
 
