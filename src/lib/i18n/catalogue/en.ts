@@ -1221,6 +1221,52 @@ export const EN_CATALOGUE = {
   'audio.tier.dubit': 'DubIt',
   'audio.tier.gated':
     'DubIt is not offered. It is gated behind a hardware benchmark and a subject-consistency test, neither of which has run on this workstation, so requesting it is refused.',
+  'audio.title': 'Dialogue audio',
+  'audio.description':
+    'Every spoken line in this production, the takes generated for it, and the one a person approved.',
+  'audio.scenes.error': 'The scenes for this production could not be read.',
+  'audio.scenes.loading': 'Reading the scenes…',
+  'audio.scenes.empty':
+    'This production has no scenes yet. Plan it first, and its dialogue will appear here.',
+  'audio.scene.label': 'Scene {order}',
+  'audio.scene.show': 'Show dialogue',
+  'audio.scene.hide': 'Hide dialogue',
+  'audio.scene.toggleContext': 'for scene {order}',
+  'audio.lines.error': 'The dialogue for this scene could not be read.',
+  'audio.lines.loading': 'Reading the dialogue…',
+  'audio.lines.empty': 'This scene carries no dialogue.',
+  'audio.lines.firstPageOnly':
+    'This is the first page of dialogue only. The orchestrator has more lines for this scene than are shown here.',
+  'audio.timing.title': 'Runtime, measured from the dialogue',
+  'audio.timing.explain':
+    'The planner’s budget is built from durations a person typed. This reads the generated audio instead and retimes every shot it can, which changes those durations.',
+  'audio.timing.run': 'Retime from dialogue',
+  'audio.timing.running': 'Retiming…',
+  'audio.timing.noReport': 'Not run yet.',
+  'audio.timing.measured': '{count} scenes were measured',
+  'audio.timing.estimated': '{count} scenes are still estimates',
+  'audio.timing.estimatedWarning':
+    'An estimated scene’s total is the Director’s clamped request rather than a measurement, and is not reported as one.',
+  'audio.timing.scene': 'Scene {order}',
+  'audio.timing.status.retimed': 'Retimed',
+  'audio.timing.status.estimated': 'Estimated',
+  'audio.timing.status.unmeasured': 'Unmeasured',
+  'audio.timing.status.noShots': 'No shots',
+  'audio.timing.total': 'Total after retiming',
+  'audio.timing.target': 'Target',
+  'audio.gaps.heading': 'What this screen cannot do yet',
+  'audio.gaps.playback':
+    'No audio can be played. Nothing in the orchestrator serves an artifact’s bytes, so a take is shown as its record — duration, peak level, hashes — rather than as sound.',
+  'audio.gaps.music':
+    'The project soundtrack, cue assignment and scene scoring are not here. Their routes are not on the orchestrator’s master branch yet.',
+  'audio.gaps.sfx':
+    'The SFX and ambience library has no routes at all, so nothing can be indexed, assigned, or shown with the licence metadata that makes it safe to use.',
+  'audio.gaps.stems':
+    'Stems and the mix — dialogue, music, effects and ambience, with levels, solo and mute — have no routes, so no level can be set here.',
+  'audio.gaps.loudness':
+    'The loudness numbers that decide whether an export is acceptable are not served, so this screen cannot show a measured value against its target.',
+  'audio.gaps.asr':
+    'The advisory ASR round-trip is a published contract with no route, so a line cannot be checked against what a recogniser heard.',
   'error.MUSIC_CUE_NOT_APPROVED':
     'That step needs an approved music cue, and this one is not approved. Approve the cue first, or choose one that already is.',
   'error.MUSIC_CUE_IMMUTABLE':

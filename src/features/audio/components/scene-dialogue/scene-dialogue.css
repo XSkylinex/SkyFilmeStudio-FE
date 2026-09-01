@@ -1,0 +1,49 @@
+@layer features {
+  .scene-dialogue {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .scene-dialogue__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .scene-dialogue__title {
+    margin: 0;
+    font-size: var(--font-size-lg);
+  }
+
+  .scene-dialogue__slugline {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .scene-dialogue__detail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .scene-dialogue__note {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .scene-dialogue__lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}

@@ -1,5 +1,6 @@
 import type {
   DialogueAnimationTier,
+  SceneTiming,
   TtsPass,
 } from 'sky-filme-studio-be/contracts';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
@@ -22,4 +23,14 @@ export const DIALOGUE_ANIMATION_TIER_LABEL: Record<
   RHYTHM_ANIMATION: 'audio.tier.rhythmAnimation',
   REACTION_EDITING: 'audio.tier.reactionEditing',
   DUBIT: 'audio.tier.dubit',
+};
+
+export const SCENE_TIMING_STATUS_LABEL: Record<
+  SceneTiming['status'],
+  TranslationKey
+> = {
+  RETIMED: 'audio.timing.status.retimed',
+  ESTIMATED: 'audio.timing.status.estimated',
+  UNMEASURED: 'audio.timing.status.unmeasured',
+  NO_SHOTS: 'audio.timing.status.noShots',
 };

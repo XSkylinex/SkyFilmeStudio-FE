@@ -46,13 +46,13 @@ const flattenRoutes = (routes: RouteObject[]): FlatRoute[] =>
     ...(route.children ? flattenRoutes(route.children) : []),
   ]);
 
-const STORYBOARD_PRODUCTION_ID = productionIdSchema.parse(
+const PLANNED_PRODUCTION_ID = productionIdSchema.parse(
   '3f9a1c6e-1f0d-4a2b-8c7d-5e6f70819a2b',
 );
 
 mockOrchestratorServer(
   http.get(API_PATH.systemMode(), () => HttpResponse.json(buildSystemMode())),
-  http.get(API_PATH.planningScenes(STORYBOARD_PRODUCTION_ID), () =>
+  http.get(API_PATH.planningScenes(PLANNED_PRODUCTION_ID), () =>
     HttpResponse.json([]),
   ),
 );
@@ -185,7 +185,7 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
   it('resolves the storyboard route to StoryboardPage', async () => {
     const memoryRouter = createMemoryRouter(routeTree, {
       initialEntries: [
-        productionStoryboardPath('proj-1', STORYBOARD_PRODUCTION_ID),
+        productionStoryboardPath('proj-1', PLANNED_PRODUCTION_ID),
       ],
     });
 
@@ -225,13 +225,16 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
 
   it('resolves the audio route to AudioPage', async () => {
     const memoryRouter = createMemoryRouter(routeTree, {
-      initialEntries: [productionAudioPath('proj-1', 'prod-1')],
+      initialEntries: [productionAudioPath('proj-1', PLANNED_PRODUCTION_ID)],
     });
 
     renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
-      await screen.findByRole('heading', { name: 'Audio', level: 1 }),
+      await screen.findByRole('heading', {
+        name: 'Dialogue audio',
+        level: 1,
+      }),
     ).toBeInTheDocument();
   });
 
