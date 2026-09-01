@@ -254,4 +254,8 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.REGENERATION_MODE_REQUIRED',
   },
+  KEYFRAME_REQUIREMENT_DERIVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.KEYFRAME_REQUIREMENT_DERIVED',
+  },
 };

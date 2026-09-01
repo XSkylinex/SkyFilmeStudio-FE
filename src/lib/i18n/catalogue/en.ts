@@ -59,6 +59,8 @@ export const EN_CATALOGUE = {
     'A keyframe for this shot has to be anchored to the approved look of what it contains — the subject, the location, the props — and no anchor was available. That anchoring is what stops the same character drifting from shot to shot.',
   'error.REGENERATION_MODE_REQUIRED':
     'Regenerating this frame needs the mode stated: the same prompt with a new seed, a controlled revision of the prompt, or a fresh keyframe. Those are different operations, and an unlabelled retry makes the attempt history impossible to read afterwards.',
+  'error.KEYFRAME_REQUIREMENT_DERIVED':
+    'Whether this shot needs a keyframe is derived from what is in it: a shot carrying a canonical subject requires one, and that answer cannot be edited by hand. If this shot may skip the gate, record a waiver with a reason — an edit would erase the question rather than answer it.',
   'error.OFFLINE_POLICY_VIOLATION':
     'A provider was pointed off this machine and generation was stopped. Nothing may leave this computer — find the provider that was reconfigured before running anything else.',
   'error.DISK_SPACE_LOW':
