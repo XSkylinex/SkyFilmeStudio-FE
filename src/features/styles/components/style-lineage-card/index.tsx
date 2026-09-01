@@ -1,7 +1,10 @@
 import type { FC } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { StyleProfileId } from 'sky-filme-studio-be/contracts';
 import { ApprovalControls } from '@/lib/components/approval-controls';
 import { Badge } from '@/lib/components/badge';
+import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
@@ -11,6 +14,8 @@ import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-erro
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { approveStyleProfileMutationOptions } from '@/features/styles/api/approve-style-profile.mutation';
 import { styleProfileVersionsQueryOptions } from '@/features/styles/api/style-profile-versions.query';
+import { CreateStyleProfileForm } from '@/features/styles/components/create-style-profile-form';
+import { EditStyleProfileForm } from '@/features/styles/components/edit-style-profile-form';
 import type { StyleLineageCardProps } from './style-lineage-card.interface';
 import './style-lineage-card.css';
 
@@ -26,6 +31,11 @@ export const StyleLineageCard: FC<StyleLineageCardProps> = ({
   );
   const approve = useMutation(
     approveStyleProfileMutationOptions(projectId, lineageId, queryClient),
+  );
+  const [editingVersionId, setEditingVersionId] =
+    useState<StyleProfileId | null>(null);
+  const [nextVersionOfId, setNextVersionOfId] = useState<StyleProfileId | null>(
+    null,
   );
 
   const newestFirst =
@@ -90,41 +100,96 @@ export const StyleLineageCard: FC<StyleLineageCardProps> = ({
       ) : null}
 
       <ul className="style-lineage-card__versions">
-        {newestFirst.map((version) => (
-          <li className="style-lineage-card__version" key={version.id}>
-            <span className="style-lineage-card__version-label">
-              {translate('styles.version.label', {
-                version: String(version.version),
-              })}
-            </span>
-            <span className="style-lineage-card__mode" dir="ltr">
-              {version.mode}
-            </span>
-            {version.approved ? (
-              <>
-                <Badge
-                  tone={STATUS_TONE.SUCCESS}
-                  label={translate('styles.version.approved')}
-                />
-                <span className="style-lineage-card__frozen">
-                  {translate('styles.version.frozen')}
-                </span>
-              </>
-            ) : (
-              <ApprovalControls
-                contextLabel={translate('styles.version.context', {
-                  name: displayName,
+        {newestFirst.map((version) => {
+          const contextLabel = translate('styles.version.context', {
+            name: displayName,
+            version: String(version.version),
+          });
+
+          return (
+            <li className="style-lineage-card__version" key={version.id}>
+              <span className="style-lineage-card__version-label">
+                {translate('styles.version.label', {
                   version: String(version.version),
                 })}
-                onApprove={() => approve.mutate(version.id)}
-                regenerationModes={[]}
-                onRegenerate={() => undefined}
-                pending={approve.isPending}
-                decided={false}
-              />
-            )}
-          </li>
-        ))}
+              </span>
+              <span className="style-lineage-card__mode" dir="ltr">
+                {version.mode}
+              </span>
+
+              {version.approved ? (
+                <>
+                  <Badge
+                    tone={STATUS_TONE.SUCCESS}
+                    label={translate('styles.version.approved')}
+                  />
+                  <span className="style-lineage-card__frozen">
+                    {translate('library.frozen.styleVersion')}
+                  </span>
+                </>
+              ) : null}
+
+              {version.approved && nextVersionOfId === version.id ? (
+                <CreateStyleProfileForm
+                  projectId={projectId}
+                  onClose={() => setNextVersionOfId(null)}
+                  nextVersionOf={{
+                    lineageId,
+                    name: version.name,
+                    description: version.description,
+                    mode: version.mode,
+                    realismLevel: version.realismLevel,
+                    paletteRules: version.paletteRules,
+                    lightingRules: version.lightingRules,
+                    cameraRules: version.cameraRules,
+                    textureRules: version.textureRules,
+                    motionRules: version.motionRules,
+                    prohibitedStyleDrift: version.prohibitedStyleDrift,
+                  }}
+                />
+              ) : null}
+              {version.approved && nextVersionOfId !== version.id ? (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  aria-label={`${translate('library.newVersion')} ${contextLabel}`}
+                  onClick={() => setNextVersionOfId(version.id)}
+                >
+                  {translate('library.newVersion')}
+                </Button>
+              ) : null}
+
+              {!version.approved && editingVersionId === version.id ? (
+                <EditStyleProfileForm
+                  projectId={projectId}
+                  lineageId={lineageId}
+                  styleProfile={version}
+                  onClose={() => setEditingVersionId(null)}
+                />
+              ) : null}
+              {!version.approved && editingVersionId !== version.id ? (
+                <>
+                  <ApprovalControls
+                    contextLabel={contextLabel}
+                    onApprove={() => approve.mutate(version.id)}
+                    regenerationModes={[]}
+                    onRegenerate={() => undefined}
+                    pending={approve.isPending}
+                    decided={false}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    aria-label={`${translate('library.edit')} ${contextLabel}`}
+                    onClick={() => setEditingVersionId(version.id)}
+                  >
+                    {translate('library.edit')}
+                  </Button>
+                </>
+              ) : null}
+            </li>
+          );
+        })}
       </ul>
     </li>
   );

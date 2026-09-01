@@ -5,6 +5,14 @@
     gap: var(--space-3);
   }
 
+  .style-library__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
   .style-library__title {
     margin: 0;
     color: var(--color-text-heading);

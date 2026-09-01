@@ -1,5 +1,7 @@
 import type { FC } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/lib/components/button';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
@@ -8,6 +10,7 @@ import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-erro
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { styleProfilesQueryOptions } from '@/features/styles/api/style-profiles.query';
 import { groupIntoLineages } from '@/features/styles/helpers/group-into-lineages';
+import { CreateStyleProfileForm } from '@/features/styles/components/create-style-profile-form';
 import { StyleLineageCard } from '@/features/styles/components/style-lineage-card';
 import { STYLE_LINEAGE_SKELETON_COUNT } from '@/features/styles/styles.constants';
 import type { StyleLibraryProps } from './style-library.interface';
@@ -18,6 +21,7 @@ export const StyleLibrary: FC<StyleLibraryProps> = ({ projectId }) => {
   const { data, error, isPending } = useQuery(
     styleProfilesQueryOptions(projectId),
   );
+  const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
 
   if (error && data === undefined) {
     const view = resolveRouteErrorView(error);
@@ -49,32 +53,50 @@ export const StyleLibrary: FC<StyleLibraryProps> = ({ projectId }) => {
     );
   }
 
-  if (data.items.length === 0) {
-    return (
-      <EmptyState
-        title={translate('styles.empty.title')}
-        description={translate('styles.empty.description')}
-        headingLevel={2}
-      />
-    );
-  }
-
   const lineages = groupIntoLineages(data.items);
 
   return (
     <div className="style-library">
-      <h2 className="style-library__title">{translate('styles.heading')}</h2>
+      <div className="style-library__header">
+        <h2 className="style-library__title">{translate('styles.heading')}</h2>
+        {isCreateFormOpen ? null : (
+          <Button
+            variant="primary"
+            size="md"
+            onClick={() => setIsCreateFormOpen(true)}
+          >
+            {translate('styles.create.open')}
+          </Button>
+        )}
+      </div>
       <p className="style-library__pinning">{translate('styles.pinning')}</p>
-      <ul className="style-library__lineages">
-        {lineages.map((lineage) => (
-          <StyleLineageCard
-            key={lineage.lineageId}
-            projectId={projectId}
-            lineageId={lineage.lineageId}
-            name={lineage.name}
-          />
-        ))}
-      </ul>
+
+      {isCreateFormOpen ? (
+        <CreateStyleProfileForm
+          projectId={projectId}
+          onClose={() => setIsCreateFormOpen(false)}
+        />
+      ) : null}
+
+      {data.items.length === 0 ? (
+        <EmptyState
+          title={translate('styles.empty.title')}
+          description={translate('styles.empty.description')}
+          headingLevel={3}
+        />
+      ) : (
+        <ul className="style-library__lineages">
+          {lineages.map((lineage) => (
+            <StyleLineageCard
+              key={lineage.lineageId}
+              projectId={projectId}
+              lineageId={lineage.lineageId}
+              name={lineage.name}
+            />
+          ))}
+        </ul>
+      )}
+
       {data.nextCursor === undefined ? null : (
         <p className="style-library__truncated">
           {translate('styles.truncated')}

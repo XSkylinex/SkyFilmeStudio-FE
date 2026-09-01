@@ -5,6 +5,11 @@
     gap: var(--space-3);
   }
 
+  .location-list__header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .location-list__items {
     display: flex;
     flex-direction: column;
