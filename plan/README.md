@@ -73,36 +73,39 @@ navigation left focus on the link that was clicked, that a single-letter shortcu
 anywhere on the page, or that a border is at a quarter of the contrast its own criterion asks for.
 All three were live in a green tree, and FE-16 found them by using the app.
 
-## The one red test, and the decision behind it — 2026-09-01
+## The contract guard stopped depending on their checked-out branch — 2026-09-01
 
-`test/contract-source-matches-runtime.test.ts` fails on this branch, and it is
-reporting a real condition rather than a defect in this repo. It reads the
-backend's `src/contracts/enums/error-code.ts` **from their working tree** and
-compares it to what their build exports. Their tree is on
-`be-18-storyboard-and-keyframes` and declares 63 codes; their `dist-esm` was
-rebuilt from `origin/master` at our request and exports 59; this repo's taxonomy
-and both catalogues are at 59 and agree with what we compile. So the two sides of
-*their* repo disagree, and will keep disagreeing for as long as BE-18 is in
-flight.
+`test/contract-source-matches-runtime.test.ts` used to read the backend's
+`src/contracts/enums/error-code.ts` **from their working tree** and compare it to
+what their build exports. That made this repo's gate a function of which branch
+the sibling happened to have checked out, and it oscillated three times in one
+session: 59 codes, then 63 when they built on `be-18-storyboard-and-keyframes`,
+then 59 again when they rebuilt from `origin/master` at our request, then 63 again
+the next time their own gate rebuilt — which it does after every `.ts` edit.
 
-`.claude/rules/state-and-data.md` says not to weaken this guard, and that stands —
-when the diff against our taxonomy is empty, the red belongs upstream, and it is.
+**The backend session named the defect correctly: the coupling was wrong, not the
+guard.** No amount of rebuilding from either side settles a check keyed to a
+working tree.
 
-**The backend session proposes a fourth option for the seam, and it is a good
-one.** Compare against a **pinned ref** rather than their working tree: either
-read their source at `origin/master`, or resolve `sky-filme-studio-be/contracts`
-to an artifact built from a ref instead of their live `dist-esm/`. Their argument
-is that their own gate rebuilds after every `.ts` edit, so any arrangement that
-depends on which branch they have checked out will oscillate no matter how often
-either side rebuilds. That is correct, and it is the same failure this table has
-already recorded twice.
+The guard now compares the **two halves of the same build**: the literals declared
+in `dist-esm/contracts/enums/error-code.d.ts`, read as text, against the runtime
+`ERROR_CODE` loaded from `dist-esm/contracts/enums/error-code.js`. That is the
+invariant the file is named for — *the contract this app loads is one build, not
+two* — tested directly rather than through a proxy, and it is the exact failure
+that was live for twenty minutes on 2026-08-22 when `types` and `import` briefly
+came from different compilations.
 
-It is not taken here, for two reasons. It is a coupling decision across two repos
-and belongs with the three options already listed in this repo's notes, none of
-which has been picked. And the obvious implementation — shelling out to
-`git show origin/master:…` from a test — would put a shell command inside a `.ts`
-file, which `CLAUDE.md` rule 5 forbids; a version that does not needs a design,
-not a patch.
+**What that trades away, stated plainly.** The old assertion also caught "their
+build is behind their source". Nothing here catches that now. It was never a
+reliable signal anyway — it fires constantly while they work, and it stayed green
+through the one real instance of build rot this seam has produced, where six
+emitted files carried unrewritten `@/` specifiers and only `yarn build` failed.
+**Build rot is caught by the bundle; type/runtime divergence is caught here.**
+
+Their suggestion of resolving the contracts entrypoint to an artifact built from a
+pinned ref is still the better long-term answer and is still unpicked, alongside
+the three options already on record. This change makes the gate stop lying in the
+meantime; it does not settle the seam.
 
 ## What the backend must have published first
 

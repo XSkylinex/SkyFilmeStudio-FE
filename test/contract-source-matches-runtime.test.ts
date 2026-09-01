@@ -5,7 +5,12 @@ import { ERROR_CODE } from 'sky-filme-studio-be/contracts';
 
 const CONTRACT_PACKAGE = 'sky-filme-studio-be';
 const CONTRACT_ENTRY = 'contracts';
-const ERROR_CODE_SOURCE = join('src', 'contracts', 'enums', 'error-code.ts');
+const ERROR_CODE_TYPES = join(
+  'dist-esm',
+  'contracts',
+  'enums',
+  'error-code.d.ts',
+);
 const ALIAS_CAPABLE_CONFIGS = [
   'vite.config.ts',
   'vitest.config.ts',
@@ -32,15 +37,17 @@ const packageJsonPath = resolveFromHere.resolve(
 const conditions = (resolveFromHere(packageJsonPath) as ContractPackage)
   .exports[`./${CONTRACT_ENTRY}`];
 
-const codesDeclaredInSource = (): string[] => {
-  const source = readFileSync(
-    join(dirname(packageJsonPath), ERROR_CODE_SOURCE),
+const codesDeclaredInTypes = (): string[] => {
+  const types = readFileSync(
+    join(dirname(packageJsonPath), ERROR_CODE_TYPES),
     'utf8',
   );
 
-  return [...source.matchAll(/^ {2}'([A-Z_]+)',$/gmu)].map(
-    ([, code]) => code ?? '',
-  );
+  const declared = [...types.matchAll(/^ +([A-Z_]+): "([A-Z_]+)";$/gmu)]
+    .filter(([, key, value]) => key === value)
+    .map(([, key]) => key ?? '');
+
+  return [...new Set(declared)];
 };
 
 describe('the contract this app loads is one build, not two', () => {
@@ -78,8 +85,8 @@ describe('the contract this app loads is one build, not two', () => {
     expect(ERROR_CODE).not.toBe(fromCommonJs.ERROR_CODE);
   });
 
-  it('serves the error codes the source declares, read as text so it cannot self-compare', () => {
-    const declared = codesDeclaredInSource();
+  it('declares in its types exactly what it exports at runtime, read as text so it cannot self-compare', () => {
+    const declared = codesDeclaredInTypes();
 
     expect(declared.length).toBeGreaterThan(20);
     expect(Object.values(ERROR_CODE).sort()).toEqual(declared.sort());
