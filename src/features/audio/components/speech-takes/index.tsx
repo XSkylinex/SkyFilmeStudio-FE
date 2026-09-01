@@ -1,5 +1,6 @@
 import type { FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { TTS_PASS } from 'sky-filme-studio-be/contracts';
 import { Badge } from '@/lib/components/badge';
 import { ContentText } from '@/lib/components/content-text';
 import { formatDateTime } from '@/lib/format/format-date-time';
@@ -39,7 +40,9 @@ export const SpeechTakes: FC<SpeechTakesProps> = ({ line }) => {
 
   return (
     <section className="speech-takes">
-      <h5 className="speech-takes__title">{translate('audio.takes.title')}</h5>
+      <h4 className="speech-takes__title">
+        {translate('audio.takes.forLine', { order: String(line.order) })}
+      </h4>
       <p className="speech-takes__note">{translate('audio.take.noPlayback')}</p>
 
       <ul className="speech-takes__list">
@@ -53,7 +56,7 @@ export const SpeechTakes: FC<SpeechTakesProps> = ({ line }) => {
               <div className="speech-takes__header">
                 <Badge
                   tone={
-                    take.pass === 'FINAL'
+                    take.pass === TTS_PASS.FINAL
                       ? STATUS_TONE.ACTIVE
                       : STATUS_TONE.NEUTRAL
                   }
