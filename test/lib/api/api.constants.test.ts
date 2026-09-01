@@ -9,7 +9,10 @@ import {
   pronunciationDictionaryIdSchema,
   propIdSchema,
   renderJobIdSchema,
+  sceneIdSchema,
+  shotIdSchema,
   sourceAssetIdSchema,
+  storyboardFrameIdSchema,
   styleProfileIdSchema,
   subjectIdSchema,
   voiceProfileIdSchema,
@@ -70,6 +73,18 @@ const SAMPLE_PRODUCTION_PROFILE_ID = productionProfileIdSchema.parse(
 
 const SAMPLE_PROJECT_BIBLE_VERSION_ID = projectBibleVersionIdSchema.parse(
   '77777777-7777-4777-8777-777777777777',
+);
+
+const SAMPLE_SCENE_ID = sceneIdSchema.parse(
+  '00000000-0000-4000-8000-000000000000',
+);
+
+const SAMPLE_SHOT_ID = shotIdSchema.parse(
+  '11111111-1111-4111-8111-111111111111',
+);
+
+const SAMPLE_STORYBOARD_FRAME_ID = storyboardFrameIdSchema.parse(
+  '22222222-2222-4222-8222-222222222222',
 );
 
 const everyPath: Record<string, string> = {
@@ -188,6 +203,20 @@ const everyPath: Record<string, string> = {
   planningStages: API_PATH.planningStages(SAMPLE_PRODUCTION_ID),
   planningBudget: API_PATH.planningBudget(SAMPLE_PRODUCTION_ID),
   planningApproval: API_PATH.planningApproval(SAMPLE_PRODUCTION_ID),
+  planningScenes: API_PATH.planningScenes(SAMPLE_PRODUCTION_ID),
+  sceneShots: API_PATH.sceneShots(SAMPLE_SCENE_ID),
+  shotStoryboardFrames: API_PATH.shotStoryboardFrames(SAMPLE_SHOT_ID),
+  shotKeyframeStatus: API_PATH.shotKeyframeStatus(SAMPLE_SHOT_ID),
+  storyboardFrameComparison: API_PATH.storyboardFrameComparison(
+    SAMPLE_STORYBOARD_FRAME_ID,
+  ),
+  storyboardFrameApproval: API_PATH.storyboardFrameApproval(
+    SAMPLE_STORYBOARD_FRAME_ID,
+  ),
+  continuityFactsInForce: API_PATH.continuityFactsInForce(
+    SAMPLE_PRODUCTION_ID,
+    SAMPLE_SCENE_ID,
+  ),
   renderJob: API_PATH.renderJob(SAMPLE_RENDER_JOB_ID),
 };
 

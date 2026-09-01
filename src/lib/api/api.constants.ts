@@ -9,7 +9,10 @@ import type {
   PronunciationDictionaryId,
   PropId,
   RenderJobId,
+  SceneId,
+  ShotId,
   SourceAssetId,
+  StoryboardFrameId,
   StyleProfileId,
   SubjectId,
   VoiceProfileId,
@@ -150,6 +153,24 @@ export const API_PATH = {
     `/productions/${productionId}/planning/budget`,
   planningApproval: (productionId: ProductionId): string =>
     `/productions/${productionId}/planning/approval`,
+  planningScenes: (productionId: ProductionId): string =>
+    `/productions/${productionId}/planning/scenes`,
+  sceneShots: (sceneId: SceneId): string => `/scenes/${sceneId}/shots`,
+  shotStoryboardFrames: (shotId: ShotId): string =>
+    `/shots/${shotId}/storyboard/frames`,
+  shotKeyframeStatus: (shotId: ShotId): string =>
+    `/shots/${shotId}/storyboard/keyframe-status`,
+  storyboardFrameComparison: (frameId: StoryboardFrameId): string =>
+    `/storyboard-frames/${frameId}/comparison`,
+  storyboardFrameApproval: (frameId: StoryboardFrameId): string =>
+    `/storyboard-frames/${frameId}/approval`,
+  continuityFactsInForce: (
+    productionId: ProductionId,
+    sceneId: SceneId,
+  ): string =>
+    `/productions/${productionId}/continuity-facts/in-force?${new URLSearchParams(
+      { scene: sceneId },
+    ).toString()}`,
   renderJob: (renderJobId: RenderJobId): string =>
     `/render-jobs/${renderJobId}`,
 } satisfies Record<string, (...args: never[]) => string>;
