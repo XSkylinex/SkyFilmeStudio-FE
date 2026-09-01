@@ -15,6 +15,7 @@ import { Field } from '@/lib/components/field';
 import { Select } from '@/lib/components/select';
 import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
+import { ValidationSummary } from '@/lib/components/validation-summary';
 import { Icon } from '@/lib/components/icon';
 import { Dialog } from '@/lib/components/dialog';
 import { Tooltip } from '@/lib/components/tooltip';
@@ -291,9 +292,19 @@ export const DesignSystemPreview: FC = () => {
           <Field label="Seed" error="Must be a whole number">
             <Input defaultValue="not a number" />
           </Field>
+          <Field label="Title" required>
+            <Input placeholder="Required by the contract, marked beside the label" />
+          </Field>
           <Field label="Brief" hint="A paragraph or treatment, not required">
             <Textarea placeholder="What happens in this production?" />
           </Field>
+        </div>
+      </section>
+
+      <section className="design-system-preview__section">
+        <h2>ValidationSummary</h2>
+        <div className="design-system-preview__grid">
+          <ValidationSummary count={2} attempt={0} />
         </div>
       </section>
 
