@@ -1,8 +1,10 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { dialogueAnimationTierSchema } from 'sky-filme-studio-be/contracts';
-import type { DialogueAnimationTier } from 'sky-filme-studio-be/contracts';
+import {
+  BENCHMARK_GATED_TIERS,
+  dialogueAnimationTierSchema,
+} from 'sky-filme-studio-be/contracts';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
 import { Field } from '@/lib/components/field';
@@ -18,10 +20,8 @@ import './dialogue-tier.css';
 
 const AUTOMATIC = '';
 
-const GATED: readonly DialogueAnimationTier[] = ['DUBIT'];
-
 const REQUESTABLE = dialogueAnimationTierSchema.options.filter(
-  (tier) => !GATED.includes(tier),
+  (tier) => !BENCHMARK_GATED_TIERS.includes(tier),
 );
 
 export const DialogueTier: FC<DialogueTierProps> = ({ line }) => {
@@ -38,12 +38,14 @@ export const DialogueTier: FC<DialogueTierProps> = ({ line }) => {
 
   return (
     <section className="dialogue-tier">
-      <h5 className="dialogue-tier__title">{translate('audio.tier.title')}</h5>
+      <h4 className="dialogue-tier__title">{translate('audio.tier.title')}</h4>
 
-      <Field label={translate('audio.tier.action')}>
+      <p className="dialogue-tier__note">{translate('audio.tier.notStored')}</p>
+
+      <Field label={translate('audio.tier.field')}>
         <Select
           options={[
-            { value: AUTOMATIC, label: translate('audio.tier.action') },
+            { value: AUTOMATIC, label: translate('audio.tier.automatic') },
             ...REQUESTABLE.map((tier) => ({
               value: tier,
               label: translate(DIALOGUE_ANIMATION_TIER_LABEL[tier]),
@@ -74,6 +76,7 @@ export const DialogueTier: FC<DialogueTierProps> = ({ line }) => {
         variant="secondary"
         size="sm"
         disabled={choose.isPending}
+        aria-label={`${translate('audio.tier.action')} ${translate('audio.approve.context', { order: String(line.order) })}`}
         onClick={() =>
           choose.mutate({
             ...(parsed.success ? { requested: parsed.data } : {}),

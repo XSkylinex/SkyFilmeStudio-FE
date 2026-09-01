@@ -1208,19 +1208,19 @@ export const EN_CATALOGUE = {
   'audio.unapprove.done':
     'The approval was removed. This line can be re-voiced.',
   'audio.tier.title': 'Animation tier',
-  'audio.tier.action': 'Choose a tier',
+  'audio.tier.action': 'Ask which tier',
   'audio.tier.pending': 'Choosing…',
   'audio.tier.editedAcrossShots': 'This line plays across more than one shot',
   'audio.tier.acrossShots.no': 'No',
   'audio.tier.acrossShots.yes': 'Yes',
-  'audio.tier.chosen': 'Chosen: {tier}',
+  'audio.tier.chosen': 'Would be: {tier}',
   'audio.tier.rationale': 'Why: {rationale}',
   'audio.tier.audioConditioned': 'Audio-conditioned',
   'audio.tier.rhythmAnimation': 'Rhythm animation',
   'audio.tier.reactionEditing': 'Reaction editing',
   'audio.tier.dubit': 'DubIt',
   'audio.tier.gated':
-    'DubIt is not offered. It is gated behind a hardware benchmark and a subject-consistency test, neither of which has run on this workstation, so requesting it is refused.',
+    'DubIt cannot be requested from here. The contract marks it as gated behind a hardware benchmark and a subject-consistency test, and whether this workstation has passed them is not on the wire — so a request could only be sent hopefully, and refused.',
   'audio.title': 'Dialogue audio',
   'audio.description':
     'Every spoken line in this production, the takes generated for it, and the one a person approved.',
@@ -1254,6 +1254,12 @@ export const EN_CATALOGUE = {
   'audio.timing.status.noShots': 'No shots',
   'audio.timing.total': 'Total after retiming',
   'audio.timing.target': 'Target',
+  'audio.tier.field': 'Tier',
+  'audio.tier.automatic': 'Let the orchestrator choose',
+  'audio.tier.notStored':
+    'This is a calculation, not a saved decision. The orchestrator works the tier out from the speaker and the shot count each time it is asked, and stores nothing — so nothing downstream reads it, and it will not be here when you come back.',
+  'audio.gaps.tierNotStored':
+    'An animation tier cannot be recorded against a line. The route computes one and returns it, and the orchestrator has no column, no table and no read route for the answer.',
   'audio.gaps.heading': 'What this screen cannot do yet',
   'audio.gaps.playback':
     'No audio can be played. Nothing in the orchestrator serves an artifact’s bytes, so a take is shown as its record — duration, peak level, hashes — rather than as sound.',

@@ -1,15 +1,17 @@
 import type { FC } from 'react';
+import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import './audio-gaps.css';
 
 const GAP_KEYS = [
   'audio.gaps.playback',
+  'audio.gaps.tierNotStored',
   'audio.gaps.music',
   'audio.gaps.sfx',
   'audio.gaps.stems',
   'audio.gaps.loudness',
   'audio.gaps.asr',
-] as const;
+] satisfies readonly TranslationKey[];
 
 export const AudioGaps: FC = () => {
   const translate = useTranslate();

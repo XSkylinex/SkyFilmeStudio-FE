@@ -1189,19 +1189,19 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.unapprove.action': 'הסר אישור',
   'audio.unapprove.done': 'האישור הוסר. ניתן להקליט את השורה מחדש.',
   'audio.tier.title': 'רמת אנימציה',
-  'audio.tier.action': 'בחר רמה',
+  'audio.tier.action': 'שאל איזו רמה',
   'audio.tier.pending': 'בוחר…',
   'audio.tier.editedAcrossShots': 'השורה הזאת נפרסת על יותר משוט אחד',
   'audio.tier.acrossShots.no': 'לא',
   'audio.tier.acrossShots.yes': 'כן',
-  'audio.tier.chosen': 'נבחר: {tier}',
+  'audio.tier.chosen': 'היה יוצא: {tier}',
   'audio.tier.rationale': 'מדוע: {rationale}',
   'audio.tier.audioConditioned': 'מותנה אודיו',
   'audio.tier.rhythmAnimation': 'אנימציה לפי קצב',
   'audio.tier.reactionEditing': 'עריכת תגובות',
   'audio.tier.dubit': 'DubIt',
   'audio.tier.gated':
-    'DubIt אינו מוצע. הוא חסום מאחורי בדיקת ביצועי חומרה ומבחן עקביות דמות, ואף אחד מהם לא הורץ בתחנה הזאת, ולכן בקשה עבורו מסורבת.',
+    'לא ניתן לבקש כאן DubIt. החוזה מסמן אותו כחסום מאחורי בדיקת ביצועי חומרה ומבחן עקביות דמות, והשאלה אם התחנה הזאת עברה אותם אינה מגיעה בחוזה — כך שבקשה עבורו הייתה נשלחת בתקווה בלבד, ומסורבת.',
   'audio.title': 'אודיו של דיאלוג',
   'audio.description':
     'כל שורה מדוברת בהפקה הזאת, הטייקים שנוצרו עבורה, והטייק שאדם אישר.',
@@ -1235,6 +1235,12 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.timing.status.noShots': 'אין שוטים',
   'audio.timing.total': 'סך הכול לאחר התזמון',
   'audio.timing.target': 'יעד',
+  'audio.tier.field': 'רמה',
+  'audio.tier.automatic': 'שהאורקסטרטור יבחר',
+  'audio.tier.notStored':
+    'זהו חישוב ולא החלטה שנשמרת. האורקסטרטור מחשב את הרמה מהדובר וממספר השוטים בכל פנייה, ואינו שומר דבר — ולכן שום שלב בהמשך אינו קורא אותה, והיא לא תהיה כאן בחזרה.',
+  'audio.gaps.tierNotStored':
+    'לא ניתן לרשום רמת אנימציה עבור שורה. הנתיב מחשב אחת ומחזיר אותה, ולאורקסטרטור אין עמודה, אין טבלה ואין נתיב קריאה לתשובה.',
   'audio.gaps.heading': 'מה המסך הזה עדיין אינו יכול לעשות',
   'audio.gaps.playback':
     'לא ניתן לנגן אודיו. שום דבר באורקסטרטור אינו מגיש את הבייטים של תוצר, ולכן טייק מוצג כרישום שלו — משך, רמת שיא, גיבובים — ולא כצליל.',
