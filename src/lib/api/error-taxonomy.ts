@@ -238,4 +238,20 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.TIER_REQUIRES_BENCHMARK',
   },
+  STORYBOARD_NOT_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.STORYBOARD_NOT_APPROVED',
+  },
+  STORYBOARD_FRAME_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.STORYBOARD_FRAME_IMMUTABLE',
+  },
+  KEYFRAME_ANCHOR_REQUIRED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.KEYFRAME_ANCHOR_REQUIRED',
+  },
+  REGENERATION_MODE_REQUIRED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.REGENERATION_MODE_REQUIRED',
+  },
 };

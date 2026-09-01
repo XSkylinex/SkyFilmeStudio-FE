@@ -51,6 +51,14 @@ export const EN_CATALOGUE = {
     'The advisory check that listens back to generated speech could not run, because no local speech-recognition model is available. The audio itself is unaffected — it simply was not transcribed and compared.',
   'error.TIER_REQUIRES_BENCHMARK':
     'The dialogue animation tier that was asked for is held behind a hardware benchmark and a subject-consistency test, and neither has run on this machine. Nothing waits for it — choose another tier.',
+  'error.STORYBOARD_NOT_APPROVED':
+    'This shot needs an approved keyframe before any video is rendered from it, and it has neither one nor a recorded waiver. A wrong keyframe multiplied by a video render is an hour of work thrown away — approve a keyframe, or record why this shot may skip one.',
+  'error.STORYBOARD_FRAME_IMMUTABLE':
+    'This storyboard frame has been approved, so it is frozen. Whatever was rendered from it keeps the frame it was rendered against — generate the next one rather than editing this one.',
+  'error.KEYFRAME_ANCHOR_REQUIRED':
+    'A keyframe for this shot has to be anchored to the approved look of what it contains — the subject, the location, the props — and no anchor was available. That anchoring is what stops the same character drifting from shot to shot.',
+  'error.REGENERATION_MODE_REQUIRED':
+    'Regenerating this frame needs the mode stated: the same prompt with a new seed, a controlled revision of the prompt, or a fresh keyframe. Those are different operations, and an unlabelled retry makes the attempt history impossible to read afterwards.',
   'error.OFFLINE_POLICY_VIOLATION':
     'A provider was pointed off this machine and generation was stopped. Nothing may leave this computer — find the provider that was reconfigured before running anything else.',
   'error.DISK_SPACE_LOW':
