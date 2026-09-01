@@ -65,13 +65,15 @@ export const SceneDialogue: FC<SceneDialogueProps> = ({ scene }) => {
           ) : (
             <>
               <ul className="scene-dialogue__lines">
-                {lines.data.items.map((line) => (
-                  <DialogueLineCard
-                    key={line.id}
-                    line={line}
-                    sceneId={scene.id}
-                  />
-                ))}
+                {[...lines.data.items]
+                  .sort((a, b) => a.order - b.order)
+                  .map((line) => (
+                    <DialogueLineCard
+                      key={line.id}
+                      line={line}
+                      sceneId={scene.id}
+                    />
+                  ))}
               </ul>
               {lines.data.nextCursor === undefined ? null : (
                 <p className="scene-dialogue__note">
