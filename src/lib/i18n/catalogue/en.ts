@@ -535,7 +535,7 @@ export const EN_CATALOGUE = {
   'styles.error.title': 'The style profiles could not be read',
   'styles.empty.title': 'No style profiles yet',
   'styles.empty.description':
-    'A style profile records the palette, lighting, camera, texture and motion rules a production is generated against. This project has none, and there is no way to create one here yet.',
+    'A style profile records the palette, lighting, camera, texture and motion rules a production is generated against. This project has none yet — add the first.',
   'styles.pinning':
     'A profile is a lineage and each row below is one version of it. Which version a production is pinned to is not shown: a production records the version it used, but no published route returns a production, so nothing here can read that record.',
   'styles.truncated':
@@ -558,7 +558,7 @@ export const EN_CATALOGUE = {
   'voices.error.title': 'The voices could not be read',
   'voices.empty.title': 'No voices yet',
   'voices.empty.description':
-    'A voice profile is what keeps a subject sounding like itself across a production. This project has none, and there is no way to create one here yet.',
+    'A voice profile is what keeps a subject sounding like itself across a production. This project has none yet — add the first.',
   'voices.truncated':
     'More voices exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'voices.onePerSubject':
@@ -598,7 +598,7 @@ export const EN_CATALOGUE = {
   'locations.error.title': 'The locations could not be read',
   'locations.empty.title': 'No locations yet',
   'locations.empty.description':
-    'A location holds the immutable features and canonical plates a scene is framed against. This project has none, and there is no way to create one here yet.',
+    'A location holds the immutable features and canonical plates a scene is framed against. This project has none yet — add the first.',
   'locations.truncated':
     'More locations exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'locations.coverageNote':
@@ -626,7 +626,7 @@ export const EN_CATALOGUE = {
   'props.error.title': 'The props could not be read',
   'props.empty.title': 'No props yet',
   'props.empty.description':
-    'A prop carries the continuity rules a later scene is checked against. This project has none, and there is no way to create one here yet.',
+    'A prop carries the continuity rules a later scene is checked against. This project has none yet — add the first.',
   'props.truncated':
     'More props exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'props.card.approved': 'Approved',
@@ -674,6 +674,59 @@ export const EN_CATALOGUE = {
   'form.invalid.tooBig': 'This number is too large.',
   'form.invalid.type': 'This is not the kind of value this field takes.',
   'form.invalid.value': 'The contract will not accept this value.',
+  'library.add': 'Add',
+  'library.edit': 'Edit',
+  'library.save': 'Save changes',
+  'library.cancel': 'Cancel',
+  'library.saving': 'Saving…',
+  'library.creating': 'Creating…',
+  'library.saved': 'Saved.',
+  'library.created': 'Created.',
+  'library.frozen':
+    'This record is approved, so it is frozen and cannot be edited. That is what makes it safe for anything already pointing at it — the freeze is enforced by the database, not by this screen.',
+  'library.frozen.styleVersion':
+    'This version is approved, so it is frozen. Edit it by creating the next version instead: productions stay pinned to the version they used, which is the whole reason a change cannot be made in place.',
+  'library.newVersion': 'Create the next version',
+  'library.newVersion.title': 'Create the next version of this style',
+  'library.newVersion.explain':
+    'This starts a new version in the same lineage, copied from this one. Nothing already pinned to an existing version moves, and the new version arrives unapproved.',
+  'library.field.name': 'Name',
+  'library.field.description': 'Canonical description',
+  'library.field.mode': 'Style mode',
+  'library.field.mode.hint':
+    'A free-text mode this project defines. The orchestrator suggests some; none is a default.',
+  'library.field.layoutNotes': 'Layout notes',
+  'library.field.immutableFeatures': 'Immutable features',
+  'library.field.continuityRules': 'Continuity rules',
+  'library.field.displayName': 'Display name',
+  'library.field.engine': 'Engine',
+  'library.field.modelId': 'Model id',
+  'library.field.language': 'Language tag',
+  'library.field.linesHint': 'One per line.',
+  'library.field.realismLevel': 'Realism level',
+  'library.field.paletteRules': 'Palette rules',
+  'library.field.lightingRules': 'Lighting rules',
+  'library.field.cameraRules': 'Camera rules',
+  'library.field.textureRules': 'Texture rules',
+  'library.field.motionRules': 'Motion rules',
+  'library.field.prohibitedStyleDrift': 'Prohibited style drift',
+  'library.field.referenceAudioPath':
+    'Reference audio, as a project-relative path',
+  'library.field.referenceTranscript': 'Exact transcript of that audio',
+  'library.field.referenceTranscript.hint':
+    'It must match the recording word for word. A transcript that drifts from the audio is the most common cause of a voice that does not sound like itself.',
+  'styles.create.open': 'Add a style',
+  'styles.create.title': 'Add a style profile',
+  'styles.edit.title': 'Edit this style version',
+  'voices.create.open': 'Add a voice',
+  'voices.create.title': 'Add a voice profile',
+  'voices.edit.title': 'Edit this voice profile',
+  'locations.create.open': 'Add a location',
+  'locations.create.title': 'Add a location',
+  'locations.edit.title': 'Edit this location',
+  'props.create.open': 'Add a prop',
+  'props.create.title': 'Add a prop',
+  'props.edit.title': 'Edit this prop',
   'productions.heading': 'Productions in this project',
   'productions.loading': 'Reading this project’s productions…',
   'productions.error.title': 'The production list could not be read',

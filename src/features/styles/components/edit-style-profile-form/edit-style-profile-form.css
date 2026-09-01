@@ -1,0 +1,59 @@
+@layer features {
+  .edit-style-profile-form {
+    display: grid;
+    inline-size: 100%;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-canvas);
+  }
+
+  .edit-style-profile-form__heading {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .edit-style-profile-form__form {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .edit-style-profile-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+
+  .edit-style-profile-form__refusal {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding-block: var(--space-2);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--tone-danger-border);
+    border-radius: var(--radius-sm);
+    background: var(--tone-danger-bg);
+    color: var(--tone-danger-fg);
+    font-size: var(--font-size-sm);
+  }
+
+  .edit-style-profile-form__refusal-code {
+    display: block;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+  }
+
+  .edit-style-profile-form__done {
+    display: block;
+    padding-block: var(--space-2);
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+}

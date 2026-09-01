@@ -1,7 +1,9 @@
 import type { FC } from 'react';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApprovalControls } from '@/lib/components/approval-controls';
 import { Badge } from '@/lib/components/badge';
+import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
 import { ErrorState } from '@/lib/components/error-state';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
@@ -9,6 +11,7 @@ import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { approveVoiceProfileMutationOptions } from '@/features/voices/api/approve-voice-profile.mutation';
+import { EditVoiceProfileForm } from '@/features/voices/components/edit-voice-profile-form';
 import type { VoiceCardProps } from './voice-card.interface';
 import './voice-card.css';
 
@@ -18,6 +21,7 @@ export const VoiceCard: FC<VoiceCardProps> = ({ projectId, voice }) => {
   const approve = useMutation(
     approveVoiceProfileMutationOptions(projectId, queryClient),
   );
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <li className="voice-card">
@@ -76,17 +80,43 @@ export const VoiceCard: FC<VoiceCardProps> = ({ projectId, voice }) => {
         </div>
       ) : null}
 
-      {voice.approved ? null : (
-        <ApprovalControls
-          contextLabel={translate('voices.card.context', {
-            name: voice.displayName,
-          })}
-          onApprove={() => approve.mutate(voice.id)}
-          regenerationModes={[]}
-          onRegenerate={() => undefined}
-          pending={approve.isPending}
-          decided={false}
+      {voice.approved ? (
+        <p className="voice-card__frozen">{translate('library.frozen')}</p>
+      ) : null}
+
+      {voice.approved || !isEditing ? null : (
+        <EditVoiceProfileForm
+          projectId={projectId}
+          voiceProfile={voice}
+          onClose={() => setIsEditing(false)}
         />
+      )}
+      {voice.approved || isEditing ? null : (
+        <>
+          <ApprovalControls
+            contextLabel={translate('voices.card.context', {
+              name: voice.displayName,
+            })}
+            onApprove={() => approve.mutate(voice.id)}
+            regenerationModes={[]}
+            onRegenerate={() => undefined}
+            pending={approve.isPending}
+            decided={false}
+          />
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-label={`${translate('library.edit')} ${translate(
+              'voices.card.context',
+              {
+                name: voice.displayName,
+              },
+            )}`}
+            onClick={() => setIsEditing(true)}
+          >
+            {translate('library.edit')}
+          </Button>
+        </>
       )}
     </li>
   );

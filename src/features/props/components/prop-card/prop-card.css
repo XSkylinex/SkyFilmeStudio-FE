@@ -54,4 +54,16 @@
   .prop-card__refusal {
     display: contents;
   }
+
+  .prop-card__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .prop-card__frozen {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
 }

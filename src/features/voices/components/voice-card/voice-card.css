@@ -57,4 +57,11 @@
   .voice-card__refusal {
     display: contents;
   }
+
+  .voice-card__frozen {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-relaxed);
+  }
 }

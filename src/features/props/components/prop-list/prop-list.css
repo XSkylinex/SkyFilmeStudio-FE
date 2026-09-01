@@ -5,6 +5,11 @@
     gap: var(--space-3);
   }
 
+  .prop-list__header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .prop-list__items {
     display: flex;
     flex-direction: column;

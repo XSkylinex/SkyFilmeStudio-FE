@@ -27,7 +27,7 @@ import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-erro
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { createProductionMutationOptions } from '@/features/productions/api/create-production.mutation';
 import { productionProfilesQueryOptions } from '@/features/productions/api/production-profiles.query';
-import { fieldErrorsFromIssues } from '@/features/productions/helpers/field-errors-from-issues';
+import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import {
   NARRATIVE_MODE_LABEL,
   PRODUCTION_KIND_LABEL,

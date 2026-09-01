@@ -530,7 +530,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'styles.error.title': 'לא ניתן לקרוא את פרופילי הסגנון',
   'styles.empty.title': 'אין עדיין פרופילי סגנון',
   'styles.empty.description':
-    'פרופיל סגנון מתעד את כללי הפלטה, התאורה, המצלמה, המרקם והתנועה שמולם מיוצרת הפקה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+    'פרופיל סגנון מתעד את כללי הפלטה, התאורה, המצלמה, המרקם והתנועה שמולם מיוצרת הפקה. לפרויקט הזה אין עדיין אף אחד — הוסיפו את הראשון.',
   'styles.pinning':
     'פרופיל הוא שושלת, וכל שורה למטה היא גרסה אחת שלו. לאיזו גרסה הפקה מוצמדת אינו מוצג: הפקה רושמת את הגרסה שבה השתמשה, אבל אף מסלול שפורסם אינו מחזיר הפקה, ולכן שום דבר כאן לא יכול לקרוא את הרישום הזה.',
   'styles.truncated':
@@ -553,7 +553,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'voices.error.title': 'לא ניתן לקרוא את הקולות',
   'voices.empty.title': 'אין עדיין קולות',
   'voices.empty.description':
-    'פרופיל קול הוא מה ששומר על דמות נשמעת כמו עצמה לאורך הפקה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+    'פרופיל קול הוא מה ששומר על דמות נשמעת כמו עצמה לאורך הפקה. לפרויקט הזה אין עדיין אף אחד — הוסיפו את הראשון.',
   'voices.truncated':
     'קיימים יותר קולות ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
   'voices.onePerSubject':
@@ -592,7 +592,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'locations.error.title': 'לא ניתן לקרוא את הלוקיישנים',
   'locations.empty.title': 'אין עדיין לוקיישנים',
   'locations.empty.description':
-    'לוקיישן מחזיק את המאפיינים הקבועים ואת ה-plates הקנוניים שמולם ממוסגרת סצנה. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+    'לוקיישן מחזיק את המאפיינים הקבועים ואת ה-plates הקנוניים שמולם ממוסגרת סצנה. לפרויקט הזה אין עדיין אף אחד — הוסיפו את הראשון.',
   'locations.truncated':
     'קיימים יותר לוקיישנים ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
   'locations.coverageNote':
@@ -620,7 +620,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'props.error.title': 'לא ניתן לקרוא את האביזרים',
   'props.empty.title': 'אין עדיין אביזרים',
   'props.empty.description':
-    'אבזר נושא את כללי הרציפות שמולם נבדקת סצנה מאוחרת. לפרויקט הזה אין אף אחד, ואין כאן עדיין דרך ליצור אחד.',
+    'אבזר נושא את כללי הרציפות שמולם נבדקת סצנה מאוחרת. לפרויקט הזה אין עדיין אף אחד — הוסיפו את הראשון.',
   'props.truncated':
     'קיימים יותר אביזרים ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
   'props.card.approved': 'מאושר',
@@ -668,6 +668,58 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'form.invalid.tooBig': 'המספר הזה גדול מדי.',
   'form.invalid.type': 'זה לא סוג הערך שהשדה הזה מקבל.',
   'form.invalid.value': 'החוזה לא יקבל את הערך הזה.',
+  'library.add': 'הוספה',
+  'library.edit': 'עריכה',
+  'library.save': 'שמירת השינויים',
+  'library.cancel': 'ביטול',
+  'library.saving': 'שומר…',
+  'library.creating': 'יוצר…',
+  'library.saved': 'נשמר.',
+  'library.created': 'נוצר.',
+  'library.frozen':
+    'הרשומה הזו מאושרת, ולכן היא מוקפאת ואי אפשר לערוך אותה. זה מה שהופך אותה לבטוחה עבור כל מה שכבר מפנה אליה — ההקפאה נאכפת במסד הנתונים, לא במסך הזה.',
+  'library.frozen.styleVersion':
+    'הגרסה הזו מאושרת, ולכן היא מוקפאת. כדי לערוך אותה, צרו את הגרסה הבאה: הפקות נשארות מוצמדות לגרסה שבה השתמשו, וזו בדיוק הסיבה שאי אפשר לשנות במקום.',
+  'library.newVersion': 'יצירת הגרסה הבאה',
+  'library.newVersion.title': 'יצירת הגרסה הבאה של הסגנון הזה',
+  'library.newVersion.explain':
+    'הפעולה פותחת גרסה חדשה באותו שושלת, מועתקת מזו. שום דבר שכבר מוצמד לגרסה קיימת לא זז, והגרסה החדשה מגיעה לא מאושרת.',
+  'library.field.name': 'שם',
+  'library.field.description': 'תיאור קנוני',
+  'library.field.mode': 'מצב סגנון',
+  'library.field.mode.hint':
+    'מצב בטקסט חופשי שהפרויקט הזה מגדיר. ה-orchestrator מציע כמה; אף אחד אינו ברירת מחדל.',
+  'library.field.layoutNotes': 'הערות פריסה',
+  'library.field.immutableFeatures': 'מאפיינים בלתי משתנים',
+  'library.field.continuityRules': 'כללי רציפות',
+  'library.field.displayName': 'שם תצוגה',
+  'library.field.engine': 'מנוע',
+  'library.field.modelId': 'מזהה מודל',
+  'library.field.language': 'תג שפה',
+  'library.field.linesHint': 'אחד בכל שורה.',
+  'library.field.realismLevel': 'רמת ריאליזם',
+  'library.field.paletteRules': 'כללי פלטה',
+  'library.field.lightingRules': 'כללי תאורה',
+  'library.field.cameraRules': 'כללי מצלמה',
+  'library.field.textureRules': 'כללי מרקם',
+  'library.field.motionRules': 'כללי תנועה',
+  'library.field.prohibitedStyleDrift': 'סטיית סגנון אסורה',
+  'library.field.referenceAudioPath': 'אודיו ייחוס, כנתיב יחסי לפרויקט',
+  'library.field.referenceTranscript': 'תמלול מדויק של האודיו הזה',
+  'library.field.referenceTranscript.hint':
+    'הוא חייב להתאים להקלטה מילה במילה. תמלול שסוטה מהאודיו הוא הגורם הנפוץ ביותר לקול שלא נשמע כמו עצמו.',
+  'styles.create.open': 'הוספת סגנון',
+  'styles.create.title': 'הוספת פרופיל סגנון',
+  'styles.edit.title': 'עריכת גרסת הסגנון הזו',
+  'voices.create.open': 'הוספת קול',
+  'voices.create.title': 'הוספת פרופיל קול',
+  'voices.edit.title': 'עריכת פרופיל הקול הזה',
+  'locations.create.open': 'הוספת לוקיישן',
+  'locations.create.title': 'הוספת לוקיישן',
+  'locations.edit.title': 'עריכת הלוקיישן הזה',
+  'props.create.open': 'הוספת אביזר',
+  'props.create.title': 'הוספת אביזר',
+  'props.edit.title': 'עריכת האביזר הזה',
   'productions.heading': 'ההפקות בפרויקט הזה',
   'productions.loading': 'קורא את ההפקות של הפרויקט…',
   'productions.error.title': 'לא ניתן היה לקרוא את רשימת ההפקות',

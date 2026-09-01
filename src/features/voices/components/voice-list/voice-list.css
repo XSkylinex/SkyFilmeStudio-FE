@@ -5,6 +5,11 @@
     gap: var(--space-3);
   }
 
+  .voice-list__header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .voice-list__group-title {
     margin: 0;
     color: var(--color-text-heading);
