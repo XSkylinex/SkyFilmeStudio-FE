@@ -117,7 +117,9 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'error.VOICE_RULES_REQUIRE_SPEECH':
     'הדמות הזו אינה רשומה כדמות מדברת, ולכן היא לא יכולה לשאת כללי קול. יש לרוקן את כללי הקול, או לרשום קודם את הדמות כמדברת.',
   'error.CONTINUITY_SCOPE_INVALID':
-    'הטווח של העובדה הזו אינו תקין: או שסצנת ההתחלה או הסיום אינה חלק מההפקה הזו, או שסצנת הסיום מגיעה לפני ההתחלה. יש לבחור את שתי הסצנות מתוך ההפקה הזו, כשהסיום אינו מוקדם מההתחלה.',
+    'או שהטווח של עובדה אינו תקין — סצנת ההתחלה או הסיום אינה חלק מההפקה הזו, או שסצנת הסיום מגיעה לפני ההתחלה — או שלא ניתן לתכנן מחדש את ההפקה הזו כל עוד עובדות עדיין משויכות לסצנות שמוחלפות. יש לבחור את שתי הסצנות מתוך ההפקה הזו כשהסיום אינו מוקדם מההתחלה, או להסיר תחילה את העובדות שמפנות לסצנות האלה.',
+  'error.SCENE_IN_USE':
+    'לא ניתן לתכנן מחדש את ההפקה הזו: הסצנות שלה כבר נושאות שוטים, שורות דיאלוג או משימות רינדור, והחלת מתאר מחליפה את מערך הסצנות כולו. האורקסטרטור מסרב במקום לנתק את העבודה הזו — יש לעדכן את הסצנות אחת-אחת, או להסיר תחילה את מה שתלוי בהן.',
   'error.CONTINUITY_CONTEXT_REQUIRED':
     'האורקסטרטור ביקש ממודל להסיק על סצנה אחת בלי לספק את הסצנה עצמה, ולכן שום דבר לא נוצר. המודל אינו זוכר דבר בין תור לתור, ולכן ההקשר הזה אינו אופציונלי — זו תקלה באורקסטרטור ולא משהו לתקן כאן.',
   'error.PRODUCTION_TRANSITION_INVALID':
@@ -647,8 +649,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.planner.description':
     'התסריט או תוכנית ההפקה שעליהם מבוססת ההפקה הזו. אין עדיין חיבור ל-orchestrator.',
   'page.storyboard.title': 'סטוריבורד',
-  'page.storyboard.description':
-    'סקירה של הקיפריימים של ההפקה הזו, סצנה אחר סצנה, לפני הרינדור. אין עדיין חיבור ל-orchestrator.',
   'page.renderQueue.title': 'תור הרינדור',
   'page.renderQueue.description':
     'כל משימות הרינדור של ההפקה הזו וההתקדמות של כל אחת מהן. אין עדיין חיבור ל-orchestrator.',
@@ -998,6 +998,150 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'בלוק של דמות מזוהה לפי המזהה שלו בלבד, ואי אפשר לכתוב אותו מכאן כלל. הביבל אינו נושא שם לדמות, והמסך הזה אינו מושיט יד לפיצ׳ר אחר כדי למצוא אחד או להציע אחד.',
   'bible.gaps.markdownSource':
     'התצוגה המחוללת מוצגת כטקסט ולא כמסמך מעובד. עיבוד שלה היה מחייב הוספת מפענח Markdown, ושום דבר חיצוני אינו מגיע לבאנדל הזה.',
+  'storyboard.title': 'סקירת סטוריבורד',
+  'storyboard.intro':
+    'השער שבין תוכנית מאושרת לבין מאות רינדורים יקרים. שוט שדורש קיפריים מקבל אישור כאן, סצנה אחר סצנה, לפני שמשהו נשלח לווידאו.',
+  'storyboard.loading': 'קריאת הסצנות של ההפקה הזו…',
+  'storyboard.error.title': 'לא ניתן היה לקרוא את הסצנות של ההפקה הזו',
+  'storyboard.empty.title': 'עדיין לא תוכננו סצנות',
+  'storyboard.empty.description':
+    'הסצנות של הפקה מגיעות ממתאר הסצנות שלה, שנכתב בשלב התכנון. שום דבר במסך הזה אינו יוצר אותן, וכל עוד אינן קיימות אין כאן מה לסקור.',
+  'storyboard.scene.label': 'סצנה {order}',
+  'storyboard.scene.purpose': 'מטרה',
+  'storyboard.scene.emotionalBeat': 'פעימה רגשית',
+  'storyboard.scene.timeOfDay': 'שעת היום',
+  'storyboard.scene.duration': 'משך יעד',
+  'storyboard.scene.continuityIn': 'רציפות בכניסה',
+  'storyboard.scene.continuityOut': 'רציפות ביציאה',
+  'storyboard.scene.show': 'הצגת השוטים',
+  'storyboard.scene.hide': 'הסתרת השוטים',
+  'storyboard.scene.toggleContext': 'לסצנה {order}',
+  'storyboard.continuity.title': 'עובדות שבתוקף כאן',
+  'storyboard.continuity.empty': 'אין עובדות רציפות בתוקף לסצנה הזו.',
+  'storyboard.continuity.error':
+    'לא ניתן היה לקרוא את עובדות הרציפות לסצנה הזו, ולכן הרשימה הזו אינה קביעה שאין כאלה.',
+  'storyboard.shots.loading': 'קריאת השוטים של הסצנה הזו…',
+  'storyboard.shots.error': 'לא ניתן היה לקרוא את השוטים של הסצנה הזו.',
+  'storyboard.shots.empty': 'לסצנה הזו אין עדיין שוטים.',
+  'storyboard.shot.label': 'שוט {order}',
+  'storyboard.shot.type': 'סוג שוט',
+  'storyboard.shot.duration': 'משך יעד',
+  'storyboard.shot.framing': 'מסגור',
+  'storyboard.shot.camera': 'מצלמה',
+  'storyboard.shot.intent': 'פעולה או כוונה חזותית',
+  'storyboard.shot.strategy': 'אסטרטגיית יצירה',
+  'storyboard.shot.state': 'מצב',
+  'storyboard.shot.continuity': 'דרישות רציפות',
+  'storyboard.gate.title': 'שער הווידאו',
+  'storyboard.gate.permitted': 'רינדור וידאו מותר לשוט הזה.',
+  'storyboard.gate.blocked': 'רינדור וידאו חסום לשוט הזה.',
+  'storyboard.gate.requirement': 'דרישת קיפריים',
+  'storyboard.gate.waiver': 'קיים ויתור רשום לשוט הזה.',
+  'storyboard.gate.error': 'לא ניתן היה לקרוא את שער הווידאו לשוט הזה.',
+  'storyboard.frames.title': 'פריימים',
+  'storyboard.frames.empty': 'לא נוצרו פריימים של סטוריבורד לשוט הזה.',
+  'storyboard.frames.error': 'לא ניתן היה לקרוא את הפריימים של השוט הזה.',
+  'storyboard.frame.label': 'ניסיון {attempt}',
+  'storyboard.frame.level': 'רמה',
+  'storyboard.frame.mode': 'אופן היצירה',
+  'storyboard.frame.created': 'נוצר בתאריך',
+  'storyboard.frame.approved': 'הפריים הזה הוא הקיפריים המאושר.',
+  'storyboard.frame.draftNotApprovable':
+    'לא ניתן לאשר טיוטה. רק קיפריים הופך לעוגן להמרת תמונה לווידאו, והאורקסטרטור מסרב לאשר כל דבר אחר — ולכן הפריים הזה אינו מציע אישור במקום להציע כזה שיידחה.',
+  'storyboard.frame.noImage':
+    'התמונה עצמה אינה מוצגת. האורקסטרטור אינו מפרסם נתיב שמגיש את הבייטים של ארטיפקט, והאפליקציה הזו אינה פונה לשום מקום אחר, ולכן מה שמופיע כאן הוא הרישום של הפריים ולא הפריים עצמו.',
+  'storyboard.frame.context': 'את הקיפריים מניסיון {attempt} של שוט {order}',
+  'storyboard.approve.done':
+    'אושר. הפריים הזה הוא כעת העוגן שכל רינדור וידאו של השוט הזה נבנה ממנו.',
+  'storyboard.reject.done':
+    'נדחה. שום דבר לא נמחק — השוט הזה עדיין יכול לשאת ניסיון נוסף.',
+  'storyboard.approval.error.title': 'ההחלטה הזו לא נרשמה',
+  'storyboard.approval.explained':
+    'אישור קיפריים הופך אותו לעוגן שכל רינדור וידאו של השוט הזה נבנה ממנו, וזו ההחלטה בעלת המינוף הגבוה ביותר במסך הזה. שום דבר כאן אינו משתנה עד שהאורקסטרטור עונה.',
+  'storyboard.compare.action': 'השוואה מול הייחוסים',
+  'storyboard.compare.title': 'הפריים הזה מול הייחוסים שלו',
+  'storyboard.compare.context':
+    'השוואת ניסיון {attempt} של שוט {order} מול הייחוסים שלו',
+  'storyboard.compare.candidate': 'ארטיפקט מועמד',
+  'storyboard.compare.anchors': 'מעוגן אל',
+  'storyboard.compare.noAnchors': 'הפריים הזה אינו רושם עוגנים.',
+  'storyboard.compare.error': 'לא ניתן היה לקרוא את ההשוואה הזו.',
+  'storyboard.compare.noImages':
+    'זו ההשוואה שהאורקסטרטור רושם, ולא שתי התמונות זו לצד זו. היא מציינת לְמה כל עוגן מפנה; שיפוט סטייה בעין דורש נתיב שמגיש את התמונות האלה, ואין כזה.',
+  'storyboard.compare.anchor.SUBJECT': 'סובייקט',
+  'storyboard.compare.anchor.LOCATION_PLATE': 'לוח מיקום',
+  'storyboard.compare.anchor.PROP': 'אביזר',
+  'storyboard.level.DRAFT': 'טיוטה',
+  'storyboard.level.KEYFRAME': 'קיפריים',
+  'storyboard.level.DRAFT.explained':
+    'טיוטה זולה, לבדיקת קומפוזיציה ומסגור. אישור שלה אינו זהה לאישור קיפריים.',
+  'storyboard.level.KEYFRAME.explained':
+    'הפריים שהופך לעוגן להמרת תמונה לווידאו. זה הפריים שהרינדור נבנה עליו.',
+  'storyboard.requirement.NOT_REQUIRED': 'לא נדרש',
+  'storyboard.requirement.REQUIRED_BY_SUBJECT': 'נדרש בגלל סובייקט קנוני',
+  'storyboard.requirement.REQUIRED_BY_USER': 'נדרש על ידי אדם',
+  'storyboard.regeneration.SAME_PROMPT_NEW_SEED': 'אותו פרומפט, זרע חדש',
+  'storyboard.regeneration.CONTROLLED_PROMPT_REVISION': 'תיקון פרומפט מבוקר',
+  'storyboard.regeneration.NEW_KEYFRAME': 'קיפריים חדש',
+  'storyboard.regeneration.EXACT_REPLAY': 'שחזור מדויק',
+  'storyboard.regeneration.RETAKE_REGION': 'צילום מחדש של אזור',
+  'storyboard.shotType.ESTABLISHING': 'שוט פתיחה',
+  'storyboard.shotType.WIDE': 'רחב',
+  'storyboard.shotType.MEDIUM': 'בינוני',
+  'storyboard.shotType.CLOSE_UP': 'תקריב',
+  'storyboard.shotType.EXTREME_CLOSE_UP': 'תקריב קיצוני',
+  'storyboard.shotType.OVER_SHOULDER': 'מעבר לכתף',
+  'storyboard.shotType.TWO_SHOT': 'שוט זוגי',
+  'storyboard.shotType.POV': 'נקודת מבט',
+  'storyboard.shotType.REACTION': 'תגובה',
+  'storyboard.shotType.INSERT': 'שוט משולב',
+  'storyboard.shotType.ACTION': 'פעולה',
+  'storyboard.shotType.TRACKING': 'עוקב',
+  'storyboard.shotType.MONTAGE': 'מונטאז׳',
+  'storyboard.shotType.TRANSITION': 'מעבר',
+  'storyboard.shotType.HOLD': 'החזקה',
+  'storyboard.shotType.LIMITED_ANIMATION': 'הנפשה מוגבלת',
+  'storyboard.strategy.TEXT_TO_VIDEO_ENVIRONMENT': 'טקסט לווידאו',
+  'storyboard.strategy.IMAGE_TO_VIDEO': 'תמונה לווידאו',
+  'storyboard.strategy.KEYFRAME_INTERPOLATION': 'אינטרפולציה בין קיפריימים',
+  'storyboard.strategy.LIMITED_ANIMATION_PAN': 'תנועה על גבי סטילס',
+  'storyboard.strategy.LIMITED_ANIMATION_HOLD': 'החזקה על גבי סטילס',
+  'storyboard.strategy.REUSE_APPROVED_CLIP': 'שימוש חוזר בקליפ מאושר',
+  'storyboard.strategy.DFR_ACTION': 'הפניה ישירה לפריים',
+  'storyboard.strategy.AUDIO_TO_VIDEO': 'אודיו לווידאו',
+  'storyboard.strategy.VIDEO_RETAKE': 'צילום מחדש של וידאו',
+  'storyboard.state.PLANNED': 'מתוכנן',
+  'storyboard.state.STORYBOARD_PENDING': 'סטוריבורד ממתין',
+  'storyboard.state.STORYBOARD_READY': 'סטוריבורד מוכן',
+  'storyboard.state.STORYBOARD_APPROVED': 'סטוריבורד מאושר',
+  'storyboard.state.AUDIO_PENDING': 'אודיו ממתין',
+  'storyboard.state.AUDIO_READY': 'אודיו מוכן',
+  'storyboard.state.VIDEO_PENDING': 'וידאו ממתין',
+  'storyboard.state.VIDEO_RENDERING': 'וידאו ברינדור',
+  'storyboard.state.VIDEO_READY': 'וידאו מוכן',
+  'storyboard.state.AUTO_QC': 'בדיקה אוטומטית',
+  'storyboard.state.MANUAL_REVIEW': 'ממתין לסקירה',
+  'storyboard.state.APPROVED': 'מאושר',
+  'storyboard.state.REJECTED': 'נדחה',
+  'storyboard.state.RENDER_FAILED': 'הרינדור נכשל',
+  'storyboard.state.ASSEMBLED': 'הורכב',
+  'storyboard.gaps.heading': 'מה המסך הזה עדיין אינו יכול לעשות',
+  'storyboard.gaps.images':
+    'אף פריים אינו מוצג כתמונה. ארטיפקט נושא נתיב בתוך הפרויקט, והאורקסטרטור אינו מפרסם נתיב שמגיש את הבייטים שלו — הגעה לקובץ בכל דרך אחרת הייתה מחייבת את האפליקציה לפנות למשהו שאינו האורקסטרטור.',
+  'storyboard.gaps.generate':
+    'לא ניתן ליצור פריימים מכאן. הנתיב קיים, אך צורת הבקשה שלו אינה מפורסמת דרך החוזה של האורקסטרטור, ולכן אין מול מה לאמת בקשה.',
+  'storyboard.gaps.operations':
+    'יצירה מחדש, תיקון פרומפט, שינוי מסגור ושינוי הבעה הם כולם נתיבים מפורסמים שצורות הבקשה שלהם אינן, ולכן אף אחד מארבעתם אינו מוצע במקום להיות מוצע ואז מסורב.',
+  'storyboard.gaps.keyframeRequirement':
+    'לא ניתן לקבוע כאן את דרישת הקיפריים של שוט, ולא ניתן לרשום ויתור, מאותה סיבה: שני הנתיבים מקבלים גוף בקשה שהחוזה אינו מפרסם.',
+  'storyboard.gaps.progress':
+    'פריימים שעדיין ברינדור אינם מתעדכנים מעצמם. התקדמות מגיעה דרך websocket שהאורקסטרטור אינו מגיש עדיין, ולכן המסך הזה מציג את מה שהיה נכון בקריאה האחרונה.',
+  'error.MUSIC_CUE_NOT_APPROVED':
+    'השלב הזה דורש קיו מוזיקלי מאושר, והקיו הזה אינו מאושר. יש לאשר אותו תחילה, או לבחור אחד שכבר מאושר.',
+  'error.MUSIC_CUE_IMMUTABLE':
+    'הקיו המוזיקלי הזה מאושר ולכן הוא מוקפא — ייתכן שהפקה כבר נבנתה עליו. יש להוסיף את הקיו הבא במקום לערוך את זה.',
+  'error.MUSIC_CUE_EXISTS':
+    'לפרויקט הזה כבר יש את הקיו הזה. קיו מזוהה לפי האודיו שלו ולא לפי שמו, וכל רינדור הופך לרשומה אחת בספרייה — לכן יש לעדכן את הקיו הקיים, או ליצור טייק נוסף.',
   'error.malformedText':
     'האורקסטרטור השיב לבקשה הזו במשהו שאינו המסמך שהתבקש. אי אפשר לסמוך על שום דבר כאן כעל הטקסט של הביבל עצמו.',
 };

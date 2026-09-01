@@ -117,7 +117,9 @@ export const EN_CATALOGUE = {
   'error.VOICE_RULES_REQUIRE_SPEECH':
     'This subject is not recorded as one that speaks, so it cannot carry voice rules. Either clear the voice rules, or record the subject as speaking first.',
   'error.CONTINUITY_SCOPE_INVALID':
-    "This fact's scope is not a valid one: either its start or end scene is not part of this production, or the end scene comes before the start. Pick both scenes from this production, with the end no earlier than the start.",
+    "Either a fact's scope is not a valid one — its start or end scene is not part of this production, or the end scene comes before the start — or this production cannot be re-planned while facts are still scoped to the scenes being replaced. Pick both scenes from this production with the end no earlier than the start, or withdraw the facts that point at those scenes first.",
+  'error.SCENE_IN_USE':
+    'This production cannot be re-planned: its scenes already carry shots, dialogue lines or render jobs, and applying an outline replaces the whole scene set. The orchestrator refuses rather than orphaning that work — revise the scenes individually, or withdraw what depends on them first.',
   'error.CONTINUITY_CONTEXT_REQUIRED':
     'The orchestrator asked a model to reason about a single scene without supplying that scene, so nothing was generated. The model remembers nothing between turns, which is why that context is not optional — this is a fault in the orchestrator rather than something to correct here.',
   'error.PRODUCTION_TRANSITION_INVALID':
@@ -653,8 +655,6 @@ export const EN_CATALOGUE = {
   'page.planner.description':
     'The screenplay or production plan driving this production. Not connected to the orchestrator yet.',
   'page.storyboard.title': 'Storyboard',
-  'page.storyboard.description':
-    "Review this production's keyframes scene by scene before they render. Not connected to the orchestrator yet.",
   'page.renderQueue.title': 'Render queue',
   'page.renderQueue.description':
     'Every render job for this production and how far each one has progressed. Not connected to the orchestrator yet.',
@@ -1011,6 +1011,155 @@ export const EN_CATALOGUE = {
     'A subject block is identified by its id alone, and cannot be written from here at all. The bible carries no name for a subject, and this screen does not reach into another feature to resolve or to offer one.',
   'bible.gaps.markdownSource':
     'The generated view is shown as text rather than as a rendered document. Rendering it would mean adding a Markdown parser, and nothing external reaches this bundle.',
+  'storyboard.title': 'Storyboard review',
+  'storyboard.intro':
+    'The gate between an approved plan and hundreds of expensive renders. A shot that needs a keyframe gets one approved here, scene by scene, before anything is sent to video.',
+  'storyboard.loading': 'Reading this production’s scenes…',
+  'storyboard.error.title': 'This production’s scenes could not be read',
+  'storyboard.empty.title': 'No scenes are planned yet',
+  'storyboard.empty.description':
+    'A production\u2019s scenes come from its scene outline, which is written while the production is planned. Nothing on this screen creates them, and until they exist there is nothing here to review.',
+  'storyboard.scene.label': 'Scene {order}',
+  'storyboard.scene.purpose': 'Purpose',
+  'storyboard.scene.emotionalBeat': 'Emotional beat',
+  'storyboard.scene.timeOfDay': 'Time',
+  'storyboard.scene.duration': 'Target duration',
+  'storyboard.scene.continuityIn': 'Continuity in',
+  'storyboard.scene.continuityOut': 'Continuity out',
+  'storyboard.scene.show': 'Show shots',
+  'storyboard.scene.hide': 'Hide shots',
+  'storyboard.scene.toggleContext': 'for scene {order}',
+  'storyboard.continuity.title': 'Facts in force here',
+  'storyboard.continuity.empty':
+    'No continuity facts are in force for this scene.',
+  'storyboard.continuity.error':
+    'The continuity facts for this scene could not be read, so this list is not a statement that there are none.',
+  'storyboard.shots.loading': 'Reading this scene’s shots…',
+  'storyboard.shots.error': 'This scene’s shots could not be read.',
+  'storyboard.shots.empty': 'This scene has no shots yet.',
+  'storyboard.shot.label': 'Shot {order}',
+  'storyboard.shot.type': 'Shot type',
+  'storyboard.shot.duration': 'Target duration',
+  'storyboard.shot.framing': 'Framing',
+  'storyboard.shot.camera': 'Camera',
+  'storyboard.shot.intent': 'Action or visual intent',
+  'storyboard.shot.strategy': 'Generation strategy',
+  'storyboard.shot.state': 'State',
+  'storyboard.shot.continuity': 'Continuity requirements',
+  'storyboard.gate.title': 'Video gate',
+  'storyboard.gate.permitted': 'Video rendering is permitted for this shot.',
+  'storyboard.gate.blocked': 'Video rendering is blocked for this shot.',
+  'storyboard.gate.requirement': 'Keyframe requirement',
+  'storyboard.gate.waiver': 'A waiver is on record for this shot.',
+  'storyboard.gate.error': 'The video gate for this shot could not be read.',
+  'storyboard.frames.title': 'Frames',
+  'storyboard.frames.empty':
+    'No storyboard frames have been generated for this shot.',
+  'storyboard.frames.error': 'This shot’s frames could not be read.',
+  'storyboard.frame.label': 'Attempt {attempt}',
+  'storyboard.frame.level': 'Level',
+  'storyboard.frame.mode': 'Generated as',
+  'storyboard.frame.created': 'Created',
+  'storyboard.frame.approved': 'This frame is the approved keyframe.',
+  'storyboard.frame.draftNotApprovable':
+    'A draft cannot be approved. Only a keyframe becomes the anchor for image-to-video, and the orchestrator refuses an approval on anything else — so this frame offers no Approve rather than one that would be turned away.',
+  'storyboard.frame.noImage':
+    'The picture itself is not shown. The orchestrator publishes no route that serves an artifact’s bytes, and this app reaches nothing else, so what appears here is the record of the frame rather than the frame.',
+  'storyboard.frame.context':
+    'the keyframe from attempt {attempt} of shot {order}',
+  'storyboard.approve.done':
+    'Approved. This frame is now the anchor every video render of this shot is built from.',
+  'storyboard.reject.done':
+    'Rejected. Nothing was destroyed — this shot can still carry another attempt.',
+  'storyboard.approval.error.title': 'That decision was not recorded',
+  'storyboard.approval.explained':
+    'Approving a keyframe makes it the anchor every video render of this shot is built from, which is the highest-leverage decision on this screen. Nothing here changes until the orchestrator has answered.',
+  'storyboard.compare.action': 'Compare with references',
+  'storyboard.compare.title': 'This frame against its references',
+  'storyboard.compare.context':
+    'Compare attempt {attempt} of shot {order} with its references',
+  'storyboard.compare.candidate': 'Candidate artifact',
+  'storyboard.compare.anchors': 'Anchored to',
+  'storyboard.compare.noAnchors': 'This frame records no anchors.',
+  'storyboard.compare.error': 'This comparison could not be read.',
+  'storyboard.compare.noImages':
+    'This is the comparison the orchestrator records, not the two pictures side by side. It names what each anchor points at; judging drift by eye needs a route that serves those images, and there is none.',
+  'storyboard.compare.anchor.SUBJECT': 'Subject',
+  'storyboard.compare.anchor.LOCATION_PLATE': 'Location plate',
+  'storyboard.compare.anchor.PROP': 'Prop',
+  'storyboard.level.DRAFT': 'Draft',
+  'storyboard.level.KEYFRAME': 'Keyframe',
+  'storyboard.level.DRAFT.explained':
+    'A cheap draft, for composition and framing. Approving one is not the same as approving a keyframe.',
+  'storyboard.level.KEYFRAME.explained':
+    'The frame that becomes the anchor for image-to-video. This is the one the render is built on.',
+  'storyboard.requirement.NOT_REQUIRED': 'Not required',
+  'storyboard.requirement.REQUIRED_BY_SUBJECT':
+    'Required by a canonical subject',
+  'storyboard.requirement.REQUIRED_BY_USER': 'Required by a person',
+  'storyboard.regeneration.SAME_PROMPT_NEW_SEED': 'Same prompt, new seed',
+  'storyboard.regeneration.CONTROLLED_PROMPT_REVISION':
+    'Controlled prompt revision',
+  'storyboard.regeneration.NEW_KEYFRAME': 'New keyframe',
+  'storyboard.regeneration.EXACT_REPLAY': 'Exact replay',
+  'storyboard.regeneration.RETAKE_REGION': 'Retake of a region',
+  'storyboard.shotType.ESTABLISHING': 'Establishing',
+  'storyboard.shotType.WIDE': 'Wide',
+  'storyboard.shotType.MEDIUM': 'Medium',
+  'storyboard.shotType.CLOSE_UP': 'Close-up',
+  'storyboard.shotType.EXTREME_CLOSE_UP': 'Extreme close-up',
+  'storyboard.shotType.OVER_SHOULDER': 'Over the shoulder',
+  'storyboard.shotType.TWO_SHOT': 'Two-shot',
+  'storyboard.shotType.POV': 'Point of view',
+  'storyboard.shotType.REACTION': 'Reaction',
+  'storyboard.shotType.INSERT': 'Insert',
+  'storyboard.shotType.ACTION': 'Action',
+  'storyboard.shotType.TRACKING': 'Tracking',
+  'storyboard.shotType.MONTAGE': 'Montage',
+  'storyboard.shotType.TRANSITION': 'Transition',
+  'storyboard.shotType.HOLD': 'Hold',
+  'storyboard.shotType.LIMITED_ANIMATION': 'Limited animation',
+  'storyboard.strategy.TEXT_TO_VIDEO_ENVIRONMENT': 'Text to video',
+  'storyboard.strategy.IMAGE_TO_VIDEO': 'Image to video',
+  'storyboard.strategy.KEYFRAME_INTERPOLATION': 'Keyframe interpolation',
+  'storyboard.strategy.LIMITED_ANIMATION_PAN': 'Pan over a still',
+  'storyboard.strategy.LIMITED_ANIMATION_HOLD': 'Hold on a still',
+  'storyboard.strategy.REUSE_APPROVED_CLIP': 'Reuse of an approved clip',
+  'storyboard.strategy.DFR_ACTION': 'Direct frame reference',
+  'storyboard.strategy.AUDIO_TO_VIDEO': 'Audio to video',
+  'storyboard.strategy.VIDEO_RETAKE': 'Retake of a video',
+  'storyboard.state.PLANNED': 'Planned',
+  'storyboard.state.STORYBOARD_PENDING': 'Storyboard pending',
+  'storyboard.state.STORYBOARD_READY': 'Storyboard ready',
+  'storyboard.state.STORYBOARD_APPROVED': 'Storyboard approved',
+  'storyboard.state.AUDIO_PENDING': 'Audio pending',
+  'storyboard.state.AUDIO_READY': 'Audio ready',
+  'storyboard.state.VIDEO_PENDING': 'Video pending',
+  'storyboard.state.VIDEO_RENDERING': 'Video rendering',
+  'storyboard.state.VIDEO_READY': 'Video ready',
+  'storyboard.state.AUTO_QC': 'Automated check',
+  'storyboard.state.MANUAL_REVIEW': 'Awaiting review',
+  'storyboard.state.APPROVED': 'Approved',
+  'storyboard.state.REJECTED': 'Rejected',
+  'storyboard.state.RENDER_FAILED': 'Render failed',
+  'storyboard.state.ASSEMBLED': 'Assembled',
+  'storyboard.gaps.heading': 'What this screen cannot do yet',
+  'storyboard.gaps.images':
+    'No frame is shown as a picture. An artifact carries a path inside the project, and the orchestrator publishes no route that serves its bytes — reaching the file any other way would mean this app talking to something that is not the orchestrator.',
+  'storyboard.gaps.generate':
+    'Frames cannot be generated from here. The route exists, but its request shape is not published through the orchestrator’s contract, so there is nothing to validate a request against.',
+  'storyboard.gaps.operations':
+    'Regenerating, revising a prompt, changing framing and changing expression are all published routes whose request shapes are not, so none of the four is offered rather than offered and refused.',
+  'storyboard.gaps.keyframeRequirement':
+    'A shot’s keyframe requirement cannot be set here, and no waiver can be recorded, for the same reason: both routes take a body the contract does not publish.',
+  'storyboard.gaps.progress':
+    'Frames that are still rendering do not update on their own. Progress arrives over a websocket the orchestrator does not yet serve, so this screen shows what was true when it was last read.',
+  'error.MUSIC_CUE_NOT_APPROVED':
+    'That step needs an approved music cue, and this one is not approved. Approve the cue first, or choose one that already is.',
+  'error.MUSIC_CUE_IMMUTABLE':
+    'This music cue is approved, so it is frozen — a production may already be built on it. Add the next cue rather than editing this one.',
+  'error.MUSIC_CUE_EXISTS':
+    'This project already has that cue. A cue is identified by its audio rather than its name, and one render becomes one library entry — so revise the cue that is already there, or generate another take.',
   'error.malformedText':
     'The orchestrator answered that request with something other than the document that was asked for. Nothing here can be trusted to be the bible’s own text.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;

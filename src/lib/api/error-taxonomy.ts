@@ -162,6 +162,10 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.CONTINUITY_SCOPE_INVALID',
   },
+  SCENE_IN_USE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SCENE_IN_USE',
+  },
   CONTINUITY_CONTEXT_REQUIRED: {
     presentation: 'PERSISTENT',
     messageKey: 'error.CONTINUITY_CONTEXT_REQUIRED',
@@ -265,5 +269,17 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
   PRODUCTION_QC_REPORT_VERSION_EXISTS: {
     presentation: 'PERSISTENT',
     messageKey: 'error.PRODUCTION_QC_REPORT_VERSION_EXISTS',
+  },
+  MUSIC_CUE_NOT_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MUSIC_CUE_NOT_APPROVED',
+  },
+  MUSIC_CUE_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MUSIC_CUE_IMMUTABLE',
+  },
+  MUSIC_CUE_EXISTS: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MUSIC_CUE_EXISTS',
   },
 };

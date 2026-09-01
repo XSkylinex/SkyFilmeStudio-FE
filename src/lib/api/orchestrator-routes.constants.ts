@@ -5,6 +5,9 @@ export const ORCHESTRATOR_ROUTE_PREFIXES = [
   '/capture-guide',
   '/productions',
   '/render-jobs',
+  '/scenes',
+  '/shots',
+  '/storyboard-frames',
 ] satisfies readonly string[];
 
 export const ORCHESTRATOR_DEFAULT_ORIGIN = 'http://127.0.0.1:5556';
