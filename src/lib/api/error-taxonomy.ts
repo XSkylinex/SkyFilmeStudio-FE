@@ -194,4 +194,28 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.RUNTIME_TOLERANCE_UNDECLARED',
   },
+  SHOT_TRANSITION_INVALID: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SHOT_TRANSITION_INVALID',
+  },
+  SHOT_STRATEGY_INVALID: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SHOT_STRATEGY_INVALID',
+  },
+  SHOT_DURATION_UNMEASURED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SHOT_DURATION_UNMEASURED',
+  },
+  SUBJECT_DESCRIPTOR_UNAVAILABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SUBJECT_DESCRIPTOR_UNAVAILABLE',
+  },
+  PROMPT_SPEC_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PROMPT_SPEC_IMMUTABLE',
+  },
+  LIMITED_ANIMATION_OVERUSED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.LIMITED_ANIMATION_OVERUSED',
+  },
 };
