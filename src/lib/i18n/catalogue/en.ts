@@ -535,7 +535,7 @@ export const EN_CATALOGUE = {
   'styles.error.title': 'The style profiles could not be read',
   'styles.empty.title': 'No style profiles yet',
   'styles.empty.description':
-    'A style profile records the palette, lighting, camera, texture and motion rules a production is generated against. This project has none, and there is no way to create one here yet.',
+    'A style profile records the palette, lighting, camera, texture and motion rules a production is generated against. This project has none yet — add the first.',
   'styles.pinning':
     'A profile is a lineage and each row below is one version of it. Which version a production is pinned to is not shown: a production records the version it used, but no published route returns a production, so nothing here can read that record.',
   'styles.truncated':
@@ -558,7 +558,7 @@ export const EN_CATALOGUE = {
   'voices.error.title': 'The voices could not be read',
   'voices.empty.title': 'No voices yet',
   'voices.empty.description':
-    'A voice profile is what keeps a subject sounding like itself across a production. This project has none, and there is no way to create one here yet.',
+    'A voice profile is what keeps a subject sounding like itself across a production. This project has none yet — add the first.',
   'voices.truncated':
     'More voices exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'voices.onePerSubject':
@@ -598,7 +598,7 @@ export const EN_CATALOGUE = {
   'locations.error.title': 'The locations could not be read',
   'locations.empty.title': 'No locations yet',
   'locations.empty.description':
-    'A location holds the immutable features and canonical plates a scene is framed against. This project has none, and there is no way to create one here yet.',
+    'A location holds the immutable features and canonical plates a scene is framed against. This project has none yet — add the first.',
   'locations.truncated':
     'More locations exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'locations.coverageNote':
@@ -626,7 +626,7 @@ export const EN_CATALOGUE = {
   'props.error.title': 'The props could not be read',
   'props.empty.title': 'No props yet',
   'props.empty.description':
-    'A prop carries the continuity rules a later scene is checked against. This project has none, and there is no way to create one here yet.',
+    'A prop carries the continuity rules a later scene is checked against. This project has none yet — add the first.',
   'props.truncated':
     'More props exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'props.card.approved': 'Approved',
@@ -703,6 +703,18 @@ export const EN_CATALOGUE = {
   'library.field.modelId': 'Model id',
   'library.field.language': 'Language tag',
   'library.field.linesHint': 'One per line.',
+  'library.field.realismLevel': 'Realism level',
+  'library.field.paletteRules': 'Palette rules',
+  'library.field.lightingRules': 'Lighting rules',
+  'library.field.cameraRules': 'Camera rules',
+  'library.field.textureRules': 'Texture rules',
+  'library.field.motionRules': 'Motion rules',
+  'library.field.prohibitedStyleDrift': 'Prohibited style drift',
+  'library.field.referenceAudioPath':
+    'Reference audio, as a project-relative path',
+  'library.field.referenceTranscript': 'Exact transcript of that audio',
+  'library.field.referenceTranscript.hint':
+    'It must match the recording word for word. A transcript that drifts from the audio is the most common cause of a voice that does not sound like itself.',
   'styles.create.open': 'Add a style',
   'styles.create.title': 'Add a style profile',
   'styles.edit.title': 'Edit this style version',
