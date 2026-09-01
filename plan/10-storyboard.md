@@ -139,6 +139,20 @@ tell what ran, and the attempt history becomes unreadable.
 A shot cannot proceed to video rendering without an approved keyframe where one is required. Show that
 state on the card, so a refused render is explained before it is attempted.
 
+**The requirement control is two refusals, not one, and neither is about direction.** Read from the
+two guards in `ShotsService.setKeyframeRequirement` on backend `master`, and corrected there by the
+backend session after this repo got it wrong from their prose: the first guard tests the **incoming**
+value and refuses the subject-derived one whatever the shot currently is; the second tests the
+**stored** value and refuses every edit once the shot already carries a canonical subject. The
+enum has no ordering, so "raise" and "lower" are not expressible in it — the method's own docblock
+and `plan/18` both describe the design as *raised by hand, never lowered by hand*, and a UI built
+from that sentence would offer a control the first guard refuses.
+
+So: **never offer the subject-derived value in a picker.** When a person wants a keyframe on a shot
+that does not require one, the affordance is the value meaning *a person asked for this*, not an
+error toast after the fact. When the shot does carry a canonical subject, offer the waiver — which
+takes a reason — instead of a disabled control with no explanation.
+
 ### 6. Motion drafts before finals (§49.4)
 
 > "Never render 200 HERO shots before reviewing motion drafts."
@@ -199,4 +213,6 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 - **Small comparison images.** Drift is only visible at size.
 - **Approving a Level 1 draft as the keyframe.** Expensive, and easy if the levels look alike.
 - **A bare "Retry".** The attempt history becomes uninterpretable.
+- **A keyframe-requirement picker offering the subject-derived value.** It is refused on the way
+  in, whatever the shot's current state.
 - **Hiding continuity facts.** The clean-subject-in-a-muddy-scene error survives to the render.
