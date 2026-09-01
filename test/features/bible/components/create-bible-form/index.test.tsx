@@ -123,6 +123,31 @@ describe('CreateBibleForm', () => {
     });
   });
 
+  it('shows the refusal against the field that caused it, not silently doing nothing', async () => {
+    styleLibraryServes();
+    const posted = capturePost();
+
+    renderInApp(
+      <CreateBibleForm
+        projectId={PROJECT_ID}
+        carriesNarrative
+        initialValues={EMPTY_BIBLE_FORM_VALUES}
+        onClose={() => undefined}
+      />,
+    );
+
+    await userEvent.type(
+      await screen.findByLabelText('Languages'),
+      'not a tag',
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+    expect(posted.body()).toBeUndefined();
+    expect(
+      await screen.findByText('The contract will not accept this value.'),
+    ).toBeInTheDocument();
+  });
+
   it('announces the created draft and puts focus on the announcement', async () => {
     styleLibraryServes();
     capturePost();

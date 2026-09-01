@@ -1,5 +1,7 @@
 import { createProductionRequestSchema } from 'sky-filme-studio-be/contracts';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
+import { createProjectBibleRequestSchema } from 'sky-filme-studio-be/contracts';
+import type { ZodError } from 'zod';
 import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 
 const VALID_BODY = {
@@ -61,5 +63,20 @@ describe('fieldErrorsFromIssues', () => {
     const errors = failureFor({ styleProfileId: 'not-a-uuid' });
 
     expect(errors['styleProfileId']).toBe('form.invalid.value');
+  });
+
+  it('records a nested issue at every depth, so a form can read whichever one it renders', () => {
+    const result = createProjectBibleRequestSchema.safeParse({
+      world: {},
+      audio: { languages: ['not a tag'] },
+    });
+
+    expect(result.success).toBe(false);
+
+    const errors = fieldErrorsFromIssues((result as { error: ZodError }).error);
+
+    expect(errors['audio']).toBe('form.invalid.value');
+    expect(errors['audio.languages']).toBe('form.invalid.value');
+    expect(errors['audio.languages.0']).toBe('form.invalid.value');
   });
 });
