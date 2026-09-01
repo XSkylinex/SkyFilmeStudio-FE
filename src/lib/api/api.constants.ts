@@ -176,8 +176,6 @@ export const API_PATH = {
     `/render-jobs/${renderJobId}`,
   sceneDialogueLines: (sceneId: SceneId): string =>
     `/scenes/${sceneId}/dialogue-lines`,
-  dialogueLine: (dialogueLineId: DialogueLineId): string =>
-    `/dialogue-lines/${dialogueLineId}`,
   dialogueLineSpeech: (dialogueLineId: DialogueLineId): string =>
     `/dialogue-lines/${dialogueLineId}/speech`,
   dialogueLineSpeechApproval: (dialogueLineId: DialogueLineId): string =>
