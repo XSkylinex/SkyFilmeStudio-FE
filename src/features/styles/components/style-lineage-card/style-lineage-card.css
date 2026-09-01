@@ -64,6 +64,12 @@
     font-size: var(--font-size-xs);
   }
 
+  .style-lineage-card__approved {
+    color: var(--color-text);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
   .style-lineage-card__frozen {
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);

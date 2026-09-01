@@ -676,6 +676,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'library.creating': 'יוצר…',
   'library.saved': 'נשמר.',
   'library.created': 'נוצר.',
+  'library.approved': 'אושר.',
   'library.frozen':
     'הרשומה הזו מאושרת, ולכן היא מוקפאת ואי אפשר לערוך אותה. זה מה שהופך אותה לבטוחה עבור כל מה שכבר מפנה אליה — ההקפאה נאכפת במסד הנתונים, לא במסך הזה.',
   'library.frozen.styleVersion':

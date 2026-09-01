@@ -9,6 +9,7 @@ import { ContentText } from '@/lib/components/content-text';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
+import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
@@ -123,6 +124,15 @@ export const StyleLineageCard: FC<StyleLineageCardProps> = ({
                     tone={STATUS_TONE.SUCCESS}
                     label={translate('styles.version.approved')}
                   />
+                  {approve.isSuccess && approve.variables === version.id ? (
+                    <output
+                      className="style-lineage-card__approved"
+                      ref={focusWhenShown}
+                      tabIndex={-1}
+                    >
+                      {translate('library.approved')}
+                    </output>
+                  ) : null}
                   <span className="style-lineage-card__frozen">
                     {translate('library.frozen.styleVersion')}
                   </span>

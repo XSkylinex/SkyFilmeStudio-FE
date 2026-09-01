@@ -74,4 +74,35 @@ describe('LocationCard', () => {
       screen.queryByRole('button', { name: /^Edit/ }),
     ).not.toBeInTheDocument();
   });
+
+  it('announces the approval it just made, and lands focus on it', async () => {
+    const user = userEvent.setup();
+    const draft = buildLocation();
+    const approved = buildLocation({ id: draft.id, approved: true });
+
+    server.use(
+      http.post(API_PATH.approveLocation(PROJECT_ID, draft.id), () =>
+        HttpResponse.json(approved),
+      ),
+    );
+
+    const view = renderInApp(
+      <ul>
+        <LocationCard projectId={PROJECT_ID} location={draft} />
+      </ul>,
+    );
+
+    await user.click(await screen.findByRole('button', { name: /^Approve/ }));
+
+    view.rerender(
+      <ul>
+        <LocationCard projectId={PROJECT_ID} location={approved} />
+      </ul>,
+    );
+
+    const announcement = await screen.findByText('Approved.');
+
+    expect(announcement.tagName).toBe('OUTPUT');
+    expect(announcement).toHaveFocus();
+  });
 });

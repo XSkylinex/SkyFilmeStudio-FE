@@ -682,6 +682,7 @@ export const EN_CATALOGUE = {
   'library.creating': 'Creating…',
   'library.saved': 'Saved.',
   'library.created': 'Created.',
+  'library.approved': 'Approved.',
   'library.frozen':
     'This record is approved, so it is frozen and cannot be edited. That is what makes it safe for anything already pointing at it — the freeze is enforced by the database, not by this screen.',
   'library.frozen.styleVersion':

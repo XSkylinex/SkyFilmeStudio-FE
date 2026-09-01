@@ -138,4 +138,68 @@ describe('StyleLineageCard', () => {
     expect(created['description']).toBe('Cold key light.');
     expect(created['mode']).toBe('TEST_MODE');
   });
+
+  it('announces the version it just approved, on that version and no other', async () => {
+    const user = userEvent.setup();
+    let approvedYet = false;
+
+    server.use(
+      http.get(API_PATH.styleProfileVersions(PROJECT_ID), () =>
+        HttpResponse.json([
+          buildStyleProfile({
+            id: LINEAGE_ID,
+            lineageId: LINEAGE_ID,
+            version: 1,
+            mode: MODE,
+            approved: approvedYet,
+          }),
+        ]),
+      ),
+      http.post(API_PATH.approveStyleProfile(PROJECT_ID, LINEAGE_ID), () => {
+        approvedYet = true;
+
+        return HttpResponse.json(
+          buildStyleProfile({
+            id: LINEAGE_ID,
+            lineageId: LINEAGE_ID,
+            version: 1,
+            mode: MODE,
+            approved: true,
+          }),
+        );
+      }),
+    );
+
+    renderCard();
+
+    await user.click(await screen.findByRole('button', { name: /^Approve/ }));
+
+    const announcement = await screen.findByText('Approved.');
+
+    expect(announcement.tagName).toBe('OUTPUT');
+    await waitFor(() => {
+      expect(announcement).toHaveFocus();
+    });
+  });
+
+  it('does not announce on a version approved before this screen opened', async () => {
+    server.use(
+      http.get(API_PATH.styleProfileVersions(PROJECT_ID), () =>
+        HttpResponse.json([
+          buildStyleProfile({
+            id: LINEAGE_ID,
+            lineageId: LINEAGE_ID,
+            version: 1,
+            mode: MODE,
+            approved: true,
+          }),
+        ]),
+      ),
+    );
+
+    renderCard();
+
+    expect(await screen.findByText('Approved: v1')).toBeInTheDocument();
+    expect(screen.queryByText('Approved.')).not.toBeInTheDocument();
+  });
 });
