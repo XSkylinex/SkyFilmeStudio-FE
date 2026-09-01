@@ -14,6 +14,7 @@ export const Textarea: FC<TextareaProps> = ({
   id,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
+  'aria-required': ariaRequired,
 }) => (
   <textarea
     className="textarea"
@@ -27,5 +28,6 @@ export const Textarea: FC<TextareaProps> = ({
     disabled={disabled}
     aria-describedby={ariaDescribedBy}
     aria-invalid={ariaInvalid}
+    aria-required={ariaRequired}
   />
 );

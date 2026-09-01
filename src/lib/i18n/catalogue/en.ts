@@ -1274,6 +1274,7 @@ export const EN_CATALOGUE = {
     'The loudness numbers that decide whether an export is acceptable are not served, so this screen cannot show a measured value against its target.',
   'audio.gaps.asr':
     'The advisory ASR round-trip is a published contract with no route, so a line cannot be checked against what a recogniser heard.',
+  'field.required': 'required',
   'error.MUSIC_CUE_NOT_APPROVED':
     'That step needs an approved music cue, and this one is not approved. Approve the cue first, or choose one that already is.',
   'error.MUSIC_CUE_IMMUTABLE':

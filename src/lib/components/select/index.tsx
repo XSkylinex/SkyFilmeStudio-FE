@@ -10,6 +10,7 @@ export const Select: FC<SelectProps> = ({
   id,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
+  'aria-required': ariaRequired,
 }) => {
   const handleChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     onChange(event.target.value);
@@ -24,6 +25,7 @@ export const Select: FC<SelectProps> = ({
       disabled={disabled}
       aria-describedby={ariaDescribedBy}
       aria-invalid={ariaInvalid}
+      aria-required={ariaRequired}
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>

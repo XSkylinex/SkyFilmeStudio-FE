@@ -104,4 +104,41 @@ describe('Field', () => {
       'true',
     );
   });
+
+  it('marks a required control with aria-required, without touching the accessible name', () => {
+    renderInStore(
+      <Field label="Name" required>
+        <Input placeholder="Name" />
+      </Field>,
+    );
+
+    const control = screen.getByPlaceholderText('Name');
+
+    expect(control).toHaveAttribute('aria-required', 'true');
+    expect(screen.getByRole('textbox', { name: 'Name' })).toBe(control);
+    expect(screen.getByText('required')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('sets nothing on a control that is not required, so the attribute cannot be read as false-positive', () => {
+    renderInStore(
+      <Field label="Notes">
+        <Input placeholder="Notes" />
+      </Field>,
+    );
+
+    expect(screen.getByPlaceholderText('Notes')).not.toHaveAttribute(
+      'aria-required',
+    );
+    expect(screen.queryByText('required')).not.toBeInTheDocument();
+  });
+
+  it('never uses the native required attribute, because no form sets noValidate', () => {
+    renderInStore(
+      <Field label="Name" required>
+        <Input placeholder="Name" />
+      </Field>,
+    );
+
+    expect(screen.getByPlaceholderText('Name')).not.toHaveAttribute('required');
+  });
 });
