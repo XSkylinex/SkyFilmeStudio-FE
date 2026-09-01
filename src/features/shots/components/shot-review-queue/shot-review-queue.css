@@ -1,0 +1,39 @@
+@layer features {
+  .shot-review-queue {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .shot-review-queue__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .shot-review-queue__title {
+    margin: 0;
+  }
+
+  .shot-review-queue__description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .shot-review-queue__note {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .shot-review-queue__scenes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+}

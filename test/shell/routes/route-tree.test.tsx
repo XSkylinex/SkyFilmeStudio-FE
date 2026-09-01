@@ -201,13 +201,13 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
 
   it('resolves the shots list route to ShotsPage', async () => {
     const memoryRouter = createMemoryRouter(routeTree, {
-      initialEntries: [productionShotsPath('proj-1', 'prod-1')],
+      initialEntries: [productionShotsPath('proj-1', PLANNED_PRODUCTION_ID)],
     });
 
     renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
-      await screen.findByRole('heading', { name: 'Shots', level: 1 }),
+      await screen.findByRole('heading', { name: 'Shot review', level: 1 }),
     ).toBeInTheDocument();
   });
 

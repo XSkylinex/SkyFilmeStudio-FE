@@ -1,0 +1,49 @@
+@layer features {
+  .scene-shot-review {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .scene-shot-review__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .scene-shot-review__title {
+    margin: 0;
+    font-size: var(--font-size-lg);
+  }
+
+  .scene-shot-review__slugline {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .scene-shot-review__detail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .scene-shot-review__note {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .scene-shot-review__shots {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
