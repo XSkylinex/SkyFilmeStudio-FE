@@ -1,7 +1,10 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { bibleCarriesNarrative } from 'sky-filme-studio-be/contracts';
 import type { ProjectBibleVersionId } from 'sky-filme-studio-be/contracts';
+import { Button } from '@/lib/components/button';
+import { Dialog } from '@/lib/components/dialog';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
@@ -18,14 +21,28 @@ import { BiblePublish } from '@/features/bible/components/bible-publish';
 import { BibleSubjectRulesSection } from '@/features/bible/components/bible-subject-rules';
 import { BibleVersionList } from '@/features/bible/components/bible-version-list';
 import { BibleWorldSection } from '@/features/bible/components/bible-world-section';
+import { CreateBibleForm } from '@/features/bible/components/create-bible-form';
+import { EditBibleForm } from '@/features/bible/components/edit-bible-form';
+import {
+  EMPTY_BIBLE_FORM_VALUES,
+  bibleFormValuesFrom,
+} from '@/features/bible/helpers/bible-form-values';
+import { projectQueryOptions } from '@/features/projects/api/project.query';
 import type { ProjectBibleViewProps } from './project-bible.interface';
 import './project-bible.css';
 
 export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
   const translate = useTranslate();
   const [chosenId, setChosenId] = useState<ProjectBibleVersionId | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [editing, setEditing] = useState(false);
   const versions = useQuery(projectBiblesQueryOptions(projectId));
   const active = useQuery(activeProjectBibleQueryOptions(projectId));
+  const project = useQuery(projectQueryOptions(projectId));
+  const carriesNarrative =
+    project.data === undefined
+      ? false
+      : bibleCarriesNarrative(project.data.projectKind);
 
   if (versions.error) {
     const errorView = resolveRouteErrorView(versions.error);
@@ -53,6 +70,50 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
   const selected =
     items.find((bible) => bible.id === chosenId) ?? active.data ?? items[0];
 
+  const initialValues =
+    selected === undefined
+      ? EMPTY_BIBLE_FORM_VALUES
+      : bibleFormValuesFrom(selected);
+
+  const createButton = (
+    <>
+      <Button
+        type="button"
+        variant="primary"
+        size="md"
+        onClick={() => setCreating(true)}
+      >
+        {translate(
+          items.length === 0 ? 'bible.create.action' : 'bible.create.next',
+        )}
+      </Button>
+
+      {project.data === undefined && !project.isPending ? (
+        <p className="project-bible__note">
+          {translate('bible.form.kindUnreadable')}
+        </p>
+      ) : null}
+    </>
+  );
+
+  const createDialog = (
+    <Dialog
+      open={creating}
+      title={translate('bible.create.title')}
+      onClose={() => setCreating(false)}
+    >
+      {creating ? (
+        <CreateBibleForm
+          projectId={projectId}
+          carriesNarrative={carriesNarrative}
+          initialValues={initialValues}
+          prefilledFromVersion={selected?.version}
+          onClose={() => setCreating(false)}
+        />
+      ) : null}
+    </Dialog>
+  );
+
   if (selected === undefined) {
     return (
       <section className="project-bible">
@@ -62,6 +123,8 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
           description={translate('bible.empty.description')}
           headingLevel={2}
         />
+        <div className="project-bible__actions">{createButton}</div>
+        {createDialog}
         <BibleGaps />
       </section>
     );
@@ -93,6 +156,39 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
         <BibleAudioSection audio={selected.audio} />
         <BibleSubjectRulesSection subjectRules={selected.subjectRules} />
       </div>
+
+      <div className="project-bible__actions">
+        {createButton}
+        {selected.published ? (
+          <p className="project-bible__frozen">{translate('bible.frozen')}</p>
+        ) : (
+          <Button
+            type="button"
+            variant="secondary"
+            size="md"
+            aria-label={`${translate('bible.edit.action')} ${translate('bible.edit.context', { version: String(selected.version) })}`}
+            onClick={() => setEditing(true)}
+          >
+            {translate('bible.edit.action')}
+          </Button>
+        )}
+      </div>
+
+      {createDialog}
+
+      <Dialog
+        open={editing}
+        title={translate('bible.edit.title')}
+        onClose={() => setEditing(false)}
+      >
+        {editing ? (
+          <EditBibleForm
+            projectId={projectId}
+            bible={selected}
+            onClose={() => setEditing(false)}
+          />
+        ) : null}
+      </Dialog>
 
       <BiblePublish projectId={projectId} bible={selected} />
       <BibleMarkdownPanel projectId={projectId} bibleId={selected.id} />

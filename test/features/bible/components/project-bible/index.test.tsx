@@ -5,9 +5,10 @@ import {
   projectBibleVersionIdSchema,
   projectIdSchema,
 } from 'sky-filme-studio-be/contracts';
-import type { ProjectBible } from 'sky-filme-studio-be/contracts';
+import type { ProjectBible, ProjectKind } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { ProjectBibleView } from '@/features/bible/components/project-bible';
+import { buildProject } from '../../../../fixtures/project.fixture';
 import { buildProjectBible } from '../../../../fixtures/project-bible.fixture';
 import { renderInApp } from '../../../../render-in-app';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
@@ -21,8 +22,12 @@ const PROJECT_ID = projectIdSchema.parse(
 const orchestratorServes = (
   versions: readonly ProjectBible[],
   active: ProjectBible | undefined,
+  projectKind: ProjectKind = 'STANDALONE',
 ): void => {
   server.use(
+    http.get(API_PATH.project(PROJECT_ID), () =>
+      HttpResponse.json(buildProject({ projectKind })),
+    ),
     http.get(API_PATH.projectBibles(PROJECT_ID), () =>
       HttpResponse.json({ items: versions }),
     ),
@@ -41,6 +46,95 @@ const orchestratorServes = (
     ),
   );
 };
+
+describe('ProjectBibleView writes', () => {
+  it('offers a way to start the first bible instead of a dead end', async () => {
+    orchestratorServes([], undefined);
+
+    renderInApp(<ProjectBibleView projectId={PROJECT_ID} />);
+
+    expect(
+      await screen.findByRole('button', { name: 'Start a draft' }),
+    ).toBeInTheDocument();
+  });
+
+  it('calls it the next version once one exists, since a POST always creates a new one', async () => {
+    const published = buildProjectBible({
+      published: true,
+      publishedAt: '2026-08-22T00:00:00.000Z',
+    });
+    orchestratorServes([published], published);
+
+    renderInApp(<ProjectBibleView projectId={PROJECT_ID} />);
+
+    expect(
+      await screen.findByRole('button', { name: 'Start the next version' }),
+    ).toBeInTheDocument();
+  });
+
+  it('offers Edit on a draft', async () => {
+    orchestratorServes([buildProjectBible({ published: false })], undefined);
+
+    renderInApp(<ProjectBibleView projectId={PROJECT_ID} />);
+
+    expect(
+      await screen.findByRole('button', { name: /^Edit this draft/ }),
+    ).toBeInTheDocument();
+  });
+
+  it('renders no Edit control for a published version and says why, from the record rather than a flag', async () => {
+    const published = buildProjectBible({
+      published: true,
+      publishedAt: '2026-08-22T00:00:00.000Z',
+    });
+    orchestratorServes([published], published);
+
+    renderInApp(<ProjectBibleView projectId={PROJECT_ID} />);
+
+    expect(
+      await screen.findByText(/published, so it can no longer be edited/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /^Edit this draft/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('keeps the trigger mounted while its dialog is open, so closing returns focus somewhere', async () => {
+    orchestratorServes([buildProjectBible({ published: false })], undefined);
+    server.use(
+      http.get(API_PATH.styleProfiles(PROJECT_ID), () =>
+        HttpResponse.json({ items: [] }),
+      ),
+    );
+
+    renderInApp(<ProjectBibleView projectId={PROJECT_ID} />);
+
+    const trigger = await screen.findByRole('button', {
+      name: 'Start the next version',
+    });
+    await userEvent.click(trigger);
+
+    expect(trigger).toBeInTheDocument();
+  });
+
+  it('names the version in the Edit control accessible name, and keeps the visible text inside it', async () => {
+    orchestratorServes(
+      [buildProjectBible({ published: false, version: 4 })],
+      undefined,
+    );
+
+    renderInApp(<ProjectBibleView projectId={PROJECT_ID} />);
+
+    const edit = await screen.findByRole('button', {
+      name: /^Edit this draft/,
+    });
+
+    expect(edit).toHaveAccessibleName(
+      'Edit this draft of the project bible, version 4',
+    );
+    expect(edit).toHaveTextContent('Edit this draft');
+  });
+});
 
 describe('ProjectBibleView', () => {
   it('offers publishing on a draft', async () => {
@@ -70,6 +164,9 @@ describe('ProjectBibleView', () => {
 
   it('says the list is truncated when the orchestrator offers another page', async () => {
     server.use(
+      http.get(API_PATH.project(PROJECT_ID), () =>
+        HttpResponse.json(buildProject()),
+      ),
       http.get(API_PATH.projectBibles(PROJECT_ID), () =>
         HttpResponse.json({
           items: [buildProjectBible({})],
@@ -134,6 +231,9 @@ describe('ProjectBibleView', () => {
 
     let draftIsPublished = false;
     server.use(
+      http.get(API_PATH.project(PROJECT_ID), () =>
+        HttpResponse.json(buildProject()),
+      ),
       http.get(API_PATH.projectBibles(PROJECT_ID), () =>
         HttpResponse.json({
           items: [draftIsPublished ? draftPublished : draft, older],
