@@ -47,7 +47,7 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 | 07 | [Asset ingestion & subject review](07-assets-and-subjects.md) | 06 | BE-11, BE-12 | **partly done 2026-08-21, detail view and subject review 2026-08-22** · the asset library, capture guide, **asset detail** and now the **subject list and Subject Review** are real. BE-12 published `subjects` and `canonical-sets`, so a subject's identity, its approved set's lineage — version, frozen descriptor and its SHA-256 — and its references with anchor eligibility all render. **Approval is real as of 2026-08-22** — the *Open draft* section finds the `PENDING` set, shows what it depicts, and approves it. **The first mutation in this app**: no optimistic update, disabled while the request is in flight, both affected queries invalidated after the server answers, and the guard that survives a reload is the refetched list having no `PENDING` set rather than any client flag. What had blocked it was a missing `GET` on the collection rather than a missing export, and `edb38a3` added it. **Registration, draft creation and both import transports are still blocked on request shapes outside `./contracts`** — BE-13 began re-exporting its own DTOs through the barrel, but no subject, asset or project DTO is published, so each of those says so on screen rather than offering a control that does nothing. The draft-versus-approved comparison is now endpoint-backed and simply unbuilt |
 | 08 | [Style, voice, location & prop studio](08-style-studio.md) | 07 | BE-13, BE-14 | **partly done 2026-08-22, step 7 landed 2026-09-01** — corrected 2026-09-01: this row still read `blocked: BE-13 in progress, no route yet` after PRs #22 and #23 had landed the phase, which is the same staleness the row itself was written to fix. The creative library reads and approves across style profiles, voices, the pronunciation dictionary, locations and props. **The project bible is now real** — BE-14 merged as `f168891`, and `/projects/:projectId/bible` lists every version, marks the active one, renders the four sections against `bibleCarriesNarrative` so a kind carrying no narrative section says so, shows the orchestrator's generated Markdown view, and **publishes a draft** with the same structural guard FE-07 established. Still unbuilt: style samples (blocked on the unpublished render-job DTO), reusable libraries (no controller), and bible create/edit. Pinning a bible to a production has a route whose request shape is unpublished |
 | 09 | [Screenplay & production planner](09-planner.md) | 06 | BE-15 | **partly done 2026-08-22** · BE-15 merged upstream as `31b4713` and the two screens it allows are real: the **production list**, which also creates a production across all eight kinds and six modes with the contract as its validator, and the **planner**, whose runtime budget answers the question the phase exists for — 12m 30s against a 20m target, 7m 30s short, the underweight scenes named, approval refused. Stages come from `GET /planning/stages`, so a music-driven production shows no screenplay stage because the wire has none. Plan approval is real and gated on server state twice over. **What is left is unbuildable rather than unbuilt**: no route runs a planning stage, no route returns a production's scenes, and — corrected 2026-09-01 — a dialogue-line controller that exists and cannot be reached. BE-17 merged as `014712e` with dialogue lines, speech, approval and dialogue timing, every DTO through the barrel; its collection is `@Controller('scenes/:sceneId/dialogue-lines')`, so it is the third surface gated behind the missing scene `GET` rather than a fourth thing to build. Between them these block the staged process, scene and dialogue editing, and the continuity review |
-| 10 | [Storyboard review](10-storyboard.md) | 09 | BE-18 | **blocked: BE-18 not started, and no route yields a `SceneId`** — measured 2026-08-31. BE-16 merged as `d658f69` and published a real `shots.controller.ts`, but every one of its routes is keyed on a scene or shot id this repo cannot obtain: enumerating every `@Controller` on backend master, the only path containing `scenes` is `@Controller('scenes/:sceneId/shots')` itself. `PUT /planning/scenes` returns `readonly unknown[]`, and neither `runtimeSegmentShareSchema` nor `sceneOutlineEntrySchema` carries an id. `shotSchema` is published and complete, so **the missing piece is a `GET` that returns a production's scenes, not a contract** |
+| 10 | [Storyboard review](10-storyboard.md) | 09 | BE-18 | **blocked: BE-18 in progress, and nothing bootstraps a `SceneId`** — BE-18 status corrected 2026-09-01 within the same session that first wrote `not started`: the backend moved onto `be-18-storyboard-and-keyframes` while this branch was open, and its working tree already declares `KEYFRAME_ANCHOR_REQUIRED`, `REGENERATION_MODE_REQUIRED`, `STORYBOARD_FRAME_IMMUTABLE` and `STORYBOARD_NOT_APPROVED`. Nothing is merged and no route exists yet. — measured 2026-08-31. BE-16 merged as `d658f69` and published a real `shots.controller.ts`, but every one of its routes is keyed on a scene or shot id this repo cannot obtain: the contracts are complete — `sceneSchema` carries `id: sceneIdSchema` and `shotSchema` carries `sceneId` — but **nothing bootstraps the first id**. Every route returning a `Shot`, `Scene` or `DialogueLineRecord` sits under `scenes/:sceneId/…`, `shots/:id` or `dialogue-lines/:id`; `PUT /planning/scenes` writes the outline and returns `readonly unknown[]`, discarding the ids, and there is no `GET`. The chain is circular, so **the missing piece is one `GET` that returns a production's scenes** |
 | 11 | [Render queue](11-render-queue.md) | 05 | BE-05, BE-23 | **blocked: there is no `GET /render-jobs`** — measured 2026-08-31. The controller publishes exactly `POST /render-jobs` and `GET /render-jobs/:id`, so the table this phase exists for has nothing to enumerate; `renderJobSchema` is published, so this too is a missing `GET` rather than a missing shape. `createRenderJobRequestSchema` remains outside `./contracts`, and workers, pressure and progress are **BE-23**, not started |
 | 12 | [Shot review](12-shot-review.md) | 11 | BE-19, BE-20 | not started |
 | 13 | [Audio & music](13-audio.md) | 09 | BE-21 | not started |
@@ -72,6 +72,37 @@ That is the point rather than the reassurance. `jsx-a11y` reads attributes. It d
 navigation left focus on the link that was clicked, that a single-letter shortcut fires approve from
 anywhere on the page, or that a border is at a quarter of the contrast its own criterion asks for.
 All three were live in a green tree, and FE-16 found them by using the app.
+
+## The one red test, and the decision behind it — 2026-09-01
+
+`test/contract-source-matches-runtime.test.ts` fails on this branch, and it is
+reporting a real condition rather than a defect in this repo. It reads the
+backend's `src/contracts/enums/error-code.ts` **from their working tree** and
+compares it to what their build exports. Their tree is on
+`be-18-storyboard-and-keyframes` and declares 63 codes; their `dist-esm` was
+rebuilt from `origin/master` at our request and exports 59; this repo's taxonomy
+and both catalogues are at 59 and agree with what we compile. So the two sides of
+*their* repo disagree, and will keep disagreeing for as long as BE-18 is in
+flight.
+
+`.claude/rules/state-and-data.md` says not to weaken this guard, and that stands —
+when the diff against our taxonomy is empty, the red belongs upstream, and it is.
+
+**The backend session proposes a fourth option for the seam, and it is a good
+one.** Compare against a **pinned ref** rather than their working tree: either
+read their source at `origin/master`, or resolve `sky-filme-studio-be/contracts`
+to an artifact built from a ref instead of their live `dist-esm/`. Their argument
+is that their own gate rebuilds after every `.ts` edit, so any arrangement that
+depends on which branch they have checked out will oscillate no matter how often
+either side rebuilds. That is correct, and it is the same failure this table has
+already recorded twice.
+
+It is not taken here, for two reasons. It is a coupling decision across two repos
+and belongs with the three options already listed in this repo's notes, none of
+which has been picked. And the obvious implementation — shelling out to
+`git show origin/master:…` from a test — would put a shell command inside a `.ts`
+file, which `CLAUDE.md` rule 5 forbids; a version that does not needs a design,
+not a patch.
 
 ## What the backend must have published first
 

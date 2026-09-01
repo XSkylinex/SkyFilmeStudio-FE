@@ -1,7 +1,7 @@
 # FE-10 — Storyboard review
 
 > **Depends on:** 09 · **Blocks:** 12 · **Backend needs:** BE-18 · **Plan authority:** §17, §39, §49.4
-> **Status:** blocked — BE-18 not started, and no route yields a `SceneId`
+> **Status:** blocked — BE-18 not started, and nothing bootstraps a `SceneId`
 
 ## Goal
 
@@ -24,19 +24,37 @@ overlay, the keyframe gate and motion drafts — have nothing to read.
 `GET`/`POST /shots/:id/prompt` and `POST /shots/:id/transition`. Every one of them is keyed on an id
 this repo cannot obtain.
 
-- Enumerating every `@Controller` on backend `master`, the only route whose path contains `scenes` is
-  `@Controller('scenes/:sceneId/shots')` itself. There is no scene collection and no scene resource.
-- `PUT /productions/:productionId/planning/scenes` writes the outline and returns
-  `readonly unknown[]`, so the ids it creates are not in its own response.
-- The two places a scene otherwise surfaces carry no id. `runtimeSegmentShareSchema` has `order`,
-  `label`, `targetDurationSeconds`, `reused` and `shareOfTarget`; `sceneOutlineEntrySchema` is
-  `scenePlanSchema.omit({ shots: true })`, and `scenePlanSchema` has no `id` field.
+**Corrected 2026-09-01.** An earlier version of this section said "no published route yields a
+`SceneId`" and gave the wrong reason. It was wrong twice over, and the corrected statement is
+narrower and more useful.
 
-So a scene strip cannot be assembled from anything published, and neither can a single shot card.
-`shotSchema` itself is a published contract and carries everything a card needs — order, type,
-target duration, subjects, location, props, framing, `generationStrategy`, `approvedKeyframeId` and
-`state` — which is what makes this worth recording rather than waiting: **the missing piece is a
-`GET` that returns a production's scenes, not a contract.**
+Not true: that the contracts are incomplete. `sceneSchema` is published and carries
+`id: sceneIdSchema`, and both `shotSchema` and `dialogueLineSchema` carry a `sceneId`. A `Shot` in
+hand does hand you the scene it belongs to.
+
+Not true either: that one path contains `scenes`.
+`PUT /productions/:productionId/planning/scenes` is a second, and `scenes/:sceneId/shots` is a
+*controller* carrying two routes rather than a route. The earlier sentence conflated the two.
+
+**What is true is that nothing bootstraps the first id, and the chain is circular.** Reading every
+controller on backend `master` for a method returning `Shot`, `Scene` or `DialogueLineRecord`, every
+one sits under `scenes/:sceneId/…`, `shots/:id` or `dialogue-lines/:id`:
+
+- there is **no route that returns a production's scenes**. `PUT /planning/scenes` writes the outline
+  and returns `readonly unknown[]`, discarding the ids it just created, and there is no `GET`;
+- the only route yielding a `shotId` is `GET /scenes/:sceneId/shots`, which needs the `sceneId` you
+  were trying to obtain;
+- the only route yielding a `dialogueLineId` needs a `sceneId` too, or a `Shot`'s `dialogueLineIds`
+  — and a `Shot` needs one of the above.
+
+The two places a scene otherwise surfaces genuinely carry no id: `runtimeSegmentShareSchema` has
+`order`, `label`, `targetDurationSeconds`, `reused` and `shareOfTarget`, and
+`sceneOutlineEntrySchema` is `scenePlanSchema.omit({ shots: true })`, which has none.
+
+So a scene strip cannot be assembled and neither can a single shot card — not because a shape is
+missing, but because **there is no entry point**. `shotSchema` carries everything a card needs, down
+to `generationStrategy`, `approvedKeyframeId` and `state`. **The missing piece is one `GET` that
+returns a production's scenes.**
 
 Two smaller gaps sit behind the same wall. `ShotPromptSpec` is typed from
 `src/shots/prompt-specs.repository`, not from `src/contracts/`, so the compiled prompt has no
