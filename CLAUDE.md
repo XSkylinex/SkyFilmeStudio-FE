@@ -55,8 +55,8 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **sixty-seven as of
-2026-09-01, thirty-five as of 2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **seventy-four as of
+2026-09-01 evening, sixty-seven that morning, thirty-five as of 2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL. Ten of them were mapped while they existed **only on an unmerged backend
@@ -88,10 +88,9 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **977 keys in English and
-Hebrew**, counted 2026-09-01 after FE-13 — 109 when FE-15 closed, then the system screen, the
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **885 keys in English and
-Hebrew**, counted 2026-09-01 after FE-16's third pass — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **987 keys in English and
+Hebrew**, counted 2026-09-01 evening after FE-13, FE-16's third pass and four BE-21 refusals absorbed
+the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of

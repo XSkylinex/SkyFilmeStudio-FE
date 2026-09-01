@@ -282,4 +282,20 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.MUSIC_CUE_EXISTS',
   },
+  SFX_ASSET_EXISTS: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SFX_ASSET_EXISTS',
+  },
+  SFX_ASSET_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SFX_ASSET_IMMUTABLE',
+  },
+  OPENING_ENDING_ASSET_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.OPENING_ENDING_ASSET_IMMUTABLE',
+  },
+  OPENING_ENDING_VERSION_CONFLICT: {
+    presentation: 'TRANSIENT',
+    messageKey: 'error.OPENING_ENDING_VERSION_CONFLICT',
+  },
 };
