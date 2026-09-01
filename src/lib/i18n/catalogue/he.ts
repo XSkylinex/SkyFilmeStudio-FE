@@ -1146,7 +1146,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.line.notApproved': 'לא אושר אודיו',
   'audio.line.measured': 'משך שנמדד',
   'audio.line.noAudioYet':
-    'השורה הזאת מעולם לא הוקלטה, ולכן אין עדיין מה לאשר.',
+    'השורה הזאת מעולם לא סונתזה, ולכן אין עדיין מה לאשר.',
   'audio.line.spokenDiffers':
     'מה שנאמר שונה מהשורה הכתובה, משום שהוחל מילון הגייה.',
   'audio.line.spoken': 'נאמר',
@@ -1182,12 +1182,12 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.synthesise.submitted':
     'נשלח. טייק יופיע כאן לאחר שהרינדור יסתיים, וזה אינו מיידי.',
   'audio.synthesise.blocked':
-    'האודיו של השורה הזאת מאושר, ולכן לא ניתן להקליט אותה מחדש. יש להסיר את האישור תחילה.',
+    'האודיו של השורה הזאת מאושר, ולכן לא ניתן לסנתז אותה מחדש. יש להסיר את האישור תחילה.',
   'audio.approve.action': 'אשר את האודיו הזה',
   'audio.approve.context': 'לשורה {order}',
   'audio.approve.done': 'האודיו של השורה הזאת אושר.',
   'audio.unapprove.action': 'הסר אישור',
-  'audio.unapprove.done': 'האישור הוסר. ניתן להקליט את השורה מחדש.',
+  'audio.unapprove.done': 'האישור הוסר. ניתן לסנתז את השורה מחדש.',
   'audio.tier.title': 'רמת אנימציה',
   'audio.tier.action': 'שאל איזו רמה',
   'audio.tier.pending': 'בוחר…',
@@ -1224,8 +1224,8 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.timing.run': 'תזמן מחדש מתוך הדיאלוג',
   'audio.timing.running': 'מתזמן מחדש…',
   'audio.timing.noReport': 'טרם הורץ.',
-  'audio.timing.measured': '{count} סצנות נמדדו',
-  'audio.timing.estimated': '{count} סצנות עדיין הערכה',
+  'audio.timing.measured': 'סצנות שנמדדו: {count}',
+  'audio.timing.estimated': 'סצנות שעדיין בהערכה: {count}',
   'audio.timing.estimatedWarning':
     'הסך של סצנה משוערת הוא בקשת הבמאי לאחר הגבלה ולא מדידה, ואינו מדווח כמדידה.',
   'audio.timing.scene': 'סצנה {order}',
@@ -1245,7 +1245,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.gaps.playback':
     'לא ניתן לנגן אודיו. שום דבר באורקסטרטור אינו מגיש את הבייטים של תוצר, ולכן טייק מוצג כרישום שלו — משך, רמת שיא, גיבובים — ולא כצליל.',
   'audio.gaps.music':
-    'פסקול ההפקה, שיוך קיוז וניקוד סצנות אינם כאן. הנתיבים שלהם עדיין אינם בענף הראשי של האורקסטרטור.',
+    'פסקול ההפקה, שיבוץ קטעי המוזיקה והלחנה לסצנות אינם כאן. האורקסטרטור אינו מפרסם עבורם שום נתיב.',
   'audio.gaps.sfx':
     'לספריית האפקטים והאמביינס אין נתיבים כלל, ולכן לא ניתן לאנדקס, לשייך, או להציג את מידע הרישוי שהופך אותה לבטוחה לשימוש.',
   'audio.gaps.stems':

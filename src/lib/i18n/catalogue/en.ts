@@ -1243,8 +1243,8 @@ export const EN_CATALOGUE = {
   'audio.timing.run': 'Retime from dialogue',
   'audio.timing.running': 'Retiming…',
   'audio.timing.noReport': 'Not run yet.',
-  'audio.timing.measured': '{count} scenes were measured',
-  'audio.timing.estimated': '{count} scenes are still estimates',
+  'audio.timing.measured': 'Scenes measured: {count}',
+  'audio.timing.estimated': 'Scenes still estimated: {count}',
   'audio.timing.estimatedWarning':
     'An estimated scene’s total is the Director’s clamped request rather than a measurement, and is not reported as one.',
   'audio.timing.scene': 'Scene {order}',
@@ -1264,7 +1264,7 @@ export const EN_CATALOGUE = {
   'audio.gaps.playback':
     'No audio can be played. Nothing in the orchestrator serves an artifact’s bytes, so a take is shown as its record — duration, peak level, hashes — rather than as sound.',
   'audio.gaps.music':
-    'The project soundtrack, cue assignment and scene scoring are not here. Their routes are not on the orchestrator’s master branch yet.',
+    'The project soundtrack, cue assignment and scene scoring are not here. The orchestrator publishes no route for any of them.',
   'audio.gaps.sfx':
     'The SFX and ambience library has no routes at all, so nothing can be indexed, assigned, or shown with the licence metadata that makes it safe to use.',
   'audio.gaps.stems':
