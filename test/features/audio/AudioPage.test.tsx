@@ -18,9 +18,13 @@ const PRODUCTION_ID = productionIdSchema.parse(
 
 const server = mockOrchestratorServer();
 
+const PROJECT_ID = '44444444-4444-4444-8444-444444444444';
+
 const renderAt = (productionId: string): void => {
   renderInApp(
-    <MemoryRouter initialEntries={[`/projects/proj-1/p/${productionId}`]}>
+    <MemoryRouter
+      initialEntries={[`/projects/${PROJECT_ID}/p/${productionId}`]}
+    >
       <Routes>
         <Route
           path={`/projects/:${PROJECT_ID_PARAM}/p/:${PRODUCTION_ID_PARAM}`}

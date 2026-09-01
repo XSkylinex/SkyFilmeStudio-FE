@@ -225,7 +225,12 @@ describe('the media-heavy lazy routes, rendered through the router so their rout
 
   it('resolves the audio route to AudioPage', async () => {
     const memoryRouter = createMemoryRouter(routeTree, {
-      initialEntries: [productionAudioPath('proj-1', PLANNED_PRODUCTION_ID)],
+      initialEntries: [
+        productionAudioPath(
+          '44444444-4444-4444-8444-444444444444',
+          PLANNED_PRODUCTION_ID,
+        ),
+      ],
     });
 
     renderInApp(<RouterProvider router={memoryRouter} />);

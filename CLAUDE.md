@@ -88,9 +88,9 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,058 keys in English and
-Hebrew**, counted 2026-09-01 evening after FE-16's third pass, FE-12's advisory half and four BE-21
-refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,079 keys in English and
+Hebrew**, counted 2026-09-01 night after dialogue editing, FE-12's advisory half, FE-16's third pass
+and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -340,7 +340,11 @@ merged as `014712e` and published `POST`/`GET /scenes/:sceneId/dialogue-lines` a
 `POST /productions/:id/dialogue-timing`, all five DTOs through the barrel. It changed nothing here when it landed,
 and that was the point: the collection is keyed on `sceneId`, so it was the **third** controller gated
 behind the one missing `GET` — until that `GET` landed as `dcf6d49` and all three became reachable at
-once. Dialogue editing is unbuilt now rather than blocked. `continuityReviewSchema` and
+once. **Dialogue editing landed on 2026-09-01**: a line is created on its scene, edited while
+unapproved and deleted while never voiced — Edit is refused upstream with `DIALOGUE_AUDIO_IMMUTABLE`
+and so not offered on an approved line, and Delete has no upstream guard at all and would orphan
+takes, so it is offered only before a line has audio. It also added `requestNoContent`, the fourth
+fetch caller, for the first route here that answers `204`. `continuityReviewSchema` and
 `toneReviewSchema` are published contracts with no route. Every one of those is a sentence on screen
 under "What this screen cannot do yet", not a note in a plan file.
 

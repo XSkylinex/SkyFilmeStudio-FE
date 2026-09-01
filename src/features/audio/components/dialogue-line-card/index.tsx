@@ -5,6 +5,7 @@ import { TTS_PASS } from 'sky-filme-studio-be/contracts';
 import { Badge } from '@/lib/components/badge';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
+import { Dialog } from '@/lib/components/dialog';
 import { formatMilliseconds } from '@/lib/format/format-milliseconds';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import { useTranslate } from '@/lib/i18n/use-translate';
@@ -12,8 +13,10 @@ import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { approveDialogueAudioMutationOptions } from '@/features/audio/api/approve-dialogue-audio.mutation';
+import { deleteDialogueLineMutationOptions } from '@/features/audio/api/delete-dialogue-line.mutation';
 import { unapproveDialogueAudioMutationOptions } from '@/features/audio/api/unapprove-dialogue-audio.mutation';
 import { synthesiseSpeechMutationOptions } from '@/features/audio/api/synthesise-speech.mutation';
+import { EditDialogueLineForm } from '@/features/audio/components/edit-dialogue-line-form';
 import { SpeechTakes } from '@/features/audio/components/speech-takes';
 import { DialogueTier } from '@/features/audio/components/dialogue-tier';
 import type { DialogueLineCardProps } from './dialogue-line-card.interface';
@@ -26,7 +29,11 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
   const translate = useTranslate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
 
+  const remove = useMutation(
+    deleteDialogueLineMutationOptions(line.id, sceneId, queryClient),
+  );
   const approve = useMutation(
     approveDialogueAudioMutationOptions(line.id, sceneId, queryClient),
   );
@@ -41,13 +48,19 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
     order: String(line.order),
   });
   const pending =
-    approve.isPending || unapprove.isPending || synthesise.isPending;
+    approve.isPending ||
+    unapprove.isPending ||
+    synthesise.isPending ||
+    remove.isPending;
   const hasAudio = line.generatedAudioPath !== undefined;
+  const canEdit = !line.approved;
+  const canDelete = !line.approved && !hasAudio;
 
   const clearLastOutcome = (): void => {
     approve.reset();
     unapprove.reset();
     synthesise.reset();
+    remove.reset();
   };
 
   const failure =
@@ -57,7 +70,9 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
         ? resolveRouteErrorView(unapprove.error)
         : synthesise.error !== null
           ? resolveRouteErrorView(synthesise.error)
-          : null;
+          : remove.error !== null
+            ? resolveRouteErrorView(remove.error)
+            : null;
 
   return (
     <li className="dialogue-line-card">
@@ -214,6 +229,47 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
         )}
       </div>
 
+      <div className="dialogue-line-card__actions">
+        {canEdit ? (
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            disabled={pending}
+            aria-label={`${translate('audio.line.edit')} ${context}`}
+            onClick={() => setEditing(true)}
+          >
+            {translate('audio.line.edit')}
+          </Button>
+        ) : null}
+        {canDelete ? (
+          <Button
+            type="button"
+            variant="danger"
+            size="sm"
+            disabled={pending}
+            aria-label={`${translate('audio.line.delete')} ${context}`}
+            onClick={() => {
+              clearLastOutcome();
+              remove.mutate(undefined);
+            }}
+          >
+            {translate(
+              remove.isPending ? 'audio.line.deleting' : 'audio.line.delete',
+            )}
+          </Button>
+        ) : null}
+        {canDelete ? null : (
+          <p className="dialogue-line-card__note">
+            {translate(
+              line.approved
+                ? 'audio.line.frozen.approved'
+                : 'audio.line.frozen.voiced',
+            )}
+          </p>
+        )}
+      </div>
+
       {approve.isSuccess && line.approved ? (
         <output
           className="dialogue-line-card__done"
@@ -253,6 +309,20 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
       <DialogueTier line={line} />
 
       {open ? <SpeechTakes line={line} /> : null}
+
+      <Dialog
+        open={editing}
+        title={translate('audio.line.edit')}
+        onClose={() => setEditing(false)}
+      >
+        {editing ? (
+          <EditDialogueLineForm
+            line={line}
+            sceneId={sceneId}
+            onClose={() => setEditing(false)}
+          />
+        ) : null}
+      </Dialog>
     </li>
   );
 };

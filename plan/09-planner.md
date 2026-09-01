@@ -2,7 +2,7 @@
 
 > **Depends on:** 06 · **Blocks:** 10, 13 · **Backend needs:** BE-15 · **Plan authority:** §14, §22 Phase A, §23, §39
 > **Status:** partly done 2026-08-22 — the runtime budget and the approval gate are real; the staged
-> planning process is blocked on a route that runs a stage, and scene and dialogue editing on a read
+> planning process is blocked on a route that runs a stage, and scene editing on a read
 > surface that does not exist
 
 ## Goal
@@ -274,15 +274,20 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
       none
 - [ ] stages are individually re-runnable, with explicit consequences — **unbuildable, same reason**
 - [x] the runtime budget is always visible and names underweight scenes
-- [ ] scenes and dialogue lines are structured; speaker is optional — **unbuildable: `PUT
-      /planning/scenes` writes and returns `readonly unknown[]`, there is no `GET`, and no dialogue
-      controller exists**
-- [ ] language is per line, with `dir` from the data; no language toggle — **no dialogue line exists to
-      carry a language. The mechanism is in place and proven on scene labels, which arrive with no
-      language field and so render through `ContentText` as `<bdi dir="auto">`; a Hebrew slugline reads
-      correctly inside the English budget table and an English one inside the Hebrew page**
-- [ ] dialogue duration is measured or blank, never estimated — **nothing estimates one, because
-      nothing shows one**
+- [~] scenes and dialogue lines are structured; speaker is optional — **the dialogue half is built,
+      2026-09-01.** A line is created on its scene with text, language, voice, an optional speaker,
+      position, emotion, pace and both pauses; edited for text, emotion, pace and pauses; and deleted
+      while it has never been voiced. Language and voice are frozen after creation because the update
+      DTO does not carry them — existing audio would disagree with the line — and the form says so.
+      Edit is refused upstream on an approved line (`DIALOGUE_AUDIO_IMMUTABLE`) and so is not offered;
+      Delete has **no** upstream guard and would orphan takes, so it is offered only before a line has
+      audio. The scene half stays unbuildable: `PUT /planning/scenes` still deletes and re-inserts
+- [x] language is per line, with `dir` from the data; no language toggle — **a line carries its own
+      `language`, entered once and frozen; the card renders its text through `ContentText` with that
+      language, and a test asserts a `he` line's `<bdi>` is `dir="rtl"` while `<html>` is not**
+- [x] dialogue duration is measured or blank, never estimated — **`durationMs` shows only once a
+      synthesis has written it, and the card shows nothing before; the timing run (FE-13) reports a
+      scene as `ESTIMATED` rather than a number when no shot in it carries dialogue**
 - [ ] continuity findings are inline and advisory, with dismissal reasons kept — **contract, no route**
 - [ ] structure profiles are selectable and compared against the plan — **selectable, half compared.**
       A production is bound to one when it is created, and its reusable sections are in the budget,

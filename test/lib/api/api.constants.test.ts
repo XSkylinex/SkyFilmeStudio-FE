@@ -224,6 +224,7 @@ const everyPath: Record<string, string> = {
   ),
   renderJob: API_PATH.renderJob(SAMPLE_RENDER_JOB_ID),
   sceneDialogueLines: API_PATH.sceneDialogueLines(SAMPLE_SCENE_ID),
+  dialogueLine: API_PATH.dialogueLine(SAMPLE_DIALOGUE_LINE_ID),
   dialogueLineSpeech: API_PATH.dialogueLineSpeech(SAMPLE_DIALOGUE_LINE_ID),
   dialogueLineSpeechApproval: API_PATH.dialogueLineSpeechApproval(
     SAMPLE_DIALOGUE_LINE_ID,
