@@ -36,9 +36,18 @@ the border token — are inherited unchanged by FE-10 and FE-12, so they are che
 
 **The automated net was checked before anything was assumed.** `plan/README.md` said accessibility
 had no automated net; that is stale. `.oxlintrc.json` has carried `jsx-a11y` since FE-00, and the
-plugin reports nothing on `src/` — not only in the default `correctness` category but with
-`pedantic`, `style` and `suspicious` added too. So the net is on and green, and everything below is
-what it cannot reach.
+plugin reported nothing on `src/` when this was written — not only in the default `correctness`
+category but with `pedantic`, `style` and `suspicious` added too. So the net was on and green, and
+everything below is what it cannot reach.
+
+**It is no longer silent, and the second pass is what broke the silence.** Re-measured 2026-09-01:
+five warnings, `yarn lint` still exit 0. Four come from this phase's own fixes — two rules on each of
+the two `role="region"` scrollers this pass added, in `runtime-budget-panel` and
+`bible-markdown-view`: `no-noninteractive-tabindex` objecting to the `tabIndex={0}` SC 2.1.1
+requires, and `prefer-tag-over-role` on the same elements. The fifth is `media-has-caption` on
+FE-07's asset proxy `<video>`, which has no caption track because nothing local produces one. **None is a defect, and the phase's thesis
+is unchanged**: the linter now has an opinion about three deliberate decisions and still reports
+nothing about a single one of the defects either pass actually found.
 
 ### Accessibility
 

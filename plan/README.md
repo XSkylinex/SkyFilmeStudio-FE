@@ -65,8 +65,12 @@ mechanism and the direction switch land — not where the CSS gets fixed.
 
 **Accessibility's automated net is real but shallow.** Corrected 2026-08-21 — an earlier version of
 this line said `jsx-a11y` was not enabled. It has been on since phase 00 landed: `.oxlintrc.json`
-ships nine plugins and eleven rules, and measured in FE-16 the plugin reports nothing on `src/` even
-with `pedantic`, `style` and `suspicious` added to the default `correctness` category.
+ships nine plugins and eleven rules. Corrected again 2026-09-01: the line then said the plugin
+reports nothing on `src/`, which was measured in FE-16 and stopped being true when FE-16's own second
+pass landed. It reports **five warnings** today — `yarn lint` still exits 0, because they are
+warnings — and none is a defect: `tabIndex={0}` on two scrollable `role="region"` wrappers that SC
+2.1.1 requires be keyboard-reachable, `prefer-tag-over-role` on the same two, and a missing caption
+track on a locally-rendered `<video>` that has none to point at.
 
 That is the point rather than the reassurance. `jsx-a11y` reads attributes. It does not know that a
 navigation left focus on the link that was clicked, that a single-letter shortcut fires approve from

@@ -182,8 +182,17 @@ reporting a capability that does not exist.
 
 FE-16 was taken out of order, because 07–14 are all backend-gated and it needs no backend. **The
 lesson worth carrying is that `yarn lint` was green before it and after it.** `jsx-a11y` has been on
-since FE-00 and reports nothing on `src/` even at `pedantic`; every defect FE-16 fixed was live in a
-green tree and was found by loading the app. A navigation left focus on the link that was clicked;
+since FE-00, and every defect FE-16 fixed was live in a green tree and was found by loading the app.
+**Corrected 2026-09-01: the plugin no longer reports nothing on `src/`** — it emits five warnings,
+and `yarn lint` still exits 0 because they are warnings. Not one is a defect. Four are FE-16's own
+second pass, two rules on each of two elements: `no-noninteractive-tabindex` objecting to the
+`tabIndex={0}` that makes a scrollable `role="region"` keyboard-reachable, which SC 2.1.1 requires
+and without which the scroller is unusable, and `prefer-tag-over-role` preferring `<section>` where
+`<div role="region">` maps to the same thing. The fifth is `media-has-caption` on FE-07's asset proxy
+`<video>`, which has no caption track because nothing local generates one. So the sentence this replaces was true when
+written and stopped being true the moment the fixes landed. **The point it was making survives
+intact and is now sharper: the linter has opinions about three considered decisions and still
+reports nothing about any defect this phase actually found.** A navigation left focus on the link that was clicked;
 `a`, `r`, `c`, space and `?` were bound on `window` with no modifier and no off switch, which is a
 Level A failure of WCAG 2.2 SC 2.1.4; and `--color-border` was at **1.27:1** in light and 1.57:1 in
 dark where SC 1.4.11 asks for 3:1, with the raised fill at 1.06:1 so the border was carrying the
