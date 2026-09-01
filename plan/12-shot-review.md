@@ -1,9 +1,43 @@
 # FE-12 — Shot review
 
 > **Depends on:** 11 · **Blocks:** 14 · **Backend needs:** BE-19, BE-20 · **Plan authority:** §25, §27, §39, §44
-> **Status:** blocked — the routes exist; the artifact bytes, two request DTOs and any way to
-> resolve a shot's render profile do not.
-> Measured 2026-09-01, see the row in `README.md` for which of the three stops which box.
+> **Status:** partly done 2026-09-01 — the advisory half is built; the comparison, the decision
+> and every operation are blocked, each on a different missing thing. See "What was buildable".
+
+## What was buildable, and what was not
+
+Measured 2026-09-01 against the orchestrator's `origin/master`. The routes this phase names all
+exist: `shots/:shotId/qc` publishes `GET runs`, `POST request-review` and `POST review`, and
+`shots/:shotId/video` publishes all five §44 regeneration modes. What is reachable from this repo is
+decided by three other things, and they fail independently:
+
+- **No route serves an artifact's bytes.** `src/artifacts/` has a module and a repository and no
+  controller; the only `StreamableFile` responses in the orchestrator are the source-asset thumbnail
+  and proxy. So the `canonical | first | middle | last` comparison this screen exists for cannot be
+  drawn, and playback cannot happen. This is the same wall FE-10 and FE-13 hit.
+- **`reviewShotRequestSchema` and `submitVideoRenderRequestSchema` are not re-exported by
+  `src/contracts/index.ts`.** The human decision cannot be recorded and no regeneration can be
+  submitted. `qcRunSchema`, `shotReviewSchema`, the sixteen `QcCheckId`s and the eight
+  `subjectQcRule` verdicts *are* published.
+- **A hero shot cannot be identified.** `HERO` is a published `qualityIntent` and `Shot` carries a
+  `renderProfileId`, but `src/render-profiles/` has no controller, so nothing resolves that id. The
+  concept exists and is unreachable — a missing route, not a missing shape.
+
+**What was built with that**: the queue by scene, each shot's lifecycle state, every `QcRun` recorded
+against it with per-check results and provenance, and the hand-over to a reviewer — which is a
+named transition (`VIDEO_READY`/`AUTO_QC` → `MANUAL_REVIEW`) refused with a typed
+`SHOT_TRANSITION_INVALID` unless a run exists. The screen is arranged around §27.2: the state badge is
+the only green on the card, every automated verdict wears FE-04's technical-check tone, and a test pins
+that no automated tone is ever `SUCCESS`.
+
+**The two states the hand-over is offered from are a copy of an unpublished table**,
+`src/shots/constants/shot-transitions.ts`, in the same direction FE-09 chose for `PLANNING`: if the
+table grows, this screen hides a control that would work rather than offering one that fails. It
+fails silently through a green gate, and is re-checked at commit time rather than pinned.
+
+**`findings` is unshaped on the wire.** `QcRun.findings` is `jsonObject[]`, nothing on master writes
+it, and no route returns a `subjectQcRuleVerdict` per shot — so identity findings are shown as
+recorded, key and value, and said to be unshaped rather than dressed as the eight rules.
 
 ## Goal
 
@@ -119,18 +153,46 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 
 ## Done when
 
-- [ ] `canonical | first | middle | last` at a size where drift is visible
-- [ ] the immutable trait list is shown beside the comparison
-- [ ] playback uses proxies, loops, and aligns audio to dialogue lines
-- [ ] QC findings are per-trait and advisory; automated-pass ≠ human-approved
-- [ ] continuity expectations are part of the displayed "correct"
-- [ ] all six operations exist; every regeneration mode is explicit
-- [ ] `RETAKE_REGION` has a real time-range selection
-- [ ] no optimistic updates on any approval-class action
-- [ ] attempt history is complete, browsable and comparable
-- [ ] the provenance panel is complete and copyable
-- [ ] keyboard-first review works end to end
-- [ ] hero shots are marked as requiring human review
+Each unticked box names what it waits for.
+
+- [ ] `canonical | first | middle | last` at a size where drift is visible — **no route serves an
+      artifact's bytes**
+- [ ] the immutable trait list is shown beside the comparison — waits on the comparison
+- [ ] playback uses proxies, loops, and aligns audio to dialogue lines — **no route serves an
+      artifact's bytes**
+- [x] QC findings are per-check and advisory; automated-pass ≠ human-approved — **done for the
+      sixteen technical checks and the run verdict**, with the tone rule pinned by a test. The eight
+      per-trait identity verdicts are **not** per-trait here: no route returns one for a shot, and
+      `findings` arrives unshaped
+- [ ] continuity expectations are part of the displayed "correct" — the facts in force are read by
+      the storyboard for a scene; not composed here, because there is nothing yet to hold them against
+- [ ] all six operations exist; every regeneration mode is explicit — **`submitVideoRenderRequestSchema`
+      and `reviewShotRequestSchema` are not re-exported**
+- [ ] `RETAKE_REGION` has a real time-range selection — same
+- [x] no optimistic updates on any approval-class action — the one write here, the hand-over, has
+      none, proven by a planted `cancelQueries`/`setQueryData` pair
+- [ ] attempt history is complete, browsable and comparable — **no route lists a shot's render
+      attempts**
+- [ ] the provenance panel is complete and copyable — each `QcRun`'s provenance is shown; the
+      attempt's own (`attempt-provenance.ts`) has no route
+- [~] keyboard-first review works end to end — the queue is keyboard-completable but is read one
+      scene at a time, because **no route lists a production's shots across scenes**
+- [ ] hero shots are marked as requiring human review — **no route serves a render profile**
+
+## Verification, 2026-09-01
+
+`yarn typecheck` 0 · `yarn lint` 0 with the five documented warnings and no new one · `yarn build` 0
+· `yarn format:check` 0. Every commit on the branch checked out and typechecked on its own.
+
+**The shot-bearing tests are red on this machine, and it is not this phase.** The orchestrator's
+working tree is on the unmerged `be-21-audio` branch, which removed `audioCueIds` from `Shot` and
+rebuilt `dist-esm`; `origin/master` still has the field, and the shared `buildShot` fixture keeps
+master's shape. The eight component tests here were verified with that fixture temporarily matching
+the in-flight shape, uncommitted — all pass, and each guard fails when its rule is broken — and are
+committed against the real fixture.
+
+**Not run:** nothing against a seeded production; no QC run has ever been recorded on this machine.
+The `dir="rtl"` pass is unverified, not passed.
 
 ## Traps
 

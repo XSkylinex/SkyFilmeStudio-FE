@@ -88,9 +88,9 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **987 keys in English and
-Hebrew**, counted 2026-09-01 evening after FE-13, FE-16's third pass and four BE-21 refusals absorbed
-the same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,058 keys in English and
+Hebrew**, counted 2026-09-01 evening after FE-16's third pass, FE-12's advisory half and four BE-21
+refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -507,6 +507,17 @@ so it invalidates the shots it retimed and the planner budget computed from them
 route in the orchestrator serves an artifact's bytes — `src/artifacts/` has a module and a repository
 and no controller, and the only `StreamableFile` responses in the whole backend are the source-asset
 thumbnail and proxy. One missing controller holds back both phases.
+
+**FE-12's advisory half landed the same evening, and the row that said it was blocked was right about
+the blockers and wrong about the word.** `/productions/:id/shots` reads a production's scenes, each
+shot's lifecycle state, and every `QcRun` recorded against it — kind, verdict, the sixteen technical
+checks with observed against expected, and the run's provenance — and hands a rendered shot to a
+reviewer, the one write the contract publishes because it takes no body. **The screen is built around
+§27.2**: a shot's state badge is the only thing on the card that can be green, every automated
+verdict wears the tone FE-04 gave a technical check, and `test/lib/status-tone/qc-outcome.tone.test.ts`
+pins that no automated tone is ever `SUCCESS` while `APPROVED` is. What stays blocked has three
+separate reasons — no artifact bytes, two DTOs not re-exported, no render-profile route — and the
+phase file keeps them apart because each moves on its own.
 
 **Two other phases were re-measured at the same time and their rows corrected.** FE-12 read "not
 started" while every route it needs had already landed; it is blocked, on three separate things —
