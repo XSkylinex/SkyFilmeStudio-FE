@@ -31,6 +31,11 @@
     gap: var(--space-3);
   }
 
+  .scene-dialogue__toolbar {
+    display: flex;
+    gap: var(--space-2);
+  }
+
   .scene-dialogue__note {
     margin: 0;
     font-size: var(--font-size-sm);

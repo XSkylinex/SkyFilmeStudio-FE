@@ -8,7 +8,10 @@ import { SceneDialogue } from '@/features/audio/components/scene-dialogue';
 import type { DialogueReviewProps } from './dialogue-review.interface';
 import './dialogue-review.css';
 
-export const DialogueReview: FC<DialogueReviewProps> = ({ productionId }) => {
+export const DialogueReview: FC<DialogueReviewProps> = ({
+  projectId,
+  productionId,
+}) => {
   const translate = useTranslate();
   const scenes = useQuery(productionScenesQueryOptions(productionId));
 
@@ -42,7 +45,7 @@ export const DialogueReview: FC<DialogueReviewProps> = ({ productionId }) => {
       ) : (
         <ul className="dialogue-review__scenes">
           {scenes.data.map((scene) => (
-            <SceneDialogue key={scene.id} scene={scene} />
+            <SceneDialogue key={scene.id} projectId={projectId} scene={scene} />
           ))}
         </ul>
       )}

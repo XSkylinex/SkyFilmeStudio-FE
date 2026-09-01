@@ -1166,6 +1166,36 @@ export const EN_CATALOGUE = {
   'audio.line.spokenDiffers':
     'What is spoken differs from the written line, because a pronunciation dictionary was applied.',
   'audio.line.spoken': 'Spoken',
+  'audio.line.add': 'Add a line',
+  'audio.line.edit': 'Edit',
+  'audio.line.delete': 'Delete',
+  'audio.line.deleting': 'Deleting…',
+  'audio.line.created':
+    'The line was added. It can be voiced once a voice profile it uses is approved.',
+  'audio.line.saved':
+    'The line was saved. Any audio it already had says the old words until it is re-voiced.',
+  'audio.line.frozen.approved':
+    'This line’s audio is approved, so its words and timing are frozen with it. Remove the approval to edit it.',
+  'audio.line.frozen.voiced':
+    'This line has been voiced, so it cannot be deleted from here — its takes would be orphaned. It can still be edited and re-voiced.',
+  'audio.line.form.text': 'Text',
+  'audio.line.form.language.hint':
+    'A BCP-47 tag such as en, he or en-GB. It cannot be changed after the line is created.',
+  'audio.line.form.voice': 'Voice',
+  'audio.line.form.voice.choose': 'Choose a voice',
+  'audio.line.form.voice.unreadable':
+    'The voice profiles could not be read, and a line cannot be created without one.',
+  'audio.line.form.voice.firstPageOnly':
+    'This is the first page of voice profiles only. The orchestrator has more than are listed here.',
+  'audio.line.form.speaker': 'Speaker',
+  'audio.line.form.speaker.none': 'No speaker',
+  'audio.line.form.order': 'Position',
+  'audio.line.form.order.hint':
+    'Where the line sits in the scene, counting from zero.',
+  'audio.line.form.pauseBeforeMs': 'Pause before (ms)',
+  'audio.line.form.pauseAfterMs': 'Pause after (ms)',
+  'audio.line.form.frozen':
+    'Language and voice cannot be changed here. Existing audio would start disagreeing with the line; add a new line instead.',
   'audio.takes.title': 'Takes',
   'audio.takes.error': 'The takes for this line could not be read.',
   'audio.takes.empty': 'No take has been generated for this line yet.',

@@ -3,15 +3,18 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
+import { Dialog } from '@/lib/components/dialog';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { sceneDialogueLinesQueryOptions } from '@/features/audio/api/scene-dialogue-lines.query';
+import { CreateDialogueLineForm } from '@/features/audio/components/create-dialogue-line-form';
 import { DialogueLineCard } from '@/features/audio/components/dialogue-line-card';
 import type { SceneDialogueProps } from './scene-dialogue.interface';
 import './scene-dialogue.css';
 
-export const SceneDialogue: FC<SceneDialogueProps> = ({ scene }) => {
+export const SceneDialogue: FC<SceneDialogueProps> = ({ projectId, scene }) => {
   const translate = useTranslate();
   const [open, setOpen] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   const lines = useQuery({
     ...sceneDialogueLinesQueryOptions(scene.id),
@@ -46,6 +49,18 @@ export const SceneDialogue: FC<SceneDialogueProps> = ({ scene }) => {
 
       {open ? (
         <div className="scene-dialogue__detail">
+          <div className="scene-dialogue__toolbar">
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              aria-label={`${translate('audio.line.add')} ${translate('audio.scene.toggleContext', { order: String(scene.order) })}`}
+              onClick={() => setAdding(true)}
+            >
+              {translate('audio.line.add')}
+            </Button>
+          </div>
+
           {lines.error && lines.data === undefined ? (
             <p className="scene-dialogue__note">
               {translate('audio.lines.error')}
@@ -84,6 +99,21 @@ export const SceneDialogue: FC<SceneDialogueProps> = ({ scene }) => {
           )}
         </div>
       ) : null}
+
+      <Dialog
+        open={adding}
+        title={translate('audio.line.add')}
+        onClose={() => setAdding(false)}
+      >
+        {adding ? (
+          <CreateDialogueLineForm
+            projectId={projectId}
+            sceneId={scene.id}
+            nextOrder={lines.data?.items.length ?? 0}
+            onClose={() => setAdding(false)}
+          />
+        ) : null}
+      </Dialog>
     </li>
   );
 };

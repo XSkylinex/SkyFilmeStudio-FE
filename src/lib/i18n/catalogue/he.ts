@@ -1148,6 +1148,35 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.line.spokenDiffers':
     'מה שנאמר שונה מהשורה הכתובה, משום שהוחל מילון הגייה.',
   'audio.line.spoken': 'נאמר',
+  'audio.line.add': 'הוסף שורה',
+  'audio.line.edit': 'ערוך',
+  'audio.line.delete': 'מחק',
+  'audio.line.deleting': 'מוחק…',
+  'audio.line.created':
+    'השורה נוספה. ניתן לסנתז אותה לאחר שפרופיל הקול שהיא משתמשת בו יאושר.',
+  'audio.line.saved':
+    'השורה נשמרה. אודיו שכבר היה לה אומר את המילים הישנות עד שתסונתז מחדש.',
+  'audio.line.frozen.approved':
+    'האודיו של השורה הזאת מאושר, ולכן המילים והתזמון שלה מוקפאים איתו. יש להסיר את האישור כדי לערוך אותה.',
+  'audio.line.frozen.voiced':
+    'השורה הזאת סונתזה, ולכן לא ניתן למחוק אותה מכאן — הטייקים שלה היו נשארים יתומים. עדיין ניתן לערוך ולסנתז אותה מחדש.',
+  'audio.line.form.text': 'טקסט',
+  'audio.line.form.language.hint':
+    'תג BCP-47 כגון en, he או en-GB. לא ניתן לשנות אותו לאחר יצירת השורה.',
+  'audio.line.form.voice': 'קול',
+  'audio.line.form.voice.choose': 'בחר קול',
+  'audio.line.form.voice.unreadable':
+    'לא ניתן היה לקרוא את פרופילי הקול, ולא ניתן ליצור שורה בלעדיהם.',
+  'audio.line.form.voice.firstPageOnly':
+    'זהו העמוד הראשון של פרופילי הקול בלבד. לאורקסטרטור יש יותר ממה שרשום כאן.',
+  'audio.line.form.speaker': 'דובר',
+  'audio.line.form.speaker.none': 'ללא דובר',
+  'audio.line.form.order': 'מיקום',
+  'audio.line.form.order.hint': 'היכן השורה יושבת בסצנה, בספירה מאפס.',
+  'audio.line.form.pauseBeforeMs': 'השהיה לפני (מ״ש)',
+  'audio.line.form.pauseAfterMs': 'השהיה אחרי (מ״ש)',
+  'audio.line.form.frozen':
+    'לא ניתן לשנות כאן שפה וקול. אודיו קיים היה מתחיל לסתור את השורה; יש להוסיף שורה חדשה במקום.',
   'audio.takes.title': 'טייקים',
   'audio.takes.error': 'לא ניתן היה לקרוא את הטייקים של השורה הזאת.',
   'audio.takes.empty': 'עדיין לא נוצר טייק לשורה הזאת.',

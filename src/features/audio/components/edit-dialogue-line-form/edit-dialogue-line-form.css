@@ -1,0 +1,37 @@
+@layer features {
+  .edit-dialogue-line-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .edit-dialogue-line-form__pauses {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .edit-dialogue-line-form__note {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .edit-dialogue-line-form__refusal {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-danger);
+  }
+
+  .edit-dialogue-line-form__done {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .edit-dialogue-line-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+}

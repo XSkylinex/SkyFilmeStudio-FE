@@ -147,4 +147,50 @@ describe('DialogueLineCard', () => {
     expect(line.closest('bdi')).toHaveAttribute('dir', 'rtl');
     expect(document.documentElement).not.toHaveAttribute('dir', 'rtl');
   });
+
+  it('offers Edit on an unapproved line and never on an approved one, because editing is refused upstream', () => {
+    const { rerender } = renderCard(buildDialogueLine({ approved: false }));
+    expect(
+      screen.getByRole('button', { name: 'Edit for line 0' }),
+    ).toBeInTheDocument();
+
+    rerender(
+      <ul>
+        <DialogueLineCard
+          line={buildDialogueLine({
+            approved: true,
+            generatedAudioPath: FINAL_PATH,
+          })}
+          sceneId={SCENE_ID}
+        />
+      </ul>,
+    );
+    expect(
+      screen.queryByRole('button', { name: /^Edit/ }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/frozen with it/)).toBeInTheDocument();
+  });
+
+  it('offers Delete only on a line that has never been voiced, since the route would orphan takes', () => {
+    const { rerender } = renderCard(buildDialogueLine({ approved: false }));
+    expect(
+      screen.getByRole('button', { name: 'Delete for line 0' }),
+    ).toBeInTheDocument();
+
+    rerender(
+      <ul>
+        <DialogueLineCard
+          line={buildDialogueLine({
+            approved: false,
+            generatedAudioPath: DRAFT_PATH,
+          })}
+          sceneId={SCENE_ID}
+        />
+      </ul>,
+    );
+    expect(
+      screen.queryByRole('button', { name: /^Delete/ }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/takes would be orphaned/)).toBeInTheDocument();
+  });
 });
