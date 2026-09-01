@@ -919,7 +919,7 @@ export const EN_CATALOGUE = {
   'bible.error.title': 'The project bible could not be read',
   'bible.empty.title': 'This project has no bible yet',
   'bible.empty.description':
-    'A bible records what a production plans against — the world, its subjects and its sound. Nothing has been recorded for this project, and there is no way to start one from this screen yet.',
+    'A bible records what a production plans against — the world, its subjects and its sound. Nothing has been recorded for this project yet.',
   'bible.versions.title': 'Versions',
   'bible.versions.select': 'Show version {version}',
   'bible.versions.published': 'Published',
@@ -969,6 +969,29 @@ export const EN_CATALOGUE = {
   'bible.subjects.voiceRules.notApplicable':
     'This subject does not speak, so voice rules cannot apply to it.',
   'bible.subjects.relationships': 'Relationships',
+  'bible.create.action': 'Start a draft',
+  'bible.create.next': 'Start the next version',
+  'bible.create.title': 'New draft of the project bible',
+  'bible.create.explain':
+    'A draft can be created empty and filled in as the project settles. Nothing is frozen until it is published, and the orchestrator assigns the version number.',
+  'bible.create.prefilled':
+    'These fields start from version {version}. Saving creates a new draft; version {version} is not touched.',
+  'bible.edit.action': 'Edit this draft',
+  'bible.edit.context': 'of the project bible, version {version}',
+  'bible.edit.title': 'Edit this draft',
+  'bible.frozen':
+    'This version is published, so it can no longer be edited. Start the next version instead.',
+  'bible.form.styleProfile': 'Style profile',
+  'bible.form.styleProfile.none': 'None',
+  'bible.form.styleProfile.unreadable':
+    'The style library could not be read, so no style profile can be chosen here. Everything else on this form still saves.',
+  'bible.form.styleProfile.firstPageOnly':
+    'This lists the first page of style profiles only. The orchestrator holds more than are shown here.',
+  'bible.form.languages.hint': 'One language tag per line.',
+  'bible.form.subjectRules':
+    'Subject rules are not written here. Each block is keyed on a subject id, and this screen does not reach into the subject library to offer one.',
+  'bible.form.kindUnreadable':
+    'This project could not be read, so whether its kind carries narrative rules is unknown. That section is left out rather than offered where the orchestrator would refuse it.',
   'bible.publish.action': 'Publish this version',
   'bible.publish.context':
     'Publish this version of the project bible, version {version}',
@@ -985,9 +1008,7 @@ export const EN_CATALOGUE = {
   'bible.gaps.pin':
     'A production records which bible version it planned against. That pin can be read, but not set from here: the route that sets it takes a request shape the orchestrator does not publish.',
   'bible.gaps.subjectRules':
-    'A subject block is identified by its id alone, because the bible carries no name for it and this screen does not reach into another feature to resolve one.',
-  'bible.gaps.editing':
-    'Creating a draft and editing one are both real operations on the orchestrator, and neither is offered here. This screen reads a bible and publishes one.',
+    'A subject block is identified by its id alone, and cannot be written from here at all. The bible carries no name for a subject, and this screen does not reach into another feature to resolve or to offer one.',
   'bible.gaps.markdownSource':
     'The generated view is shown as text rather than as a rendered document. Rendering it would mean adding a Markdown parser, and nothing external reaches this bundle.',
   'error.malformedText':

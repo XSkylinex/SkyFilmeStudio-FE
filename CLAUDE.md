@@ -86,11 +86,11 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **745 keys in English and
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **760 keys in English and
 Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
-four creative-library screens, FE-09's production list, create form and planner, and the project
-bible.
+four creative-library screens, FE-09's production list, create form and planner, the project bible
+and its two write forms.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
 tree held 371, so the warning had already failed once on the paragraph carrying it. It then failed a
 second time on the same paragraph: it read 690 while the tree held 694, because absorbing four
@@ -182,8 +182,17 @@ reporting a capability that does not exist.
 
 FE-16 was taken out of order, because 07–14 are all backend-gated and it needs no backend. **The
 lesson worth carrying is that `yarn lint` was green before it and after it.** `jsx-a11y` has been on
-since FE-00 and reports nothing on `src/` even at `pedantic`; every defect FE-16 fixed was live in a
-green tree and was found by loading the app. A navigation left focus on the link that was clicked;
+since FE-00, and every defect FE-16 fixed was live in a green tree and was found by loading the app.
+**Corrected 2026-09-01: the plugin no longer reports nothing on `src/`** — it emits five warnings,
+and `yarn lint` still exits 0 because they are warnings. Not one is a defect. Four are FE-16's own
+second pass, two rules on each of two elements: `no-noninteractive-tabindex` objecting to the
+`tabIndex={0}` that makes a scrollable `role="region"` keyboard-reachable, which SC 2.1.1 requires
+and without which the scroller is unusable, and `prefer-tag-over-role` preferring `<section>` where
+`<div role="region">` maps to the same thing. The fifth is `media-has-caption` on FE-07's asset proxy
+`<video>`, which has no caption track because nothing local generates one. So the sentence this replaces was true when
+written and stopped being true the moment the fixes landed. **The point it was making survives
+intact and is now sharper: the linter has opinions about three considered decisions and still
+reports nothing about any defect this phase actually found.** A navigation left focus on the link that was clicked;
 `a`, `r`, `c`, space and `?` were bound on `window` with no modifier and no off switch, which is a
 Level A failure of WCAG 2.2 SC 2.1.4; and `--color-border` was at **1.27:1** in light and 1.57:1 in
 dark where SC 1.4.11 asks for 3:1, with the raised fill at 1.06:1 so the border was carrying the
@@ -395,9 +404,28 @@ assertion fail, not the test.**
 **What the screen cannot do, and says so.** `PUT /productions/:productionId/bible` exists, but
 `pinProjectBibleRequestSchema` compiles into **zero** files under `dist-esm/` while
 `createProjectBibleRequestSchema` compiles into two — so a production's pinned bible can be read and
-not set. Creating and editing a draft are published and unbuilt. A subject block is identified by its
-id alone, because `subjectRules` carries no name and resolving one would mean reaching into another
-feature's `api/`.
+not set. A subject block is identified by its id alone, because `subjectRules` carries no name and
+resolving one would mean reaching into another feature's `api/`.
+
+**The bible writes as of 2026-09-01, and creating and editing were published the whole time.** `POST
+/projects/:projectId/bible` starts a draft and `PATCH /projects/:projectId/bible/:id` edits one, so a
+project with no bible is no longer a dead end — the same class of dead end FE-16's second pass found
+on the style library that morning. **The update DTO takes whole sections, not fields**: `world`,
+`narrative` and `audio` are complete replacements and an empty body is refused, so the patch is
+decided per section and comparison normalises through `parseLines` first, or re-indenting a rule list
+would submit as an edit. `null` clears a section and an absent key leaves it alone, which is the same
+asymmetry the four library update DTOs have and one level up.
+
+**Which fields exist comes from `bibleCarriesNarrative`, read from two different places.** Editing
+takes `projectKind` off the record; creating cannot, so `GET /projects/:id` was added — the first
+single-project read here, keyed `['project', id]` rather than under the collection key, because
+`invalidateQueries` prefix-matches and a list invalidation must not refetch every detail.
+
+**Still not writable, and said on screen rather than only here:** subject rules, which are keyed on a
+subject id the bible carries no name for; and deletion, which is published and refused for a
+different reason than the canonical plates are — the immutability trigger permits `deleted_at` on a
+published row, so `DELETE` will soft-delete a bible productions planned against as readily as a draft
+nobody used, with no `ErrorCode` separating the two.
 
 ## The six rules that outrank everything else
 

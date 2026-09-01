@@ -25,10 +25,11 @@ export const fieldErrorsFromIssues = (
   const errors: Record<string, TranslationKey> = {};
 
   for (const issue of error.issues) {
-    const field = issue.path[0];
+    const key = keyFor(issue);
+    const segments = issue.path.map(String);
 
-    if (field !== undefined) {
-      errors[String(field)] = keyFor(issue);
+    for (let depth = 1; depth <= segments.length; depth += 1) {
+      errors[segments.slice(0, depth).join('.')] = key;
     }
   }
 

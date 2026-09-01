@@ -386,49 +386,6 @@ on failure nothing puts it back — `role="alert"` announces the refusal but the
 back. The fix is `aria-disabled` with a guarded handler, which means another change to a shared
 primitive; it is a phase of its own rather than a passenger here.
 
-## Steps 2, 7 and 8
-
-**Step 2 (style samples) is blocked** on `createRenderJobRequestSchema`, one of the DTOs still not
-re-exported. Without it Decision 2 — "a style profile that cannot be seen cannot be approved" — has no
-mechanism, and the same-subject-two-styles comparison with it.
-
-**Step 7 (project bible) landed 2026-09-01.** `/projects/:projectId/bible` reads every version, marks
-the one the orchestrator calls active, renders the four sections and the generated Markdown view, and
-**publishes a draft**. What each part is:
-
-- **Sections depend on the project kind, and the contract decides.** `bibleCarriesNarrative` is
-  exported from the built package and is called; this repo does not carry its own list of which kinds
-  carry a narrative section. A kind that carries none **says so** — a stated absence, not a blank.
-- **"Active" is derived, not a flag.** `ProjectBiblesService.findActive` returns the highest
-  *published* version, so the screen asks `/bible/active` rather than reading a field off a row.
-- **Publishing is the second approval-class mutation in this app, and it copies FE-07's structure.**
-  No optimistic update, disabled in flight, both affected queries invalidated only after the server
-  answers. **The guard that survives a reload is structural**: the refetched version carries
-  `published: true`, the control is not rendered, and there is no un-publish route to undo it. A test
-  swaps that server-state check for a client flag and fails.
-- **It is a publish, not an approval.** `ApprovalControls` hard-codes its own label and has no way to
-  say "publish"; §46 makes publishing a named transition distinct from approval, and the backend
-  spells it `/publish` while style profiles get `/approve`. So the control composes `Button` directly
-  rather than taking a one-off label prop into a shared primitive.
-- **Paging is stated.** `Page<T>` carries `nextCursor`, and the screen says it read the first page
-  only when the orchestrator offers another. That is the fourth screen to say it and the asset
-  library is still the one that does not.
-
-**What it cannot do, on screen rather than in this file.** Pinning a bible to a production:
-`PUT /productions/:productionId/bible` exists, `pinProjectBibleRequestSchema` compiles into **zero**
-files under `dist-esm/` while `createProjectBibleRequestSchema` compiles into two, so the request has
-no published shape — reading the pin is fine, setting it is not. Creating and editing a draft are
-both published and simply unbuilt. And a subject block is identified by its id alone: `subjectRules`
-carries no name, and resolving one would mean reaching into another feature's `api/`, which
-`code-style.md` forbids and which has no shared home yet.
-
-**A bidi defect the gate could not see, found by looking.** The generated Markdown view first shipped
-inside `ContentText`, which is `<bdi dir="auto">`. Under `<html dir="rtl">` that mirrors the whole
-document: `  - ללא אלימות גרפית` loses its indentation and its bullet jumps to the far edge. A
-Markdown document's `#`, `-` and leading spaces are structure, so the view is `dir="ltr"` and the
-Hebrew inside it still reads correctly as its own run. Every gate stage was green over the broken
-version; a test now asserts the direction and fails when it is removed.
-
 **Step 8 (libraries)** has wire types and no controller, deliberately on the backend's side.
 
 ## How writing actually works, measured 2026-09-01 on backend `master` @ `f14098e`
@@ -480,6 +437,64 @@ and wrong for style profiles.
 Approval freezes content, not the lifecycle. No screen offers it, and no sentence here claims an
 approved record cannot be removed at all.
 
+## The bible writes too, as of 2026-09-01
+
+Decision 3 said "structured fields, per project kind, with a generated readable view". The read half
+delivered the fields and the view; this delivers the editing. `POST /projects/:projectId/bible` and
+`PATCH /projects/:projectId/bible/:id` had been published as long as the read routes had, and both
+request shapes were emitted into `dist-esm/` — verified there rather than in the backend's source,
+which is the distinction that keeps `pinProjectBibleRequestSchema` unavailable.
+
+**The patch is per section, not per field.** `updateProjectBibleRequestSchema` takes `world`,
+`narrative` and `audio` as whole objects and refuses an empty body, so a change to one field sends
+that entire section and omits the other two. `bible-edit-diff.ts` compares normalised form values
+per section to decide, and normalising through `parseLines` first means re-indenting a rule list is
+not an edit — without that, opening a form and closing it produces a patch the server accepts.
+
+**`null` clears and an absent key leaves alone, and the difference is visible on screen.** Clearing
+every narrative field on a bible that had one sends `narrative: null`. Sending `{}` would record
+"narrative rules exist and are blank", which the read side already distinguishes from "none
+recorded" with two different sentences.
+
+**Which fields exist comes from the kind, and the kind comes from two different places.** Editing
+reads `projectKind` off the record. Creating cannot — there is no record yet — so
+`GET /projects/:id` was added for it, the first single-project read in this app. Its query key is
+`['project', id]`, deliberately not under the collection key, because `invalidateQueries`
+prefix-matches and the detail must not refetch on every list invalidation.
+
+**One consequence of that, named because it is silent otherwise.** If the project read fails, the
+create form cannot know whether the kind carries a narrative section, so it omits the section rather
+than offering fields the orchestrator would refuse with `PROJECT_BIBLE_NARRATIVE_NOT_APPLICABLE`.
+When the form was prefilled from a version that *did* carry narrative rules, those rules are then
+not carried into the new draft. The screen says so — `bible.form.kindUnreadable` — and the loss is
+recoverable by editing the created draft, where the record answers the question itself.
+
+**Deletion is published and is not offered, and this is a different refusal from the plate one.**
+`DELETE /projects/:projectId/bible/:id` exists, and the immutability trigger permits it on a
+published row because its diff excludes `deleted_at`. So the route will soft-delete a bible that
+productions planned against, with no `ErrorCode` separating that from discarding a draft nobody used.
+A control whose dangerous use is indistinguishable from its safe one needs a confirmation design, not
+a button appended to this phase.
+
+**Subject rules are still not writable, and the gap on screen now says so.** They are keyed on a
+subject id the bible carries no name for; offering them means reaching into
+`src/features/subjects/api/`, which is the third and fourth caller of the cross-feature import
+`code-style.md` forbids — both forms already do it for the style-profile picker, following the two
+precedents in `create-production-form` and elsewhere. Adding the subject library to that list in a
+phase that cannot fix the underlying question was not worth it.
+
+**Measured, both trees built in one session rather than compared against a recorded figure.** The
+bible route is lazy, so the forms land in its own chunk: `BiblePage` goes 21.00 kB → **58.93 kB** JS
+and 6.07 kB → **8.49 kB** CSS, while the entry chunk moves 475.38 kB → **475.47 kB** and its CSS not
+at all. The JS figure was 59.04 kB before the review pass; collapsing the screen's two `return`
+statements into one took 0.11 kB out with the defect. Both catalogues go 745 → **760**, counted per file.
+
+**Note on the entry figure.** `plan/16` and this session's earlier handoff record master's entry at
+475.10 kB; rebuilt today it is 475.38 kB on an unchanged master. The 0.28 kB is not explained here,
+and the likeliest cause is the sibling's build moving under the `portal:` link, which is documented
+behaviour of this seam. It is recorded rather than reconciled, because the comparison that matters —
+master and this branch, built minutes apart on one machine — was made directly.
+
 ## What no screen does yet
 
 **Canonical plates cannot be created or edited here, and that is deliberate.** Their DTOs are
@@ -495,10 +510,13 @@ share a shape it does not.
 the end, so each screen says "reads the first page only" when the server offers more. The asset
 library, which predates this, silently shows fifty and stops — that is FE-07's to fix.
 
-**Naming a prop's owner subject.** `projectSubjectsQueryOptions` lives in another feature and
-`code-style.md` forbids reaching sideways. Moving it down needs a home that neither `src/lib/api/`
-(the fetch client) nor `src/shell/api/` (installation status) cleanly provides. Left as an open
-question rather than settled under time pressure.
+**Naming a prop's owner subject, or a bible's subject block.** `projectSubjectsQueryOptions` lives in
+another feature and `code-style.md` forbids reaching sideways. Moving it down needs a home that
+neither `src/lib/api/` (the fetch client) nor `src/shell/api/` (installation status) cleanly
+provides. Left as an open question rather than settled under time pressure — and the question is
+larger than it was: the two bible forms take the same shortcut for the style-profile picker, so four
+components now reach across a boundary the rules forbid, none of them wrongly and all of them for
+want of a shared home.
 
 ## Done when
 
@@ -511,7 +529,9 @@ question rather than settled under time pressure.
 - [ ] props carry continuity rules — **the link to where they apply has no published join**
 - [x] the bible is structured, versioned, and shows only fields relevant to the project kind — the
       kind's own `bibleCarriesNarrative` decides, and a kind that carries none says so rather than
-      rendering a blank section
+      rendering a blank section. **Decision 3 is fully answered as of 2026-09-01**: those structured
+      fields are now written as well as read, on both a first draft and a next version, with subject
+      rules the one section still read-only and said to be
 - [ ] reusable libraries are discoverable
 
 ## Traps
