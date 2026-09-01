@@ -56,6 +56,12 @@
     font-weight: var(--font-weight-medium);
   }
 
+  .create-production-form__runtime-required {
+    margin-inline-start: var(--space-1);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+  }
+
   .create-production-form__runtime-hint {
     margin: 0;
     color: var(--color-text-secondary);

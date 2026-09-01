@@ -94,6 +94,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
       <form className="create-voice-profile-form__form" onSubmit={handleSubmit}>
         <Field
           label={translate('library.field.displayName')}
+          required
           error={errorFor('displayName')}
         >
           <Input
@@ -104,6 +105,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
         <Field
           label={translate('library.field.engine')}
+          required
           error={errorFor('engine')}
         >
           <Input
@@ -114,6 +116,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
         <Field
           label={translate('library.field.modelId')}
+          required
           error={errorFor('modelId')}
         >
           <Input
@@ -124,6 +127,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
         <Field
           label={translate('library.field.language')}
+          required
           error={errorFor('language')}
         >
           <Input

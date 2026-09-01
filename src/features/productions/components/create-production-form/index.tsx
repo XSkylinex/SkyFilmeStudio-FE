@@ -200,6 +200,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
           <Field
             label={translate('productions.create.title')}
             hint={translate('productions.create.title.hint')}
+            required
             error={errorFor('title')}
           >
             <Input
@@ -210,6 +211,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
 
           <Field
             label={translate('productions.kind.label')}
+            required
             error={errorFor('productionKind')}
           >
             <Select
@@ -223,6 +225,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
 
           <Field
             label={translate('productions.mode.label')}
+            required
             error={errorFor('narrativeMode')}
           >
             <Select
@@ -237,6 +240,9 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
           <fieldset className="create-production-form__runtime">
             <legend className="create-production-form__runtime-legend">
               {translate('productions.create.targetRuntime')}
+              <span className="create-production-form__runtime-required">
+                {translate('field.required')}
+              </span>
             </legend>
             <p className="create-production-form__runtime-hint">
               {translate('productions.create.targetRuntime.hint')}
@@ -294,6 +300,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
           <Field
             label={translate('productions.create.styleProfile')}
             hint={translate('productions.create.styleProfile.hint')}
+            required
             error={errorFor('styleProfileId')}
           >
             <Select

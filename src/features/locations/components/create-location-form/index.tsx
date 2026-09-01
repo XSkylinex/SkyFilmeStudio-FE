@@ -86,12 +86,17 @@ export const CreateLocationForm: FC<CreateLocationFormProps> = ({
 
   return (
     <form className="create-location-form" onSubmit={handleSubmit}>
-      <Field label={translate('library.field.name')} error={errorFor('name')}>
+      <Field
+        label={translate('library.field.name')}
+        required
+        error={errorFor('name')}
+      >
         <Input value={name} onChange={(event) => setName(event.target.value)} />
       </Field>
 
       <Field
         label={translate('library.field.description')}
+
         error={errorFor('canonicalDescription')}
       >
         <Textarea
@@ -102,6 +107,7 @@ export const CreateLocationForm: FC<CreateLocationFormProps> = ({
 
       <Field
         label={translate('library.field.layoutNotes')}
+
         error={errorFor('layoutNotes')}
       >
         <Textarea

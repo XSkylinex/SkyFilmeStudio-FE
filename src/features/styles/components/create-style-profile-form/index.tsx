@@ -127,7 +127,11 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
       )}
 
       <form className="create-style-profile-form__form" onSubmit={handleSubmit}>
-        <Field label={translate('library.field.name')} error={errorFor('name')}>
+        <Field
+          label={translate('library.field.name')}
+          required
+          error={errorFor('name')}
+        >
           <Input
             value={name}
             onChange={(event) => setName(event.target.value)}
@@ -136,6 +140,7 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
 
         <Field
           label={translate('library.field.description')}
+
           error={errorFor('description')}
         >
           <Textarea
@@ -148,6 +153,7 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
         <Field
           label={translate('library.field.mode')}
           hint={translate('library.field.mode.hint')}
+          required
           error={errorFor('mode')}
         >
           <Input
