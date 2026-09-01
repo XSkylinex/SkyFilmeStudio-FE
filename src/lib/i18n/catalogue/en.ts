@@ -820,8 +820,6 @@ export const EN_CATALOGUE = {
     'A production needs a style profile first',
   'productions.create.blocked.description':
     'Every production is pinned to a style version, and this project has none yet. Create the first one in the style library, then come back here.',
-  'productions.create.invalid':
-    'The orchestrator’s own contract rejected this before it was sent.',
   'productions.create.failed.title': 'The production was not created',
   'planner.error.title': 'This production could not be read',
   'planner.loading': 'Reading this production…',
@@ -1274,12 +1272,22 @@ export const EN_CATALOGUE = {
     'The loudness numbers that decide whether an export is acceptable are not served, so this screen cannot show a measured value against its target.',
   'audio.gaps.asr':
     'The advisory ASR round-trip is a published contract with no route, so a line cannot be checked against what a recogniser heard.',
+  'form.invalid': 'Fields needing attention: {count}',
+  'field.required': 'required',
   'error.MUSIC_CUE_NOT_APPROVED':
     'That step needs an approved music cue, and this one is not approved. Approve the cue first, or choose one that already is.',
   'error.MUSIC_CUE_IMMUTABLE':
     'This music cue is approved, so it is frozen — a production may already be built on it. Add the next cue rather than editing this one.',
   'error.MUSIC_CUE_EXISTS':
     'This project already has that cue. A cue is identified by its audio rather than its name, and one render becomes one library entry — so revise the cue that is already there, or generate another take.',
+  'error.SFX_ASSET_EXISTS':
+    'The SFX library already holds this exact audio. An asset is matched by its content rather than its name, so reuse the entry that is already there instead of importing the same bytes twice.',
+  'error.SFX_ASSET_IMMUTABLE':
+    'This SFX asset is approved, so it is frozen — a production may already be built on it. Import a new one rather than editing this one.',
+  'error.OPENING_ENDING_ASSET_IMMUTABLE':
+    'This opening or ending asset is approved and cannot be edited. Import a new version instead; productions stay pinned to the version they used.',
+  'error.OPENING_ENDING_VERSION_CONFLICT':
+    'Another writer took that version number first. Nothing was changed — try again and the next version will be allocated.',
   'error.malformedText':
     'The orchestrator answered that request with something other than the document that was asked for. Nothing here can be trusted to be the bible’s own text.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;

@@ -1,9 +1,18 @@
 import type { FC } from 'react';
 import { cloneElement, useId } from 'react';
+import { useTranslate } from '@/lib/i18n/use-translate';
 import type { FieldProps } from './field.interface';
 import './field.css';
 
-export const Field: FC<FieldProps> = ({ label, hint, error, id, children }) => {
+export const Field: FC<FieldProps> = ({
+  label,
+  hint,
+  error,
+  required,
+  id,
+  children,
+}) => {
+  const translate = useTranslate();
   const generatedId = useId();
   const controlId = id ?? generatedId;
   const hintId = hint ? `${controlId}-hint` : undefined;
@@ -15,14 +24,22 @@ export const Field: FC<FieldProps> = ({ label, hint, error, id, children }) => {
 
   return (
     <div className="field">
-      <label className="field__label" htmlFor={controlId}>
-        {label}
-      </label>
+      <div className="field__heading">
+        <label className="field__label" htmlFor={controlId}>
+          {label}
+        </label>
+        {required ? (
+          <span className="field__required" aria-hidden="true">
+            {translate('field.required')}
+          </span>
+        ) : null}
+      </div>
       <div className="field__control">
         {cloneElement(children, {
           id: controlId,
           'aria-describedby': describedBy,
           'aria-invalid': error ? true : children.props['aria-invalid'],
+          'aria-required': required ? true : children.props['aria-required'],
         })}
       </div>
       {hint ? (

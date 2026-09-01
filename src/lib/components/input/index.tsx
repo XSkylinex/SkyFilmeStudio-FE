@@ -12,6 +12,7 @@ export const Input: FC<InputProps> = ({
   id,
   'aria-describedby': ariaDescribedBy,
   'aria-invalid': ariaInvalid,
+  'aria-required': ariaRequired,
 }) => (
   <input
     className="input"
@@ -25,5 +26,6 @@ export const Input: FC<InputProps> = ({
     disabled={disabled}
     aria-describedby={ariaDescribedBy}
     aria-invalid={ariaInvalid}
+    aria-required={ariaRequired}
   />
 );

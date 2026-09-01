@@ -6,6 +6,7 @@ import { Button } from '@/lib/components/button';
 import { Field } from '@/lib/components/field';
 import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
+import { ValidationSummary } from '@/lib/components/validation-summary';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
@@ -37,6 +38,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
+  const [attempt, setAttempt] = useState(0);
 
   const errorFor = (field: string): string => {
     const key = fieldErrors[field];
@@ -79,6 +81,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
     if (!result.success) {
       setFieldErrors(fieldErrorsFromIssues(result.error));
+      setAttempt((count) => count + 1);
       return;
     }
 
@@ -92,8 +95,16 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
   return (
     <section className="create-voice-profile-form">
       <form className="create-voice-profile-form__form" onSubmit={handleSubmit}>
+        {Object.keys(fieldErrors).length === 0 ? null : (
+          <ValidationSummary
+            count={Object.keys(fieldErrors).length}
+            attempt={attempt}
+          />
+        )}
+
         <Field
           label={translate('library.field.displayName')}
+          required
           error={errorFor('displayName')}
         >
           <Input
@@ -104,6 +115,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
         <Field
           label={translate('library.field.engine')}
+          required
           error={errorFor('engine')}
         >
           <Input
@@ -114,6 +126,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
         <Field
           label={translate('library.field.modelId')}
+          required
           error={errorFor('modelId')}
         >
           <Input
@@ -124,6 +137,7 @@ export const CreateVoiceProfileForm: FC<CreateVoiceProfileFormProps> = ({
 
         <Field
           label={translate('library.field.language')}
+          required
           error={errorFor('language')}
         >
           <Input

@@ -6,6 +6,7 @@ import { Button } from '@/lib/components/button';
 import { Field } from '@/lib/components/field';
 import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
+import { ValidationSummary } from '@/lib/components/validation-summary';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
@@ -31,6 +32,7 @@ export const CreatePropForm: FC<CreatePropFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
+  const [attempt, setAttempt] = useState(0);
 
   const errorFor = (field: string): string => {
     const key = fieldErrors[field];
@@ -70,6 +72,7 @@ export const CreatePropForm: FC<CreatePropFormProps> = ({
 
     if (!result.success) {
       setFieldErrors(fieldErrorsFromIssues(result.error));
+      setAttempt((count) => count + 1);
       return;
     }
 
@@ -82,12 +85,24 @@ export const CreatePropForm: FC<CreatePropFormProps> = ({
 
   return (
     <form className="create-prop-form" onSubmit={handleSubmit}>
-      <Field label={translate('library.field.name')} error={errorFor('name')}>
+      {Object.keys(fieldErrors).length === 0 ? null : (
+        <ValidationSummary
+          count={Object.keys(fieldErrors).length}
+          attempt={attempt}
+        />
+      )}
+
+      <Field
+        label={translate('library.field.name')}
+        required
+        error={errorFor('name')}
+      >
         <Input value={name} onChange={(event) => setName(event.target.value)} />
       </Field>
 
       <Field
         label={translate('library.field.description')}
+
         error={errorFor('canonicalDescription')}
       >
         <Textarea

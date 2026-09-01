@@ -6,6 +6,7 @@ import { Button } from '@/lib/components/button';
 import { Field } from '@/lib/components/field';
 import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
+import { ValidationSummary } from '@/lib/components/validation-summary';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { diffNullableText } from '@/lib/helpers/diff-nullable-text';
 import { parseLines } from '@/lib/helpers/parse-lines';
@@ -62,6 +63,7 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
+  const [attempt, setAttempt] = useState(0);
 
   const errorFor = (field: string): string => {
     const key = fieldErrors[field];
@@ -98,6 +100,7 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
 
     if (!result.success) {
       setFieldErrors(fieldErrorsFromIssues(result.error));
+      setAttempt((count) => count + 1);
       return;
     }
 
@@ -111,6 +114,13 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
   return (
     <section className="edit-style-profile-form">
       <form className="edit-style-profile-form__form" onSubmit={handleSubmit}>
+        {Object.keys(fieldErrors).length === 0 ? null : (
+          <ValidationSummary
+            count={Object.keys(fieldErrors).length}
+            attempt={attempt}
+          />
+        )}
+
         <Field label={translate('library.field.name')} error={errorFor('name')}>
           <Input
             value={name}

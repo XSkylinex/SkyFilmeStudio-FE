@@ -78,4 +78,40 @@ describe('CreatePropForm', () => {
     expect(await screen.findByText('This needs a value.')).toBeInTheDocument();
     expect(postCalls).toBe(0);
   });
+
+  it('announces the failed submit and lands focus on the announcement', async () => {
+    const user = userEvent.setup();
+    server.use(
+      http.post(API_PATH.projectProps(PROJECT_ID), () =>
+        HttpResponse.json(buildProp()),
+      ),
+    );
+
+    renderForm(() => undefined);
+
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+
+    const summary = await screen.findByRole('status');
+    expect(summary).toHaveTextContent('Fields needing attention: 1');
+    expect(summary).toHaveFocus();
+
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+
+    expect(screen.getByRole('status')).toHaveFocus();
+  });
+
+  it('marks only the field a person must fill, not every key the wire needs', () => {
+    renderForm(() => undefined);
+
+    expect(screen.getByLabelText('Name')).toHaveAttribute(
+      'aria-required',
+      'true',
+    );
+    expect(screen.getByLabelText('Canonical description')).not.toHaveAttribute(
+      'aria-required',
+    );
+    expect(screen.getByLabelText('Continuity rules')).not.toHaveAttribute(
+      'aria-required',
+    );
+  });
 });

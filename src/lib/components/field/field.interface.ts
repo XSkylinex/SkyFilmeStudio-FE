@@ -5,6 +5,7 @@ export interface FieldProps {
   label: string;
   hint?: string;
   error?: string;
+  required?: boolean;
   id?: string;
   children: ReactElement<FieldControlProps>;
 }

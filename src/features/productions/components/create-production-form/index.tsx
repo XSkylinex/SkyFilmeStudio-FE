@@ -20,6 +20,7 @@ import { Input } from '@/lib/components/input';
 import { Select } from '@/lib/components/select';
 import { Skeleton } from '@/lib/components/skeleton';
 import { Textarea } from '@/lib/components/textarea';
+import { ValidationSummary } from '@/lib/components/validation-summary';
 import { formatDuration } from '@/lib/format/format-duration';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
@@ -72,6 +73,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
+  const [attempt, setAttempt] = useState(0);
 
   const errorFor = (field: string): string => {
     const key = fieldErrors[field];
@@ -165,6 +167,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
 
       if (!result.success) {
         setFieldErrors(fieldErrorsFromIssues(result.error));
+        setAttempt((count) => count + 1);
         return;
       }
 
@@ -192,14 +195,16 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
       <>
         <form className="create-production-form__form" onSubmit={handleSubmit}>
           {hasFieldErrors ? (
-            <p className="create-production-form__invalid" role="alert">
-              {translate('productions.create.invalid')}
-            </p>
+            <ValidationSummary
+              count={Object.keys(fieldErrors).length}
+              attempt={attempt}
+            />
           ) : null}
 
           <Field
             label={translate('productions.create.title')}
             hint={translate('productions.create.title.hint')}
+            required
             error={errorFor('title')}
           >
             <Input
@@ -210,6 +215,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
 
           <Field
             label={translate('productions.kind.label')}
+            required
             error={errorFor('productionKind')}
           >
             <Select
@@ -223,6 +229,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
 
           <Field
             label={translate('productions.mode.label')}
+            required
             error={errorFor('narrativeMode')}
           >
             <Select
@@ -237,6 +244,9 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
           <fieldset className="create-production-form__runtime">
             <legend className="create-production-form__runtime-legend">
               {translate('productions.create.targetRuntime')}
+              <span className="create-production-form__runtime-required">
+                {translate('field.required')}
+              </span>
             </legend>
             <p className="create-production-form__runtime-hint">
               {translate('productions.create.targetRuntime.hint')}
@@ -294,6 +304,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
           <Field
             label={translate('productions.create.styleProfile')}
             hint={translate('productions.create.styleProfile.hint')}
+            required
             error={errorFor('styleProfileId')}
           >
             <Select
