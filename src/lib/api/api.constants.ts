@@ -1,5 +1,6 @@
 import type {
   CanonicalAssetSetId,
+  DialogueLineId,
   LocationId,
   LocationPlateId,
   ProductionId,
@@ -173,4 +174,16 @@ export const API_PATH = {
     ).toString()}`,
   renderJob: (renderJobId: RenderJobId): string =>
     `/render-jobs/${renderJobId}`,
+  sceneDialogueLines: (sceneId: SceneId): string =>
+    `/scenes/${sceneId}/dialogue-lines`,
+  dialogueLine: (dialogueLineId: DialogueLineId): string =>
+    `/dialogue-lines/${dialogueLineId}`,
+  dialogueLineSpeech: (dialogueLineId: DialogueLineId): string =>
+    `/dialogue-lines/${dialogueLineId}/speech`,
+  dialogueLineSpeechApproval: (dialogueLineId: DialogueLineId): string =>
+    `/dialogue-lines/${dialogueLineId}/speech/approval`,
+  dialogueLineTier: (dialogueLineId: DialogueLineId): string =>
+    `/dialogue-lines/${dialogueLineId}/dialogue-tier`,
+  productionDialogueTiming: (productionId: ProductionId): string =>
+    `/productions/${productionId}/dialogue-timing`,
 } satisfies Record<string, (...args: never[]) => string>;
