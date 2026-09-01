@@ -277,15 +277,23 @@ under "What this screen cannot do yet", not a note in a plan file.
 
 **The project bible is real as of 2026-09-01, and it is FE-08's step 7 rather than a new phase.**
 `plan/10` and `plan/11` are the next two in the table and both are blocked the same way — a published
-contract with no route that reaches it. FE-10 needs a `SceneId` and **nothing published yields one**.
-Three paths on backend `master` contain `scenes` and none of them returns scenes:
-`PUT /productions/:productionId/planning/scenes` writes the outline and returns `readonly unknown[]`,
-discarding the ids it just made, while `scenes/:sceneId/shots` and `scenes/:sceneId/dialogue-lines`
-both *take* the id being sought. Neither `runtimeSegmentShareSchema` nor `sceneOutlineEntrySchema`
-carries one. **BE-18 merged as `f14098e` on 2026-09-01 and did not change this** — its whole
-storyboard surface hangs off `shots/:shotId`, so it added a floor above a missing staircase. FE-11
-has no `GET /render-jobs` at all: the controller is exactly `POST /render-jobs` and
-`GET /render-jobs/:id`. **Track the missing route, not the phase number** — "blocked on BE-18" was
+contract with no route that reaches it. **FE-10 needs to re-read a production's scenes, and nothing
+lets it.** The scene ids are on the wire — `PUT /productions/:productionId/planning/scenes` returns
+the full rows and only its declared `readonly unknown[]` throws them away, which the backend's own
+e2e spec proves by parsing that response with `z.array(sceneSchema)`. But that route deletes every
+scene and re-inserts with fresh ids, and `shots.scene_id` is `onDelete: 'restrict'`, so it mints new
+ids when it works and refuses once shots exist. **A read that destroys what it reads is not a read**,
+and this product requires that a reload lose nothing. **BE-18 merged as `f14098e` on 2026-09-01 and
+did not change this** — its whole storyboard surface hangs off `shots/:shotId`, so it added a floor
+above a missing staircase. FE-11 has no `GET /render-jobs` at all: the controller is exactly
+`POST /render-jobs` and `GET /render-jobs/:id`.
+
+**This repo reported the wrong reason first, from a working instrument.** A grep over controller
+return-type annotations for `Scene` returned zero and was validated against a true positive — seven
+hits for `Promise<Production>`. That proved it could find annotations; it never proved annotations
+answer *what comes back over HTTP*. `git.md`'s rule catches a broken instrument, not a sound one
+pointed at the wrong question. **When the question is about the wire, read the wire, or read a test
+that parses it.** **Track the missing route, not the phase number** — "blocked on BE-18" was
 the dependency line's answer and it was never the one that mattered. So the phase taken
 was the one BE-14 unblocked and `plan/08` had deferred with "one phase is one phase".
 `src/features/bible/` reads every version of a project bible, marks the one the orchestrator calls
