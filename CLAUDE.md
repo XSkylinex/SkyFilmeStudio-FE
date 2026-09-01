@@ -42,8 +42,9 @@ any of it can be looked at.
 FE-03 added the app shell: `react-router-dom@7.18.2`, the full route tree in `src/shell/routes/`,
 and shell chrome under `src/shell/` — `app-shell`, `production-shell`, `production-nav`,
 `route-error-boundary`, `root-error-boundary`, `fatal-boundary`, `offline-indicator`,
-`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` holds **nineteen**
-route-level pages — eighteen stubs when FE-03 landed, plus asset detail from FE-07. Which of them are
+`connection-indicator`, `keyboard`, `shell-state`, `route-title`. `src/features/` holds **twenty**
+route-level pages — counted 2026-09-01 with `ls src/features/*/[A-Z]*.tsx`, the project bible being
+the twentieth — eighteen stubs when FE-03 landed, plus asset detail from FE-07. Which of them are
 no longer stubs is recorded in the FE-06 and FE-07 paragraphs above rather than counted here, because
 "real" is a judgement and a number would go stale the way the others did. The preview gallery lives
 at `/design-system`.
@@ -85,13 +86,17 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **612 keys in English and
-Hebrew**, counted 2026-08-22 — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **695 keys in English and
+Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
-four creative-library screens, and FE-09's production list, create form and planner.
+four creative-library screens, FE-09's production list, create form and planner, and the project
+bible.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
-tree held 371, so the warning had already failed once on the paragraph carrying it. Count both
-catalogues and require them equal:
+tree held 371, so the warning had already failed once on the paragraph carrying it. It then failed a
+second time on the same paragraph: it read 690 while the tree held 694, because absorbing four
+upstream refusals adds four keys and the commit that added them updated no count. **An error code is
+a catalogue key**, so every absorption moves this number, and none of them looks like a screen.
+Count both catalogues and require them equal:
 `grep -cE "^  '[^']+':" src/lib/i18n/catalogue/{en,he}.ts`. English is the source of
 truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
 The interface language lives in the shell slice, persists to
@@ -261,9 +266,81 @@ and FE-07's `<output tabIndex={-1}>` pattern is what tells a screen reader and l
 **Most of `plan/09` is unbuildable rather than unbuilt, and the reasons are three missing routes.**
 `PlanningService.runStage` exists and no controller reaches it, so no stage can be run or re-run.
 `PUT /planning/scenes` writes and returns `readonly unknown[]` with no `GET`, so scenes are visible
-only as rows in the budget. There is no dialogue-line controller at all. `continuityReviewSchema` and
+only as rows in the budget. **Corrected 2026-09-01: there is a dialogue-line controller now** — BE-17
+merged as `014712e` and published `POST`/`GET /scenes/:sceneId/dialogue-lines` and
+`GET`/`PATCH`/`DELETE /dialogue-lines/:id`, plus speech synthesis, approval and
+`POST /productions/:id/dialogue-timing`, all five DTOs through the barrel. It changes nothing here,
+and that is the point: the collection is keyed on `sceneId`, so it is the **third** controller gated
+behind the one missing `GET`. `continuityReviewSchema` and
 `toneReviewSchema` are published contracts with no route. Every one of those is a sentence on screen
 under "What this screen cannot do yet", not a note in a plan file.
+
+**The project bible is real as of 2026-09-01, and it is FE-08's step 7 rather than a new phase.**
+`plan/10` and `plan/11` are the next two in the table and both are blocked the same way — a published
+contract with no route that reaches it. FE-10 needs a `SceneId` and **nothing published yields one**.
+Three paths on backend `master` contain `scenes` and none of them returns scenes:
+`PUT /productions/:productionId/planning/scenes` writes the outline and returns `readonly unknown[]`,
+discarding the ids it just made, while `scenes/:sceneId/shots` and `scenes/:sceneId/dialogue-lines`
+both *take* the id being sought. Neither `runtimeSegmentShareSchema` nor `sceneOutlineEntrySchema`
+carries one. **BE-18 merged as `f14098e` on 2026-09-01 and did not change this** — its whole
+storyboard surface hangs off `shots/:shotId`, so it added a floor above a missing staircase. FE-11
+has no `GET /render-jobs` at all: the controller is exactly `POST /render-jobs` and
+`GET /render-jobs/:id`. **Track the missing route, not the phase number** — "blocked on BE-18" was
+the dependency line's answer and it was never the one that mattered. So the phase taken
+was the one BE-14 unblocked and `plan/08` had deferred with "one phase is one phase".
+`src/features/bible/` reads every version of a project bible, marks the one the orchestrator calls
+active, renders world, narrative, audio and subject rules, shows the generated Markdown view, and
+**publishes a draft**.
+
+**Which sections a bible shows comes from `bibleCarriesNarrative`, never from a list in this repo** —
+and a kind that carries no narrative section says so on screen rather than rendering a blank one.
+"Active" is **derived, not a flag**: `findActive` returns the highest published version, so the screen
+asks `/bible/active` instead of reading a field. **Publishing is the second approval-class mutation
+here and copies FE-07's structure exactly** — no optimistic update, disabled in flight, both queries
+invalidated only after the server answers, and the guard that survives a reload is the refetched
+version carrying `published: true` rather than any client flag. It is a *publish*, not an approval:
+`ApprovalControls` hard-codes its own label, §46 makes publishing a named transition, and the backend
+spells it `/publish` while style profiles get `/approve` — so the control composes `Button` rather
+than bending a shared primitive to a one-off label.
+
+**`request-text.ts` is the third caller of `fetch` in this repo, and the bar it had to clear was that
+the other two genuinely cannot express it.** `GET /bible/:id/markdown` returns `text/markdown`; a
+JSON parse of it is a `MALFORMED` throw. It also refuses a 200 whose `Content-Type` is not markdown,
+because a single-page-app fallback would otherwise be handed to the caller as the bible's own text.
+
+**The bidi lesson this phase adds: on a `<pre>`, put `dir` on the `<pre>`.** The generated Markdown
+view shipped as `<pre>` wrapping `ContentText` — `<bdi dir="auto">` — and under `<html dir="rtl">`
+the whole document mirrored, a nested `  - ` bullet losing its indentation. The cause was **not**
+`auto`: `dir` was on the inner `<bdi>` while the `<pre>` inherited `direction: rtl` from the page.
+The first fix, `<pre dir="ltr">`, was also wrong and review caught it — it puts a Hebrew line's
+sentence-final period at the wrong end, FE-07's defect once per line. Measured in Chrome across all
+three: `dir="ltr"` computes `unicode-bidi: isolate`; **`dir="auto"` on the `<pre>` computes
+`unicode-bidi: plaintext`**, which HTML's rendering section specifies for `pre[dir=auto]` and which
+resolves direction **per bidi paragraph** — and with `white-space: pre` every line is a paragraph. So
+each line takes its own first-strong direction and its punctuation lands correctly. **All four gate
+stages were green over both wrong versions.**
+
+**`jsx-a11y` reported nothing on two real defects, again.** The publish button failed SC 2.5.3 Label
+in Name — visible "Publish this version" against an accessible name that did not contain it, so
+speech input could not activate it. And the success message was keyed on `publish.isSuccess`, which
+never resets while the component is mounted, so selecting any other already-published version
+re-announced a stale publish and stole focus out of the version list. It is keyed on
+`publish.data?.id === bible.id` now. Both were found by review, not by the linter — the third time
+`plan/16`'s point has held.
+
+**A test that looks right and proves nothing is still the expensive failure.** The publish mutation's
+"no optimistic update" test counted refetches through `fetchQuery` — and `invalidateQueries` does not
+refetch a query with no observers, so an optimistic `onMutate` was added on purpose and the test still
+passed. It now spies on `invalidateQueries` and fails on `expected "invalidateQueries" to not be
+called at all, but actually been called 1 times`. `git.md`'s rule is the general form: **watch the
+assertion fail, not the test.**
+
+**What the screen cannot do, and says so.** `PUT /productions/:productionId/bible` exists, but
+`pinProjectBibleRequestSchema` compiles into **zero** files under `dist-esm/` while
+`createProjectBibleRequestSchema` compiles into two — so a production's pinned bible can be read and
+not set. Creating and editing a draft are published and unbuilt. A subject block is identified by its
+id alone, because `subjectRules` carries no name and resolving one would mean reaching into another
+feature's `api/`.
 
 ## The six rules that outrank everything else
 

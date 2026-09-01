@@ -4,6 +4,7 @@ import type {
   LocationPlateId,
   ProductionId,
   ProductionProfileId,
+  ProjectBibleVersionId,
   ProjectId,
   PronunciationDictionaryId,
   PropId,
@@ -111,6 +112,22 @@ export const API_PATH = {
     `/projects/${projectId}/props/${propId}`,
   approveProp: (projectId: ProjectId, propId: PropId): string =>
     `/projects/${projectId}/props/${propId}/approve`,
+  projectBibles: (projectId: ProjectId): string =>
+    `/projects/${projectId}/bible`,
+  activeProjectBible: (projectId: ProjectId): string =>
+    `/projects/${projectId}/bible/active`,
+  projectBible: (
+    projectId: ProjectId,
+    bibleId: ProjectBibleVersionId,
+  ): string => `/projects/${projectId}/bible/${bibleId}`,
+  projectBibleMarkdown: (
+    projectId: ProjectId,
+    bibleId: ProjectBibleVersionId,
+  ): string => `/projects/${projectId}/bible/${bibleId}/markdown`,
+  publishProjectBible: (
+    projectId: ProjectId,
+    bibleId: ProjectBibleVersionId,
+  ): string => `/projects/${projectId}/bible/${bibleId}/publish`,
   productions: (projectId: ProjectId): string =>
     `/projects/${projectId}/productions`,
   production: (projectId: ProjectId, productionId: ProductionId): string =>

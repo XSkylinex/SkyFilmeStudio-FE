@@ -1,7 +1,8 @@
 # FE-08 — Style, voice, location & prop studio
 
 > **Depends on:** 07 · **Blocks:** 09 · **Backend needs:** BE-13 · **Plan authority:** §3.5, §11.5–11.8, §13, §29
-> **Status:** partly done 2026-08-22 — steps 1, 3, 4, 5, 6 read; step 2 blocked, 7 and 8 unbuilt
+> **Status:** partly done 2026-08-22, **step 7 landed 2026-09-01** — steps 1, 3, 4, 5, 6 read,
+> step 7 reads and publishes; step 2 blocked, step 8 unbuilt
 
 ## Goal
 
@@ -314,8 +315,119 @@ four would assert a closed set.
 re-exported. Without it Decision 2 — "a style profile that cannot be seen cannot be approved" — has no
 mechanism, and the same-subject-two-styles comparison with it.
 
-**Step 7 (project bible)** — BE-14 merged as `f168891` and the bible DTOs are published, so this is no
-longer blocked on the backend. It was not built here because one phase is one phase.
+**Step 7 (project bible) landed 2026-09-01.** `/projects/:projectId/bible` reads every version, marks
+the one the orchestrator calls active, renders the four sections and the generated Markdown view, and
+**publishes a draft**. What each part is:
+
+- **Sections depend on the project kind, and the contract decides.** `bibleCarriesNarrative` is
+  exported from the built package and is called; this repo does not carry its own list of which kinds
+  carry a narrative section. A kind that carries none **says so** — a stated absence, not a blank.
+- **"Active" is derived, not a flag.** `ProjectBiblesService.findActive` returns the highest
+  *published* version, so the screen asks `/bible/active` rather than reading a field off a row.
+- **Publishing is the second approval-class mutation in this app, and it copies FE-07's structure.**
+  No optimistic update, disabled in flight, both affected queries invalidated only after the server
+  answers. **The guard that survives a reload is structural**: the refetched version carries
+  `published: true`, the control is not rendered, and there is no un-publish route to undo it. A test
+  swaps that server-state check for a client flag and fails.
+- **It is a publish, not an approval.** `ApprovalControls` hard-codes its own label and has no way to
+  say "publish"; §46 makes publishing a named transition distinct from approval, and the backend
+  spells it `/publish` while style profiles get `/approve`. So the control composes `Button` directly
+  rather than taking a one-off label prop into a shared primitive.
+- **Paging is stated.** `Page<T>` carries `nextCursor`, and the screen says it read the first page
+  only when the orchestrator offers another. That is the fourth screen to say it and the asset
+  library is still the one that does not.
+
+**What it cannot do, on screen rather than in this file.** Pinning a bible to a production:
+`PUT /productions/:productionId/bible` exists, `pinProjectBibleRequestSchema` compiles into **zero**
+files under `dist-esm/` while `createProjectBibleRequestSchema` compiles into two, so the request has
+no published shape — reading the pin is fine, setting it is not. Creating and editing a draft are
+both published and simply unbuilt. And a subject block is identified by its id alone: `subjectRules`
+carries no name, and resolving one would mean reaching into another feature's `api/`, which
+`code-style.md` forbids and which has no shared home yet.
+
+**A bidi defect the gate could not see, and the first fix for it was also wrong.** The generated
+Markdown view shipped as `<pre>` wrapping `ContentText`, which is `<bdi dir="auto">`. Under
+`<html dir="rtl">` the whole document mirrored — a nested `  - ` bullet lost its indentation and its
+dash landed at the far edge. The cause was not `auto`: it was that `dir` sat on the **inner** `<bdi>`
+while the `<pre>` itself inherited `direction: rtl` from the page.
+
+The first correction was `<pre dir="ltr">`, and review caught that it reintroduces FE-07's bug once
+per line. Measured in Chrome on a page holding all three variants:
+
+| markup | computed | a Hebrew line ending in a period |
+| ------ | -------- | -------------------------------- |
+| `<pre dir="ltr">` | `unicode-bidi: isolate`, `direction: ltr` | period lands at the **visual right** — the wrong end |
+| `<pre dir="auto">` | `unicode-bidi: plaintext`, `direction: ltr` | bullet right, period left — **correct** |
+| `<pre><bdi dir="auto">` | `isolate` on the `bdi`, `direction: rtl` on the `pre` | whole block mirrors |
+
+The answer is **`dir="auto"` on the `<pre>` itself**. HTML's rendering section gives
+`pre[dir=auto]` `unicode-bidi: plaintext`, which resolves base direction **per bidi paragraph** — and
+with `white-space: pre` every line is its own paragraph. So each line gets its own first-strong
+direction: English lines read left to right, Hebrew lines right to left with their punctuation at the
+correct end. The cost is that Hebrew-first lines align to the opposite edge from English ones, so
+nesting depth alternates sides in a mixed document. That is correct bidi and a smaller price than
+mangling every Hebrew sentence.
+
+**Every gate stage was green over both wrong versions.** The first was found by loading the page in
+Hebrew; the second only by review plus a measurement, because it *looks* right until a line begins
+with a Hebrew word.
+
+**Two accessibility defects review found that `jsx-a11y` reports nothing for.** The publish button
+failed **SC 2.5.3 Label in Name** — visible "Publish this version", accessible name "Publish version
+{n} of the project bible", which does not contain the visible string, so a speech-input user saying
+"click Publish this version" gets nothing. The accessible name is now a superset of the visible text,
+which is the shape `ApprovalControls` already had. And the success message was keyed on
+`publish.isSuccess`, which never resets while the component stays mounted: publishing v2 and then
+selecting any *other* already-published version re-ran `focusWhenShown` and threw a keyboard user out
+of the version list to a stale message. It is keyed on `publish.data?.id === bible.id` now.
+
+**Recorded and not fixed:** `disabled` on the in-flight publish button drops focus to `<body>`, and
+on failure nothing puts it back — `role="alert"` announces the refusal but the user must navigate
+back. The fix is `aria-disabled` with a guarded handler, which means another change to a shared
+primitive; it is a phase of its own rather than a passenger here.
+
+## Steps 2, 7 and 8
+
+**Step 2 (style samples) is blocked** on `createRenderJobRequestSchema`, one of the DTOs still not
+re-exported. Without it Decision 2 — "a style profile that cannot be seen cannot be approved" — has no
+mechanism, and the same-subject-two-styles comparison with it.
+
+**Step 7 (project bible) landed 2026-09-01.** `/projects/:projectId/bible` reads every version, marks
+the one the orchestrator calls active, renders the four sections and the generated Markdown view, and
+**publishes a draft**. What each part is:
+
+- **Sections depend on the project kind, and the contract decides.** `bibleCarriesNarrative` is
+  exported from the built package and is called; this repo does not carry its own list of which kinds
+  carry a narrative section. A kind that carries none **says so** — a stated absence, not a blank.
+- **"Active" is derived, not a flag.** `ProjectBiblesService.findActive` returns the highest
+  *published* version, so the screen asks `/bible/active` rather than reading a field off a row.
+- **Publishing is the second approval-class mutation in this app, and it copies FE-07's structure.**
+  No optimistic update, disabled in flight, both affected queries invalidated only after the server
+  answers. **The guard that survives a reload is structural**: the refetched version carries
+  `published: true`, the control is not rendered, and there is no un-publish route to undo it. A test
+  swaps that server-state check for a client flag and fails.
+- **It is a publish, not an approval.** `ApprovalControls` hard-codes its own label and has no way to
+  say "publish"; §46 makes publishing a named transition distinct from approval, and the backend
+  spells it `/publish` while style profiles get `/approve`. So the control composes `Button` directly
+  rather than taking a one-off label prop into a shared primitive.
+- **Paging is stated.** `Page<T>` carries `nextCursor`, and the screen says it read the first page
+  only when the orchestrator offers another. That is the fourth screen to say it and the asset
+  library is still the one that does not.
+
+**What it cannot do, on screen rather than in this file.** Pinning a bible to a production:
+`PUT /productions/:productionId/bible` exists, `pinProjectBibleRequestSchema` compiles into **zero**
+files under `dist-esm/` while `createProjectBibleRequestSchema` compiles into two, so the request has
+no published shape — reading the pin is fine, setting it is not. Creating and editing a draft are
+both published and simply unbuilt. And a subject block is identified by its id alone: `subjectRules`
+carries no name, and resolving one would mean reaching into another feature's `api/`, which
+`code-style.md` forbids and which has no shared home yet.
+
+**A bidi defect the gate could not see, found by looking.** The generated Markdown view first shipped
+inside `ContentText`, which is `<bdi dir="auto">`. Under `<html dir="rtl">` that mirrors the whole
+document: `  - ללא אלימות גרפית` loses its indentation and its bullet jumps to the far edge. A
+Markdown document's `#`, `-` and leading spaces are structure, so the view is `dir="ltr"` and the
+Hebrew inside it still reads correctly as its own run. Every gate stage was green over the broken
+version; a test now asserts the direction and fails when it is removed.
 
 **Step 8 (libraries)** has wire types and no controller, deliberately on the backend's side.
 
@@ -343,7 +455,9 @@ question rather than settled under time pressure.
 - [ ] the pronunciation dictionary works per language with Hebrew first-class — **the audible preview has no route**
 - [x] locations show plate coverage against observed kinds; suggested kinds without a plate are named as suggestions
 - [ ] props carry continuity rules — **the link to where they apply has no published join**
-- [ ] the bible is structured, versioned, and shows only fields relevant to the project kind
+- [x] the bible is structured, versioned, and shows only fields relevant to the project kind — the
+      kind's own `bibleCarriesNarrative` decides, and a kind that carries none says so rather than
+      rendering a blank section
 - [ ] reusable libraries are discoverable
 
 ## Traps

@@ -22,6 +22,7 @@ import {
   ASSETS_SEGMENT,
   ASSET_ID_PARAM,
   AUDIO_SEGMENT,
+  BIBLE_SEGMENT,
   DESIGN_SYSTEM_SEGMENT,
   LOCATIONS_SEGMENT,
   PLAN_SEGMENT,
@@ -195,6 +196,16 @@ const projectRoutes: RouteObject[] = [
     Component: PropsPage,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.props.title'),
+  },
+  {
+    path: BIBLE_SEGMENT,
+    lazy: () =>
+      import('@/features/bible/BiblePage').then((routeModule) => ({
+        Component: routeModule.BiblePage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
+    ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('page.bible.title'),
   },
   {
     path: PRODUCTIONS_SEGMENT,

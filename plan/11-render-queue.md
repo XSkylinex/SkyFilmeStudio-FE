@@ -1,12 +1,33 @@
 # FE-11 — Render queue
 
 > **Depends on:** 05 · **Blocks:** 12 · **Backend needs:** BE-05, BE-23 · **Plan authority:** §9, §10, §39, §47, §48
-> **Status:** not started
+> **Status:** blocked — no `GET /render-jobs`, and BE-23 not started
 
 ## Goal
 
 The screen a user watches for hours. It answers one question continuously: **is this progressing, or is
 it wedged?** — and if it is wedged, why, and what can be done.
+
+## Why this cannot start yet — measured 2026-08-31
+
+**There is no list route.** `render-queue.controller.ts` on backend `master` publishes exactly two
+endpoints: `POST /render-jobs`, which returns `{ renderJobId }` and never awaits, and
+`GET /render-jobs/:id`, which returns one `RenderJob` by id. This phase is a table, and there is
+nothing to enumerate — a queue view that can only fetch a job whose id you already have is not a
+queue view. The `renderJobSchema` contract is published and complete, so this is a missing `GET`
+rather than a missing shape, exactly as in `plan/10`.
+
+**`createRenderJobRequestSchema` is still unpublished.** It lives in `src/render-queue/dto/` and no
+`../render-queue/dto/*` line appears in the backend's `src/contracts/index.ts`. `plan/08` already
+records this against style samples; it also closes any route to submitting a job from here.
+
+**Workers, pressure and progress are BE-23, which has not started.** Steps 6 and 8 — live
+`system.pressure`, claim-pausing, the worker view and heartbeats — have no source, and step 9's
+re-render measurement has nothing to measure. `plan/05` is blocked on the same phase.
+
+What survives the wait is the note already at the bottom of this file about `isPermanentFailure`
+answering two questions with one helper. That is still this phase's to separate, and it is still not
+reachable while `GET /render-jobs/:id` can only raise a 404 or a validation 400.
 
 ## Decisions
 

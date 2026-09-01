@@ -218,4 +218,44 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.LIMITED_ANIMATION_OVERUSED',
   },
+  VOICE_PROFILE_NOT_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.VOICE_PROFILE_NOT_APPROVED',
+  },
+  VOICE_LANGUAGE_UNSUPPORTED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.VOICE_LANGUAGE_UNSUPPORTED',
+  },
+  DIALOGUE_AUDIO_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.DIALOGUE_AUDIO_IMMUTABLE',
+  },
+  ASR_UNAVAILABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.ASR_UNAVAILABLE',
+  },
+  TIER_REQUIRES_BENCHMARK: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.TIER_REQUIRES_BENCHMARK',
+  },
+  STORYBOARD_NOT_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.STORYBOARD_NOT_APPROVED',
+  },
+  STORYBOARD_FRAME_IMMUTABLE: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.STORYBOARD_FRAME_IMMUTABLE',
+  },
+  KEYFRAME_ANCHOR_REQUIRED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.KEYFRAME_ANCHOR_REQUIRED',
+  },
+  REGENERATION_MODE_REQUIRED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.REGENERATION_MODE_REQUIRED',
+  },
+  KEYFRAME_REQUIREMENT_DERIVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.KEYFRAME_REQUIREMENT_DERIVED',
+  },
 };

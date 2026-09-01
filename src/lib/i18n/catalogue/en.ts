@@ -41,6 +41,26 @@ export const EN_CATALOGUE = {
     'One of this scene’s shots already carries a compiled prompt, which is the record of how something was rendered and is never overwritten. Withdraw or supersede that shot deliberately rather than replacing the whole scene.',
   'error.LIMITED_ANIMATION_OVERUSED':
     'More of this scene is limited animation than the plan allows, which is how a production becomes a slideshow without anyone choosing that. If it is deliberate, raise the ceiling on the request explicitly.',
+  'error.VOICE_PROFILE_NOT_APPROVED':
+    'This line would be spoken by a voice that is not the approved one for its speaker — either the profile is still a draft, or it belongs to a different subject. A recurring subject gets one approved voice, or the production ends up with a different voice per line. Approve that subject’s voice profile, or point the line at it.',
+  'error.VOICE_LANGUAGE_UNSUPPORTED':
+    'The voice profile for this line does not declare the language the line is written in. Add that language to the profile that already exists — a second voice for the same subject would make them sound like two different people.',
+  'error.DIALOGUE_AUDIO_IMMUTABLE':
+    'This dialogue line is approved, and its audio was generated from the text as it stands. Editing the words or the timing now would leave approved audio saying something else — withdraw the approval first.',
+  'error.ASR_UNAVAILABLE':
+    'The advisory check that listens back to generated speech could not run, because no local speech-recognition model is available. The audio itself is unaffected — it simply was not transcribed and compared.',
+  'error.TIER_REQUIRES_BENCHMARK':
+    'The dialogue animation tier that was asked for is held behind a hardware benchmark and a subject-consistency test, and neither has run on this machine. Nothing waits for it — choose another tier.',
+  'error.STORYBOARD_NOT_APPROVED':
+    'This shot needs an approved keyframe before any video is rendered from it, and it has neither one nor a recorded waiver. A wrong keyframe multiplied by a video render is an hour of work thrown away — approve a keyframe, or record why this shot may skip one.',
+  'error.STORYBOARD_FRAME_IMMUTABLE':
+    'This storyboard frame has been approved, so it is frozen. Whatever was rendered from it keeps the frame it was rendered against — generate the next one rather than editing this one.',
+  'error.KEYFRAME_ANCHOR_REQUIRED':
+    'A keyframe for this shot has to be anchored to the approved look of what it contains — the subject, the location, the props — and no anchor was available. That anchoring is what stops the same character drifting from shot to shot.',
+  'error.REGENERATION_MODE_REQUIRED':
+    'Regenerating this frame needs the mode stated: the same prompt with a new seed, a controlled revision of the prompt, or a fresh keyframe. Those are different operations, and an unlabelled retry makes the attempt history impossible to read afterwards.',
+  'error.KEYFRAME_REQUIREMENT_DERIVED':
+    'Whether a keyframe is required by the subjects in a shot is worked out when the scene is planned, so it cannot be chosen by hand — say instead that a person is asking for the keyframe. And once a shot carries a canonical subject the requirement cannot be changed at all: record a waiver with a reason if this shot may skip the gate.',
   'error.OFFLINE_POLICY_VIOLATION':
     'A provider was pointed off this machine and generation was stopped. Nothing may leave this computer — find the provider that was reconfigured before running anything else.',
   'error.DISK_SPACE_LOW':
@@ -835,6 +855,85 @@ export const EN_CATALOGUE = {
     'Write a dialogue line, pick a voice for it, or see how long it will take to speak. There is no dialogue route at all, and a spoken duration is measured by the speech engine rather than guessed from a word count.',
   'planner.gaps.continuity':
     'Show continuity or tone findings beside the scenes they concern. Both have a schema and neither has a route.',
+  'page.bible.title': 'Project bible',
+  'bible.title': 'Project bible',
+  'bible.loading': 'Loading the project bible',
+  'bible.error.title': 'The project bible could not be read',
+  'bible.empty.title': 'This project has no bible yet',
+  'bible.empty.description':
+    'A bible records what a production plans against — the world, its subjects and its sound. Nothing has been recorded for this project, and there is no way to start one from this screen yet.',
+  'bible.versions.title': 'Versions',
+  'bible.versions.select': 'Show version {version}',
+  'bible.versions.published': 'Published',
+  'bible.versions.draft': 'Draft',
+  'bible.versions.active': 'Current',
+  'bible.versions.firstPageOnly':
+    'This reads the first page of versions only. The orchestrator holds more than are shown here.',
+  'bible.field.notRecorded': 'Not recorded',
+  'bible.field.noneRecorded': 'None recorded',
+  'bible.world.title': 'World rules',
+  'bible.world.genre': 'Genre',
+  'bible.world.tone': 'Tone',
+  'bible.world.audience': 'Audience',
+  'bible.world.contentBoundaries': 'Content boundaries',
+  'bible.world.recurringThemes': 'Recurring themes',
+  'bible.world.introOutroRules': 'Intro and outro rules',
+  'bible.world.continuityConstraints': 'Continuity constraints',
+  'bible.narrative.title': 'Narrative rules',
+  'bible.narrative.notCarried':
+    'This kind of project carries no narrative section, so these rules cannot be recorded on it at all.',
+  'bible.narrative.notRecorded':
+    'This kind of project can carry narrative rules, and none were recorded on this version.',
+  'bible.narrative.worldRules': 'World, physics and magic rules',
+  'bible.narrative.humourDramaLanguage': 'Humour and drama language',
+  'bible.narrative.chronology': 'Chronology',
+  'bible.audio.title': 'Audio rules',
+  'bible.audio.languages': 'Languages',
+  'bible.audio.narratorPolicy': 'Narrator policy',
+  'bible.audio.musicIdentity': 'Music identity',
+  'bible.audio.recurringMotifs': 'Recurring motifs',
+  'bible.audio.ambienceRules': 'Ambience rules',
+  'bible.audio.sfxAesthetic': 'Sound-effect aesthetic',
+  'bible.audio.dialogueMusicPriority': 'Dialogue and music priority',
+  'bible.audio.loudnessProfile': 'Loudness profile',
+  'bible.subjects.title': 'Subject rules',
+  'bible.subjects.none': 'No subject carries rules on this version.',
+  'bible.subjects.immutableVisualTraits': 'Immutable visual traits',
+  'bible.subjects.allowedVariations': 'Allowed variations',
+  'bible.subjects.prohibitedChanges': 'Prohibited changes',
+  'bible.subjects.scaleRelationships': 'Scale relationships',
+  'bible.subjects.wardrobeVariants': 'Wardrobe and surface variants',
+  'bible.subjects.behaviourAndPersonality': 'Behaviour and personality',
+  'bible.subjects.speaks': 'Speaks',
+  'bible.subjects.speaks.yes': 'Yes',
+  'bible.subjects.speaks.no': 'No',
+  'bible.subjects.voiceRules': 'Voice rules',
+  'bible.subjects.voiceRules.notApplicable':
+    'This subject does not speak, so voice rules cannot apply to it.',
+  'bible.subjects.relationships': 'Relationships',
+  'bible.publish.action': 'Publish this version',
+  'bible.publish.context':
+    'Publish this version of the project bible, version {version}',
+  'bible.publish.explained':
+    'Publishing freezes this version. A production that planned against it keeps what it planned against, so a later change means publishing the next version rather than editing this one, and there is no way to undo it.',
+  'bible.publish.done':
+    'Published. This is now the version a new production plans against.',
+  'bible.publish.error.title': 'That version was not published',
+  'bible.markdown.title': 'Generated view',
+  'bible.markdown.source':
+    'The orchestrator generates this from the structured record above. It is a view rather than the source, and it arrives in the orchestrator’s own wording rather than the interface language.',
+  'bible.markdown.error.title': 'The generated view could not be read',
+  'bible.gaps.heading': 'What this screen cannot do yet',
+  'bible.gaps.pin':
+    'A production records which bible version it planned against. That pin can be read, but not set from here: the route that sets it takes a request shape the orchestrator does not publish.',
+  'bible.gaps.subjectRules':
+    'A subject block is identified by its id alone, because the bible carries no name for it and this screen does not reach into another feature to resolve one.',
+  'bible.gaps.editing':
+    'Creating a draft and editing one are both real operations on the orchestrator, and neither is offered here. This screen reads a bible and publishes one.',
+  'bible.gaps.markdownSource':
+    'The generated view is shown as text rather than as a rendered document. Rendering it would mean adding a Markdown parser, and nothing external reaches this bundle.',
+  'error.malformedText':
+    'The orchestrator answered that request with something other than the document that was asked for. Nothing here can be trusted to be the bible’s own text.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

@@ -57,7 +57,7 @@ describe('routeTree', () => {
     expect(flatRoutes.every((route) => route.hasErrorBoundary)).toBe(true);
   });
 
-  it('keeps the media-heavy routes, the gallery and the system screen out of the entry chunk', () => {
+  it('keeps every screen heavy enough to earn its own chunk out of the entry chunk', () => {
     const lazyRoutes = flatRoutes.filter((route) => route.isLazy);
     const lazyPaths = lazyRoutes
       .map((route) => route.path)
@@ -66,6 +66,7 @@ describe('routeTree', () => {
     expect(lazyPaths).toEqual([
       'assets/:assetId',
       'audio',
+      'bible',
       'design-system',
       'plan',
       'shots',

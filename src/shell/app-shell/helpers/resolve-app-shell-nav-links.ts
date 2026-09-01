@@ -1,6 +1,7 @@
 import {
   productionListPath,
   projectAssetsPath,
+  projectBiblePath,
   projectListPath,
   projectLocationsPath,
   projectPropsPath,
@@ -31,6 +32,7 @@ export const resolveAppShellNavLinks = (
     { to: projectVoicesPath(projectId), labelKey: 'page.voices.title' },
     { to: projectLocationsPath(projectId), labelKey: 'page.locations.title' },
     { to: projectPropsPath(projectId), labelKey: 'page.props.title' },
+    { to: projectBiblePath(projectId), labelKey: 'page.bible.title' },
     { to: productionListPath(projectId), labelKey: 'page.productions.title' },
   ];
 };
