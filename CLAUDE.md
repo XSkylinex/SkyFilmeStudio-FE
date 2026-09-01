@@ -53,8 +53,8 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **thirty-five as of
-2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **sixty-seven as of
+2026-09-01, thirty-five as of 2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL. Ten of them were mapped while they existed **only on an unmerged backend
@@ -86,11 +86,13 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **760 keys in English and
-Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **881 keys in English and
+Hebrew**, counted 2026-09-01 after FE-10 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
-and its two write forms.
+and its two write forms, and the storyboard review, whose 120 keys include a label for every value of
+six contract enums — sixteen shot types, fifteen shot states, nine generation strategies, five
+regeneration modes, three keyframe requirements, two storyboard levels.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
 tree held 371, so the warning had already failed once on the paragraph carrying it. It then failed a
 second time on the same paragraph: it read 690 while the tree held 694, because absorbing four
@@ -430,6 +432,42 @@ different reason than the canonical plates are — the immutability trigger perm
 published row, so `DELETE` will soft-delete a bible productions planned against as readily as a draft
 nobody used, with no `ErrorCode` separating the two.
 
+**FE-10 made the storyboard read, and the keyframe gate real, on 2026-09-01.** `/storyboard` was an
+`EmptyState` saying "Not connected to the orchestrator yet"; it is now a strip of scenes, each opening
+to its shots, each shot to its storyboard frames and the gate that decides whether it may be rendered.
+**One controller method unblocked it** — `GET /productions/:productionId/planning/scenes`, merged as
+`dcf6d49` — and the same method unblocked BE-16's shots and BE-17's dialogue lines, both of which had
+been published and unreachable for weeks. The phase's dependency line said BE-18, which merged and
+changed nothing here.
+
+**Approving a keyframe is the highest-leverage decision in the pipeline, and it is the only write on
+this screen.** `POST` and `DELETE /storyboard-frames/:frameId/approval` are buildable precisely
+because they take no request body; every other storyboard write has a route whose request shape the
+contract does not export. No optimistic update — and the guard for that is a **cache snapshot**, not a
+spy on `invalidateQueries`, because the first version of it passed while a `setQueryData` optimistic
+update was live. A spy on the wrong verb is a green test over a broken rule.
+
+**Approve is never offered on a draft.** `StoryboardsService.approve` refuses a non-`KEYFRAME` frame
+with a 400, and that refusal is a plain `BadRequestException`, so `StudioErrorFilter` never sees it
+and it arrives codeless. Offering the control and explaining the refusal afterwards is the defect
+`plan/08` avoided in the keyframe-requirement picker.
+
+**A decision writes the shot, not only the frame**, and review caught this repo invalidating only half
+of it. `approve` calls `setApprovedKeyframe` and `advanceIfIn` inside one transaction; the query that
+reads a `Shot` is a deliberate sibling key, so the prefix invalidation could not reach it and a card
+would have read "Storyboard ready" indefinitely after its keyframe was approved.
+
+**No frame is shown as a picture, and that is a missing route rather than a decision.** An `Artifact`
+carries a project-relative path and nothing serves its bytes — checked across every controller, with
+the search validated against the source-asset thumbnail and proxy routes it does find. So the strip
+shows the record of a frame and says why the picture is absent, and the comparison overlay shows the
+anchors the orchestrator records rather than two images side by side.
+
+**The phase also removed a second source of truth it had just created.** Deciding which shots need no
+keyframe from a copy of the backend's unpublished `NEEDS_NO_KEYFRAME` list would have disagreed
+silently the day a strategy was added to it, and it stated one of the two causes of `NOT_REQUIRED` as
+if it were the only one. The gate reports what the wire returns.
+
 ## The six rules that outrank everything else
 
 1. **One backend, no exceptions.** The UI talks to the NestJS orchestrator and nothing else. Never
@@ -480,7 +518,7 @@ Use `yarn`, never `npm` or `npx`: `~/.npm/_cacache` on this machine is root-owne
 | Vite | 8.2.1 | Rolldown + Oxc; esbuild is an *optional* peer and is **not installed** |
 | oxlint | 1.78.0 | 9 plugins, 11 rules. **Type-aware mode is ON** — `oxlint-tsgolint@7.0.2001` installed |
 | Vitest | 4.1.10 | jsdom 30.0.1, RTL 16.3.2, jest-dom 7.0.1, MSW 2.15.0 |
-| Zod | 4.4.3 | pinned exactly, **identical to the backend's pin**; a major split makes two `z.infer`s |
+| Zod | 4.5.2 | pinned exactly, **identical to the backend's pin**. Any split makes two `z.infer`s — measured 2026-09-01, a **minor** one (4.4.3 here against their 4.5.2) took `tsc -b` from 0.9 s to 14.3 GB and never completing. It presents as a hang, not an error |
 | TanStack Query | 5.101.4 | server state only; Redux Toolkit 2.12.0 holds uncommitted edits |
 | Prettier | 3.9.6 | backend's config verbatim; `*.md` and `.claude/` are ignored |
 

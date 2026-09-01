@@ -1,8 +1,9 @@
 # FE-10 — Storyboard review
 
-> **Depends on:** 09 · **Blocks:** 12 · **Backend needs:** BE-18 · **Plan authority:** §17, §39, §49.4
-> **Status:** blocked — no idempotent read of a production's scenes. The ids exist on the wire; the
-> only route carrying them replaces the scene set to do it, and refuses once shots exist
+> **Depends on:** 09 · **Blocks:** 12 · **Backend needs:** BE-16, BE-18 · **Plan authority:** §17, §39, §49.4
+> **Status:** partly done 2026-09-01 — the strip reads and the keyframe gate approves. What is left is
+> unbuildable rather than unbuilt: no route serves an artifact's bytes, and seven write DTOs are
+> unpublished
 
 ## Goal
 
@@ -12,107 +13,61 @@ pleasant to use at two hundred shots, the pipeline works. If it is not, people w
 
 > "Never send an unreviewed screenplay directly into hundreds of final video renders." — §17
 
-## Why this cannot start yet — measured 2026-08-31, re-measured 2026-09-01
+## What unblocked it, on 2026-09-01
 
-Two blockers were measured. **One of them is gone as of 2026-09-01, and the phase is still blocked**,
-which is the useful part: the blocker that mattered was never the one on the dependency line.
+**One controller method.** `GET /productions/:productionId/planning/scenes` merged upstream as
+`dcf6d49`, declared `Promise<readonly Scene[]>`, and it changes nothing when it runs. That is the
+whole unblock. Everything below it — `GET /scenes/:sceneId/shots` from BE-16, all twelve storyboard
+routes from BE-18, and BE-17's dialogue-line collection — had been published and unreachable, every
+one of them keyed on an id that no idempotent read produced.
 
-**BE-18 has merged, and it changes nothing here.** ~~BE-18 has not started~~ — that was true on
-2026-08-31 and false twenty-two minutes before this was written. BE-18 landed on backend `master` as
-`f14098e`, and it is not a stub: `storyboards.controller.ts` publishes `POST`/`GET .../frames`,
-`frames/regenerate`, `frames/revise-prompt`, `frames/change-framing`, `frames/change-expression`,
-`keyframe-waiver`, `keyframe-requirement` and `keyframe-status` under `shots/:shotId/storyboard`,
-plus `GET :frameId/comparison` and `POST`/`DELETE :frameId/approval` under `storyboard-frames`. All
-five of its refusals are wired to real throw sites now, not merely declared. Steps 2, 3, 5 and 6 have
-something to read at last — and no way to reach it, because **every one of those routes is keyed on a
-`shotId`**, which is keyed on a `sceneId`, which is the blocker below.
+**The blocker was never the phase on the dependency line.** This file said "Backend needs: BE-18" and
+tracked it through `not started` → `in progress` → merged, and the phase did not move once, because
+all twelve of BE-18's routes hang off a `shotId`. The lesson stands and is now demonstrated in both
+directions: **track the missing route, not the phase number.** A single `GET` that nobody had
+scheduled unblocked three surfaces at once.
 
-The lesson is about how this file was read, not about the backend. "Blocked on BE-18" was the
-dependency line's answer and it was the wrong one to track; the phase would have unblocked the day a
-`GET` returned scenes, whether or not BE-18 existed. **Track the missing route, not the phase
-number.**
+**What the old blocker actually was**, kept because the reasoning is still correct: the only route
+carrying scene ids was `PUT /productions/:productionId/planning/scenes`, which deletes every scene and
+re-inserts with fresh ids, and refuses outright once shots exist because `shots.scene_id` is
+`onDelete: 'restrict'`. A read that destroys what it reads is not a read. That route still behaves
+exactly that way — it is simply no longer the only one. Its refusal is now a typed `SCENE_IN_USE`
+rather than a 500, which this repo has absorbed.
 
-**The shot half that BE-16 *did* publish is unreachable.** BE-16 merged as `d658f69` and shipped
-`shots.controller.ts`, which is real: `GET /scenes/:sceneId/shots`, `GET /shots/:id`,
-`GET`/`POST /shots/:id/prompt` and `POST /shots/:id/transition`. Every one of them is keyed on an id
-this repo cannot obtain.
+**This repo reported the wrong reason first, from a working instrument.** A grep over controller
+return-type annotations for `Scene` returned zero and was validated against a true positive — seven
+hits for `Promise<Production>`. That proved the grep could find annotations; it never proved
+annotations answer *what comes back over HTTP*. A sound instrument aimed at the wrong question, which
+no true-positive check catches. **When the question is about the wire, read the wire.**
 
-**Corrected 2026-09-01.** An earlier version of this section said "no published route yields a
-`SceneId`" and gave the wrong reason. It was wrong twice over, and the corrected statement is
-narrower and more useful.
+## What is still blocked, and why each one is different
 
-Not true: that the contracts are incomplete. `sceneSchema` is published and carries
-`id: sceneIdSchema`, and both `shotSchema` and `dialogueLineSchema` carry a `sceneId`. A `Shot` in
-hand does hand you the scene it belongs to.
+Three distinct reasons, which matter because they have three different fixes.
 
-Not true either: that one path contains `scenes`.
-`PUT /productions/:productionId/planning/scenes` is a second, and `scenes/:sceneId/shots` is a
-*controller* carrying two routes rather than a route. The earlier sentence conflated the two.
+**No frame is shown as a picture — no route serves an artifact's bytes.** `Artifact` carries
+`path: projectRelativePathSchema`, a path inside the project, and every controller on backend master
+was searched for a route serving it. The search was validated against the two it does find,
+`GET /projects/:projectId/assets/:assetId/thumbnail` and `.../proxy`, which are for *source assets*.
+A storyboard frame is an artifact, not a source asset. Reaching the file any other way would mean this
+app talking to something that is not the orchestrator, which rule 1 forbids outright. So the strip
+shows the record of a frame — level, attempt, regeneration mode, anchors, approval state — and says on
+screen why the picture is absent. This is FE-06's "do not report structure that does not exist"
+applied to an image.
 
-**Corrected again, later the same day, by the backend session.** The claim above this line — that
-`PUT /planning/scenes` "discards the ids it just created" — was **false**, and the way it was reached
-is the more useful half.
+**Seven writes have routes and no published request shape.** `generate`, `regenerate`,
+`revise-prompt`, `change-framing`, `change-expression`, `keyframe-waiver` and `keyframe-requirement`
+all exist under `shots/:shotId/storyboard`, and their DTOs live in `src/storyboards/dto` and
+`src/shots/dto` without being exported through the orchestrator's `src/contracts/index.ts`. Counted:
+the barrel carries forty `dto/` lines and none of them is a shot or storyboard DTO. There is nothing
+to validate a request body against, so none of the seven is offered.
 
-`PUT /productions/:productionId/planning/scenes` **returns the full scene rows, ids included.**
-`ScenesRepository.replaceForProduction` returns `Promise<readonly Scene[]>`;
-`PlanningService.applySceneOutline` returns that exact value and declares `Promise<readonly unknown[]>`;
-the controller widens it again. The widening is two lines of declaration over a complete value. The
-proof is not inference: the backend's own `test/storyboards/storyboards.e2e-spec.ts` parses that
-route's live response body with `z.array(sceneSchema)` and then uses `scene.id` to reach
-`/shots/:shotId/…`, and it passes on master.
+**Progress needs the socket.** BE-23 has not started. Frames still rendering do not update on their
+own, and the screen says so rather than polling a local machine on a timer.
 
-**How this repo got it wrong is worth more than the fact.** The instrument was a grep over controller
-**return-type annotations** for `Scene`, which returned zero — and it was validated against a true
-positive first, seven hits for `Promise<Production>`. That proved the grep could find return-type
-annotations. It never proved that return-type annotations answer *what comes back over HTTP*. A
-working instrument aimed at the wrong question, which no true-positive check catches. When the
-question is about the wire, read the wire — or read a test that parses it.
-
-**The phase is still blocked, and the blocker is now exact: there is no way to *re-read* the ids.**
-`replaceForProduction` deletes every scene for the production and re-inserts with
-`id: sceneIdSchema.parse(randomUUID())`, so each call mints new ids and the previous ones are dead.
-And `shots.scene_id` is `onDelete: 'restrict'`, so once a scene has shots the delete fails outright —
-the repository's own docblock says re-planning past committed work "fails loudly rather than
-orphaning it". By the time a storyboard has anything to review there are shots, so the only
-id-yielding route refuses to run.
-
-A read that destroys what it reads is not a read. This screen loads on mount and again after every
-reload, and `CLAUDE.md` requires that a reload lose nothing.
-
-- the only route yielding a `shotId` is `GET /scenes/:sceneId/shots`, which needs the `sceneId`;
-- the only route yielding a `dialogueLineId` needs a `sceneId` too, or a `Shot`'s `dialogueLineIds`
-  — and a `Shot` needs one of the above.
-
-The two places a scene otherwise surfaces genuinely carry no id: `runtimeSegmentShareSchema` has
-`order`, `label`, `targetDurationSeconds`, `reused` and `shareOfTarget`, and
-`sceneOutlineEntrySchema` is `scenePlanSchema.omit({ shots: true })`, which has none.
-
-**The missing piece is one idempotent `GET` that returns a production's scenes** — and it is smaller
-than it sounds. `ScenesRepository.listForProduction(productionId): Promise<readonly Scene[]>` already
-exists and is already called from `planning.service.ts` twice and `dialogue-timing.service.ts` once.
-What is missing is a controller method delegating to it. No query, no new contract.
-
-**A precondition to design for, not a refusal to handle afterwards.** The backend is making §23's
-production render gate actually run on submission — it was silently skipped for storyboard and speech
-jobs because neither passed a `productionId`. Once that lands, a storyboard submit is refused with
-`PRODUCTION_RENDER_NOT_PERMITTED` unless the production is in `STORYBOARDING` or `STORYBOARD_REVIEW`,
-and dialogue speech needs `AUDIO_RENDER` or `VIDEO_RENDER`. So this screen moves the production into
-the right state through `POST /productions/:id/transitions` before it offers a submit control, the
-same way FE-07's approval gate reads server state before rendering a button.
-
-Two smaller gaps sit behind the same wall. `ShotPromptSpec` is typed from
-`src/shots/prompt-specs.repository`, not from `src/contracts/`, so the compiled prompt has no
-published response shape; and no `../shots/dto/*` appears in the backend's `src/contracts/index.ts`,
-so `transitionShotRequestSchema` and `planSceneRequestSchema` are unpublished the same way the
-render-job DTO is. Approve and reject would have no validated request body even with an id in hand.
-
-**Updated 2026-09-01: the missing scene `GET` now gates three surfaces, not one.** BE-17 merged as
-`014712e` and published dialogue lines, speech synthesis, speech approval, the §19 tier choice and
-`POST /productions/:id/dialogue-timing`, with every DTO exported through the barrel and — unlike the
-shot DTOs — properly published. Its collection is `@Controller('scenes/:sceneId/dialogue-lines')`.
-So a third fully-contracted surface is now unreachable for exactly the same reason as the first two.
-**One route that returns a production's scenes would unblock shots, dialogue and this phase's strip
-together**, which makes it the single highest-value thing the backend could add for this repo.
+**The two approval routes are buildable for exactly one reason: they take no body.**
+`POST` and `DELETE /storyboard-frames/:frameId/approval` are identified entirely by the path id and
+both answer with the published `ShotKeyframeStatus`. That is why the gate this phase exists for is
+real while the operations around it are not.
 
 ## Decisions
 
@@ -225,19 +180,47 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 - confirm the scene's continuity facts are visible next to its shots;
 - `dir="rtl"` — the strip and overlay mirror correctly.
 
+**What was actually run, 2026-09-01.** `yarn typecheck`, `yarn lint`, `yarn test`, `yarn build` and
+`yarn format:check` all exit 0; 1420 tests across 211 files; entry chunk 491.90 kB with the whole
+storyboard in its own 27.19 kB chunk. Four of the nine bullets above cannot be run here at all —
+three need images this build has no route for, and the fourth needs a regenerate control that has no
+published request shape. The 200-shot and `dir="rtl"` passes need a seeded production and have not
+been done; **that is a gap in this phase's verification, not a passed check.**
+
 ## Done when
 
-- [ ] scene strip with shot cards, virtualised, usable at 200+ shots
-- [ ] Level 1 and Level 2 are visually unmistakable
-- [ ] the comparison overlay is large and shows the immutable trait list
-- [ ] all seven §17.2 operations exist
-- [ ] regeneration modes are explicit; there is no bare "Retry"
-- [ ] no optimistic updates on approve/reject
-- [ ] the keyframe gate is visible on the card
-- [ ] motion drafts are the obvious next step; skipping is a deliberate override
-- [ ] reuse/hold shots are not shown as pending
-- [ ] continuity facts appear alongside their scene
-- [ ] keyboard-first review works end to end
+- [x] scene strip with shot cards, usable at 200+ shots — **by disclosure rather than
+      virtualisation.** A scene fetches its shots only when opened and a shot its frames and gate only
+      when opened, which bounds the mounted DOM and the request count together. No virtualisation
+      dependency was added; revisit if a single scene ever holds enough shots to matter, which is not
+      the shape of the data
+- [x] Level 1 and Level 2 are visually unmistakable — badge, tone and a sentence each, and the
+      distinction is enforced rather than decorative: approve is **not offered** on a `DRAFT`, because
+      `StoryboardsService.approve` refuses one with a 400
+- [ ] the comparison overlay is large and shows the immutable trait list — **cannot be met.** No route
+      serves an artifact's bytes, so there are no images to place side by side, and the trait list is a
+      canonical set's frozen descriptor in another feature's data. The overlay shows the anchors the
+      orchestrator records and says what it is not
+- [ ] all seven §17.2 operations exist — **two of seven.** Approve and reject are buildable because
+      their routes take no body; regenerate, revise prompt, change framing, change expression and
+      compare-with-reference-images all need request shapes the contract does not export
+- [ ] regeneration modes are explicit; there is no bare "Retry" — vacuously true and left unticked:
+      there is no regeneration control at all. The five modes have catalogue labels ready for one
+- [x] no optimistic updates on approve/reject — and the guard is a cache snapshot rather than a spy on
+      `invalidateQueries`, because the first version of it passed while a `setQueryData` optimistic
+      update was live
+- [x] the keyframe gate is visible on the card — `videoPermitted`, the requirement, any waiver, and
+      the orchestrator's own sentence
+- [ ] motion drafts are the obvious next step; skipping is a deliberate override — needs the render
+      queue, which is FE-11 and blocked on a missing `GET /render-jobs`
+- [x] reuse/hold shots are not shown as pending — **taken from the wire, not from the strategy.** An
+      earlier pass carried a copy of the backend's unpublished `NEEDS_NO_KEYFRAME` list; the gate now
+      reports the requirement the orchestrator returns, which also covers the commoner second cause of
+      `NOT_REQUIRED` — a shot with no canonical subject that nobody marked by hand
+- [x] continuity facts appear alongside their scene
+- [x] keyboard-first review works end to end — real buttons in DOM order with `aria-expanded`, so Tab
+      and Enter reach every control. Deliberately **no** single-key shortcuts: FE-16 fixed a Level A
+      failure of SC 2.1.4 in this repo already
 
 ## Traps
 
