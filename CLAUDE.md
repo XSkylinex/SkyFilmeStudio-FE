@@ -33,9 +33,11 @@ FE-02 added the token system (`src/styles/`) and a primitive layer of seventeen 
 it contributes no styles of its own (`icon-button` composes `button` and so has none):
 `badge`, `button`, `icon`, `icon-button`, `field`, `input`, `select`, `status-dot`, `progress-bar`,
 `skeleton`, `dialog`, `tooltip`, `toast`, `empty-state`, `error-state`, `media-tile`,
-`approval-controls`. **The layer is nineteen today** — FE-15 added `content-text`, the `<bdi>` wrapper
-that makes a Hebrew record read correctly inside an English UI, and FE-09 added `textarea`, because a
-production's brief is a paragraph and `Input` is the wrong element for one.
+`approval-controls`. **The layer is twenty today** — FE-15 added `content-text`, the `<bdi>` wrapper
+that makes a Hebrew record read correctly inside an English UI, FE-09 added `textarea`, because a
+production's brief is a paragraph and `Input` is the wrong element for one, and FE-16's third pass
+added `validation-summary`, the `<output tabIndex={-1}>` a form renders when a submit fails the
+contract, keyed on the attempt so it takes focus every time and not only the first.
 `src/shell/design-system-preview/` renders all of them and is the only place
 any of it can be looked at.
 
@@ -88,6 +90,8 @@ and into `src/shell/api/`.
 
 FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **977 keys in English and
 Hebrew**, counted 2026-09-01 after FE-13 — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **885 keys in English and
+Hebrew**, counted 2026-09-01 after FE-16's third pass — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -234,9 +238,12 @@ planner were lazy — `plan/16` had already named that inversion for the render 
 
 Everything else in `plan/16` needs a screen that does not exist — storyboard, shot review, the
 render queue — and the phase file names which phase each unticked box waits for rather than leaving
-them blank. Two exceptions are named there rather than blamed on a missing screen: **a failed
-validation is announced on one form out of nine**, and **nothing tells anyone which fields are
-required**. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
+them blank. Two exceptions were named there rather than blamed on a missing screen — a failed
+validation announced on one form out of nine, and nothing telling anyone which fields were required —
+and **both closed on 2026-09-01 in a third pass.** The required count in the plan was wrong in an
+instructive way: it counted keys the wire needs present, and every form sends every key, so a field
+whose schema accepts `''` is not one a person has to fill. Asking `safeParse('')` gives thirteen, not
+twelve, and an empty prop form reporting one invalid field rather than two is what exposed it. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
 is the first `<video>` in this codebase, its route is `lazy`, and it builds as its own chunk rather
 than into the entry. `plan/16` carries the measurement and the one caveat — React DOM's own media
 event plumbing is in the entry either way and is not ours to move.

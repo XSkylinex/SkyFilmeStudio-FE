@@ -187,17 +187,24 @@ times in one session.
 
 ## Recorded rather than fixed
 
-- **A failed validation is silent in eight forms.** `Field` associates the error correctly —
-  `aria-describedby` and `aria-invalid`, pinned by its own tests — but nothing announces it and focus
-  does not move, so a screen-reader user presses Save and learns nothing. `src/` contains no
-  `aria-live` at all. The create-production form got `role="alert"` on its banner as part of the
-  commit that gave it a success announcement; the other eight need the `<output tabIndex={-1}>`
-  treatment this file already settled on, and that is one sweep rather than eight.
-- **Nothing conveys which fields are required.** Twelve are, read off the contract:
-  three on locations, two on props, four on voices, three on styles. `FieldProps` has no `required`
-  and `src/` has no `aria-required`. Do **not** reach for the native `required` attribute — no form
-  sets `noValidate`, so the browser would block submit before `handleSubmit` runs and the Zod schema
-  would stop being the only validator, which is a property the style form's tests exist to hold.
+- **A failed validation is silent in eight forms — fixed 2026-09-01, on eleven.** The count had
+  grown: the bible's two forms arrived after this was written. `ValidationSummary`, the twentieth
+  primitive, is an `<output tabIndex={-1}>` that takes focus when it appears and is keyed on an
+  attempt counter so it takes focus again on the next failed submit — without the key, only the
+  first failure is ever heard, and a test was watched failing with it removed. Every form renders it
+  first inside `<form>`. The create-production form's `role="alert"` banner, the unreliable shape,
+  is gone with its string and its rule.
+- **Nothing conveys which fields are required — fixed 2026-09-01, and the count was wrong.** This
+  bullet said twelve, read off the contract. That counted keys the wire needs present, and every
+  form always sends every key, so a field whose schema accepts `''` is one the user may leave blank.
+  Asking `safeParse('')` instead gives **thirteen**: two on styles, four on voices, one on locations,
+  one on props, and five on the production form this bullet never counted. A style's `description`
+  and a location's and prop's `canonicalDescription` are `z.string()` with no `.min(1)`, and an empty
+  prop form reports one field, not two — which is how the over-count was found. `Field` takes
+  `required`, renders the marker *beside* the label rather than inside it so the accessible name is
+  untouched, and clones `aria-required` onto the control; the native `required` attribute is still
+  not used, for the reason above, and a test pins its absence. The target runtime is one value split
+  across two inputs, so its marker is on the fieldset's legend.
 - **Both language catalogues ship on first paint.** `use-translate` is a 180.53 kB chunk that
   `index.html` links and the entry statically imports, and it contains **24,672** Hebrew characters —
   measured with a grep validated on a four-character probe. An English reader parses the whole Hebrew
@@ -267,9 +274,8 @@ What the gate did not tell us, and was checked by loading the app in Chrome agai
       approval copies it, and the two-line ref moved to `src/lib/helpers/focus-when-shown.ts` on its
       second consumer. The four that did nothing — style, voice, location and prop — now announce,
       each scoped to the record it approved rather than to "an approval happened", and
-      `CreateProductionForm` was the last create form saying nothing at all. **A failed validation is
-      still silent on eight forms**, which is recorded above as its own sweep rather than left implied
-      by this box
+      `CreateProductionForm` was the last create form saying nothing at all. **A failed validation now
+      announces on all eleven forms** — see the sweep above, closed 2026-09-01
 - [x] control boundaries satisfy SC 1.4.11, measured rather than eyeballed
 - [x] reduced motion is honoured in CSS — every transition in `src/` uses a duration token, and the
       three keyframe loops each also set `animation: none`
