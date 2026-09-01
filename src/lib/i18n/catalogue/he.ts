@@ -548,8 +548,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'styles.lineage.approvedIs': 'מאושרת: גרסה {version}',
   'styles.version.label': 'גרסה {version}',
   'styles.version.approved': 'מאושרת',
-  'styles.version.frozen':
-    'גרסה מאושרת מוקפאת, ולכן שינוי הופך לגרסה חדשה ולא לעריכה.',
   'styles.version.context': 'גרסה {version} של {name}',
   'styles.approveError.title': 'הגרסה הזו לא אושרה',
   'page.styles.title': 'סגנונות',

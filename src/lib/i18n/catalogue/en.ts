@@ -553,8 +553,6 @@ export const EN_CATALOGUE = {
   'styles.lineage.approvedIs': 'Approved: v{version}',
   'styles.version.label': 'v{version}',
   'styles.version.approved': 'Approved',
-  'styles.version.frozen':
-    'An approved version is frozen, so a change becomes a new version rather than an edit.',
   'styles.version.context': 'version {version} of {name}',
   'styles.approveError.title': 'That version was not approved',
   'page.styles.title': 'Styles',
