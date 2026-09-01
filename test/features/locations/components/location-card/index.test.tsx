@@ -15,24 +15,6 @@ const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
 );
 
-beforeAll(() => {
-  if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
-    HTMLDialogElement.prototype.showModal = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = true;
-    };
-  }
-  if (typeof HTMLDialogElement.prototype.close !== 'function') {
-    HTMLDialogElement.prototype.close = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = false;
-      this.dispatchEvent(new Event('close'));
-    };
-  }
-});
-
 const serveNoPlates = (locationId: LocationId): void => {
   server.use(
     http.get(API_PATH.locationPlates(PROJECT_ID, locationId), () =>

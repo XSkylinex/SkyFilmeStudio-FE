@@ -7,24 +7,6 @@ import { KeyboardShortcutsProvider } from '@/shell/keyboard/keyboard-shortcuts-p
 import { ShortcutsHelpButton } from '@/shell/keyboard/shortcuts-help-button';
 import { characterShortcutsEnabledSet } from '@/shell/shell.slice';
 
-beforeAll(() => {
-  if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
-    HTMLDialogElement.prototype.showModal = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = true;
-    };
-  }
-  if (typeof HTMLDialogElement.prototype.close !== 'function') {
-    HTMLDialogElement.prototype.close = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = false;
-      this.dispatchEvent(new Event('close'));
-    };
-  }
-});
-
 const openHelpIn = async (language: 'en' | 'he'): Promise<void> => {
   const store = createStore();
   store.dispatch(interfaceLanguageSet(language));

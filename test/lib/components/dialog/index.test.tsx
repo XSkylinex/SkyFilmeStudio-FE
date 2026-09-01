@@ -3,24 +3,6 @@ import { fireEvent, screen } from '@testing-library/react';
 import { renderInStore } from '../../../render-in-store';
 import { Dialog } from '@/lib/components/dialog';
 
-beforeAll(() => {
-  if (typeof HTMLDialogElement.prototype.showModal !== 'function') {
-    HTMLDialogElement.prototype.showModal = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = true;
-    };
-  }
-  if (typeof HTMLDialogElement.prototype.close !== 'function') {
-    HTMLDialogElement.prototype.close = function (
-      this: HTMLDialogElement,
-    ): void {
-      this.open = false;
-      this.dispatchEvent(new Event('close'));
-    };
-  }
-});
-
 afterEach(() => {
   vi.restoreAllMocks();
 });
