@@ -92,12 +92,6 @@ export const GENERATION_STRATEGY_LABEL: Record<
   VIDEO_RETAKE: 'storyboard.strategy.VIDEO_RETAKE',
 };
 
-export const STRATEGIES_NEEDING_NO_KEYFRAME: ReadonlySet<GenerationStrategy> =
-  new Set<GenerationStrategy>([
-    'REUSE_APPROVED_CLIP',
-    'LIMITED_ANIMATION_HOLD',
-  ]);
-
 export const FRAME_ANCHOR_KIND_LABEL: Record<
   'SUBJECT' | 'LOCATION_PLATE' | 'PROP',
   TranslationKey

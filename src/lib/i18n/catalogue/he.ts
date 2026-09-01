@@ -1007,11 +1007,11 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'storyboard.error.title': 'לא ניתן היה לקרוא את הסצנות של ההפקה הזו',
   'storyboard.empty.title': 'עדיין לא תוכננו סצנות',
   'storyboard.empty.description':
-    'הפקה מקבלת את הסצנות שלה כשהתוכנית שלה מאושרת. יש לאשר את התוכנית, והסצנות יופיעו כאן.',
+    'הסצנות של הפקה מגיעות ממתאר הסצנות שלה, שנכתב בשלב התכנון. שום דבר במסך הזה אינו יוצר אותן, וכל עוד אינן קיימות אין כאן מה לסקור.',
   'storyboard.scene.label': 'סצנה {order}',
   'storyboard.scene.purpose': 'מטרה',
   'storyboard.scene.emotionalBeat': 'פעימה רגשית',
-  'storyboard.scene.timeOfDay': 'שעה',
+  'storyboard.scene.timeOfDay': 'שעת היום',
   'storyboard.scene.duration': 'משך יעד',
   'storyboard.scene.continuityIn': 'רציפות בכניסה',
   'storyboard.scene.continuityOut': 'רציפות ביציאה',
@@ -1034,8 +1034,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'storyboard.shot.strategy': 'אסטרטגיית יצירה',
   'storyboard.shot.state': 'מצב',
   'storyboard.shot.continuity': 'דרישות רציפות',
-  'storyboard.shot.noKeyframeNeeded':
-    'השוט הזה נבנה מחומר שכבר קיים, ולכן אינו דורש קיפריים ואינו ממתין לאחד.',
   'storyboard.gate.title': 'שער הווידאו',
   'storyboard.gate.permitted': 'רינדור וידאו מותר לשוט הזה.',
   'storyboard.gate.blocked': 'רינדור וידאו חסום לשוט הזה.',
@@ -1047,7 +1045,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'storyboard.frames.error': 'לא ניתן היה לקרוא את הפריימים של השוט הזה.',
   'storyboard.frame.label': 'ניסיון {attempt}',
   'storyboard.frame.level': 'רמה',
-  'storyboard.frame.mode': 'נוצר כ',
+  'storyboard.frame.mode': 'אופן היצירה',
   'storyboard.frame.created': 'נוצר בתאריך',
   'storyboard.frame.approved': 'הפריים הזה הוא הקיפריים המאושר.',
   'storyboard.frame.draftNotApprovable':
@@ -1072,7 +1070,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'storyboard.compare.error': 'לא ניתן היה לקרוא את ההשוואה הזו.',
   'storyboard.compare.noImages':
     'זו ההשוואה שהאורקסטרטור רושם, ולא שתי התמונות זו לצד זו. היא מציינת לְמה כל עוגן מפנה; שיפוט סטייה בעין דורש נתיב שמגיש את התמונות האלה, ואין כזה.',
-  'storyboard.compare.anchor.SUBJECT': 'נושא',
+  'storyboard.compare.anchor.SUBJECT': 'סובייקט',
   'storyboard.compare.anchor.LOCATION_PLATE': 'לוח מיקום',
   'storyboard.compare.anchor.PROP': 'אביזר',
   'storyboard.level.DRAFT': 'טיוטה',
@@ -1082,7 +1080,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'storyboard.level.KEYFRAME.explained':
     'הפריים שהופך לעוגן להמרת תמונה לווידאו. זה הפריים שהרינדור נבנה עליו.',
   'storyboard.requirement.NOT_REQUIRED': 'לא נדרש',
-  'storyboard.requirement.REQUIRED_BY_SUBJECT': 'נדרש בגלל נושא קנוני',
+  'storyboard.requirement.REQUIRED_BY_SUBJECT': 'נדרש בגלל סובייקט קנוני',
   'storyboard.requirement.REQUIRED_BY_USER': 'נדרש על ידי אדם',
   'storyboard.regeneration.SAME_PROMPT_NEW_SEED': 'אותו פרומפט, זרע חדש',
   'storyboard.regeneration.CONTROLLED_PROMPT_REVISION': 'תיקון פרומפט מבוקר',

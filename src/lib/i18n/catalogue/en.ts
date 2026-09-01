@@ -1020,7 +1020,7 @@ export const EN_CATALOGUE = {
   'storyboard.error.title': 'This production’s scenes could not be read',
   'storyboard.empty.title': 'No scenes are planned yet',
   'storyboard.empty.description':
-    'A production gets its scenes when its plan is approved. Approve the plan, and the scenes appear here.',
+    'A production\u2019s scenes come from its scene outline, which is written while the production is planned. Nothing on this screen creates them, and until they exist there is nothing here to review.',
   'storyboard.scene.label': 'Scene {order}',
   'storyboard.scene.purpose': 'Purpose',
   'storyboard.scene.emotionalBeat': 'Emotional beat',
@@ -1048,8 +1048,6 @@ export const EN_CATALOGUE = {
   'storyboard.shot.strategy': 'Generation strategy',
   'storyboard.shot.state': 'State',
   'storyboard.shot.continuity': 'Continuity requirements',
-  'storyboard.shot.noKeyframeNeeded':
-    'This shot is built from footage that already exists, so it needs no keyframe and is not waiting for one.',
   'storyboard.gate.title': 'Video gate',
   'storyboard.gate.permitted': 'Video rendering is permitted for this shot.',
   'storyboard.gate.blocked': 'Video rendering is blocked for this shot.',
@@ -1098,7 +1096,8 @@ export const EN_CATALOGUE = {
   'storyboard.level.KEYFRAME.explained':
     'The frame that becomes the anchor for image-to-video. This is the one the render is built on.',
   'storyboard.requirement.NOT_REQUIRED': 'Not required',
-  'storyboard.requirement.REQUIRED_BY_SUBJECT': 'Required by a canonical subject',
+  'storyboard.requirement.REQUIRED_BY_SUBJECT':
+    'Required by a canonical subject',
   'storyboard.requirement.REQUIRED_BY_USER': 'Required by a person',
   'storyboard.regeneration.SAME_PROMPT_NEW_SEED': 'Same prompt, new seed',
   'storyboard.regeneration.CONTROLLED_PROMPT_REVISION':
