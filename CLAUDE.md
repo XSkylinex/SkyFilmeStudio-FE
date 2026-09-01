@@ -86,7 +86,7 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **695 keys in English and
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **742 keys in English and
 Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, and the project
@@ -221,10 +221,34 @@ approved head, a voice split on whether it belongs to a subject, plate coverage 
 location actually has, and a prop's continuity rules. `src/features/{styles,voices,locations,props}/`
 hold the slices; `plan/08` records which Done-when boxes are ticked and which cannot be.
 
-**Every one of them reads and approves. None of them creates or edits.** Create and update DTOs are
-published for style profiles, voice profiles, locations, plates and props, so those forms are
-buildable and are simply not built. A pronunciation dictionary has a **create** DTO and no update one,
-which is the same gap as its missing `PATCH`. The empty states say so rather than implying otherwise.
+**All four now create and edit, as of 2026-09-01.** `/styles`, `/voices`, `/locations` and `/props`
+each offer an Add control and a per-record Edit, against the `POST` and `PATCH` every one of them
+publishes. A pronunciation dictionary still has a **create** DTO and no update one, which is the same
+gap as its missing `PATCH`. **Canonical plates are the one deliberate omission**: a plate is anchored
+to exactly one of a source asset or an artifact, checked against the stored row after a merge, so
+switching anchors must be a single `PATCH` sending both fields and the obvious two-step flow fails on
+its first step with no `ErrorCode`. `plan/08` carries the argument.
+
+**Editing a style profile does not create a version, and that is the trap this phase was built
+around.** `plan/08` step 1 says "changing a style creates a new version"; that is the product
+requirement, not the API. `PATCH` mutates the row in place, leaving `version` and `lineageId`
+untouched — a new version is a `POST` carrying `lineageId`. An editor wired to the plan's sentence
+would have silently rewritten a version other productions are pinned to, which is step 1's own
+definition of losing the user's trust. So an approved version offers **create the next version** and
+no edit at all.
+
+**What stops it is a database trigger, not this screen.** Each of the five tables carries a
+`BEFORE UPDATE` trigger raising `P0001` when an approved row's content would change, surfaced as
+`STYLE_PROFILE_IMMUTABLE`, `VOICE_PROFILE_IMMUTABLE`, `LOCATION_IMMUTABLE`, `PROP_IMMUTABLE` or
+`LOCATION_PLATE_IMMUTABLE`. The guard cannot be bypassed, so the screen's only job is to show it
+before a person meets it — the control is chosen from the record's own server-given `approved`, never
+from a client flag, exactly as FE-07 established.
+
+**Every update sends only the fields that changed.** Each update DTO is a `strictObject` with a
+`.refine()` rejecting an empty body, so a no-op save is a `400`; sending every field would also
+overwrite what the user never touched. A nullable field is cleared with an explicit `null` —
+**omitting a key means "leave it alone", and only `null` erases** — which is pinned by a test that
+fails with `expected {} to have property "realismLevel"` when the code omits instead.
 
 **`Page<T>` carries `nextCursor`, and an absent one means the end** — so truncation is detectable, and
 each of the four says "reads the first page only" when the server offers more. The asset library

@@ -503,7 +503,7 @@ question rather than settled under time pressure.
 ## Done when
 
 - [x] style modes are open-ended, with no default style presented — nothing in `src/` names one
-- [ ] versioning is visible: lineages and their approved head **are**, and as of FE-09 so is **which version a production is pinned to** — BE-15 gave a production a route, and `GET /style-profiles/:id` resolves the pin by the id it carries. Diffs are computable from `/versions` but unbuilt, and the warning needs an editor
+- [ ] versioning is visible: lineages and their approved head **are**, and as of FE-09 so is **which version a production is pinned to**. **The warning exists now** — an approved version offers *create the next version* rather than an edit, and says productions stay pinned to the version they used before the user commits. Still unticked because **diffs between versions are unbuilt**: they are computable from `/versions` and nothing renders them, so "what changed between versions" is the one part of step 1 still missing
 - [ ] the same-subject-two-styles comparison exists and demonstrates identity is unchanged
 - [x] voices support subject, narrator and standalone roles; one voice per subject is stated where it is enforced
 - [ ] the pronunciation dictionary works per language with Hebrew first-class — **the audible preview has no route**
