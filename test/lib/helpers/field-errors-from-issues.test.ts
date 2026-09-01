@@ -1,5 +1,5 @@
 import { createProductionRequestSchema } from 'sky-filme-studio-be/contracts';
-import { fieldErrorsFromIssues } from '@/features/productions/helpers/field-errors-from-issues';
+import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 
 const VALID_BODY = {
