@@ -117,7 +117,7 @@ export const EN_CATALOGUE = {
   'error.VOICE_RULES_REQUIRE_SPEECH':
     'This subject is not recorded as one that speaks, so it cannot carry voice rules. Either clear the voice rules, or record the subject as speaking first.',
   'error.CONTINUITY_SCOPE_INVALID':
-    "This fact's scope is not a valid one: either its start or end scene is not part of this production, or the end scene comes before the start. Pick both scenes from this production, with the end no earlier than the start.",
+    "Either a fact's scope is not a valid one — its start or end scene is not part of this production, or the end scene comes before the start — or this production cannot be re-planned while facts are still scoped to the scenes being replaced. Pick both scenes from this production with the end no earlier than the start, or withdraw the facts that point at those scenes first.",
   'error.SCENE_IN_USE':
     'This production cannot be re-planned: its scenes already carry shots, dialogue lines or render jobs, and applying an outline replaces the whole scene set. The orchestrator refuses rather than orphaning that work — revise the scenes individually, or withdraw what depends on them first.',
   'error.CONTINUITY_CONTEXT_REQUIRED':
