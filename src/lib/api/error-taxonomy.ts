@@ -258,4 +258,12 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.KEYFRAME_REQUIREMENT_DERIVED',
   },
+  QC_RUN_SCOPE_REQUIRED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.QC_RUN_SCOPE_REQUIRED',
+  },
+  PRODUCTION_QC_REPORT_VERSION_EXISTS: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.PRODUCTION_QC_REPORT_VERSION_EXISTS',
+  },
 };

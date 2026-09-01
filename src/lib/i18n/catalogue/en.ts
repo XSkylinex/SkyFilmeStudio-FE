@@ -59,6 +59,10 @@ export const EN_CATALOGUE = {
     'A keyframe for this shot has to be anchored to the approved look of what it contains — the subject, the location, the props — and no anchor was available. That anchoring is what stops the same character drifting from shot to shot.',
   'error.REGENERATION_MODE_REQUIRED':
     'Regenerating this frame needs the mode stated: the same prompt with a new seed, a controlled revision of the prompt, or a fresh keyframe. Those are different operations, and an unlabelled retry makes the attempt history impossible to read afterwards.',
+  'error.QC_RUN_SCOPE_REQUIRED':
+    'A quality-control run has to be attached to something — either one shot or a whole production. This one named neither, so nothing could say what it had checked. Sending it again unchanged will fail the same way.',
+  'error.PRODUCTION_QC_REPORT_VERSION_EXISTS':
+    'This production already has a quality-control report at that version. Reports are numbered and never overwritten, so the next one has to be a new version rather than a reuse of this one.',
   'error.KEYFRAME_REQUIREMENT_DERIVED':
     'Whether a keyframe is required by the subjects in a shot is worked out when the scene is planned, so it cannot be chosen by hand — say instead that a person is asking for the keyframe. And once a shot carries a canonical subject the requirement cannot be changed at all: record a waiver with a reason if this shot may skip the gate.',
   'error.OFFLINE_POLICY_VIOLATION':
