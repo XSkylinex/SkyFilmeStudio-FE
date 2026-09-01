@@ -9,6 +9,7 @@ import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { subjectDetailQueryOptions } from '@/features/subjects/api/subject-detail.query';
+import { CanonicalComparison } from '@/features/subjects/components/canonical-comparison';
 import { CanonicalDraft } from '@/features/subjects/components/canonical-draft';
 import { CanonicalSection } from '@/features/subjects/components/canonical-section';
 import { SubjectIdentity } from '@/features/subjects/components/subject-identity';
@@ -85,6 +86,8 @@ export const SubjectReview: FC<SubjectReviewProps> = ({
       <SubjectIdentity subject={subject.data} />
 
       <CanonicalSection projectId={projectId} subjectId={subjectId} />
+
+      <CanonicalComparison projectId={projectId} subjectId={subjectId} />
 
       <CanonicalDraft
         projectId={projectId}
