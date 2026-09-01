@@ -16,4 +16,9 @@ describe('formatMilliseconds', () => {
   it('refuses to render a negative duration', () => {
     expect(formatMilliseconds(-500)).toBe('0.00 s');
   });
+
+  it('does not round 754 ms up to a second', () => {
+    expect(formatMilliseconds(754)).toBe('0.75 s');
+    expect(formatMilliseconds(754)).not.toMatch(/^1/);
+  });
 });

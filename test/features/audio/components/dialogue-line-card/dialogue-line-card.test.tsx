@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
+  languageTagSchema,
   projectRelativePathSchema,
   sceneIdSchema,
 } from 'sky-filme-studio-be/contracts';
@@ -131,5 +132,19 @@ describe('DialogueLineCard', () => {
     );
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  it('renders a Hebrew line right-to-left inside the English shell', () => {
+    renderCard(
+      buildDialogueLine({
+        language: languageTagSchema.parse('he'),
+        text: 'הסדנה מעולם לא הייתה שקטה כל כך.',
+      }),
+    );
+
+    const line = screen.getByText('הסדנה מעולם לא הייתה שקטה כל כך.');
+
+    expect(line.closest('bdi')).toHaveAttribute('dir', 'rtl');
+    expect(document.documentElement).not.toHaveAttribute('dir', 'rtl');
   });
 });
