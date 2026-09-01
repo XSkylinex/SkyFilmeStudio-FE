@@ -7,8 +7,10 @@ import { SCENE_SHOTS_STALE_TIME_MS } from '@/lib/query/query.constants';
 
 const sceneShotsSchema = shotSchema.array();
 
+export const SCENE_SHOTS_QUERY_PREFIX = ['scene-shots'];
+
 export const sceneShotsQueryKey = (sceneId: SceneId): string[] => [
-  'scene-shots',
+  ...SCENE_SHOTS_QUERY_PREFIX,
   sceneId,
 ];
 
