@@ -86,14 +86,17 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **690 keys in English and
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **695 keys in English and
 Hebrew**, counted 2026-09-01 — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, and the project
 bible.
 This number has been wrong more than once; count it rather than increment it — it said 357 while the
-tree held 371, so the warning had already failed once on the paragraph carrying it. Count both
-catalogues and require them equal:
+tree held 371, so the warning had already failed once on the paragraph carrying it. It then failed a
+second time on the same paragraph: it read 690 while the tree held 694, because absorbing four
+upstream refusals adds four keys and the commit that added them updated no count. **An error code is
+a catalogue key**, so every absorption moves this number, and none of them looks like a screen.
+Count both catalogues and require them equal:
 `grep -cE "^  '[^']+':" src/lib/i18n/catalogue/{en,he}.ts`. English is the source of
 truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
 The interface language lives in the shell slice, persists to
