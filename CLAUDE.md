@@ -327,24 +327,27 @@ and FE-07's `<output tabIndex={-1}>` pattern is what tells a screen reader and l
 only as rows in the budget. **Corrected 2026-09-01: there is a dialogue-line controller now** — BE-17
 merged as `014712e` and published `POST`/`GET /scenes/:sceneId/dialogue-lines` and
 `GET`/`PATCH`/`DELETE /dialogue-lines/:id`, plus speech synthesis, approval and
-`POST /productions/:id/dialogue-timing`, all five DTOs through the barrel. It changes nothing here,
-and that is the point: the collection is keyed on `sceneId`, so it is the **third** controller gated
-behind the one missing `GET`. `continuityReviewSchema` and
+`POST /productions/:id/dialogue-timing`, all five DTOs through the barrel. It changed nothing here when it landed,
+and that was the point: the collection is keyed on `sceneId`, so it was the **third** controller gated
+behind the one missing `GET` — until that `GET` landed as `dcf6d49` and all three became reachable at
+once. Dialogue editing is unbuilt now rather than blocked. `continuityReviewSchema` and
 `toneReviewSchema` are published contracts with no route. Every one of those is a sentence on screen
 under "What this screen cannot do yet", not a note in a plan file.
 
 **The project bible is real as of 2026-09-01, and it is FE-08's step 7 rather than a new phase.**
-`plan/10` and `plan/11` are the next two in the table and both are blocked the same way — a published
-contract with no route that reaches it. **FE-10 needs to re-read a production's scenes, and nothing
-lets it.** The scene ids are on the wire — `PUT /productions/:productionId/planning/scenes` returns
-the full rows and only its declared `readonly unknown[]` throws them away, which the backend's own
-e2e spec proves by parsing that response with `z.array(sceneSchema)`. But that route deletes every
-scene and re-inserts with fresh ids, and `shots.scene_id` is `onDelete: 'restrict'`, so it mints new
-ids when it works and refuses once shots exist. **A read that destroys what it reads is not a read**,
-and this product requires that a reload lose nothing. **BE-18 merged as `f14098e` on 2026-09-01 and
-did not change this** — its whole storyboard surface hangs off `shots/:shotId`, so it added a floor
-above a missing staircase. FE-11 has no `GET /render-jobs` at all: the controller is exactly
-`POST /render-jobs` and `GET /render-jobs/:id`.
+**`plan/10` unblocked later the same day; `plan/11` did not.** For weeks FE-10 needed exactly one
+thing — an idempotent read of a production's scenes. The ids were on the wire, since
+`PUT /productions/:productionId/planning/scenes` returns the full rows and only its declared
+`readonly unknown[]` throws them away, but that route deletes every scene and re-inserts with fresh
+ids, and `shots.scene_id` is `onDelete: 'restrict'`, so it minted new ids when it worked and refused
+once shots existed. **A read that destroys what it reads is not a read**, and this product requires
+that a reload lose nothing. `dcf6d49` added `GET /productions/:productionId/planning/scenes`, and that
+one controller method unblocked three surfaces at once: BE-16's shots, BE-18's twelve storyboard
+routes and BE-17's dialogue-line collection, each of which had been published and keyed on an id
+nothing produced. **BE-18 was never the blocker** — it merged as `f14098e` and moved nothing here,
+because its whole surface hangs off `shots/:shotId`. **Track the missing route, not the phase
+number.** FE-11 is still blocked, for its own unrelated reason: there is no `GET /render-jobs` at all,
+the controller being exactly `POST /render-jobs` and `GET /render-jobs/:id`.
 
 **This repo reported the wrong reason first, from a working instrument.** A grep over controller
 return-type annotations for `Scene` returned zero and was validated against a true positive — seven
