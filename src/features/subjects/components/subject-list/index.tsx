@@ -58,10 +58,21 @@ export const SubjectList: FC<SubjectListProps> = ({ projectId }) => {
   }
 
   return (
-    <ul className="subject-list__items">
-      {data.items.map((subject) => (
-        <SubjectCard key={subject.id} projectId={projectId} subject={subject} />
-      ))}
-    </ul>
+    <>
+      <ul className="subject-list__items">
+        {data.items.map((subject) => (
+          <SubjectCard
+            key={subject.id}
+            projectId={projectId}
+            subject={subject}
+          />
+        ))}
+      </ul>
+      {data.nextCursor === undefined ? null : (
+        <p className="subject-list__truncated">
+          {translate('subjects.truncated')}
+        </p>
+      )}
+    </>
   );
 };

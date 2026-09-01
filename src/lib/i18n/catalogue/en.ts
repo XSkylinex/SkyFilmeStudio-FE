@@ -426,6 +426,8 @@ export const EN_CATALOGUE = {
   'subjects.title': 'Subjects',
   'subjects.loading': 'Loading subjects',
   'subjects.error.title': 'The subject list could not be read',
+  'subjects.truncated':
+    'More subjects exist than are shown. This screen reads the first page only, and paging is not built yet.',
   'subjects.empty.title': 'No subjects yet',
   'subjects.empty.description':
     'Nothing has been registered in this project. Registering is not wired up in this build yet — the orchestrator accepts a subject, but the request shape is not published through the shared contract.',

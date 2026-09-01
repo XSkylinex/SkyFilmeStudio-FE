@@ -420,6 +420,8 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'subjects.title': 'סובייקטים',
   'subjects.loading': 'טוען סובייקטים',
   'subjects.error.title': 'לא ניתן היה לקרוא את רשימת הסובייקטים',
+  'subjects.truncated':
+    'קיימים יותר נושאים ממה שמוצג. המסך הזה קורא רק את העמוד הראשון, ועימוד עדיין לא נבנה.',
   'subjects.empty.title': 'אין עדיין סובייקטים',
   'subjects.empty.description':
     'שום דבר לא נרשם בפרויקט הזה. הרישום אינו מחובר בגרסה הזו — המתזמר מקבל סובייקט, אך מבנה הבקשה אינו מפורסם בחוזה המשותף.',
