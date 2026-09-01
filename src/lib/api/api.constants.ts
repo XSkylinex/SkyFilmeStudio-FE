@@ -184,4 +184,7 @@ export const API_PATH = {
     `/dialogue-lines/${dialogueLineId}/dialogue-tier`,
   productionDialogueTiming: (productionId: ProductionId): string =>
     `/productions/${productionId}/dialogue-timing`,
+  shotQcRuns: (shotId: ShotId): string => `/shots/${shotId}/qc/runs`,
+  shotQcRequestReview: (shotId: ShotId): string =>
+    `/shots/${shotId}/qc/request-review`,
 } satisfies Record<string, (...args: never[]) => string>;
