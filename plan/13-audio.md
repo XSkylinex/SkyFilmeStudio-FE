@@ -118,7 +118,7 @@ yarn typecheck && yarn lint && yarn test && yarn build && yarn dev
 ```
 
 **What was run, 2026-09-01:** `yarn typecheck` 0 · `yarn lint` 0, with the five documented warnings
-and no new one · `yarn test` 1,465 tests across 217 files · `yarn build` 0 · `yarn format:check` 0.
+and no new one · `yarn test` 1,469 tests across 218 files · `yarn build` 0 · `yarn format:check` 0.
 Both catalogues hold 977 keys and are equal. Every commit on the branch was checked out and
 typechecked on its own, because a green tip proved nothing about the eleven underneath it in FE-10.
 
