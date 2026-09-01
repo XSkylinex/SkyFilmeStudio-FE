@@ -1,7 +1,8 @@
 # FE-10 — Storyboard review
 
 > **Depends on:** 09 · **Blocks:** 12 · **Backend needs:** BE-18 · **Plan authority:** §17, §39, §49.4
-> **Status:** blocked — nothing bootstraps a `SceneId`. BE-18 merged 2026-09-01 and did not add one
+> **Status:** blocked — no idempotent read of a production's scenes. The ids exist on the wire; the
+> only route carrying them replaces the scene set to do it, and refuses once shots exist
 
 ## Goal
 
@@ -48,14 +49,37 @@ Not true either: that one path contains `scenes`.
 `PUT /productions/:productionId/planning/scenes` is a second, and `scenes/:sceneId/shots` is a
 *controller* carrying two routes rather than a route. The earlier sentence conflated the two.
 
-**What is true is that nothing bootstraps the first id, and the chain is circular.** Reading every
-controller on backend `master` for a method returning `Shot`, `Scene` or `DialogueLineRecord`, every
-one sits under `scenes/:sceneId/…`, `shots/:id` or `dialogue-lines/:id`:
+**Corrected again, later the same day, by the backend session.** The claim above this line — that
+`PUT /planning/scenes` "discards the ids it just created" — was **false**, and the way it was reached
+is the more useful half.
 
-- there is **no route that returns a production's scenes**. `PUT /planning/scenes` writes the outline
-  and returns `readonly unknown[]`, discarding the ids it just created, and there is no `GET`;
-- the only route yielding a `shotId` is `GET /scenes/:sceneId/shots`, which needs the `sceneId` you
-  were trying to obtain;
+`PUT /productions/:productionId/planning/scenes` **returns the full scene rows, ids included.**
+`ScenesRepository.replaceForProduction` returns `Promise<readonly Scene[]>`;
+`PlanningService.applySceneOutline` returns that exact value and declares `Promise<readonly unknown[]>`;
+the controller widens it again. The widening is two lines of declaration over a complete value. The
+proof is not inference: the backend's own `test/storyboards/storyboards.e2e-spec.ts` parses that
+route's live response body with `z.array(sceneSchema)` and then uses `scene.id` to reach
+`/shots/:shotId/…`, and it passes on master.
+
+**How this repo got it wrong is worth more than the fact.** The instrument was a grep over controller
+**return-type annotations** for `Scene`, which returned zero — and it was validated against a true
+positive first, seven hits for `Promise<Production>`. That proved the grep could find return-type
+annotations. It never proved that return-type annotations answer *what comes back over HTTP*. A
+working instrument aimed at the wrong question, which no true-positive check catches. When the
+question is about the wire, read the wire — or read a test that parses it.
+
+**The phase is still blocked, and the blocker is now exact: there is no way to *re-read* the ids.**
+`replaceForProduction` deletes every scene for the production and re-inserts with
+`id: sceneIdSchema.parse(randomUUID())`, so each call mints new ids and the previous ones are dead.
+And `shots.scene_id` is `onDelete: 'restrict'`, so once a scene has shots the delete fails outright —
+the repository's own docblock says re-planning past committed work "fails loudly rather than
+orphaning it". By the time a storyboard has anything to review there are shots, so the only
+id-yielding route refuses to run.
+
+A read that destroys what it reads is not a read. This screen loads on mount and again after every
+reload, and `CLAUDE.md` requires that a reload lose nothing.
+
+- the only route yielding a `shotId` is `GET /scenes/:sceneId/shots`, which needs the `sceneId`;
 - the only route yielding a `dialogueLineId` needs a `sceneId` too, or a `Shot`'s `dialogueLineIds`
   — and a `Shot` needs one of the above.
 
@@ -63,10 +87,18 @@ The two places a scene otherwise surfaces genuinely carry no id: `runtimeSegment
 `order`, `label`, `targetDurationSeconds`, `reused` and `shareOfTarget`, and
 `sceneOutlineEntrySchema` is `scenePlanSchema.omit({ shots: true })`, which has none.
 
-So a scene strip cannot be assembled and neither can a single shot card — not because a shape is
-missing, but because **there is no entry point**. `shotSchema` carries everything a card needs, down
-to `generationStrategy`, `approvedKeyframeId` and `state`. **The missing piece is one `GET` that
-returns a production's scenes.**
+**The missing piece is one idempotent `GET` that returns a production's scenes** — and it is smaller
+than it sounds. `ScenesRepository.listForProduction(productionId): Promise<readonly Scene[]>` already
+exists and is already called from `planning.service.ts` twice and `dialogue-timing.service.ts` once.
+What is missing is a controller method delegating to it. No query, no new contract.
+
+**A precondition to design for, not a refusal to handle afterwards.** The backend is making §23's
+production render gate actually run on submission — it was silently skipped for storyboard and speech
+jobs because neither passed a `productionId`. Once that lands, a storyboard submit is refused with
+`PRODUCTION_RENDER_NOT_PERMITTED` unless the production is in `STORYBOARDING` or `STORYBOARD_REVIEW`,
+and dialogue speech needs `AUDIO_RENDER` or `VIDEO_RENDER`. So this screen moves the production into
+the right state through `POST /productions/:id/transitions` before it offers a submit control, the
+same way FE-07's approval gate reads server state before rendering a button.
 
 Two smaller gaps sit behind the same wall. `ShotPromptSpec` is typed from
 `src/shots/prompt-specs.repository`, not from `src/contracts/`, so the compiled prompt has no
