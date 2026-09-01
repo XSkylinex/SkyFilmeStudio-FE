@@ -7,6 +7,7 @@ import { Field } from '@/lib/components/field';
 import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
+import { diffNullableText } from '@/lib/helpers/diff-nullable-text';
 import { parseLines } from '@/lib/helpers/parse-lines';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
@@ -19,17 +20,6 @@ import './edit-style-profile-form.css';
 
 const DESCRIPTION_ROWS = 4;
 const RULE_ROWS = 3;
-
-const clearableChange = (
-  next: string,
-  original: string,
-): string | null | undefined => {
-  if (next === original) {
-    return undefined;
-  }
-
-  return next === '' ? null : next;
-};
 
 const linesChange = (next: string, original: string): string[] | undefined =>
   next === original ? undefined : parseLines(next);
@@ -111,7 +101,7 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
       description:
         description === styleProfile.description ? undefined : description,
       mode: mode === styleProfile.mode ? undefined : mode,
-      realismLevel: clearableChange(realismLevel, originalRealismLevel),
+      realismLevel: diffNullableText(realismLevel, originalRealismLevel),
       paletteRules: linesChange(paletteRules, originalPalette),
       lightingRules: linesChange(lightingRules, originalLighting),
       cameraRules: linesChange(cameraRules, originalCamera),

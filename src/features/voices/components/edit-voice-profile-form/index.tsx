@@ -6,6 +6,7 @@ import { Button } from '@/lib/components/button';
 import { Field } from '@/lib/components/field';
 import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
+import { diffNullableText } from '@/lib/helpers/diff-nullable-text';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
@@ -17,17 +18,6 @@ import type { EditVoiceProfileFormProps } from './edit-voice-profile-form.interf
 import './edit-voice-profile-form.css';
 
 const TRANSCRIPT_ROWS = 4;
-
-const clearableChange = (
-  next: string,
-  original: string,
-): string | null | undefined => {
-  if (next === original) {
-    return undefined;
-  }
-
-  return next === '' ? null : next;
-};
 
 export const EditVoiceProfileForm: FC<EditVoiceProfileFormProps> = ({
   projectId,
@@ -89,11 +79,11 @@ export const EditVoiceProfileForm: FC<EditVoiceProfileFormProps> = ({
       engine: engine === voiceProfile.engine ? undefined : engine,
       modelId: modelId === voiceProfile.modelId ? undefined : modelId,
       language: language === voiceProfile.language ? undefined : language,
-      referenceAudioPath: clearableChange(
+      referenceAudioPath: diffNullableText(
         referenceAudioPath,
         originalAudioPath,
       ),
-      referenceTranscript: clearableChange(
+      referenceTranscript: diffNullableText(
         referenceTranscript,
         originalTranscript,
       ),
