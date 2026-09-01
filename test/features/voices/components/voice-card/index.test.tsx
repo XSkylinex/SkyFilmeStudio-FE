@@ -35,7 +35,7 @@ describe('VoiceCard', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('offers editing on a draft voice, in place beside its approve control', async () => {
+  it('opens editing in a dialog and keeps the approve control behind it', async () => {
     const user = userEvent.setup();
 
     renderCard(false);
@@ -52,6 +52,13 @@ describe('VoiceCard', () => {
     expect(
       screen.getByRole('button', { name: 'Save changes' }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Edit this voice profile' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /^Approve/ }),
+    ).toBeInTheDocument();
+    expect(editButton).toBeInTheDocument();
   });
 
   it('announces the approval it just made, and lands focus on it', async () => {

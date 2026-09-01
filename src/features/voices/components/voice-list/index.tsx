@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/lib/components/button';
+import { Dialog } from '@/lib/components/dialog';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
@@ -58,23 +59,27 @@ export const VoiceList: FC<VoiceListProps> = ({ projectId }) => {
   return (
     <div className="voice-list">
       <div className="voice-list__header">
-        {isCreateFormOpen ? null : (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={() => setIsCreateFormOpen(true)}
-          >
-            {translate('voices.create.open')}
-          </Button>
-        )}
+        <Button
+          variant="primary"
+          size="md"
+          onClick={() => setIsCreateFormOpen(true)}
+        >
+          {translate('voices.create.open')}
+        </Button>
       </div>
 
-      {isCreateFormOpen ? (
-        <CreateVoiceProfileForm
-          projectId={projectId}
-          onClose={() => setIsCreateFormOpen(false)}
-        />
-      ) : null}
+      <Dialog
+        open={isCreateFormOpen}
+        title={translate('voices.create.title')}
+        onClose={() => setIsCreateFormOpen(false)}
+      >
+        {isCreateFormOpen ? (
+          <CreateVoiceProfileForm
+            projectId={projectId}
+            onClose={() => setIsCreateFormOpen(false)}
+          />
+        ) : null}
+      </Dialog>
 
       <p className="voice-list__rule">{translate('voices.onePerSubject')}</p>
 

@@ -9,13 +9,6 @@
     background-color: var(--color-surface-canvas);
   }
 
-  .edit-style-profile-form__heading {
-    margin: 0;
-    color: var(--color-text-heading);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-  }
-
   .edit-style-profile-form__form {
     display: grid;
     gap: var(--space-3);

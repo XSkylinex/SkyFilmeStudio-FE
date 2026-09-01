@@ -72,13 +72,20 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
 
   if (create.isSuccess) {
     return (
-      <output
-        className="create-style-profile-form__done"
-        ref={focusWhenShown}
-        tabIndex={-1}
-      >
-        {translate('library.created')}
-      </output>
+      <div className="create-style-profile-form">
+        <output
+          className="create-style-profile-form__done"
+          ref={focusWhenShown}
+          tabIndex={-1}
+        >
+          {translate('library.created')}
+        </output>
+        <div className="create-style-profile-form__actions">
+          <Button type="button" variant="ghost" size="md" onClick={onClose}>
+            {translate('library.cancel')}
+          </Button>
+        </div>
+      </div>
     );
   }
 
@@ -113,14 +120,6 @@ export const CreateStyleProfileForm: FC<CreateStyleProfileFormProps> = ({
 
   return (
     <section className="create-style-profile-form">
-      <h4 className="create-style-profile-form__heading">
-        {translate(
-          nextVersionOf === undefined
-            ? 'styles.create.title'
-            : 'library.newVersion.title',
-        )}
-      </h4>
-
       {nextVersionOf === undefined ? null : (
         <p className="create-style-profile-form__explain">
           {translate('library.newVersion.explain')}

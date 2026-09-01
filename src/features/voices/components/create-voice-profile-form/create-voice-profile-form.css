@@ -9,13 +9,6 @@
     background-color: var(--color-surface-raised);
   }
 
-  .create-voice-profile-form__heading {
-    margin: 0;
-    color: var(--color-text-heading);
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-semibold);
-  }
-
   .create-voice-profile-form__form {
     display: grid;
     gap: var(--space-4);

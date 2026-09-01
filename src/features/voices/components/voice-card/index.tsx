@@ -5,6 +5,7 @@ import { ApprovalControls } from '@/lib/components/approval-controls';
 import { Badge } from '@/lib/components/badge';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
+import { Dialog } from '@/lib/components/dialog';
 import { ErrorState } from '@/lib/components/error-state';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
@@ -96,14 +97,20 @@ export const VoiceCard: FC<VoiceCardProps> = ({ projectId, voice }) => {
         </>
       ) : null}
 
-      {voice.approved || !isEditing ? null : (
-        <EditVoiceProfileForm
-          projectId={projectId}
-          voiceProfile={voice}
-          onClose={() => setIsEditing(false)}
-        />
-      )}
-      {voice.approved || isEditing ? null : (
+      <Dialog
+        open={isEditing}
+        title={translate('voices.edit.title')}
+        onClose={() => setIsEditing(false)}
+      >
+        {isEditing ? (
+          <EditVoiceProfileForm
+            projectId={projectId}
+            voiceProfile={voice}
+            onClose={() => setIsEditing(false)}
+          />
+        ) : null}
+      </Dialog>
+      {voice.approved ? null : (
         <>
           <ApprovalControls
             contextLabel={translate('voices.card.context', {

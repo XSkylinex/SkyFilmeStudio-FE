@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/lib/components/button';
+import { Dialog } from '@/lib/components/dialog';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
@@ -59,24 +60,28 @@ export const StyleLibrary: FC<StyleLibraryProps> = ({ projectId }) => {
     <div className="style-library">
       <div className="style-library__header">
         <h2 className="style-library__title">{translate('styles.heading')}</h2>
-        {isCreateFormOpen ? null : (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={() => setIsCreateFormOpen(true)}
-          >
-            {translate('styles.create.open')}
-          </Button>
-        )}
+        <Button
+          variant="primary"
+          size="md"
+          onClick={() => setIsCreateFormOpen(true)}
+        >
+          {translate('styles.create.open')}
+        </Button>
       </div>
       <p className="style-library__pinning">{translate('styles.pinning')}</p>
 
-      {isCreateFormOpen ? (
-        <CreateStyleProfileForm
-          projectId={projectId}
-          onClose={() => setIsCreateFormOpen(false)}
-        />
-      ) : null}
+      <Dialog
+        open={isCreateFormOpen}
+        title={translate('styles.create.title')}
+        onClose={() => setIsCreateFormOpen(false)}
+      >
+        {isCreateFormOpen ? (
+          <CreateStyleProfileForm
+            projectId={projectId}
+            onClose={() => setIsCreateFormOpen(false)}
+          />
+        ) : null}
+      </Dialog>
 
       {data.items.length === 0 ? (
         <EmptyState

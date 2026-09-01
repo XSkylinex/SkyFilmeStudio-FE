@@ -50,44 +50,28 @@ export const EditVoiceProfileForm: FC<EditVoiceProfileFormProps> = ({
     return key === undefined ? '' : translate(key);
   };
 
-  if (update.isSuccess) {
-    return (
-      <output
-        className="edit-voice-profile-form__done"
-        ref={focusWhenShown}
-        tabIndex={-1}
-      >
-        {translate('library.saved')}
-      </output>
-    );
-  }
-
-  const hasChanges =
-    displayName !== voiceProfile.displayName ||
-    engine !== voiceProfile.engine ||
-    modelId !== voiceProfile.modelId ||
-    language !== voiceProfile.language ||
-    referenceAudioPath !== originalAudioPath ||
-    referenceTranscript !== originalTranscript;
+  const baseline = update.data ?? voiceProfile;
+  const patch = {
+    displayName: displayName === baseline.displayName ? undefined : displayName,
+    engine: engine === baseline.engine ? undefined : engine,
+    modelId: modelId === baseline.modelId ? undefined : modelId,
+    language: language === baseline.language ? undefined : language,
+    referenceAudioPath: diffNullableText(
+      referenceAudioPath,
+      baseline.referenceAudioPath,
+    ),
+    referenceTranscript: diffNullableText(
+      referenceTranscript,
+      baseline.referenceTranscript,
+    ),
+  };
+  const hasChanges = Object.values(patch).some((value) => value !== undefined);
+  const justSaved = update.isSuccess && !hasChanges;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    const result = updateVoiceProfileRequestSchema.safeParse({
-      displayName:
-        displayName === voiceProfile.displayName ? undefined : displayName,
-      engine: engine === voiceProfile.engine ? undefined : engine,
-      modelId: modelId === voiceProfile.modelId ? undefined : modelId,
-      language: language === voiceProfile.language ? undefined : language,
-      referenceAudioPath: diffNullableText(
-        referenceAudioPath,
-        originalAudioPath,
-      ),
-      referenceTranscript: diffNullableText(
-        referenceTranscript,
-        originalTranscript,
-      ),
-    });
+    const result = updateVoiceProfileRequestSchema.safeParse(patch);
 
     if (!result.success) {
       setFieldErrors(fieldErrorsFromIssues(result.error));
@@ -103,10 +87,6 @@ export const EditVoiceProfileForm: FC<EditVoiceProfileFormProps> = ({
 
   return (
     <section className="edit-voice-profile-form">
-      <h4 className="edit-voice-profile-form__heading">
-        {translate('voices.edit.title')}
-      </h4>
-
       <form className="edit-voice-profile-form__form" onSubmit={handleSubmit}>
         <Field
           label={translate('library.field.displayName')}
@@ -169,6 +149,16 @@ export const EditVoiceProfileForm: FC<EditVoiceProfileFormProps> = ({
             rows={TRANSCRIPT_ROWS}
           />
         </Field>
+
+        {justSaved ? (
+          <output
+            className="edit-voice-profile-form__done"
+            ref={focusWhenShown}
+            tabIndex={-1}
+          >
+            {translate('library.saved')}
+          </output>
+        ) : null}
 
         <div className="edit-voice-profile-form__actions">
           <Button type="button" variant="ghost" size="md" onClick={onClose}>
