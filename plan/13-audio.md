@@ -125,9 +125,12 @@ typechecked on its own, because a green tip proved nothing about the eleven unde
 **What was not run, and why.** None of the list below it was exercised against a seeded production —
 there is no seeded dialogue on this machine, so no line has ever been synthesised here. The `dir="rtl"`
 pass and the repeated-cue check are therefore unverified rather than passed, and are not claimed. Each
-guard that could be checked was checked by watching it fail first: the no-optimistic-update snapshot
-against a real `cancelQueries`/`setQueryData` pair, and each invalidation by deleting it and watching
-`expected 1 to be 2`.
+guard that could be checked was checked by watching it fail first — and one of them was wrong the
+first time. The no-optimistic-update snapshot originally covered only `['dialogue-line', id]`, while
+the badge and the control choice read `['scene-dialogue-lines', sceneId]`, a sibling key the prefix
+cannot reach; review demonstrated with `@tanstack/query-core` that a `setQueryData` on the scene list
+left that snapshot byte-identical. It now snapshots both keys, and a planted optimistic update on the
+scene list fails it. Each invalidation was proven by deleting it and watching `expected 1 to be 2`.
 
 - generate and approve 6–10 cues; confirm each stored bpm, mood, loopable and safe dialogue level;
 - score a 5-scene production and confirm **cue reuse is the easy action**;
@@ -175,9 +178,15 @@ shot it can, then recomputes the budget on top. The screen reports `measuredScen
 Director's clamped request rather than a measurement, because the contract is explicit that it must
 not be reported as one.
 
-The animation tier from §19 is also here. Three of the four tiers can be requested; `DUBIT` is named
-and explained rather than offered, because the orchestrator's `BENCHMARKED_TIERS` is an empty array
-and every explicit request for it raises `TIER_REQUIRES_BENCHMARK`.
+The animation tier from §19 is also here, **and it is a calculation rather than a recorded
+decision** — review caught this repo presenting it as the latter. `POST /dialogue-lines/:id/dialogue-tier`
+reads the line and the speaker's subject type, runs a pure helper and returns; `SpeechService.chooseTier`
+makes no repository call, and there is no column, no table and no `GET` for the answer. The screen now
+says so in its own copy and lists it under what the screen cannot do. Three of the four tiers can be
+requested and the list of gated ones is read from the published `BENCHMARK_GATED_TIERS` rather than
+copied — the first version hard-coded `['DUBIT']`, which is the `NEEDS_NO_KEYFRAME` defect FE-10
+removed one phase earlier. Whether this workstation has *passed* the gate lives in a private
+`BENCHMARKED_TIERS` in the service and is on no wire, so the copy no longer claims to know.
 
 ## Traps
 

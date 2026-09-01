@@ -474,7 +474,9 @@ if it were the only one. The gate reports what the wire returns.
 `/productions/:id/audio` was an `EmptyState`; it now reads a production's scenes, the lines each
 carries, and every take a line has produced — model, seed, voice-profile SHA-256, audio hash, sample
 rate, peak level and the **measured** duration. It writes too: a line is synthesised in either §22
-pass, its audio is approved and un-approved, and its §19 animation tier is chosen. The phase's
+pass, its audio is approved and un-approved, and the §19 animation tier it would get is shown —
+computed on request and stored nowhere, which review caught this repo presenting as a recorded
+decision. The phase's
 dependency line says BE-21, and BE-21 blocks none of that: the whole dialogue and speech surface has
 an explicit publishing block in `src/contracts/index.ts`, and what had made it unreachable was the
 same single missing route that blocked FE-10. **That is the second phase running whose blocker was
