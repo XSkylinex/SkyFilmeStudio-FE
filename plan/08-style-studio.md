@@ -437,6 +437,63 @@ and wrong for style profiles.
 Approval freezes content, not the lifecycle. No screen offers it, and no sentence here claims an
 approved record cannot be removed at all.
 
+## The bible writes too, as of 2026-09-01
+
+Decision 3 said "structured fields, per project kind, with a generated readable view". The read half
+delivered the fields and the view; this delivers the editing. `POST /projects/:projectId/bible` and
+`PATCH /projects/:projectId/bible/:id` had been published as long as the read routes had, and both
+request shapes were emitted into `dist-esm/` — verified there rather than in the backend's source,
+which is the distinction that keeps `pinProjectBibleRequestSchema` unavailable.
+
+**The patch is per section, not per field.** `updateProjectBibleRequestSchema` takes `world`,
+`narrative` and `audio` as whole objects and refuses an empty body, so a change to one field sends
+that entire section and omits the other two. `bible-edit-diff.ts` compares normalised form values
+per section to decide, and normalising through `parseLines` first means re-indenting a rule list is
+not an edit — without that, opening a form and closing it produces a patch the server accepts.
+
+**`null` clears and an absent key leaves alone, and the difference is visible on screen.** Clearing
+every narrative field on a bible that had one sends `narrative: null`. Sending `{}` would record
+"narrative rules exist and are blank", which the read side already distinguishes from "none
+recorded" with two different sentences.
+
+**Which fields exist comes from the kind, and the kind comes from two different places.** Editing
+reads `projectKind` off the record. Creating cannot — there is no record yet — so
+`GET /projects/:id` was added for it, the first single-project read in this app. Its query key is
+`['project', id]`, deliberately not under the collection key, because `invalidateQueries`
+prefix-matches and the detail must not refetch on every list invalidation.
+
+**One consequence of that, named because it is silent otherwise.** If the project read fails, the
+create form cannot know whether the kind carries a narrative section, so it omits the section rather
+than offering fields the orchestrator would refuse with `PROJECT_BIBLE_NARRATIVE_NOT_APPLICABLE`.
+When the form was prefilled from a version that *did* carry narrative rules, those rules are then
+not carried into the new draft. The screen says so — `bible.form.kindUnreadable` — and the loss is
+recoverable by editing the created draft, where the record answers the question itself.
+
+**Deletion is published and is not offered, and this is a different refusal from the plate one.**
+`DELETE /projects/:projectId/bible/:id` exists, and the immutability trigger permits it on a
+published row because its diff excludes `deleted_at`. So the route will soft-delete a bible that
+productions planned against, with no `ErrorCode` separating that from discarding a draft nobody used.
+A control whose dangerous use is indistinguishable from its safe one needs a confirmation design, not
+a button appended to this phase.
+
+**Subject rules are still not writable, and the gap on screen now says so.** They are keyed on a
+subject id the bible carries no name for; offering them means reaching into
+`src/features/subjects/api/`, which is the third and fourth caller of the cross-feature import
+`code-style.md` forbids — both forms already do it for the style-profile picker, following the two
+precedents in `create-production-form` and elsewhere. Adding the subject library to that list in a
+phase that cannot fix the underlying question was not worth it.
+
+**Measured, both trees built in one session rather than compared against a recorded figure.** The
+bible route is lazy, so the forms land in its own chunk: `BiblePage` goes 21.00 kB → **59.04 kB** JS
+and 6.07 kB → **8.49 kB** CSS, while the entry chunk moves 475.38 kB → **475.47 kB** and its CSS not
+at all. Both catalogues go 745 → **759**, counted per file.
+
+**Note on the entry figure.** `plan/16` and this session's earlier handoff record master's entry at
+475.10 kB; rebuilt today it is 475.38 kB on an unchanged master. The 0.28 kB is not explained here,
+and the likeliest cause is the sibling's build moving under the `portal:` link, which is documented
+behaviour of this seam. It is recorded rather than reconciled, because the comparison that matters —
+master and this branch, built minutes apart on one machine — was made directly.
+
 ## What no screen does yet
 
 **Canonical plates cannot be created or edited here, and that is deliberate.** Their DTOs are
@@ -452,10 +509,13 @@ share a shape it does not.
 the end, so each screen says "reads the first page only" when the server offers more. The asset
 library, which predates this, silently shows fifty and stops — that is FE-07's to fix.
 
-**Naming a prop's owner subject.** `projectSubjectsQueryOptions` lives in another feature and
-`code-style.md` forbids reaching sideways. Moving it down needs a home that neither `src/lib/api/`
-(the fetch client) nor `src/shell/api/` (installation status) cleanly provides. Left as an open
-question rather than settled under time pressure.
+**Naming a prop's owner subject, or a bible's subject block.** `projectSubjectsQueryOptions` lives in
+another feature and `code-style.md` forbids reaching sideways. Moving it down needs a home that
+neither `src/lib/api/` (the fetch client) nor `src/shell/api/` (installation status) cleanly
+provides. Left as an open question rather than settled under time pressure — and the question is
+larger than it was: the two bible forms take the same shortcut for the style-profile picker, so four
+components now reach across a boundary the rules forbid, none of them wrongly and all of them for
+want of a shared home.
 
 ## Done when
 
@@ -468,7 +528,9 @@ question rather than settled under time pressure.
 - [ ] props carry continuity rules — **the link to where they apply has no published join**
 - [x] the bible is structured, versioned, and shows only fields relevant to the project kind — the
       kind's own `bibleCarriesNarrative` decides, and a kind that carries none says so rather than
-      rendering a blank section
+      rendering a blank section. **Decision 3 is fully answered as of 2026-09-01**: those structured
+      fields are now written as well as read, on both a first draft and a next version, with subject
+      rules the one section still read-only and said to be
 - [ ] reusable libraries are discoverable
 
 ## Traps
