@@ -59,4 +59,14 @@ describe('EN_CATALOGUE', () => {
 
     expect(outdated).toEqual([]);
   });
+
+  it('offers no bare "Retry", because every regeneration is a named mode', () => {
+    const bare = Object.entries(EN_CATALOGUE)
+      .filter(([, value]) =>
+        /^(retry|try again|regenerate)$/i.test(value.trim()),
+      )
+      .map(([key]) => key);
+
+    expect(bare).toEqual([]);
+  });
 });

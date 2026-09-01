@@ -1,12 +1,40 @@
 # FE-17 — Test suite & acceptance
 
 > **Depends on:** all · **Blocks:** release · **Backend needs:** BE-26 · **Plan authority:** §51, §52, §62
-> **Status:** not started
+> **Status:** partly done 2026-09-01 — the suite half is audited and every claim that can be asserted
+> without a missing screen is; the §62 walkthrough and everything on two machines is not started.
 
 ## Goal
 
 A test suite that asserts the claims this UI makes, and a walkthrough that proves the sixteen steps of
 §62 are actually doable by a person on either workstation.
+
+## The audit, 2026-09-01
+
+Every claim under "What to assert" checked against `test/`, with the instrument validated first on a
+claim known to be covered (four files) and a phrase known not to exist (zero).
+
+| Claim | State |
+| ----- | ----- |
+| a valid payload parses; an unknown key is rejected | **held** — every fixture parses through the real schema, and six files assert an unknown key or value is refused as `CONTRACT` |
+| a socket message that fails validation is dropped | **waits for BE-23** — there is no socket |
+| an approval mutation shows no state change until the server confirms | **held** — cache-snapshot guards on every approval-class write, each proven against a planted `cancelQueries`/`setQueryData` pair |
+| a duration picker from `maxTestedDurationSeconds: 8` has no 12 s option | **waits for a capability route and a picker** — neither exists |
+| every error code maps to a non-generic sentence, incl. `DISK_SPACE_LOW` and `OFFLINE_POLICY_VIOLATION` | **held** — `error-taxonomy.test.ts` generates one test per code from the contract, and both named codes are in it |
+| a `MUSIC_DRIVEN` production shows no screenplay stage | **held** — FE-09, three files |
+| 11 minutes against 20 produce a visible deficit and name the underweight scenes | **held** — FE-09 |
+| a production with zero subjects renders every screen without error | **added** — `test/shell/routes/zero-subjects.test.tsx`, four routes through the real route tree |
+| an unapproved canonical set blocks final rendering, visibly | **waits for final rendering** — no route |
+| rejecting a shot keeps its previous attempts browsable | **waits for the review DTO and an attempts route** — neither published |
+| a QC `PASS` is not presented as human approval | **held on the FE-12 branch** — `qc-outcome.tone.test.ts` pins that no automated tone is `SUCCESS`, and a component test asserts a passing run never renders in the approval tone |
+| every regeneration control names its mode; no bare "Retry" exists | **added** for the second half — the catalogue refuses a bare Retry; the first half waits for the regeneration DTOs |
+| a `he` dialogue line renders RTL inside an LTR shell | **added** — on FE-13's dialogue line card |
+| switching the interface language flips direction without a reload | **held** — `test/shell/document-language/` |
+| a missing translation key fails the build | **held at compile time** — `he.ts` is `satisfies Record<TranslationKey, string>`; not a runtime test, and it does not need to be |
+| with the socket disabled, every screen still converges by polling | **waits for BE-23** |
+| the queue's re-render count under load is bounded by the flush rate | **waits for BE-23 and FE-11** |
+| `formatDuration` renders `00:20:00` | **the plan is wrong, not the code** — FE-09 chose `20:00`, tested, and every runtime on screen uses it |
+| `754 ms` does not become `1 s` | **added** — `formatMilliseconds(754)` is `0.75 s` |
 
 ## The suite
 
@@ -111,16 +139,23 @@ something outside it (`floor-check.mjs`).
 
 ## Done when
 
-- [ ] the suite covers every assertion listed above and each has teeth (demonstrated)
-- [ ] fixtures parse through the real contract schemas
-- [ ] mocking is at the HTTP boundary; the socket transport is injectable
-- [ ] the §62 walkthrough completes on **both** machines
-- [ ] step 13 completed with two materially different style/source cases
-- [ ] a full session produces **zero** non-loopback requests
-- [ ] the external-URL build assertion still works
-- [ ] no memory growth or leaked listeners over a long render
-- [ ] the app works on both platforms within the declared browser floor
-- [ ] the report states explicitly what was **looked at**, not only what compiled
+- [~] the suite covers every assertion listed above and each has teeth (demonstrated) — **every
+      claim that has a screen to assert against is covered, and each addition was watched failing**;
+      six wait for BE-23, the review DTOs or an attempts route, and are named in the table
+- [x] fixtures parse through the real contract schemas — true by construction: every `build*` in
+      `test/fixtures/` returns `schema.parse(...)`, which is why the in-flight `Shot` change is red
+      here rather than silently green
+- [~] mocking is at the HTTP boundary; the socket transport is injectable — MSW throughout; there is
+      no socket transport to inject
+- [ ] the §62 walkthrough completes on **both** machines — not started; needs a working pipeline
+- [ ] step 13 completed with two materially different style/source cases — not started
+- [ ] a full session produces **zero** non-loopback requests — not measured; the build-time guard
+      is the static half, the runtime half needs a session
+- [x] the external-URL build assertion still works — `test/build/find-external-urls.test.ts`
+- [ ] no memory growth or leaked listeners over a long render — needs a render
+- [ ] the app works on both platforms within the declared browser floor — not measured
+- [x] the report states explicitly what was **looked at**, not only what compiled — nothing in this
+      audit was looked at in a browser; it is a suite audit and says so
 
 ## Traps
 
