@@ -277,10 +277,16 @@ under "What this screen cannot do yet", not a note in a plan file.
 
 **The project bible is real as of 2026-09-01, and it is FE-08's step 7 rather than a new phase.**
 `plan/10` and `plan/11` are the next two in the table and both are blocked the same way — a published
-contract with no route that reaches it. FE-10 needs a `SceneId` and **nothing published yields one**:
-the only route whose path contains `scenes` is `@Controller('scenes/:sceneId/shots')` itself,
-`PUT /planning/scenes` returns `readonly unknown[]`, and neither `runtimeSegmentShareSchema` nor
-`sceneOutlineEntrySchema` carries an id. FE-11 has no `GET /render-jobs` at all. So the phase taken
+contract with no route that reaches it. FE-10 needs a `SceneId` and **nothing published yields one**.
+Three paths on backend `master` contain `scenes` and none of them returns scenes:
+`PUT /productions/:productionId/planning/scenes` writes the outline and returns `readonly unknown[]`,
+discarding the ids it just made, while `scenes/:sceneId/shots` and `scenes/:sceneId/dialogue-lines`
+both *take* the id being sought. Neither `runtimeSegmentShareSchema` nor `sceneOutlineEntrySchema`
+carries one. **BE-18 merged as `f14098e` on 2026-09-01 and did not change this** — its whole
+storyboard surface hangs off `shots/:shotId`, so it added a floor above a missing staircase. FE-11
+has no `GET /render-jobs` at all: the controller is exactly `POST /render-jobs` and
+`GET /render-jobs/:id`. **Track the missing route, not the phase number** — "blocked on BE-18" was
+the dependency line's answer and it was never the one that mattered. So the phase taken
 was the one BE-14 unblocked and `plan/08` had deferred with "one phase is one phase".
 `src/features/bible/` reads every version of a project bible, marks the one the orchestrator calls
 active, renders world, narrative, audio and subject rules, shows the generated Markdown view, and

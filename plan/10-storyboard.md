@@ -1,7 +1,7 @@
 # FE-10 — Storyboard review
 
 > **Depends on:** 09 · **Blocks:** 12 · **Backend needs:** BE-18 · **Plan authority:** §17, §39, §49.4
-> **Status:** blocked — BE-18 not started, and nothing bootstraps a `SceneId`
+> **Status:** blocked — nothing bootstraps a `SceneId`. BE-18 merged 2026-09-01 and did not add one
 
 ## Goal
 
@@ -11,13 +11,25 @@ pleasant to use at two hundred shots, the pipeline works. If it is not, people w
 
 > "Never send an unreviewed screenplay directly into hundreds of final video renders." — §17
 
-## Why this cannot start yet — measured 2026-08-31
+## Why this cannot start yet — measured 2026-08-31, re-measured 2026-09-01
 
-Two blockers, and the second is the one that would not have been guessed from the dependency line.
+Two blockers were measured. **One of them is gone as of 2026-09-01, and the phase is still blocked**,
+which is the useful part: the blocker that mattered was never the one on the dependency line.
 
-**BE-18 has not started.** The backend's own table says so, and there is no storyboard, keyframe or
-artifact controller on its `master`. Steps 2, 3, 5 and 6 — Level 1 versus Level 2, the comparison
-overlay, the keyframe gate and motion drafts — have nothing to read.
+**BE-18 has merged, and it changes nothing here.** ~~BE-18 has not started~~ — that was true on
+2026-08-31 and false twenty-two minutes before this was written. BE-18 landed on backend `master` as
+`f14098e`, and it is not a stub: `storyboards.controller.ts` publishes `POST`/`GET .../frames`,
+`frames/regenerate`, `frames/revise-prompt`, `frames/change-framing`, `frames/change-expression`,
+`keyframe-waiver`, `keyframe-requirement` and `keyframe-status` under `shots/:shotId/storyboard`,
+plus `GET :frameId/comparison` and `POST`/`DELETE :frameId/approval` under `storyboard-frames`. All
+five of its refusals are wired to real throw sites now, not merely declared. Steps 2, 3, 5 and 6 have
+something to read at last — and no way to reach it, because **every one of those routes is keyed on a
+`shotId`**, which is keyed on a `sceneId`, which is the blocker below.
+
+The lesson is about how this file was read, not about the backend. "Blocked on BE-18" was the
+dependency line's answer and it was the wrong one to track; the phase would have unblocked the day a
+`GET` returned scenes, whether or not BE-18 existed. **Track the missing route, not the phase
+number.**
 
 **The shot half that BE-16 *did* publish is unreachable.** BE-16 merged as `d658f69` and shipped
 `shots.controller.ts`, which is real: `GET /scenes/:sceneId/shots`, `GET /shots/:id`,
