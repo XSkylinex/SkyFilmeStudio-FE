@@ -1050,6 +1050,8 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'storyboard.frame.mode': 'נוצר כ',
   'storyboard.frame.created': 'נוצר בתאריך',
   'storyboard.frame.approved': 'הפריים הזה הוא הקיפריים המאושר.',
+  'storyboard.frame.draftNotApprovable':
+    'לא ניתן לאשר טיוטה. רק קיפריים הופך לעוגן להמרת תמונה לווידאו, והאורקסטרטור מסרב לאשר כל דבר אחר — ולכן הפריים הזה אינו מציע אישור במקום להציע כזה שיידחה.',
   'storyboard.frame.noImage':
     'התמונה עצמה אינה מוצגת. האורקסטרטור אינו מפרסם נתיב שמגיש את הבייטים של ארטיפקט, והאפליקציה הזו אינה פונה לשום מקום אחר, ולכן מה שמופיע כאן הוא הרישום של הפריים ולא הפריים עצמו.',
   'storyboard.frame.context': 'את הקיפריים מניסיון {attempt} של שוט {order}',

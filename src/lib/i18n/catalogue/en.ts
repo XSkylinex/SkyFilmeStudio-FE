@@ -1065,6 +1065,8 @@ export const EN_CATALOGUE = {
   'storyboard.frame.mode': 'Generated as',
   'storyboard.frame.created': 'Created',
   'storyboard.frame.approved': 'This frame is the approved keyframe.',
+  'storyboard.frame.draftNotApprovable':
+    'A draft cannot be approved. Only a keyframe becomes the anchor for image-to-video, and the orchestrator refuses an approval on anything else — so this frame offers no Approve rather than one that would be turned away.',
   'storyboard.frame.noImage':
     'The picture itself is not shown. The orchestrator publishes no route that serves an artifact’s bytes, and this app reaches nothing else, so what appears here is the record of the frame rather than the frame.',
   'storyboard.frame.context':
