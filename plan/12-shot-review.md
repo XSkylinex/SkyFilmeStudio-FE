@@ -1,7 +1,9 @@
 # FE-12 — Shot review
 
 > **Depends on:** 11 · **Blocks:** 14 · **Backend needs:** BE-19, BE-20 · **Plan authority:** §25, §27, §39, §44
-> **Status:** not started
+> **Status:** blocked — the routes exist; the artifact bytes, two request DTOs and any way to
+> resolve a shot's render profile do not.
+> Measured 2026-09-01, see the row in `README.md` for which of the three stops which box.
 
 ## Goal
 
