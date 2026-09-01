@@ -6,6 +6,7 @@ import {
 import type { RouteObject } from 'react-router-dom';
 import { http, HttpResponse } from 'msw';
 import { screen, waitFor } from '@testing-library/react';
+import { productionIdSchema } from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { routeTree } from '@/shell/routes/route-tree';
 import { NotFoundPage } from '@/shell/routes/not-found-page';
@@ -45,8 +46,15 @@ const flattenRoutes = (routes: RouteObject[]): FlatRoute[] =>
     ...(route.children ? flattenRoutes(route.children) : []),
   ]);
 
+const STORYBOARD_PRODUCTION_ID = productionIdSchema.parse(
+  '3f9a1c6e-1f0d-4a2b-8c7d-5e6f70819a2b',
+);
+
 mockOrchestratorServer(
   http.get(API_PATH.systemMode(), () => HttpResponse.json(buildSystemMode())),
+  http.get(API_PATH.planningScenes(STORYBOARD_PRODUCTION_ID), () =>
+    HttpResponse.json([]),
+  ),
 );
 
 describe('routeTree', () => {
@@ -176,13 +184,18 @@ describe('the design-system gallery route', () => {
 describe('the media-heavy lazy routes, rendered through the router so their route.lazy mapper actually runs', () => {
   it('resolves the storyboard route to StoryboardPage', async () => {
     const memoryRouter = createMemoryRouter(routeTree, {
-      initialEntries: [productionStoryboardPath('proj-1', 'prod-1')],
+      initialEntries: [
+        productionStoryboardPath('proj-1', STORYBOARD_PRODUCTION_ID),
+      ],
     });
 
     renderInApp(<RouterProvider router={memoryRouter} />);
 
     expect(
-      await screen.findByRole('heading', { name: 'Storyboard', level: 1 }),
+      await screen.findByRole('heading', {
+        name: 'Storyboard review',
+        level: 1,
+      }),
     ).toBeInTheDocument();
   });
 

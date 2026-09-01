@@ -649,8 +649,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'page.planner.description':
     'התסריט או תוכנית ההפקה שעליהם מבוססת ההפקה הזו. אין עדיין חיבור ל-orchestrator.',
   'page.storyboard.title': 'סטוריבורד',
-  'page.storyboard.description':
-    'סקירה של הקיפריימים של ההפקה הזו, סצנה אחר סצנה, לפני הרינדור. אין עדיין חיבור ל-orchestrator.',
   'page.renderQueue.title': 'תור הרינדור',
   'page.renderQueue.description':
     'כל משימות הרינדור של ההפקה הזו וההתקדמות של כל אחת מהן. אין עדיין חיבור ל-orchestrator.',

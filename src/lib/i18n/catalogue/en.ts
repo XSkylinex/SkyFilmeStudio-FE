@@ -655,8 +655,6 @@ export const EN_CATALOGUE = {
   'page.planner.description':
     'The screenplay or production plan driving this production. Not connected to the orchestrator yet.',
   'page.storyboard.title': 'Storyboard',
-  'page.storyboard.description':
-    "Review this production's keyframes scene by scene before they render. Not connected to the orchestrator yet.",
   'page.renderQueue.title': 'Render queue',
   'page.renderQueue.description':
     'Every render job for this production and how far each one has progressed. Not connected to the orchestrator yet.',
