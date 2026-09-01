@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { TTS_PASS } from 'sky-filme-studio-be/contracts';
 import { Badge } from '@/lib/components/badge';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
@@ -43,6 +44,12 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
     approve.isPending || unapprove.isPending || synthesise.isPending;
   const hasAudio = line.generatedAudioPath !== undefined;
 
+  const clearLastOutcome = (): void => {
+    approve.reset();
+    unapprove.reset();
+    synthesise.reset();
+  };
+
   const failure =
     approve.error !== null
       ? resolveRouteErrorView(approve.error)
@@ -55,9 +62,9 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
   return (
     <li className="dialogue-line-card">
       <div className="dialogue-line-card__header">
-        <h4 className="dialogue-line-card__title">
+        <h3 className="dialogue-line-card__title">
           {translate('audio.line.label', { order: String(line.order) })}
-        </h4>
+        </h3>
         <Badge
           tone={line.approved ? STATUS_TONE.SUCCESS : STATUS_TONE.NEUTRAL}
           label={translate(
@@ -141,7 +148,10 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
             size="sm"
             disabled={pending}
             aria-label={`${translate('audio.unapprove.action')} ${context}`}
-            onClick={() => unapprove.mutate(undefined)}
+            onClick={() => {
+              clearLastOutcome();
+              unapprove.mutate(undefined);
+            }}
           >
             {translate('audio.unapprove.action')}
           </Button>
@@ -154,7 +164,10 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
                 size="sm"
                 disabled={pending}
                 aria-label={`${translate('audio.approve.action')} ${context}`}
-                onClick={() => approve.mutate(undefined)}
+                onClick={() => {
+                  clearLastOutcome();
+                  approve.mutate(undefined);
+                }}
               >
                 {translate('audio.approve.action')}
               </Button>
@@ -166,10 +179,14 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
               size="sm"
               disabled={pending}
               aria-label={`${translate('audio.synthesise.draft')} ${translate('audio.synthesise.context', { order: String(line.order) })}`}
-              onClick={() => synthesise.mutate({ pass: 'DRAFT' })}
+              onClick={() => {
+                clearLastOutcome();
+                synthesise.mutate({ pass: TTS_PASS.DRAFT });
+              }}
             >
               {translate(
-                synthesise.isPending
+                synthesise.isPending &&
+                  synthesise.variables?.pass === TTS_PASS.DRAFT
                   ? 'audio.synthesise.pending'
                   : 'audio.synthesise.draft',
               )}
@@ -181,15 +198,23 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
               size="sm"
               disabled={pending}
               aria-label={`${translate('audio.synthesise.final')} ${translate('audio.synthesise.context', { order: String(line.order) })}`}
-              onClick={() => synthesise.mutate({ pass: 'FINAL' })}
+              onClick={() => {
+                clearLastOutcome();
+                synthesise.mutate({ pass: TTS_PASS.FINAL });
+              }}
             >
-              {translate('audio.synthesise.final')}
+              {translate(
+                synthesise.isPending &&
+                  synthesise.variables?.pass === TTS_PASS.FINAL
+                  ? 'audio.synthesise.pending'
+                  : 'audio.synthesise.final',
+              )}
             </Button>
           </>
         )}
       </div>
 
-      {approve.isSuccess ? (
+      {approve.isSuccess && line.approved ? (
         <output
           className="dialogue-line-card__done"
           ref={focusWhenShown}
@@ -199,7 +224,7 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
         </output>
       ) : null}
 
-      {unapprove.isSuccess ? (
+      {unapprove.isSuccess && !line.approved ? (
         <output
           className="dialogue-line-card__done"
           ref={focusWhenShown}
