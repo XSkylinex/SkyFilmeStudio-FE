@@ -215,12 +215,18 @@ Each unticked box names what it waits for, rather than being left blank.
       so "peak not clipped" is answerable; "decodes" and "not silent" are not
 - [ ] ASR round-trip presented as advisory — `asrReviewSchema` is **a published contract with no
       route**, the same shape as `continuityReviewSchema` in phase 09
-- [ ] DX/MX/FX/AMB stems with level, solo and mute, then scene and production mixes — **no routes on
-      master; both mix routes exist on the unmerged `be-21-audio` branch** as of 2026-09-02 and are
-      in this phase's build order. Level, solo and mute are a further question: a mix is submitted
-      bodiless and returns a render job, so nothing in the request expresses a per-stem control
-- [ ] loudness shown as measured numbers against the target, not a tick — **no route serves a
-      measured LUFS or true peak**, so a number here would be invented
+- [~] DX/MX/FX/AMB stems with level, solo and mute, then scene and production mixes — **the mixes are
+      built as of 2026-09-02**: a scene is mixed from its four stems and a production from its scene
+      mixes, both submitted and never awaited, both refusals shown as sentences. Still unticked for
+      the half the box names first — **a stem cannot be levelled, soloed or muted**. A mix is
+      submitted with no body at all, its four stems are recorded by id, and no route returns a stem,
+      so there is nothing in the request to carry a per-stem control and nothing to show about one
+- [x] loudness shown as measured numbers against the target, not a tick — **built 2026-09-02.** A
+      production mix carries the integrated loudness and true peak both before and after correction,
+      the target for each, and the target loudness range; all six are on screen as measured numbers,
+      with a sentence saying the corrected figure is the one an export is judged on. The sentence
+      this replaces said no route serves them, which stopped being true when BE-21 merged. **Per
+      scene there is still nothing**: a scene mix carries no loudness figures at all
 - [ ] the ducking envelope is visualised against dialogue timings — half its inputs exist (each
       line's measured duration) and the other half is a cue's safe dialogue level, which **waits for
       BE-21**
