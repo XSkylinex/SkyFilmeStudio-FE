@@ -28,6 +28,9 @@ const serves = (
     http.get(API_PATH.openingEndingAssets(PROJECT_ID), () =>
       HttpResponse.json({ items: [] }),
     ),
+    http.get(API_PATH.musicCueRenders(PROJECT_ID), () =>
+      HttpResponse.json({ items: [] }),
+    ),
   );
 };
 
@@ -68,16 +71,30 @@ describe('MusicPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('says the render list cannot be read here, and why, rather than offering a promotion it cannot make', async () => {
+  it('offers the render-and-promote flow the library depends on for reuse', async () => {
     serves([]);
 
     renderAt();
 
     expect(await screen.findByText('No cues yet')).toBeInTheDocument();
     expect(
-      screen.getByText(/a type the orchestrator keeps in a repository file/),
+      screen.getByRole('heading', { level: 2, name: 'Candidates' }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /promote/i })).toBeNull();
+    expect(
+      screen.getByRole('button', { name: 'Render a candidate' }),
+    ).toBeInTheDocument();
+  });
+
+  it('says a candidate cannot be heard before it is promoted, and why', async () => {
+    serves([]);
+
+    renderAt();
+
+    expect(
+      await screen.findByText(
+        /A candidate cannot be heard before it is promoted/,
+      ),
+    ).toBeInTheDocument();
   });
 
   it('says no cue can be heard here, because nothing serves an artifact’s bytes', async () => {

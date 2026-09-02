@@ -17,6 +17,9 @@ const PROJECT_ID = projectIdSchema.parse(
 const CUE_ID = musicCueIdSchema.parse('88888888-8888-4888-8888-888888888888');
 
 const server = mockOrchestratorServer(
+  http.get('/projects/:projectId/music-cues/renders', () =>
+    HttpResponse.json({ items: [] }),
+  ),
   http.get(API_PATH.musicCues(PROJECT_ID), () =>
     HttpResponse.json({ items: [] }),
   ),

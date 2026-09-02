@@ -89,16 +89,16 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,414 keys in English
-and Hebrew**, counted 2026-09-02 after the shot effects editor — 1,389 after the score, 1,366 after
-the plate writes, 1,338 after the mix panels, 1,305 after the music and opening-ending libraries,
-1,261 after the music and opening-ending libraries, 1,222 after the SFX library, 1,179 after the
-pronunciation writes, 1,164 after two audio-mix refusals, 1,162 after the structure-profile form,
-1,117 after the production edit form, 1,111 after the style version diff, 1,104 after the prop
-owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning after the bible's
-subject-rules editor, 1,087 the night before, after the canonical comparison, dialogue editing,
-FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the same evening — 109
-when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,464 keys in English
+and Hebrew**, counted 2026-09-02 after the music candidates — 1,414 after the shot effects editor,
+1,389 after the score, 1,366 after the plate writes, 1,338 after the mix panels, 1,305 after the
+music and opening-ending libraries, 1,261 after the music and opening-ending libraries, 1,222 after
+the SFX library, 1,179 after the pronunciation writes, 1,164 after two audio-mix refusals, 1,162
+after the structure-profile form, 1,117 after the production edit form, 1,111 after the style
+version diff, 1,104 after the prop owner's name, 1,103 after two more BE-21 refusals, 1,101 that
+morning after the bible's subject-rules editor, 1,087 the night before, after the canonical
+comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals
+absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -558,6 +558,15 @@ are a list a person composes. So the whole list *is* the editing surface: add, r
 `order` taken from the position on screen rather than typed. Clearing a shot is sending an empty
 list. The editor sits on the shot review screen because that is where the shot is, and the audio
 screen's sentence points there rather than claiming a missing route.
+
+**A cue is rendered as a candidate and promoted by a person, and the split is the point
+(2026-09-02).** `POST …/music-cues/renders` submits a candidate and answers with a render job;
+`POST …/music-cues` promotes one into the library. Promotion is where the facts the library needs and
+the render does not carry are recorded — the cue's name, where it loops, and the safe dialogue level.
+**The blocker here was a response type, not a route**: `MusicCueRender` was declared in the
+orchestrator's repository file and not published, so the candidate list had no shape to parse and the
+promotion no id to name. That was reported and fixed upstream the same day, with the id **branded**,
+so a bare uuid no longer parses where a render id belongs.
 
 **Scoring is the Music Supervisor invoked, not a picker (2026-09-02).** `POST
 /productions/:id/score` runs it with an optional brief and an optional cap on how much of a
