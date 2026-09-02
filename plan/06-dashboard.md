@@ -237,12 +237,13 @@ app with real user-authored content in it:
 - [x] nothing in the UI can trigger a model download
 - [x] the disk gate's state is visible and explained
 - [ ] pressure metrics are profile-appropriate and live — **FE-05, blocked on BE-23**
-- [ ] reusable libraries are surfaced — **corrected 2026-09-02: BE-13 merged weeks ago and brought
-      no reusable library; it brought the per-project creative library.** The first library that is
-      reusable across projects with a controller behind it is the global SFX/ambience library on the
-      backend's unmerged `be-21-audio` branch — `sfx-assets`, not project-scoped by its own docblock,
-      with tags and a licence the contract requires on an imported asset. Nothing on master serves
-      one; `plan/13` carries what that branch holds and the order to build it when it merges
+- [x] reusable libraries are surfaced — **built 2026-09-02.** The sentence this replaces was written
+      that morning and was overtaken the same afternoon: it said BE-13 had brought no reusable
+      library, which was right, and that the first one lived on an unmerged branch, which stopped
+      being true when BE-21 merged. The global SFX and ambience library is at `/sfx`, reached from
+      the navigation beside Projects and System because it belongs to the installation rather than to
+      any project; the soundtrack and the opening and ending libraries are reached from a project's
+      own navigation. `plan/13` carries what each one does
 - [x] approved sources and masters cannot be deleted from the UI — nothing here deletes anything
 
 ## Traps
