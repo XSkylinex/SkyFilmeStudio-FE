@@ -550,6 +550,15 @@ file and never published through `./contracts`, so the render list has no shape 
 promotion has no render id to name. Both request DTOs are published — it is the response type that is
 missing, and the screen says so rather than offering a control that cannot work.
 
+**Scoring is the Music Supervisor invoked, not a picker (2026-09-02).** `POST
+/productions/:id/score` runs it with an optional brief and an optional cap on how much of a
+production one cue may cover, and refuses with `MUSIC_CUE_VARIETY_OVERUSED` when a score would lean
+on one. Every scene then shows the cues assigned to it **by name**, resolved through the project's
+soundtrack library, with the start offset, gain, loop and fades the mix will use — and a cue the
+library no longer returns says so rather than showing an id. **Adjusting a placement is not offered**:
+the route replaces a scene's cues wholesale, so moving one would mean restating the rest, and the
+screen says that rather than pretending the gap is a missing route.
+
 **FE-13 made the dialogue audio real on 2026-09-01, and its stated dependency gated none of it.**
 `/productions/:id/audio` was an `EmptyState`; it now reads a production's scenes, the lines each
 carries, and every take a line has produced — model, seed, voice-profile SHA-256, audio hash, sample
