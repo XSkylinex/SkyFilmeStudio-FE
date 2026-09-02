@@ -206,8 +206,13 @@ Each unticked box names what it waits for, rather than being left blank.
       adjusted**. `PUT /scenes/:sceneId/cues` replaces a scene's cues wholesale and
       `replaceSceneCuesRequestSchema` says so, so moving one cue means restating the rest — an editor
       would have to reconstruct the scene from the screen, which is a design rather than a form
-- [x] SFX/ambience library with tags and licence provenance shown — **built 2026-09-02**, the first
-      thing taken from the BE-21 build order the day it merged. `/sfx` is a top-level route because
+- [x] SFX/ambience library with tags and licence provenance shown — **built 2026-09-02**, and
+      **placed against shots the same day**: a shot's effects and ambience are edited on the shot
+      review screen, where the shot is. The whole list is sent at once because `PUT
+      /shots/:shotId/audio-cues` replaces rather than appends, and `order` is the position on screen
+      rather than a number a person types — which is the difference between this and the scene score,
+      where the list is generated and nudging one entry would mean restating the rest. It is the
+      first thing taken from the BE-21 build order the day it merged. `/sfx` is a top-level route because
       `sfx-assets` is not project-scoped: the library belongs to the installation, which is what §30's
       reuse means, and putting it under a project would have misrepresented the route. Import, list,
       approve and remove; tags and licence are on every card, and a licence is required for an
