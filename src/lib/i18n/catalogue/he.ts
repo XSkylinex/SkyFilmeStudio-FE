@@ -1534,6 +1534,45 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.gaps.tierNotStored':
     'לא ניתן לרשום רמת אנימציה עבור שורה. הנתיב מחשב אחת ומחזיר אותה, ולאורקסטרטור אין עמודה, אין טבלה ואין נתיב קריאה לתשובה.',
   'audio.takes.forLine': 'טייקים לשורה {order}',
+  'audio.mix.heading': 'המיקס',
+  'audio.mix.explain':
+    'סצנה מתמקססת מארבעת הסטמים שלה — דיאלוג, מוזיקה, אפקטים ואמביינס — וההפקה היא המיקסים של הסצנות משורשרים ומתוקנים פעם אחת. שניהם נשלחים ואינם מומתנים: התשובה היא עבודת רינדור, לא קובץ.',
+  'audio.mix.scene.heading': 'מיקסים של סצנות',
+  'audio.mix.scene.none': 'הסצנה הזו עדיין לא מוקססה.',
+  'audio.mix.scene.unreadable': 'לא ניתן היה לקרוא את המיקסים של הסצנה הזו.',
+  'audio.mix.scene.submit': 'מיקס לסצנה הזו',
+  'audio.mix.scene.submitting': 'שולח…',
+  'audio.mix.scene.submitContext': 'מיקס לסצנה {order}',
+  'audio.mix.scene.submitted':
+    'נשלח כעבודת רינדור {renderJobId}. מיקס אורך דקות; הרשימה הזו תציג אותו ברגע שהעבודה תכתוב אחד.',
+  'audio.mix.scene.failed.title': 'הסצנה לא מוקססה',
+  'audio.mix.production.heading': 'מיקס ההפקה',
+  'audio.mix.production.none':
+    'ההפקה הזו עדיין לא מוקססה. כל סצנה מתמקססת תחילה, מפני שמיקס ההפקה הוא המיקסים של הסצנות מחוברים ומתוקנים פעם אחת.',
+  'audio.mix.production.unreadable': 'לא ניתן היה לקרוא את מיקסי ההפקה.',
+  'audio.mix.production.submit': 'מיקס להפקה הזו',
+  'audio.mix.production.submitting': 'שולח…',
+  'audio.mix.production.failed.title': 'ההפקה לא מוקססה',
+  'audio.mix.field.duration': 'משך:',
+  'audio.mix.field.audio': 'שמע:',
+  'audio.mix.field.audio.value': '{sampleRate} הרץ, {channels} ערוצים',
+  'audio.mix.field.path': 'קובץ:',
+  'audio.mix.field.hash': 'טביעת אצבע SHA-256:',
+  'audio.mix.field.made': 'נוצר:',
+  'audio.mix.field.stems': 'סטמים:',
+  'audio.mix.field.stems.value':
+    'ארבעה, אחד לכל אחד מדיאלוג, מוזיקה, אפקטים ואמביינס',
+  'audio.mix.stems.unreadable':
+    'סטם מתועד לפי מזהה ואין ראוט שמחזיר אחד, ולכן אי אפשר להציג כאן ממה הסטם נבנה.',
+  'audio.mix.loudness.heading': 'עוצמה, נמדדת מול היעד',
+  'audio.mix.loudness.integrated': 'עוצמה משוקללת:',
+  'audio.mix.loudness.truePeak': 'שיא אמיתי:',
+  'audio.mix.loudness.range': 'טווח עוצמה מבוקש:',
+  'audio.mix.loudness.before': 'לפני תיקון:',
+  'audio.mix.loudness.after': 'אחרי תיקון:',
+  'audio.mix.loudness.target': 'יעד:',
+  'audio.mix.loudness.explain':
+    'אלה ערכים מדודים, לא סימן וי. הערך המתוקן הוא מה שייצוא נשפט לפיו, והערך שלפני התיקון אומר כמה המיקס נאלץ לזוז.',
   'audio.gaps.heading': 'מה המסך הזה עדיין אינו יכול לעשות',
   'audio.gaps.playback':
     'לא ניתן לנגן אודיו. שום דבר באורקסטרטור אינו מגיש את הבייטים של תוצר, ולכן טייק מוצג כרישום שלו — משך, רמת שיא, גיבובים — ולא כצליל.',

@@ -4,6 +4,7 @@ import { useTranslate } from '@/lib/i18n/use-translate';
 import { productionScenesQueryOptions } from '@/features/storyboard/api/production-scenes.query';
 import { AudioGaps } from '@/features/audio/components/audio-gaps';
 import { DialogueTiming } from '@/features/audio/components/dialogue-timing';
+import { ProductionMix } from '@/features/audio/components/production-mix';
 import { SceneDialogue } from '@/features/audio/components/scene-dialogue';
 import type { DialogueReviewProps } from './dialogue-review.interface';
 import './dialogue-review.css';
@@ -49,6 +50,16 @@ export const DialogueReview: FC<DialogueReviewProps> = ({
           ))}
         </ul>
       )}
+
+      <section className="dialogue-review__mix">
+        <h2 className="dialogue-review__mix-title">
+          {translate('audio.mix.heading')}
+        </h2>
+        <p className="dialogue-review__note">
+          {translate('audio.mix.explain')}
+        </p>
+        <ProductionMix productionId={productionId} />
+      </section>
 
       <AudioGaps />
     </div>

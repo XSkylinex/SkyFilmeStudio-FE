@@ -35,4 +35,16 @@
     flex-direction: column;
     gap: var(--space-4);
   }
+
+  .dialogue-review__mix {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .dialogue-review__mix-title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-xl);
+  }
 }
