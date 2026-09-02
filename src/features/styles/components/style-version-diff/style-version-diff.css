@@ -1,0 +1,58 @@
+@layer features {
+  .style-version-diff {
+    inline-size: 100%;
+    font-size: var(--font-size-sm);
+  }
+
+  .style-version-diff__summary {
+    cursor: pointer;
+    color: var(--color-text-secondary);
+  }
+
+  .style-version-diff__summary:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  .style-version-diff__none {
+    margin: var(--space-2) 0 0;
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+
+  .style-version-diff__fields {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-2) 0 0;
+  }
+
+  .style-version-diff__field {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .style-version-diff__label {
+    color: var(--color-text-secondary);
+  }
+
+  .style-version-diff__lines {
+    margin: 0;
+  }
+
+  .style-version-diff__list {
+    display: grid;
+    gap: var(--space-1);
+    margin: 0;
+    padding-inline-start: var(--space-4);
+  }
+
+  .style-version-diff__line[data-change='removed'] {
+    text-decoration: line-through;
+    text-decoration-color: var(--color-text-secondary);
+  }
+
+  .style-version-diff__mark {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+  }
+}

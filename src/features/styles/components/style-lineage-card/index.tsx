@@ -18,6 +18,7 @@ import { approveStyleProfileMutationOptions } from '@/features/styles/api/approv
 import { styleProfileVersionsQueryOptions } from '@/features/styles/api/style-profile-versions.query';
 import { CreateStyleProfileForm } from '@/features/styles/components/create-style-profile-form';
 import { EditStyleProfileForm } from '@/features/styles/components/edit-style-profile-form';
+import { StyleVersionDiff } from '@/features/styles/components/style-version-diff';
 import type { StyleLineageCardProps } from './style-lineage-card.interface';
 import './style-lineage-card.css';
 
@@ -107,6 +108,9 @@ export const StyleLineageCard: FC<StyleLineageCardProps> = ({
             name: displayName,
             version: String(version.version),
           });
+          const previous = newestFirst.find(
+            (candidate) => candidate.version < version.version,
+          );
 
           return (
             <li className="style-lineage-card__version" key={version.id}>
@@ -118,6 +122,9 @@ export const StyleLineageCard: FC<StyleLineageCardProps> = ({
               <span className="style-lineage-card__mode" dir="ltr">
                 {version.mode}
               </span>
+              {previous === undefined ? null : (
+                <StyleVersionDiff previous={previous} current={version} />
+              )}
 
               {version.approved ? (
                 <>
