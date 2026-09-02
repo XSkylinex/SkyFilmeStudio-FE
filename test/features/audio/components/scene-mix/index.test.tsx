@@ -9,7 +9,12 @@ import { renderInApp } from '../../../../render-in-app';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
 const scene = buildScene({ order: 1 });
-const server = mockOrchestratorServer();
+const server = mockOrchestratorServer(
+  http.get('/productions/:productionId/score', () => HttpResponse.json([])),
+  http.get('/projects/:projectId/music-cues', () =>
+    HttpResponse.json({ items: [] }),
+  ),
+);
 
 const serves = (mixes: readonly ReturnType<typeof buildSceneMix>[]): void => {
   server.use(

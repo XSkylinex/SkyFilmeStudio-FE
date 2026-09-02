@@ -9,6 +9,7 @@ import { sceneDialogueLinesQueryOptions } from '@/features/audio/api/scene-dialo
 import { CreateDialogueLineForm } from '@/features/audio/components/create-dialogue-line-form';
 import { DialogueLineCard } from '@/features/audio/components/dialogue-line-card';
 import { SceneMix } from '@/features/audio/components/scene-mix';
+import { SceneScore } from '@/features/audio/components/scene-score';
 import type { SceneDialogueProps } from './scene-dialogue.interface';
 import './scene-dialogue.css';
 
@@ -115,6 +116,12 @@ export const SceneDialogue: FC<SceneDialogueProps> = ({ projectId, scene }) => {
           />
         ) : null}
       </Dialog>
+
+      <SceneScore
+        projectId={projectId}
+        productionId={scene.productionId}
+        sceneId={scene.id}
+      />
 
       <SceneMix scene={scene} />
     </li>

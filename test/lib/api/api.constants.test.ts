@@ -258,6 +258,7 @@ const everyPath: Record<string, string> = {
   sfxAssets: API_PATH.sfxAssets(),
   sfxAsset: API_PATH.sfxAsset(SAMPLE_SFX_ASSET_ID),
   approveSfxAsset: API_PATH.approveSfxAsset(SAMPLE_SFX_ASSET_ID),
+  productionScore: API_PATH.productionScore(SAMPLE_PRODUCTION_ID),
   sceneMixes: API_PATH.sceneMixes(SAMPLE_SCENE_ID),
   productionMixes: API_PATH.productionMixes(SAMPLE_PRODUCTION_ID),
   sceneShots: API_PATH.sceneShots(SAMPLE_SCENE_ID),

@@ -199,8 +199,13 @@ Each unticked box names what it waits for, rather than being left blank.
       no shape to parse and no render id for `promoteMusicCueRequestSchema` to name. Both request
       DTOs are published; it is the response type that is missing, which is the same class of gap the
       mix routes had until BE-21's follow-up
-- [ ] scene scoring with a visible cue-vs-scene strip — **waits for BE-21**; there is no cue to score
-      a scene with
+- [~] scene scoring with a visible cue-vs-scene strip — **built 2026-09-02.** Scoring is run on the
+      production with an optional brief and an optional cap on how much of it one cue may cover, and
+      every scene shows the cues assigned to it by name, with the start offset, gain, loop and fades
+      the mix will use. Still unticked for the second half of the phrase: **a placement cannot be
+      adjusted**. `PUT /scenes/:sceneId/cues` replaces a scene's cues wholesale and
+      `replaceSceneCuesRequestSchema` says so, so moving one cue means restating the rest — an editor
+      would have to reconstruct the scene from the screen, which is a design rather than a form
 - [x] SFX/ambience library with tags and licence provenance shown — **built 2026-09-02**, the first
       thing taken from the BE-21 build order the day it merged. `/sfx` is a top-level route because
       `sfx-assets` is not project-scoped: the library belongs to the installation, which is what §30's
