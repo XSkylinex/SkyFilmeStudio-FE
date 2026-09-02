@@ -25,6 +25,7 @@ import './dialogue-line-card.css';
 export const DialogueLineCard: FC<DialogueLineCardProps> = ({
   line,
   sceneId,
+  onRemoved,
 }) => {
   const translate = useTranslate();
   const queryClient = useQueryClient();
@@ -251,7 +252,7 @@ export const DialogueLineCard: FC<DialogueLineCardProps> = ({
             aria-label={`${translate('audio.line.delete')} ${context}`}
             onClick={() => {
               clearLastOutcome();
-              remove.mutate(undefined);
+              remove.mutate(undefined, { onSuccess: onRemoved });
             }}
           >
             {translate(

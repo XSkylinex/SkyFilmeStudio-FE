@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { ActionResult } from '@/lib/components/action-result';
 import { Button } from '@/lib/components/button';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
@@ -16,6 +17,8 @@ import './sfx-library.css';
 
 export const SfxLibrary: FC = () => {
   const translate = useTranslate();
+  const [removed, setRemoved] = useState<string | null>(null);
+  const [removals, setRemovals] = useState(0);
   const { data, error, isPending } = useQuery(sfxAssetsQueryOptions());
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -72,9 +75,23 @@ export const SfxLibrary: FC = () => {
       ) : (
         <ul className="sfx-library__list">
           {data.items.map((asset) => (
-            <SfxAssetCard key={asset.id} asset={asset} />
+            <SfxAssetCard
+              key={asset.id}
+              asset={asset}
+              onRemoved={(name) => {
+                setRemoved(name);
+                setRemovals((count) => count + 1);
+              }}
+            />
           ))}
         </ul>
+      )}
+
+      {removed === null ? null : (
+        <ActionResult
+          message={translate('sfx.card.removed', { name: removed })}
+          attempt={removals}
+        />
       )}
 
       {data?.nextCursor === undefined ? null : (

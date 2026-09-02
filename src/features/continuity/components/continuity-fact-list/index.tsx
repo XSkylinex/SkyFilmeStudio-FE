@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { ActionResult } from '@/lib/components/action-result';
 import { Button } from '@/lib/components/button';
 import { Dialog } from '@/lib/components/dialog';
 import { EmptyState } from '@/lib/components/empty-state';
@@ -25,6 +26,8 @@ export const ContinuityFactList: FC<ContinuityFactListProps> = ({
   const [property, setProperty] = useState('');
   const [entityId, setEntityId] = useState('');
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [removed, setRemoved] = useState<string | null>(null);
+  const [removals, setRemovals] = useState(0);
 
   const filter = {
     ...(property === '' ? {} : { property }),
@@ -113,9 +116,20 @@ export const ContinuityFactList: FC<ContinuityFactListProps> = ({
               fact={fact}
               scenes={scenes.data}
               onFilterByEntity={setEntityId}
+              onRemoved={(property) => {
+                setRemoved(property);
+                setRemovals((count) => count + 1);
+              }}
             />
           ))}
         </ul>
+      )}
+
+      {removed === null ? null : (
+        <ActionResult
+          message={translate('continuity.card.removed', { property: removed })}
+          attempt={removals}
+        />
       )}
 
       {facts.data?.nextCursor === undefined ? null : (

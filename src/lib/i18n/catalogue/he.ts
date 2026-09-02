@@ -1952,4 +1952,10 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'מילון נמחק על ידי הסתרתו, והמונחים שלו נשארים מקושרים אליו במקום להימחק. לכן ניתן למחוק מילון רק לאחר שהמונחים שלו הוסרו, וכך מונח אינו שורד במילון שאף אחד אינו מציג.',
   'voices.dictionaries.remove.unknown':
     'לא ניתן היה לקרוא את המונחים של המילון הזה, ולכן לא ידוע אם בטוח למחוק אותו ולא מוצעת מחיקה.',
+  'continuity.card.removed': 'העובדה על {property} נמחקה.',
+  'sfx.card.removed': 'נכס האפקט {name} נמחק.',
+  'music.card.removed': 'הקיו המוזיקלי {name} נמחק.',
+  'openingEnding.card.removed': 'הגרסה {name} נמחקה.',
+  'audio.line.removed': 'שורת הדיאלוג נמחקה.',
+  'voices.entries.removed': 'המונח {term} נמחק.',
 };

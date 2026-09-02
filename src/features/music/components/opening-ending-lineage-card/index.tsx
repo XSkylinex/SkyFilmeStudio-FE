@@ -18,6 +18,7 @@ import './opening-ending-lineage-card.css';
 export const OpeningEndingLineageCard: FC<OpeningEndingLineageCardProps> = ({
   projectId,
   lineage,
+  onRemoved,
 }) => {
   const translate = useTranslate();
   const queryClient = useQueryClient();
@@ -224,7 +225,11 @@ export const OpeningEndingLineageCard: FC<OpeningEndingLineageCardProps> = ({
                         },
                       )}
                       disabled={remove.isPending}
-                      onClick={() => remove.mutate(version.id)}
+                      onClick={() =>
+                        remove.mutate(version.id, {
+                          onSuccess: () => onRemoved(version.name),
+                        })
+                      }
                     >
                       {translate(
                         remove.isPending
