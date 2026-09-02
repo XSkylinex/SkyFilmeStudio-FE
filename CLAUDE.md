@@ -108,7 +108,10 @@ second time on the same paragraph: it read 690 while the tree held 694, because 
 upstream refusals adds four keys and the commit that added them updated no count. **An error code is
 a catalogue key**, so every absorption moves this number, and none of them looks like a screen.
 Count both catalogues and require them equal:
-`grep -cE "^  '[^']+':" src/lib/i18n/catalogue/{en,he}.ts`. English is the source of
+`grep -cE "^  '[^']+':" src/lib/i18n/catalogue/{en,he}.ts`. **Since 2026-09-02 the suite counts for
+you**: `test/catalogue-count-in-claude-md.test.ts` fails when this paragraph's number is not the
+catalogues' length, and `node .claude/skills/recount/scripts/recount.mjs "<what moved it>"` rewrites
+the sentence — through the rebase conflict every PR hits on it, which happened eleven times that day. English is the source of
 truth and Hebrew is `Record<TranslationKey, string>`, so a missing translation is a compile error.
 The interface language lives in the shell slice, persists to
 `localStorage`, and drives `<html lang>`/`<html dir>` with no reload. `ContentText` renders `<bdi>`
