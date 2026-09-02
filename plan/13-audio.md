@@ -189,7 +189,7 @@ scene list fails it. Each invalidation was proven by deleting it and watching `e
 
 Each unticked box names what it waits for, rather than being left blank.
 
-- [~] the OST library exists with full per-cue metadata; reuse is the obvious action — **the library
+- [x] the OST library exists with full per-cue metadata; reuse is the obvious action — **the library
       is real as of 2026-09-02**, on `/projects/:id/music`: every cue with its category, mood, tags,
       measured duration, tempo, key, loop points and the safe dialogue level, approved and removed
       from the card. Still unticked because **reuse is not yet the obvious action**: a cue is
@@ -197,8 +197,13 @@ Each unticked box names what it waits for, rather than being left blank.
       /projects/:id/music-cues/renders` answers with `MusicCueRender`, a type declared in
       `src/music/music-cue-renders.repository.ts` and never published through the barrel, so there is
       no shape to parse and no render id for `promoteMusicCueRequestSchema` to name. Both request
-      DTOs are published; it is the response type that is missing, which is the same class of gap the
-      mix routes had until BE-21's follow-up
+      DTOs were published all along; the response type was the missing piece, and it landed in BE-21's
+      follow-up on 2026-09-02. **Reuse is the obvious action now**: a candidate is rendered with a
+      category, mood, prompt, duration and an optional seed, appears in a list of candidates with its
+      model, seed, measured duration and peak level, and is promoted into the library with the facts
+      the library needs and the render does not carry — its name, where it loops, and the level
+      dialogue may sit over it at. A candidate still cannot be heard before that decision, because
+      nothing serves an artifact's bytes; the decision is made from the record
 - [~] scene scoring with a visible cue-vs-scene strip — **built 2026-09-02.** Scoring is run on the
       production with an optional brief and an optional cap on how much of it one cue may cover, and
       every scene shows the cues assigned to it by name, with the start offset, gain, loop and fades

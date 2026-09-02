@@ -1177,9 +1177,70 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'openingEnding.import.submit': 'ייבוא',
   'openingEnding.import.submitting': 'מייבא…',
   'openingEnding.import.failed.title': 'הקובץ לא יובא',
+  'music.renders.heading': 'מועמדים',
+  'music.renders.explain':
+    'קיו מתרנדר תחילה כמועמד ומקודם לספרייה לאחר מכן, מפני שהקידום הוא החלטה שאדם מקבל על צליל ששמע עליו ולא החלטה של המודל.',
+  'music.renders.loading': 'קורא את המועמדים…',
+  'music.renders.unreadable': 'לא ניתן היה לקרוא את המועמדים.',
+  'music.renders.none':
+    'עדיין לא רונדר אף מועמד. שלחו אחד והוא יופיע כאן ברגע שהעבודה תכתוב אותו.',
+  'music.renders.truncated':
+    'זהו העמוד הראשון בלבד של המועמדים. למתזמר יש יותר מהרשומים כאן.',
+  'music.renders.submit': 'רינדור מועמד',
+  'music.renders.submitting': 'שולח…',
+  'music.renders.submitted':
+    'נשלח כעבודת רינדור {renderJobId}. רינדור אורך דקות; המועמד יופיע למעלה ברגע שהעבודה תכתוב אותו.',
+  'music.renders.submit.failed.title': 'המועמד לא נשלח',
+  'music.renders.field.category': 'קטגוריה',
+  'music.renders.field.category.hint':
+    'באותיות גדולות עם קווים תחתונים, למשל MAIN_THEME. הקטגוריות הן שלכם להמציא; שום דבר כאן אינו מספק רשימה.',
+  'music.renders.field.mood': 'מצב רוח',
+  'music.renders.field.prompt': 'פרומפט',
+  'music.renders.field.prompt.hint': 'מה מבקשים מהמודל, במילים שלכם.',
+  'music.renders.field.duration': 'משך בשניות',
+  'music.renders.field.seed': 'זרע',
+  'music.renders.field.seed.hint':
+    'לא חובה. תנו אחד כדי שהרינדור יהיה ניתן לשחזור; השאירו ריק והמתזמר יבחר.',
+  'music.renders.card.model': 'מודל:',
+  'music.renders.card.seed': 'זרע:',
+  'music.renders.card.seed.none': 'לא תועד',
+  'music.renders.card.duration': 'משך:',
+  'music.renders.card.peak': 'רמת שיא:',
+  'music.renders.card.audio': 'שמע:',
+  'music.renders.card.audio.value': '{sampleRate} הרץ, {channels} ערוצים',
+  'music.renders.card.prompt': 'פרומפט:',
+  'music.renders.card.path': 'קובץ:',
+  'music.promote.open': 'קידום לספרייה',
+  'music.promote.heading': 'קידום המועמד הזה',
+  'music.promote.explain':
+    'הקידום מתעד את מה שהספרייה צריכה והרינדור אינו נושא: איך הקיו נקרא, היכן הוא עושה לופ, ובאיזו עוצמה הדיאלוג רשאי לשבת מעליו.',
+  'music.promote.name': 'שם',
+  'music.promote.tags': 'תגיות',
+  'music.promote.tags.hint': 'אחת בכל שורה. לא חובה.',
+  'music.promote.bpm': 'טמפו',
+  'music.promote.bpm.hint':
+    'לא חובה. מודל מקומי לרוב אינו מסוגל לדווח עליו, ולכן עדיף להשאיר ריק מאשר לנחש.',
+  'music.promote.key': 'סולם',
+  'music.promote.key.hint': 'לא חובה, וטקסט חופשי.',
+  'music.promote.loopable': 'לופ',
+  'music.promote.loopable.yes': 'כן',
+  'music.promote.loopable.no': 'לא',
+  'music.promote.intro': 'פתיח במילישניות',
+  'music.promote.outro': 'סיומת במילישניות',
+  'music.promote.introOutro.hint':
+    'היכן מתחיל ומסתיים אמצע הקיו. שניהם יחד אינם יכולים לעלות על אורך הרינדור, אחרת אין אמצע ללופ.',
+  'music.promote.safeLevel': 'עוצמת דיאלוג בטוחה בדציבלים',
+  'music.promote.safeLevel.hint':
+    'באיזו עוצמה הדיאלוג רשאי לשבת מעל הקיו הזה. זה מה שהופך את מעטפת ההנמכה לניתנת לחישוב במקום לציור ביד.',
+  'music.promote.licence': 'רישיון',
+  'music.promote.licence.hint':
+    'לא חובה לקיו שההתקנה הזו יצרה, וזה בדיוק מה שרינדור הוא.',
+  'music.promote.submit': 'קידום',
+  'music.promote.submitting': 'מקדם…',
+  'music.promote.failed.title': 'המועמד לא קודם',
   'music.gaps.heading': 'מה המסך הזה עדיין אינו יכול לעשות',
   'music.gaps.renders':
-    'קיו מתרנדר תחילה ואז מקודם, ואי אפשר לקרוא כאן את רשימת הרינדורים: הראוט עונה בטיפוס שהמתזמר מחזיק בקובץ ריפוזיטורי במקום לפרסם אותו, ולכן אין צורה לפרסר ואין מזהה רינדור שהקידום יוכל לנקוב בו. רינדור וקידום של קיו נעשים במתזמר עד שהטיפוס הזה יפורסם.',
+    'אי אפשר לשמוע מועמד לפני שהוא מקודם. שום דבר במתזמר אינו מגיש את הבייטים של ארטיפקט, ולכן ההחלטה מתקבלת מהרשומה — הפרומפט, הזרע, המשך המדוד ורמת השיא — ולא מהצליל.',
   'music.gaps.playback':
     'אי אפשר לשמוע כאן שום קיו. שום דבר במתזמר אינו מגיש את הבייטים של ארטיפקט, ולכן קיו מוצג כרשומה שלו — משך מדוד, טמפו, עוצמה ושתי טביעות האצבע — ולא כצליל.',
   'bible.title': 'ביבל הפרויקט',

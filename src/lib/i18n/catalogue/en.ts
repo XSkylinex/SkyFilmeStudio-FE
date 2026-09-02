@@ -1195,9 +1195,71 @@ export const EN_CATALOGUE = {
   'openingEnding.import.submit': 'Import',
   'openingEnding.import.submitting': 'Importing…',
   'openingEnding.import.failed.title': 'The file was not imported',
+  'music.renders.heading': 'Candidates',
+  'music.renders.explain':
+    'A cue is rendered as a candidate first and promoted into the library second, because promotion is a decision a person makes about a sound they have heard about rather than one the model makes.',
+  'music.renders.loading': 'Reading the candidates…',
+  'music.renders.unreadable': 'The candidates could not be read.',
+  'music.renders.none':
+    'No candidate has been rendered yet. Submit one and it appears here when the job has written it.',
+  'music.renders.truncated':
+    'This is the first page of candidates only. The orchestrator has more than are listed here.',
+  'music.renders.submit': 'Render a candidate',
+  'music.renders.submitting': 'Submitting…',
+  'music.renders.submitted':
+    'Submitted as render job {renderJobId}. A render takes minutes; the candidate appears above once the job has written it.',
+  'music.renders.submit.failed.title': 'The candidate was not submitted',
+  'music.renders.field.category': 'Category',
+  'music.renders.field.category.hint':
+    'In capitals with underscores, such as MAIN_THEME. The categories are yours to invent; nothing here ships a list.',
+  'music.renders.field.mood': 'Mood',
+  'music.renders.field.prompt': 'Prompt',
+  'music.renders.field.prompt.hint':
+    'What the model is asked for, in your own words.',
+  'music.renders.field.duration': 'Duration in seconds',
+  'music.renders.field.seed': 'Seed',
+  'music.renders.field.seed.hint':
+    'Optional. Give one to make a render repeatable; leave it empty and the orchestrator chooses.',
+  'music.renders.card.model': 'Model:',
+  'music.renders.card.seed': 'Seed:',
+  'music.renders.card.seed.none': 'Not recorded',
+  'music.renders.card.duration': 'Duration:',
+  'music.renders.card.peak': 'Peak level:',
+  'music.renders.card.audio': 'Audio:',
+  'music.renders.card.audio.value': '{sampleRate} Hz, {channels} channels',
+  'music.renders.card.prompt': 'Prompt:',
+  'music.renders.card.path': 'File:',
+  'music.promote.open': 'Promote into the library',
+  'music.promote.heading': 'Promote this candidate',
+  'music.promote.explain':
+    'Promotion records what the library needs and the render does not carry: what the cue is called, where it loops, and the level dialogue may sit over it at.',
+  'music.promote.name': 'Name',
+  'music.promote.tags': 'Tags',
+  'music.promote.tags.hint': 'One per line. Optional.',
+  'music.promote.bpm': 'Tempo',
+  'music.promote.bpm.hint':
+    'Optional. A local model often cannot report one, so leave it empty rather than guessing.',
+  'music.promote.key': 'Musical key',
+  'music.promote.key.hint': 'Optional, and free text.',
+  'music.promote.loopable': 'Loops',
+  'music.promote.loopable.yes': 'Yes',
+  'music.promote.loopable.no': 'No',
+  'music.promote.intro': 'Intro in milliseconds',
+  'music.promote.outro': 'Outro in milliseconds',
+  'music.promote.introOutro.hint':
+    'Where the middle of the cue begins and ends. The two together cannot exceed the render’s length, or there is no middle to loop.',
+  'music.promote.safeLevel': 'Safe dialogue level in decibels',
+  'music.promote.safeLevel.hint':
+    'What dialogue may sit over this cue at. It is what makes the ducking envelope computable rather than drawn by hand.',
+  'music.promote.licence': 'Licence',
+  'music.promote.licence.hint':
+    'Optional for a cue this installation generated, which is what a render is.',
+  'music.promote.submit': 'Promote',
+  'music.promote.submitting': 'Promoting…',
+  'music.promote.failed.title': 'The candidate was not promoted',
   'music.gaps.heading': 'What this screen cannot do yet',
   'music.gaps.renders':
-    'A cue is rendered first and then promoted, and the render list cannot be read here: the route answers with a type the orchestrator keeps in a repository file rather than publishing, so there is no shape to parse and no render id for the promotion to name. Rendering and promoting a cue happen at the orchestrator until that type is published.',
+    'A candidate cannot be heard before it is promoted. Nothing in the orchestrator serves an artifact’s bytes, so the decision is made from the record — its prompt, seed, measured duration and peak level — rather than from the sound.',
   'music.gaps.playback':
     'No cue can be heard here. Nothing in the orchestrator serves an artifact’s bytes, so a cue is shown as its record — measured duration, tempo, level and both hashes — rather than as sound.',
   'bible.title': 'Project bible',

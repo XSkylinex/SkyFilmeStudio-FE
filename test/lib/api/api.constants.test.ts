@@ -181,6 +181,7 @@ const everyPath: Record<string, string> = {
     SAMPLE_OPENING_ENDING_ASSET_ID,
   ),
   musicCues: API_PATH.musicCues(SAMPLE_PROJECT_ID),
+  musicCueRenders: API_PATH.musicCueRenders(SAMPLE_PROJECT_ID),
   musicCue: API_PATH.musicCue(SAMPLE_PROJECT_ID, SAMPLE_MUSIC_CUE_ID),
   approveMusicCue: API_PATH.approveMusicCue(
     SAMPLE_PROJECT_ID,
