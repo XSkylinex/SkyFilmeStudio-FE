@@ -95,6 +95,19 @@ it flags, it does not block. Let the user dismiss with a reason, and keep the re
 Offer reusable structures — the 20-minute episodic profile is **an example, not the format**. Show the
 selected structure against the actual scene plan so an overrun act is visible.
 
+**Created here as of 2026-09-02.** `POST /projects/:id/production-profiles` and
+`createProductionProfileRequestSchema` had been published since BE-15, and until today a profile
+could only come from the orchestrator, so the create-production form's *No structure profile* was
+the whole choice for any project that had none. The productions page now carries a structure
+profiles section that lists what exists — target, tolerance, frame, audio and how many sections are
+reusable — and creates one. **The form assumes no format**: frame rate, size, aspect ratio, sample
+rate and channels are required and empty, because a default here would be a capability this repo
+asserted rather than one the orchestrator advertised, which is the trap §6 names. Sections carry a
+start and end in seconds and a reusable flag; the contract refuses one that ends before it starts on
+the end field, and the orchestrator refuses two that overlap with
+`PRODUCTION_PROFILE_SECTIONS_OVERLAP`, which the form shows as a sentence. The non-reusable act shape
+is still compared by nothing, for the reason the Done-when box below gives.
+
 ### 8. Approval and state
 
 The production state machine (§23) drives what is available. `SCREENPLAY_APPROVED` and

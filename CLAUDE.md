@@ -89,12 +89,12 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,117 keys in English
-and Hebrew**, counted 2026-09-02 after the production edit form — 1,111 after the style version
-diff, 1,104 after the prop owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning
-after the bible's subject-rules editor, 1,087 the night before, after the canonical comparison,
-dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the
-same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,162 keys in English
+and Hebrew**, counted 2026-09-02 after the structure-profile form — 1,117 after the production edit
+form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103 after two more
+BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the night before,
+after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four
+BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -326,7 +326,9 @@ budget, the stages the production needs, and the approval gate. **A production i
 2026-09-02**, against the `PATCH` that had been published the whole time: only changed fields are
 sent, and a set optional field cannot be emptied from here because the DTO carries no `null` — the
 form says so on the field. A transitions control waits on one export, `PRODUCTION_TRANSITIONS`,
-which lives outside the contracts barrel.
+which lives outside the contracts barrel. **Structure profiles are created on
+the productions page as of 2026-09-02**, against the `POST` BE-15 published; the form assumes no
+frame or audio format, because a default here would be a capability asserted rather than advertised.
 
 **"Which scenes are underweight" is measured against this plan's own mean, and the screen says so.**
 The wire gives no per-scene target — a segment carries `shareOfTarget` and nothing else — so an even
