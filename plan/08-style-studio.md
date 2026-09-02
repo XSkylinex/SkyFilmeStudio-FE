@@ -558,7 +558,10 @@ did not get smaller by waiting, and it is still open.
       fields are now written as well as read, on both a first draft and a next version, and
       **subject rules joined them on 2026-09-02** — each block is attached to a subject chosen by
       name from the project's subject list and sent by id, and the read-only view names it back
-- [ ] reusable libraries are discoverable
+- [ ] reusable libraries are discoverable — **no controller on master serves one, measured
+      2026-09-02.** The first with a controller is the global SFX library on the unmerged
+      `be-21-audio` branch, alongside per-project opening/ending assets; both are `plan/13`'s to
+      build when that branch merges, and this box follows them
 
 ## Traps
 
