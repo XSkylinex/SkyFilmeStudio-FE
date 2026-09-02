@@ -78,4 +78,9 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  .production-card__continuity {
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+  }
 }

@@ -76,6 +76,7 @@ describe('routeTree', () => {
       'assets/:assetId',
       'audio',
       'bible',
+      'continuity',
       'design-system',
       'locations',
       'music',

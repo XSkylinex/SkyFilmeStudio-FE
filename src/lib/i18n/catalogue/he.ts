@@ -1852,4 +1852,49 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'זו גרסת הביבל שההפקה מוצמדת אליה, ולא בהכרח הגרסה הנוכחית של הפרויקט. פרסום ביבל חדש אינו מזיז הפקה שכבר תוכננה.',
   'planner.summary.bibleUnresolved':
     'ההפקה הזו אינה מוצמדת לגרסת ביבל, או שהגרסה שהיא מציינת אינה נפתרת עוד. האורקסטרטור משיב אותה תשובה בשני המקרים, ולכן המסך הזה אינו יכול להבחין ביניהם. גם הצמדה אינה זמינה כאן, משום שצורת הבקשה עבורה אינה מפורסמת.',
+  'page.continuity.title': 'רציפות',
+  'page.continuity.description':
+    'כל עובדה שהפקה זו רשמה על מה שחייב להישאר עקבי, והקשר התכנון שנמסר לתפקיד מתכנן עבור סצנה.',
+  'continuity.list.title': 'עובדות רשומות',
+  'continuity.list.description':
+    'עובדה תקפה לטווח של סצנות. היא מה שמונע מדמות שהתלכלכה בסצנה 6 להגיע נקייה בסצנה 7.',
+  'continuity.list.error.title': 'לא ניתן היה לקרוא את עובדות הרציפות',
+  'continuity.list.empty.title': 'אין עדיין עובדות רציפות',
+  'continuity.list.empty.description':
+    'דבר לא נרשם עבור הפקה זו. עובדות נכתבות על ידי שלבי התכנון בזמן ריצתם, וידנית במסך הזה.',
+  'continuity.list.empty.filtered.title': 'אין עובדות התואמות לסינון הזה',
+  'continuity.list.empty.filtered.description':
+    'נקו את הסינון כדי לראות את כל מה שההפקה רשמה.',
+  'continuity.list.firstPageOnly':
+    'זהו העמוד הראשון של העובדות ולאורקסטרטור יש עוד. אף מסך ביישום הזה עדיין אינו עוקב אחר סמן עימוד.',
+  'continuity.filter.property': 'תכונה',
+  'continuity.filter.entityActive': 'מוצגת ישות אחת בלבד:',
+  'continuity.filter.clear': 'ניקוי הסינון',
+  'continuity.card.scope': 'תקף עבור',
+  'continuity.card.source': 'נרשם מתוך',
+  'continuity.card.entity': 'ישות',
+  'continuity.card.onlyEntity': 'רק ישות זו',
+  'continuity.card.onlyEntityContext':
+    'הצגת העובדות על הישות אשר {property} שלה הוא {value} בלבד',
+  'continuity.scope.range': 'סצנות {start} עד {end}',
+  'continuity.scope.open': 'מסצנה {start} והלאה',
+  'continuity.scope.unplanned':
+    'סצנה שהעובדה הזו מציינת אינה נמצאת בתוכנית הנוכחית של ההפקה',
+  'continuity.context.title': 'ההקשר שממנו תוכננה הסצנה',
+  'continuity.context.description':
+    'האורקסטרטור מוסר לתפקיד המתכנן בדיוק את המסמך הזה. תוכנית שגויה מאובחנת מקריאת מה שממנו היא הופקה.',
+  'continuity.context.scene': 'סצנה',
+  'continuity.context.choose': 'בחרו סצנה',
+  'continuity.context.sceneOption': 'סצנה {order}',
+  'continuity.context.error.title': 'לא ניתן היה לקרוא את ההקשר הזה',
+  'continuity.context.noScenes.title': 'להפקה זו אין עדיין סצנות',
+  'continuity.context.noScenes.description':
+    'הקשר תכנון נבנה עבור סצנה אחת בכל פעם, ולכן אין מה לקרוא עד שהתוכנית תפיק סצנות.',
+  'continuity.gaps.heading': 'מה המסך הזה עדיין אינו יכול לעשות',
+  'continuity.gaps.entityName':
+    'עובדה מציינת את הישות שלה במזהה בלבד ואינה נושאת סוג, ולכן דבר כאן אינו יכול להפוך את המזהה הזה לשם של נושא, אביזר או מיקום.',
+  'continuity.gaps.paging':
+    'נקרא רק העמוד הראשון של העובדות. אחר הסמן שהאורקסטרטור מחזיר לא עוקב אף מסך ביישום הזה.',
+  'productions.card.continuity': 'רציפות',
+  'productions.card.continuity.context': 'פתיחת עובדות הרציפות של {title}',
 };

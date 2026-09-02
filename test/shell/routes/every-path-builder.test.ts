@@ -43,6 +43,10 @@ const everyBuiltPath: Record<string, string> = {
     PROJECT_ID,
     PRODUCTION_ID,
   ),
+  productionContinuityPath: routes.productionContinuityPath(
+    PROJECT_ID,
+    PRODUCTION_ID,
+  ),
 };
 
 describe('every exported path builder', () => {
