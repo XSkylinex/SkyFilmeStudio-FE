@@ -1504,6 +1504,10 @@ export const EN_CATALOGUE = {
     'Another writer took that version number first. Nothing was changed — try again and the next version will be allocated.',
   'error.SFX_ASSET_NOT_APPROVED':
     'That step needs an approved SFX asset, and this one is not approved. Approve the asset first, or choose one that already is.',
+  'error.AUDIO_TIMELINE_CONFLICT':
+    'This scene’s audio timeline does not add up, so there is nothing coherent to mix. Either its shots carry no length at all, or two pieces of its audio disagree about where they sit; fix the scene’s plan and mix it again.',
+  'error.SCENE_MIX_MISSING':
+    'A production is mixed from its scene mixes, so every scene has to be mixed first. One or more scenes have no mix yet — or the production has no scenes at all.',
   'error.MUSIC_CUE_VARIETY_OVERUSED':
     'This music cue has already been placed as often as the production’s variety rule allows, so it was not placed again. Choose a different cue for this placement.',
   'error.malformedText':
