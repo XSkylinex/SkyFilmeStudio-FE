@@ -14,7 +14,7 @@ export const buildShot = (overrides: Partial<Shot> = {}): Shot =>
     camera: 'Static, eye-level.',
     actionOrVisualIntent: 'Establish the space before she enters.',
     dialogueLineIds: [],
-    audioCueIds: [],
+    ...('audioCueIds' in shotSchema.shape ? { audioCueIds: [] } : {}),
     visualPriority: 'HIGH',
     motionComplexity: 'LOW',
     continuityRequirements: [],
