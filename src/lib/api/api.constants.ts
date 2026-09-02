@@ -194,6 +194,8 @@ export const API_PATH = {
     `/productions/${productionId}/planning/approval`,
   planningScenes: (productionId: ProductionId): string =>
     `/productions/${productionId}/planning/scenes`,
+  productionScore: (productionId: ProductionId): string =>
+    `/productions/${productionId}/score`,
   sceneMixes: (sceneId: SceneId): string => `/scenes/${sceneId}/mixes`,
   productionMixes: (productionId: ProductionId): string =>
     `/productions/${productionId}/mixes`,
