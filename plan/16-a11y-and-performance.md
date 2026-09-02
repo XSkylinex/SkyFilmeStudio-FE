@@ -185,6 +185,19 @@ third resolves through a canvas and was validated on black-on-white (21.00), whi
 and an oklch that must not come back black. This is the trap at the bottom of this file, met three
 times in one session.
 
+**A rect skeleton at full width was 950 pixels tall, and four gate stages were green over it.**
+Found on 2026-09-02 by loading the app, not by a test: `.skeleton[data-shape='rect']` pairs
+`inline-size: 100%` with `aspect-ratio: 16 / 9`, which is right inside a grid column — the music
+library's placeholders measured 185 × 328 — and catastrophic as a full-width child, where 1,688
+pixels of width bought 950 of height. The voices screen stacked four of them and ran to roughly
+3,800 pixels of shimmering grey; the music screen did the same. **The primitive was wrong, not the
+five callers**, so the fix is a `max-block-size` on the shape rather than a wrapper on each screen:
+12rem, measured back at 192 pixels, and the music screen's whole document went from thousands to 873.
+The ratio is kept, because inside a column it is what makes a placeholder look like the media it
+stands for. `test/lib/components/skeleton/skeleton.test.tsx` reads the stylesheet and fails without
+the cap — the same instrument the runtime budget's `display: flex` defect needed, because jsdom has
+no layout and no assertion about rendered height is available here.
+
 ## Recorded rather than fixed
 
 - **A failed validation is silent in eight forms — fixed 2026-09-01, on eleven.** The count had
