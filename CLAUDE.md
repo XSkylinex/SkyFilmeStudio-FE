@@ -89,18 +89,18 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,527 keys in English
-and Hebrew**, counted 2026-09-02 after the continuity review fixes — 1,524 after the continuity
-writes, 1,503 after the continuity screen, 1,469 after the production bible pin, 1,464 after the
-music candidates, 1,414 after the shot effects editor, 1,389 after the score, 1,366 after the plate
-writes, 1,338 after the mix panels, 1,305 after the music and opening-ending libraries, 1,261 after
-the music and opening-ending libraries, 1,222 after the SFX library, 1,179 after the pronunciation
-writes, 1,164 after two audio-mix refusals, 1,162 after the structure-profile form, 1,117 after the
-production edit form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103
-after two more BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the
-night before, after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third
-pass and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system
-screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,542 keys in English
+and Hebrew**, counted 2026-09-02 after the scene cue editor — 1,527 after the continuity review
+fixes, 1,524 after the continuity writes, 1,503 after the continuity screen, 1,469 after the
+production bible pin, 1,464 after the music candidates, 1,414 after the shot effects editor, 1,389
+after the score, 1,366 after the plate writes, 1,338 after the mix panels, 1,305 after the music and
+opening-ending libraries, 1,261 after the music and opening-ending libraries, 1,222 after the SFX
+library, 1,179 after the pronunciation writes, 1,164 after two audio-mix refusals, 1,162 after the
+structure-profile form, 1,117 after the production edit form, 1,111 after the style version diff,
+1,104 after the prop owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning after the
+bible's subject-rules editor, 1,087 the night before, after the canonical comparison, dialogue
+editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the same evening
+— 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -642,6 +642,17 @@ It catches the bug class it was written for and no more. Its worth was settled t
 onto a master that had merged an hour earlier, it failed immediately on a twenty-first stylesheet
 written after it. **That is the sixth time `plan/16`'s point has held**, and the first where the
 defect was a token name rather than markup.
+
+**A scene's music placements became editable on 2026-09-02, and the blocker recorded against them
+was a design that already existed.** `plan/13` had left that box half-ticked with a real argument:
+`PUT /scenes/:sceneId/cues` replaces a scene's cues wholesale, so adjusting one placement means
+restating the rest, which is "a design rather than a form". The design was already in this repo one
+level down — a shot's audio cues are edited by holding the whole list on screen and sending all of
+it, with `order` taken from a row's position rather than typed. **Two things the scene case needed
+that the shot case did not.** The read moved to the route the `PUT` replaces rather than filtering
+the production-wide score, because reading through one route and writing through another is how a
+wholesale replace drops a row. And a placement naming a cue the soundtrack's first page does not
+return keeps that cue selectable, or the `<Select>` would show nothing chosen and blank it on save.
 
 **FE-12's advisory half landed the same evening, and the row that said it was blocked was right about
 the blockers and wrong about the word.** `/productions/:id/shots` reads a production's scenes, each

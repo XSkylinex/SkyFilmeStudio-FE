@@ -1676,9 +1676,9 @@ export const EN_CATALOGUE = {
   'audio.score.scene.none': 'No cue is assigned to this scene.',
   'audio.score.cue.unknown':
     'A cue the soundtrack library did not return; it may have been removed since the score was made.',
-  'audio.score.cue.startsAt': 'Starts at:',
-  'audio.score.cue.gain': 'Gain:',
-  'audio.score.cue.loop': 'Loops:',
+  'audio.score.cue.startsAt': 'Starts at (ms)',
+  'audio.score.cue.gain': 'Gain (dB)',
+  'audio.score.cue.loop': 'Loops',
   'audio.score.cue.loop.yes': 'Yes',
   'audio.score.cue.loop.no': 'No',
   'audio.score.cue.fades': 'Fades:',
@@ -1958,6 +1958,23 @@ export const EN_CATALOGUE = {
   'continuity.context.scenesUnread.title': 'The production’s scenes could not be read',
   'continuity.create.scenesUnread':
     'The production’s scenes could not be read, so a fact cannot be recorded — a fact has to name the scene it starts at.',
+  'audio.score.cue.name': 'Cue',
+  'audio.score.cue.choose': 'Choose a cue',
+  'audio.score.cue.entry': 'Placement {position}',
+  'audio.score.cue.fadeIn': 'Fade in (ms)',
+  'audio.score.cue.fadeOut': 'Fade out (ms)',
+  'audio.score.cue.add': 'Add a placement',
+  'audio.score.cue.remove': 'Remove',
+  'audio.score.cue.removeContext': 'placement {position} from this scene',
+  'audio.score.cue.libraryUnreadable':
+    'The project’s soundtrack could not be read, so a placement can be adjusted but a different cue cannot be chosen for it.',
+  'audio.score.scene.wholesale':
+    'The orchestrator replaces a scene’s placements as a set, so saving sends every placement below in the order shown. Their order is their position here, not a number to type.',
+  'audio.score.scene.unreadable': 'This scene’s placements could not be read',
+  'audio.score.scene.save': 'Save the placements',
+  'audio.score.scene.saving': 'Saving…',
+  'audio.score.scene.saved': 'The placements were saved.',
+  'audio.score.scene.failed.title': 'The placements were not saved',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;
