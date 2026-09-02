@@ -285,6 +285,18 @@ visible category rather than an afterthought. The one-approved-voice-per-subject
 on approval, not creation**, so the screen says so — otherwise a user learns the rule from a refusal
 that cannot explain why the create succeeded.
 
+**Pronunciation (step 4) writes as of 2026-09-02.** Until today the dictionary was read-only here
+while `POST /projects/:id/pronunciation-dictionaries`, `POST …/:dictionaryId/entries` and
+`DELETE …/entries/:entryId` were all published and routed — and the note on screen told the reader
+that changing an entry means deleting it and adding the replacement, neither of which the screen
+offered. A dictionary is created by language tag, an entry is added with an optional phoneme
+override, and an entry is removed, which is the only way to change one because no `PATCH` exists.
+**Hebrew is first-class in the typing, not only in the reading**: the term field is wrapped in the
+dictionary's own direction, resolved from its language tag, while the field itself stays `dir="auto"`
+so a Latin term typed into a Hebrew dictionary still reads correctly; the phoneme field is notation
+and stays `ltr`. Removal has no optimistic update — the row stays until the server answers, proven by
+adding a `setQueryData` on purpose and watching two tests fail.
+
 **Pronunciation (step 4).** Each entry shows its `term` beside the `normalisedTerm` it collapses to.
 That is not decoration: normalisation strips exactly the marks an operator cannot see, so two
 identical-looking terms legitimately collide, and without the normalised form on screen
@@ -549,7 +561,12 @@ did not get smaller by waiting, and it is still open.
 - [x] versioning is visible: lineages and their approved head **are**, and as of FE-09 so is **which version a production is pinned to**. **The warning exists now** — an approved version offers *create the next version* rather than an edit, and says productions stay pinned to the version they used before the user commits. **Ticked 2026-09-02: diffs between versions render.** Every version after the first carries *What changed from v{n}*, computed from the same `/versions` page, listing each field's removed and added lines with the word beside each line rather than a colour alone, and saying *No differences* when a next version was created without an edit
 - [ ] the same-subject-two-styles comparison exists and demonstrates identity is unchanged
 - [x] voices support subject, narrator and standalone roles; one voice per subject is stated where it is enforced
-- [ ] the pronunciation dictionary works per language with Hebrew first-class — **the audible preview has no route**
+- [~] the pronunciation dictionary works per language with Hebrew first-class — **built on 2026-09-02
+      except the preview.** A dictionary is created per language, an entry added and removed, and the
+      term is typed in the dictionary's own direction. Still unticked because the box asks for the
+      audible preview that tells a person whether an entry helped, and **no synthesis-preview route
+      exists**; an entry also cannot be edited in place, which is the missing `PATCH` rather than a
+      decision here
 - [x] locations show plate coverage against observed kinds; suggested kinds without a plate are named as suggestions
 - [ ] props carry continuity rules — **the link to where they apply has no published join**
 - [x] the bible is structured, versioned, and shows only fields relevant to the project kind — the

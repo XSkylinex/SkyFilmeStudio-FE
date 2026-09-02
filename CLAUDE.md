@@ -89,13 +89,13 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,164 keys in English
-and Hebrew**, counted 2026-09-02 after two audio-mix refusals — 1,162 after the structure-profile
-form, 1,117 after the production edit form, 1,111 after the style version diff, 1,104 after the prop
-owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning after the bible's
-subject-rules editor, 1,087 the night before, after the canonical comparison, dialogue editing,
-FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the same evening — 109
-when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,179 keys in English
+and Hebrew**, counted 2026-09-02 after the pronunciation writes — 1,164 after two audio-mix
+refusals, 1,162 after the structure-profile form, 1,117 after the production edit form, 1,111 after
+the style version diff, 1,104 after the prop owner's name, 1,103 after two more BE-21 refusals,
+1,101 that morning after the bible's subject-rules editor, 1,087 the night before, after the
+canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21
+refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -282,8 +282,13 @@ reads — no route was needed, which is why it had stayed unbuilt for two weeks.
 
 **All four now create and edit, as of 2026-09-01.** `/styles`, `/voices`, `/locations` and `/props`
 each offer an Add control and a per-record Edit, against the `POST` and `PATCH` every one of them
-publishes. A pronunciation dictionary still has a **create** DTO and no update one, which is the same
-gap as its missing `PATCH`. **Canonical plates are the one deliberate omission**: a plate is anchored
+publishes. **The pronunciation dictionary writes too, as of 2026-09-02** — a dictionary per language, entries
+added and removed — against routes that were published the whole time while the screen stayed
+read-only and told the reader to delete and re-add an entry it gave no way to delete. An entry still
+has no update DTO and no `PATCH`, so removing and re-adding is the change, and now it is offered.
+**Hebrew is first-class in the typing, not only the reading**: the term field is wrapped in the
+dictionary's own direction and the field itself stays `dir="auto"`, so a Latin term in a Hebrew
+dictionary still reads correctly. **Canonical plates are the one deliberate omission**: a plate is anchored
 to exactly one of a source asset or an artifact, checked against the stored row after a merge, so
 switching anchors must be a single `PATCH` sending both fields and the obvious two-step flow fails on
 its first step with no `ErrorCode`. `plan/08` carries the argument.
