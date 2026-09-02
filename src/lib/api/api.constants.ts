@@ -7,6 +7,7 @@ import type {
   ProductionProfileId,
   ProjectBibleVersionId,
   MusicCueId,
+  OpeningEndingAssetId,
   ProjectId,
   PronunciationDictionaryEntryId,
   PronunciationDictionaryId,
@@ -91,6 +92,18 @@ export const API_PATH = {
   sfxAsset: (sfxAssetId: SfxAssetId): string => `/sfx-assets/${sfxAssetId}`,
   approveSfxAsset: (sfxAssetId: SfxAssetId): string =>
     `/sfx-assets/${sfxAssetId}/approve`,
+  openingEndingAssets: (projectId: ProjectId): string =>
+    `/projects/${projectId}/opening-ending-assets`,
+  openingEndingAsset: (
+    projectId: ProjectId,
+    openingEndingAssetId: OpeningEndingAssetId,
+  ): string =>
+    `/projects/${projectId}/opening-ending-assets/${openingEndingAssetId}`,
+  approveOpeningEndingAsset: (
+    projectId: ProjectId,
+    openingEndingAssetId: OpeningEndingAssetId,
+  ): string =>
+    `/projects/${projectId}/opening-ending-assets/${openingEndingAssetId}/approve`,
   musicCues: (projectId: ProjectId): string =>
     `/projects/${projectId}/music-cues`,
   musicCue: (projectId: ProjectId, musicCueId: MusicCueId): string =>

@@ -7,6 +7,7 @@ import {
   productionProfileIdSchema,
   projectBibleVersionIdSchema,
   musicCueIdSchema,
+  openingEndingAssetIdSchema,
   projectIdSchema,
   pronunciationDictionaryEntryIdSchema,
   pronunciationDictionaryIdSchema,
@@ -58,6 +59,10 @@ const SAMPLE_VOICE_PROFILE_ID = voiceProfileIdSchema.parse(
 
 const SAMPLE_MUSIC_CUE_ID = musicCueIdSchema.parse(
   '88888888-8888-4888-8888-888888888888',
+);
+
+const SAMPLE_OPENING_ENDING_ASSET_ID = openingEndingAssetIdSchema.parse(
+  '99999999-9999-4999-8999-999999999999',
 );
 
 const SAMPLE_PRONUNCIATION_DICTIONARY_ID =
@@ -165,6 +170,15 @@ const everyPath: Record<string, string> = {
   approveVoiceProfile: API_PATH.approveVoiceProfile(
     SAMPLE_PROJECT_ID,
     SAMPLE_VOICE_PROFILE_ID,
+  ),
+  openingEndingAssets: API_PATH.openingEndingAssets(SAMPLE_PROJECT_ID),
+  openingEndingAsset: API_PATH.openingEndingAsset(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_OPENING_ENDING_ASSET_ID,
+  ),
+  approveOpeningEndingAsset: API_PATH.approveOpeningEndingAsset(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_OPENING_ENDING_ASSET_ID,
   ),
   musicCues: API_PATH.musicCues(SAMPLE_PROJECT_ID),
   musicCue: API_PATH.musicCue(SAMPLE_PROJECT_ID, SAMPLE_MUSIC_CUE_ID),
