@@ -106,6 +106,8 @@ export const API_PATH = {
     `/projects/${projectId}/opening-ending-assets/${openingEndingAssetId}/approve`,
   musicCues: (projectId: ProjectId): string =>
     `/projects/${projectId}/music-cues`,
+  musicCueRenders: (projectId: ProjectId): string =>
+    `/projects/${projectId}/music-cues/renders`,
   musicCue: (projectId: ProjectId, musicCueId: MusicCueId): string =>
     `/projects/${projectId}/music-cues/${musicCueId}`,
   approveMusicCue: (projectId: ProjectId, musicCueId: MusicCueId): string =>
