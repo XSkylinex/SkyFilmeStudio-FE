@@ -5,6 +5,7 @@ import { ErrorState } from '@/lib/components/error-state';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { PROJECT_ID_PARAM } from '@/shell/routes/routes.constants';
 import { MusicLibrary } from '@/features/music/components/music-library';
+import { OpeningEndingLibrary } from '@/features/music/components/opening-ending-library';
 import { MUSIC_GAP_KEYS } from '@/features/music/music.constants';
 import './music-page.css';
 
@@ -31,6 +32,8 @@ export const MusicPage: FC = () => {
       </p>
 
       <MusicLibrary projectId={projectId.data} />
+
+      <OpeningEndingLibrary projectId={projectId.data} />
 
       <section className="music-page__gaps">
         <h2 className="music-page__gaps-title">

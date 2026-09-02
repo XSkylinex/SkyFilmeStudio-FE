@@ -20,6 +20,9 @@ const server = mockOrchestratorServer(
   http.get(API_PATH.musicCues(PROJECT_ID), () =>
     HttpResponse.json({ items: [] }),
   ),
+  http.get(API_PATH.openingEndingAssets(PROJECT_ID), () =>
+    HttpResponse.json({ items: [] }),
+  ),
 );
 
 const renderCard = (

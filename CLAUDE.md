@@ -89,14 +89,15 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,261 keys in English
-and Hebrew**, counted 2026-09-02 after the music and opening-ending libraries — 1,222 after the SFX
-library, 1,179 after the pronunciation writes, 1,164 after two audio-mix refusals, 1,162 after the
-structure-profile form, 1,117 after the production edit form, 1,111 after the style version diff,
-1,104 after the prop owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning after the
-bible's subject-rules editor, 1,087 the night before, after the canonical comparison, dialogue
-editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the same evening
-— 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,305 keys in English
+and Hebrew**, counted 2026-09-02 after the music and opening-ending libraries — 1,261 after the
+music and opening-ending libraries, 1,222 after the SFX library, 1,179 after the pronunciation
+writes, 1,164 after two audio-mix refusals, 1,162 after the structure-profile form, 1,117 after the
+production edit form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103
+after two more BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the
+night before, after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third
+pass and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system
+screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -529,6 +530,12 @@ required for an imported sound and absent is legitimate for a generated one**, w
 contract's own `refine` rather than a rule invented here, and the form's required marker follows the
 chosen origin. Approval is structural in the FE-07 sense: an approved effect renders no Approve and
 no Remove at all, so a reload cannot re-offer either.
+
+**Opening and ending audio is a lineage, not a file, and the screen is built on that** (2026-09-02).
+Versions fold onto the lineage they belong to, the approved one is named, and an import either starts
+a lineage or continues one — the shape FE-08 established for style profiles, met here for the second
+time. What the orchestrator did not measure — a frame size, an fps, a duration — says *not measured*
+rather than rendering a blank.
 
 **The soundtrack library reads and decides as of 2026-09-02**, on `/projects/:id/music` — a cue's
 category, mood, tags, measured duration, tempo, key, loop points, and the **safe dialogue level that

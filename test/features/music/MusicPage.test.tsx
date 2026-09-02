@@ -25,6 +25,9 @@ const serves = (
         nextCursor === undefined ? { items } : { items, nextCursor },
       ),
     ),
+    http.get(API_PATH.openingEndingAssets(PROJECT_ID), () =>
+      HttpResponse.json({ items: [] }),
+    ),
   );
 };
 
