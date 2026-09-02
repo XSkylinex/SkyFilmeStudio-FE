@@ -5,6 +5,7 @@ import { ErrorState } from '@/lib/components/error-state';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { PROJECT_ID_PARAM } from '@/shell/routes/routes.constants';
 import { ProductionLibrary } from '@/features/productions/components/production-library';
+import { ProductionProfileList } from '@/features/productions/components/production-profile-list';
 import './production-list-page.css';
 
 export const ProductionListPage: FC = () => {
@@ -28,6 +29,7 @@ export const ProductionListPage: FC = () => {
         {translate('page.productions.title')}
       </h1>
       <ProductionLibrary projectId={projectId.data} />
+      <ProductionProfileList projectId={projectId.data} />
     </section>
   );
 };
