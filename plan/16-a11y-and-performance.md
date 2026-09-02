@@ -293,7 +293,11 @@ What the gate did not tell us, and was checked by loading the app in Chrome agai
       successful save no longer removes every control on the card. Before this, saving a voice edit
       left the card with no Approve, no Edit and no Cancel until a reload. The storyboard and shot
       review remain **FE-10, FE-12**
-- [ ] the automated-pass vs human-approved distinction survives being read aloud — **FE-12**
+- [x] the automated-pass vs human-approved distinction survives being read aloud — **pinned
+      2026-09-02** by a test that reads FE-12's QC section as text in document order: the heading
+      *Automated checks* and the sentence saying none of them is an approval come before any verdict,
+      every verdict is preceded by its run's kind, and the word the shot's own state uses for a human
+      decision never appears inside the section. Moving the advisory sentence below the runs fails it
 - [ ] reduced motion is honoured in the React layer, including autoplay — **FE-12.** The one media
       element that exists does not autoplay, so there is nothing here for the query to damp yet; the
       box this describes is a shot preview that plays on its own, which FE-12 introduces
