@@ -7,6 +7,7 @@ import type {
   ProductionProfileId,
   ProjectBibleVersionId,
   ProjectId,
+  PronunciationDictionaryEntryId,
   PronunciationDictionaryId,
   PropId,
   RenderJobId,
@@ -88,6 +89,12 @@ export const API_PATH = {
     `/projects/${projectId}/pronunciation-dictionaries`,
   pronunciationDictionaryByLanguage: (projectId: ProjectId): string =>
     `/projects/${projectId}/pronunciation-dictionaries/by-language`,
+  pronunciationDictionaryEntry: (
+    projectId: ProjectId,
+    dictionaryId: PronunciationDictionaryId,
+    entryId: PronunciationDictionaryEntryId,
+  ): string =>
+    `/projects/${projectId}/pronunciation-dictionaries/${dictionaryId}/entries/${entryId}`,
   pronunciationDictionaryEntries: (
     projectId: ProjectId,
     dictionaryId: PronunciationDictionaryId,

@@ -604,6 +604,24 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'voices.dictionaries.editNote':
     'לא ניתן לערוך ערך: האורקסטרטור אינו מפרסם מסלול לכך, ולכן שינוי פירושו מחיקה והוספה של ערך מחליף.',
   'voices.entries.none': 'למילון הזה אין ערכים.',
+  'voices.dictionaries.add': 'הוספת מילון',
+  'voices.dictionaries.add.heading': 'מילון הגייה חדש',
+  'voices.dictionaries.add.language.hint':
+    'מילון אחד לכל שפה, שנכתבת כתג שפה. מילון שני לשפה שכבר יש לפרויקט הזה נדחה.',
+  'voices.dictionaries.add.failed.title': 'המילון לא נוצר',
+  'voices.entries.add': 'הוספת ערך',
+  'voices.entries.add.heading': 'ערך חדש',
+  'voices.entries.add.term': 'מונח',
+  'voices.entries.add.term.hint':
+    'המילה כפי שהיא מופיעה בתסריט. זהו תוכן, ולכן היא נכתבת בשפה ובכיוון של המילון הזה.',
+  'voices.entries.add.phonemes': 'דריסת פונמות',
+  'voices.entries.add.phonemes.hint':
+    'לא חובה, וזו נוטציה ולא שפה. אפשר להשאיר ריק כדי לרשום את המונח בלעדיה.',
+  'voices.entries.add.failed.title': 'הערך לא נוסף',
+  'voices.entries.remove': 'הסרה',
+  'voices.entries.removeContext': 'הסרת הערך {term}',
+  'voices.entries.removing': 'מסיר…',
+  'voices.entries.remove.failed.title': 'הערך לא הוסר',
   'voices.entries.unreadable':
     'לא ניתן לקרוא את הערכים של המילון הזה, ולכן זה אינו ידוע ולא ריק.',
   'voices.entries.truncated':

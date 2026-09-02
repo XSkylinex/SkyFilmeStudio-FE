@@ -37,4 +37,9 @@
     font-family: var(--font-mono);
     font-size: var(--font-size-sm);
   }
+
+  .pronunciation-dictionaries__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
