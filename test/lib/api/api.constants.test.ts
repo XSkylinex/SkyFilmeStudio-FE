@@ -284,6 +284,7 @@ const everyPath: Record<string, string> = {
   dialogueLineTier: API_PATH.dialogueLineTier(SAMPLE_DIALOGUE_LINE_ID),
   productionDialogueTiming:
     API_PATH.productionDialogueTiming(SAMPLE_PRODUCTION_ID),
+  shotAudioCues: API_PATH.shotAudioCues(SAMPLE_SHOT_ID),
   shotQcRuns: API_PATH.shotQcRuns(SAMPLE_SHOT_ID),
   shotQcRequestReview: API_PATH.shotQcRequestReview(SAMPLE_SHOT_ID),
 };

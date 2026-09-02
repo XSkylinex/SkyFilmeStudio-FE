@@ -229,6 +229,7 @@ export const API_PATH = {
     `/dialogue-lines/${dialogueLineId}/dialogue-tier`,
   productionDialogueTiming: (productionId: ProductionId): string =>
     `/productions/${productionId}/dialogue-timing`,
+  shotAudioCues: (shotId: ShotId): string => `/shots/${shotId}/audio-cues`,
   shotQcRuns: (shotId: ShotId): string => `/shots/${shotId}/qc/runs`,
   shotQcRequestReview: (shotId: ShotId): string =>
     `/shots/${shotId}/qc/request-review`,
