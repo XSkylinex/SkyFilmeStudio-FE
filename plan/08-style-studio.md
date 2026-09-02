@@ -532,14 +532,21 @@ master and this branch, built minutes apart on one machine — was made directly
 
 ## What no screen does yet
 
-**Canonical plates cannot be created or edited here, and that is deliberate.** Their DTOs are
-published like the other four, but a plate is anchored to exactly one of a source asset or an
-artifact — enforced by a `.refine()`, by a service-level merge check and by a
-`num_nonnulls(...) = 1` database `CHECK`. The service merges the request against the **stored** row
-before counting, so switching a plate from one anchor to the other must be a **single `PATCH` sending
-both fields**; a natural "clear the old, then set the new" flow `400`s on its first step, with no
-`ErrorCode` to explain it. That deserves its own design rather than being appended to four forms that
-share a shape it does not.
+**Canonical plates are created and edited as of 2026-09-02, with the design this paragraph asked
+for.** The constraint is unchanged: a plate anchors exactly one of a source asset or an artifact,
+enforced by a `.refine()`, a service-level merge check and a `num_nonnulls(...) = 1` database
+`CHECK`, and the service merges against the **stored** row before counting — so a "clear the old,
+then set the new" flow `400`s on its first step with no `ErrorCode` to explain it. What was missing
+was not a route but a form that never produces that flow. The anchor is chosen as a **kind** rather
+than as two independent fields, and `plateUpdateFrom` emits the new anchor and an explicit `null` for
+the old one **in the same patch** — so the two-step sequence is unreachable from the screen rather
+than merely discouraged. A test asserts that patch shape and fails when the clear is dropped.
+
+The rest follows the four forms: a kind is typed rather than picked, because `plateKindSchema` is a
+branded pattern and the four `SUGGESTED_PLATE_KINDS` are offered as suggestions in the hint; a source
+asset is chosen by its path from the project's assets, while an **artifact id is typed**, because
+nothing in the orchestrator lists artifacts; and an approved plate offers neither approval nor edit,
+which is the `LOCATION_PLATE_IMMUTABLE` trigger shown before a person meets it.
 
 **Paging.** Every list reads the first page. `Page<T>` carries `nextCursor` and an absent one means
 the end, so each screen says "reads the first page only" when the server offers more. The asset
@@ -567,7 +574,7 @@ did not get smaller by waiting, and it is still open.
       audible preview that tells a person whether an entry helped, and **no synthesis-preview route
       exists**; an entry also cannot be edited in place, which is the missing `PATCH` rather than a
       decision here
-- [x] locations show plate coverage against observed kinds; suggested kinds without a plate are named as suggestions
+- [x] locations show plate coverage against observed kinds; suggested kinds without a plate are named as suggestions. **Plates are written as of 2026-09-02**: created, re-anchored in a single patch, and approved
 - [ ] props carry continuity rules — **the link to where they apply has no published join**
 - [x] the bible is structured, versioned, and shows only fields relevant to the project kind — the
       kind's own `bibleCarriesNarrative` decides, and a kind that carries none says so rather than
