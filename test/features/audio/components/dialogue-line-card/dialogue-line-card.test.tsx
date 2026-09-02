@@ -27,7 +27,7 @@ const FINAL_PATH = projectRelativePathSchema.parse(
 const renderCard = (line = buildDialogueLine()) =>
   renderInApp(
     <ul>
-      <DialogueLineCard line={line} sceneId={SCENE_ID} />
+      <DialogueLineCard line={line} sceneId={SCENE_ID} onRemoved={() => undefined} />
     </ul>,
   );
 
@@ -127,6 +127,7 @@ describe('DialogueLineCard', () => {
         <DialogueLineCard
           line={buildDialogueLine({ approved: false })}
           sceneId={SCENE_ID}
+        onRemoved={() => undefined}
         />
       </ul>,
     );
@@ -162,6 +163,7 @@ describe('DialogueLineCard', () => {
             generatedAudioPath: FINAL_PATH,
           })}
           sceneId={SCENE_ID}
+        onRemoved={() => undefined}
         />
       </ul>,
     );
@@ -185,6 +187,7 @@ describe('DialogueLineCard', () => {
             generatedAudioPath: DRAFT_PATH,
           })}
           sceneId={SCENE_ID}
+        onRemoved={() => undefined}
         />
       </ul>,
     );

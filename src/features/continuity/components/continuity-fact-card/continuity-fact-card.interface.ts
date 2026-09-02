@@ -9,4 +9,5 @@ export interface ContinuityFactCardProps {
   readonly fact: ContinuityFact;
   readonly scenes: readonly Scene[] | undefined;
   readonly onFilterByEntity: (entityId: string) => void;
+  readonly onRemoved: (property: string) => void;
 }

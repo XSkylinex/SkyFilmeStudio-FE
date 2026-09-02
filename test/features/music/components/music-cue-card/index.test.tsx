@@ -33,7 +33,8 @@ const renderCard = (
 ): void => {
   renderInApp(
     <ul>
-      <MusicCueCard projectId={PROJECT_ID} cue={cue} />
+      <MusicCueCard projectId={PROJECT_ID} cue={cue}   onRemoved={() => undefined}
+      />
     </ul>,
   );
 };

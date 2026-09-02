@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { ActionResult } from '@/lib/components/action-result';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
 import { Dialog } from '@/lib/components/dialog';
@@ -15,6 +16,7 @@ import './scene-dialogue.css';
 
 export const SceneDialogue: FC<SceneDialogueProps> = ({ projectId, scene }) => {
   const translate = useTranslate();
+  const [removals, setRemovals] = useState(0);
   const [open, setOpen] = useState(false);
   const [adding, setAdding] = useState(false);
 
@@ -89,9 +91,16 @@ export const SceneDialogue: FC<SceneDialogueProps> = ({ projectId, scene }) => {
                       key={line.id}
                       line={line}
                       sceneId={scene.id}
+                      onRemoved={() => setRemovals((count) => count + 1)}
                     />
                   ))}
               </ul>
+              {removals === 0 ? null : (
+                <ActionResult
+                  message={translate('audio.line.removed')}
+                  attempt={removals}
+                />
+              )}
               {lines.data.nextCursor === undefined ? null : (
                 <p className="scene-dialogue__note">
                   {translate('audio.lines.firstPageOnly')}

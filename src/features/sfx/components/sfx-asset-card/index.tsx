@@ -18,7 +18,7 @@ import './sfx-asset-card.css';
 
 const MILLISECONDS_PER_SECOND = 1000;
 
-export const SfxAssetCard: FC<SfxAssetCardProps> = ({ asset }) => {
+export const SfxAssetCard: FC<SfxAssetCardProps> = ({ asset, onRemoved }) => {
   const translate = useTranslate();
   const queryClient = useQueryClient();
   const approve = useMutation(approveSfxAssetMutationOptions(queryClient));
@@ -175,7 +175,11 @@ export const SfxAssetCard: FC<SfxAssetCardProps> = ({ asset }) => {
                 name: asset.name,
               })}
               disabled={remove.isPending}
-              onClick={() => remove.mutate(asset.id)}
+              onClick={() =>
+                remove.mutate(asset.id, {
+                  onSuccess: () => onRemoved(asset.name),
+                })
+              }
             >
               {translate(
                 remove.isPending ? 'sfx.card.removing' : 'sfx.card.remove',

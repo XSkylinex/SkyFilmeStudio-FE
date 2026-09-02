@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import type { FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { ActionResult } from '@/lib/components/action-result';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { Skeleton } from '@/lib/components/skeleton';
@@ -14,6 +16,8 @@ import './music-library.css';
 
 export const MusicLibrary: FC<MusicLibraryProps> = ({ projectId }) => {
   const translate = useTranslate();
+  const [removed, setRemoved] = useState<string | null>(null);
+  const [removals, setRemovals] = useState(0);
   const { data, error, isPending } = useQuery(musicCuesQueryOptions(projectId));
 
   if (error && data === undefined) {
@@ -57,9 +61,24 @@ export const MusicLibrary: FC<MusicLibraryProps> = ({ projectId }) => {
       ) : (
         <ul className="music-library__list">
           {data.items.map((cue) => (
-            <MusicCueCard key={cue.id} projectId={projectId} cue={cue} />
+            <MusicCueCard
+              key={cue.id}
+              projectId={projectId}
+              cue={cue}
+              onRemoved={(name) => {
+                setRemoved(name);
+                setRemovals((count) => count + 1);
+              }}
+            />
           ))}
         </ul>
+      )}
+
+      {removed === null ? null : (
+        <ActionResult
+          message={translate('music.card.removed', { name: removed })}
+          attempt={removals}
+        />
       )}
 
       {data.nextCursor === undefined ? null : (

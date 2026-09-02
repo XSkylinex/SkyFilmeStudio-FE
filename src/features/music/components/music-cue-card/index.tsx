@@ -16,7 +16,11 @@ import { deleteMusicCueMutationOptions } from '@/features/music/api/delete-music
 import type { MusicCueCardProps } from './music-cue-card.interface';
 import './music-cue-card.css';
 
-export const MusicCueCard: FC<MusicCueCardProps> = ({ projectId, cue }) => {
+export const MusicCueCard: FC<MusicCueCardProps> = ({
+  projectId,
+  cue,
+  onRemoved,
+}) => {
   const translate = useTranslate();
   const queryClient = useQueryClient();
   const approve = useMutation(
@@ -208,7 +212,9 @@ export const MusicCueCard: FC<MusicCueCardProps> = ({ projectId, cue }) => {
                 name: cue.name,
               })}
               disabled={remove.isPending}
-              onClick={() => remove.mutate(cue.id)}
+              onClick={() =>
+                remove.mutate(cue.id, { onSuccess: () => onRemoved(cue.name) })
+              }
             >
               {translate(
                 remove.isPending ? 'music.card.removing' : 'music.card.remove',

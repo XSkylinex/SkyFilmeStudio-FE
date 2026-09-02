@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import type { FC, ReactNode } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ActionResult } from '@/lib/components/action-result';
 import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
 import { ErrorState } from '@/lib/components/error-state';
@@ -19,6 +21,8 @@ export const PronunciationEntries: FC<PronunciationEntriesProps> = ({
   language,
 }) => {
   const translate = useTranslate();
+  const [removed, setRemoved] = useState<string | null>(null);
+  const [removals, setRemovals] = useState(0);
   const queryClient = useQueryClient();
   const { data, error, isPending } = useQuery(
     pronunciationEntriesQueryOptions(projectId, dictionaryId),
@@ -87,7 +91,14 @@ export const PronunciationEntries: FC<PronunciationEntriesProps> = ({
                   term: entry.term,
                 })}
                 disabled={remove.isPending}
-                onClick={() => remove.mutate(entry.id)}
+                onClick={() =>
+                  remove.mutate(entry.id, {
+                    onSuccess: () => {
+                      setRemoved(entry.term);
+                      setRemovals((count) => count + 1);
+                    },
+                  })
+                }
               >
                 {translate(
                   remove.isPending && remove.variables === entry.id
@@ -98,6 +109,12 @@ export const PronunciationEntries: FC<PronunciationEntriesProps> = ({
             </li>
           ))}
         </ul>
+        {removed === null ? null : (
+          <ActionResult
+            message={translate('voices.entries.removed', { term: removed })}
+            attempt={removals}
+          />
+        )}
       </>
     );
   };

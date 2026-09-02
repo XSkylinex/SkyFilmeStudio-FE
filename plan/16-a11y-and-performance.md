@@ -306,12 +306,29 @@ What the gate did not tell us, and was checked by loading the app in Chrome agai
 - [x] reduced motion is honoured in CSS — every transition in `src/` uses a duration token, and the
       three keyframe loops each also set `animation: none`
 - [x] no `react/react-compiler` errors, and no suppressions
-- [~] every workflow is keyboard-completable — **the library workflows are, as of 2026-09-01.**
-      Creating, editing and approving a style, voice, location or prop can be completed and left by
-      keyboard: the forms open in a modal `Dialog` that takes focus and gives it back, and a
-      successful save no longer removes every control on the card. Before this, saving a voice edit
-      left the card with no Approve, no Edit and no Cancel until a reload. The storyboard and shot
-      review remain **FE-10, FE-12**
+- [~] every workflow is keyboard-completable — **the library workflows are, as of 2026-09-01, and
+      every deletion is, as of 2026-09-02.** Creating, editing and approving a style, voice, location
+      or prop can be completed and left by keyboard: the forms open in a modal `Dialog` that takes
+      focus and gives it back, and a successful save no longer removes every control on the card.
+      Before this, saving a voice edit left the card with no Approve, no Edit and no Cancel until a
+      reload.
+
+      **A fourth pass, 2026-09-02, found the same defect in every delete in the app.** Deleting a
+      row removed the button that was pressed along with the row, and focus fell to `<body>` with
+      nothing announced — six flows, in code written weeks apart, all of it in a green tree. It was
+      measured rather than reviewed: a throwaway test clicked Delete, waited for the row to leave,
+      and read `document.activeElement`. `BODY`, twice, on the newest screen and on one built weeks
+      earlier. That is the same failure the second pass fixed on approval and the same reason: **the
+      control that reports an outcome cannot live inside the thing the outcome destroys.** The
+      announcement moved up to the list, which outlives the row.
+
+      `ActionResult` is the primitive for it — `<output tabIndex={-1}>` that takes focus when shown
+      and re-takes it on each new result, keyed on a counter rather than on `isSuccess`, because the
+      second pass already found a success flag that never resets re-announcing a stale result. The
+      pattern was hand-rolled in **38 files** before this; those are not migrated here, and that
+      count is the argument for doing it.
+
+      The storyboard and shot review remain **FE-10, FE-12**
 - [x] the automated-pass vs human-approved distinction survives being read aloud — **pinned
       2026-09-02** by a test that reads FE-12's QC section as text in document order: the heading
       *Automated checks* and the sentence saying none of them is an approval come before any verdict,

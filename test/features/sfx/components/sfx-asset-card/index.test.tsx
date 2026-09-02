@@ -19,7 +19,8 @@ const renderCard = (
 ): void => {
   renderInApp(
     <ul>
-      <SfxAssetCard asset={asset} />
+      <SfxAssetCard asset={asset}   onRemoved={() => undefined}
+      />
     </ul>,
   );
 };

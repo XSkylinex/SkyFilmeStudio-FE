@@ -4,4 +4,5 @@ import type { OpeningEndingLineage } from '@/features/music/interfaces/opening-e
 export interface OpeningEndingLineageCardProps {
   readonly projectId: ProjectId;
   readonly lineage: OpeningEndingLineage;
+  readonly onRemoved: (name: string) => void;
 }

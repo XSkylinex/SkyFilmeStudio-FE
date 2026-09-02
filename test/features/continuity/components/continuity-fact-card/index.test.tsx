@@ -28,6 +28,7 @@ const renderCard = (): void => {
         fact={FACT}
         scenes={SCENES}
         onFilterByEntity={() => undefined}
+        onRemoved={() => undefined}
       />
     </ul>,
   );

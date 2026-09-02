@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { ActionResult } from '@/lib/components/action-result';
 import { Button } from '@/lib/components/button';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
@@ -19,6 +20,8 @@ export const OpeningEndingLibrary: FC<OpeningEndingLibraryProps> = ({
   projectId,
 }) => {
   const translate = useTranslate();
+  const [removed, setRemoved] = useState<string | null>(null);
+  const [removals, setRemovals] = useState(0);
   const { data, error, isPending } = useQuery(
     openingEndingAssetsQueryOptions(projectId),
   );
@@ -88,9 +91,20 @@ export const OpeningEndingLibrary: FC<OpeningEndingLibraryProps> = ({
               key={lineage.lineageId}
               projectId={projectId}
               lineage={lineage}
+              onRemoved={(name) => {
+                setRemoved(name);
+                setRemovals((count) => count + 1);
+              }}
             />
           ))}
         </ul>
+      )}
+
+      {removed === null ? null : (
+        <ActionResult
+          message={translate('openingEnding.card.removed', { name: removed })}
+          attempt={removals}
+        />
       )}
 
       {data?.nextCursor === undefined ? null : (

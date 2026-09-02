@@ -16,6 +16,7 @@ export const ContinuityFactCard: FC<ContinuityFactCardProps> = ({
   fact,
   scenes,
   onFilterByEntity,
+  onRemoved,
 }) => {
   const translate = useTranslate();
   const queryClient = useQueryClient();
@@ -83,7 +84,11 @@ export const ContinuityFactCard: FC<ContinuityFactCardProps> = ({
             { property: fact.property, value: fact.value },
           )}`}
           disabled={remove.isPending}
-          onClick={() => remove.mutate(fact.id)}
+          onClick={() =>
+            remove.mutate(fact.id, {
+              onSuccess: () => onRemoved(fact.property),
+            })
+          }
         >
           {translate(
             remove.isPending

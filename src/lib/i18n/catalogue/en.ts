@@ -1984,6 +1984,12 @@ export const EN_CATALOGUE = {
     'A dictionary is deleted by hiding it, and its terms are left attached to it rather than removed. So a dictionary can only be deleted once its terms are gone, which keeps a term from surviving in a dictionary nothing lists.',
   'voices.dictionaries.remove.unknown':
     'This dictionary’s terms could not be read, so whether it is safe to delete is unknown and no delete is offered.',
+  'continuity.card.removed': 'The fact about {property} was deleted.',
+  'sfx.card.removed': 'The SFX asset {name} was deleted.',
+  'music.card.removed': 'The music cue {name} was deleted.',
+  'openingEnding.card.removed': 'The version {name} was deleted.',
+  'audio.line.removed': 'The dialogue line was deleted.',
+  'voices.entries.removed': 'The term {term} was deleted.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

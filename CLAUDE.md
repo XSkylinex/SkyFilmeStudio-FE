@@ -89,19 +89,19 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,548 keys in English
-and Hebrew**, counted 2026-09-02 after the dictionary delete — 1,542 after the scene cue editor,
-1,527 after the continuity review fixes, 1,524 after the continuity writes, 1,503 after the
-continuity screen, 1,469 after the production bible pin, 1,464 after the music candidates, 1,414
-after the shot effects editor, 1,389 after the score, 1,366 after the plate writes, 1,338 after the
-mix panels, 1,305 after the music and opening-ending libraries, 1,261 after the music and
-opening-ending libraries, 1,222 after the SFX library, 1,179 after the pronunciation writes, 1,164
-after two audio-mix refusals, 1,162 after the structure-profile form, 1,117 after the production
-edit form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103 after two
-more BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the night
-before, after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass
-and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen,
-the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,554 keys in English
+and Hebrew**, counted 2026-09-02 after the removal announcements — 1,548 after the dictionary
+delete, 1,542 after the scene cue editor, 1,527 after the continuity review fixes, 1,524 after the
+continuity writes, 1,503 after the continuity screen, 1,469 after the production bible pin, 1,464
+after the music candidates, 1,414 after the shot effects editor, 1,389 after the score, 1,366 after
+the plate writes, 1,338 after the mix panels, 1,305 after the music and opening-ending libraries,
+1,261 after the music and opening-ending libraries, 1,222 after the SFX library, 1,179 after the
+pronunciation writes, 1,164 after two audio-mix refusals, 1,162 after the structure-profile form,
+1,117 after the production edit form, 1,111 after the style version diff, 1,104 after the prop
+owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning after the bible's
+subject-rules editor, 1,087 the night before, after the canonical comparison, dialogue editing,
+FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the same evening — 109
+when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -225,6 +225,19 @@ two hundred buttons all named "Approve". **A control's border is `--color-border
 panel's is `--color-border`**; only the first is held to 3:1, and `.claude/rules/css.md` carries the
 measured table. And **single-key shortcuts have an off switch reachable without a shortcut**, since
 turning `?` off would otherwise strand the control that turns it back on.
+
+**FE-16's fourth pass, 2026-09-02, found one defect in every delete in the app.** Deleting a row
+removed the button that was pressed along with the row, so focus fell to `<body>` and nothing was
+announced — six flows, written weeks apart, all green. **It was measured, not reviewed**: a
+throwaway test clicked Delete, waited for the row to leave the document, and read
+`document.activeElement`. `BODY`, on the newest screen and on one built weeks earlier. The rule
+underneath is the one the second pass found on approvals: **a control that reports an outcome
+cannot live inside the thing the outcome destroys**, so the announcement belongs to the list, which
+outlives the row. `src/lib/components/action-result/` is the primitive — an `<output tabIndex={-1}>`
+that takes focus when shown and re-takes it per result, keyed on a counter rather than on
+`isSuccess`, because a success flag that never resets is a bug this repo has already shipped once.
+That pattern was hand-rolled in **38 files** before this, which is the argument for the primitive
+rather than a thirty-ninth copy.
 
 **FE-16 ran a second pass on 2026-09-01, for the same reason and with the same result.** The surface
 had roughly doubled since August — four creative-library screens, eight create and edit forms, the
