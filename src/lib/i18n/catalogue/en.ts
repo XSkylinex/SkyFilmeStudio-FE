@@ -1560,17 +1560,57 @@ export const EN_CATALOGUE = {
   'audio.gaps.tierNotStored':
     'An animation tier cannot be recorded against a line. The route computes one and returns it, and the orchestrator has no column, no table and no read route for the answer.',
   'audio.takes.forLine': 'Takes for line {order}',
+  'audio.mix.heading': 'The mix',
+  'audio.mix.explain':
+    'A scene is mixed from its four stems — dialogue, music, effects and ambience — and the production is those scene mixes concatenated and corrected once. Both are submitted and never awaited: the answer is a render job, not a file.',
+  'audio.mix.scene.heading': 'Scene mixes',
+  'audio.mix.scene.none': 'This scene has not been mixed yet.',
+  'audio.mix.scene.unreadable': 'This scene’s mixes could not be read.',
+  'audio.mix.scene.submit': 'Mix this scene',
+  'audio.mix.scene.submitting': 'Submitting…',
+  'audio.mix.scene.submitContext': 'Mix scene {order}',
+  'audio.mix.scene.submitted':
+    'Submitted as render job {renderJobId}. A mix takes minutes; this list shows it once the job has written one.',
+  'audio.mix.scene.failed.title': 'The scene was not mixed',
+  'audio.mix.production.heading': 'Production mix',
+  'audio.mix.production.none':
+    'This production has not been mixed yet. Every scene is mixed first, because the production mix is those scene mixes joined and corrected once.',
+  'audio.mix.production.unreadable':
+    'The production’s mixes could not be read.',
+  'audio.mix.production.submit': 'Mix this production',
+  'audio.mix.production.submitting': 'Submitting…',
+  'audio.mix.production.failed.title': 'The production was not mixed',
+  'audio.mix.field.duration': 'Duration:',
+  'audio.mix.field.audio': 'Audio:',
+  'audio.mix.field.audio.value': '{sampleRate} Hz, {channels} channels',
+  'audio.mix.field.path': 'File:',
+  'audio.mix.field.hash': 'SHA-256 fingerprint:',
+  'audio.mix.field.made': 'Made:',
+  'audio.mix.field.stems': 'Stems:',
+  'audio.mix.field.stems.value':
+    'Four, one each for dialogue, music, effects and ambience',
+  'audio.mix.stems.unreadable':
+    'A stem is recorded by id and no route returns one, so what a stem was built from cannot be shown here.',
+  'audio.mix.loudness.heading': 'Loudness, measured against the target',
+  'audio.mix.loudness.integrated': 'Integrated loudness:',
+  'audio.mix.loudness.truePeak': 'True peak:',
+  'audio.mix.loudness.range': 'Target loudness range:',
+  'audio.mix.loudness.before': 'Before correction:',
+  'audio.mix.loudness.after': 'After correction:',
+  'audio.mix.loudness.target': 'Target:',
+  'audio.mix.loudness.explain':
+    'These are measured values, not a tick. The corrected figure is what an export is judged on, and the figure before correction says how far the mix had to move.',
   'audio.gaps.heading': 'What this screen cannot do yet',
   'audio.gaps.playback':
     'No audio can be played. Nothing in the orchestrator serves an artifact’s bytes, so a take is shown as its record — duration, peak level, hashes — rather than as sound.',
   'audio.gaps.music':
-    'The project soundtrack, cue assignment and scene scoring are not here. The orchestrator publishes no route for any of them.',
+    'Cue assignment and scene scoring are not here. The orchestrator publishes the routes for both, and this screen has not been built against them yet; the project soundtrack itself has its own screen.',
   'audio.gaps.sfx':
-    'The SFX and ambience library has no routes at all, so nothing can be indexed, assigned, or shown with the licence metadata that makes it safe to use.',
+    'Placing an effect against a shot is not here. The orchestrator publishes the route, and this screen has not been built against it yet; the library the effects come from has its own screen.',
   'audio.gaps.stems':
-    'Stems and the mix — dialogue, music, effects and ambience, with levels, solo and mute — have no routes, so no level can be set here.',
+    'A stem cannot be levelled, soloed or muted. A mix is submitted whole and its four stems are recorded by id, with no route returning one and nothing in the request expressing a per-stem control.',
   'audio.gaps.loudness':
-    'The loudness numbers that decide whether an export is acceptable are not served, so this screen cannot show a measured value against its target.',
+    'Loudness is measured on a production mix and shown above. What is still absent is the same measurement per scene: a scene mix carries no loudness figures, so only the finished production can be judged.',
   'audio.gaps.asr':
     'The advisory ASR round-trip is a published contract with no route, so a line cannot be checked against what a recogniser heard.',
   'form.invalid': 'Fields needing attention: {count}',
