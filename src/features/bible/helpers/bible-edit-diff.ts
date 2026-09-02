@@ -14,13 +14,18 @@ import {
   worldFromValues,
 } from '@/features/bible/helpers/bible-sections-from-values';
 import type { BibleAudioInput } from '@/features/bible/helpers/bible-sections-from-values';
+import { subjectRulesFromValues } from '@/features/bible/helpers/subject-rules-from-values';
+import type { SubjectRulesCandidate } from '@/features/bible/helpers/subject-rules-from-values';
+import { subjectRulesValuesFrom } from '@/features/bible/helpers/subject-rules-values';
+import type { SubjectRulesValues } from '@/features/bible/interfaces/subject-rules-values';
 
 export type BibleEditPatch = Omit<
   UpdateProjectBibleRequest,
-  'audio' | 'styleProfileId'
+  'audio' | 'styleProfileId' | 'subjectRules'
 > & {
   audio?: BibleAudioInput;
   styleProfileId?: string | null;
+  subjectRules?: SubjectRulesCandidate;
 };
 
 const WORLD_FIELDS: readonly BibleFormField[] = [
@@ -65,6 +70,7 @@ export const bibleEditDiff = (
   original: ProjectBible,
   edited: BibleFormValues,
   carriesNarrative: boolean,
+  editedSubjectRules?: readonly SubjectRulesValues[],
 ): BibleEditPatch => {
   const baseline = bibleFormValuesFrom(original);
   const patch: BibleEditPatch = {};
@@ -81,6 +87,15 @@ export const bibleEditDiff = (
   if (baseline.styleProfileId !== edited.styleProfileId) {
     patch.styleProfileId =
       edited.styleProfileId === '' ? null : edited.styleProfileId;
+  }
+  if (editedSubjectRules !== undefined) {
+    const before = subjectRulesFromValues(
+      subjectRulesValuesFrom(original.subjectRules),
+    );
+    const after = subjectRulesFromValues(editedSubjectRules);
+    if (JSON.stringify(before) !== JSON.stringify(after)) {
+      patch.subjectRules = after;
+    }
   }
 
   return patch;

@@ -24,6 +24,9 @@ import type {
   BibleFormField,
   BibleFormValues,
 } from '@/features/bible/interfaces/bible-form-values';
+import { BibleSubjectRulesEditor } from '@/features/bible/components/bible-subject-rules-editor';
+import { subjectRulesValuesFrom } from '@/features/bible/helpers/subject-rules-values';
+import type { SubjectRulesValues } from '@/features/bible/interfaces/subject-rules-values';
 import { styleProfilesQueryOptions } from '@/features/styles/api/style-profiles.query';
 import type { EditBibleFormProps } from './edit-bible-form.interface';
 import './edit-bible-form.css';
@@ -43,6 +46,9 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
   const [values, setValues] = useState<BibleFormValues>(
     bibleFormValuesFrom(bible),
   );
+  const [subjectRules, setSubjectRules] = useState<
+    readonly SubjectRulesValues[]
+  >(subjectRulesValuesFrom(bible.subjectRules));
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
@@ -63,7 +69,7 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
 
   const carriesNarrative = bibleCarriesNarrative(bible.projectKind);
   const baseline = update.data ?? bible;
-  const patch = bibleEditDiff(baseline, values, carriesNarrative);
+  const patch = bibleEditDiff(baseline, values, carriesNarrative, subjectRules);
   const hasChanges = Object.keys(patch).length > 0;
   const justSaved = update.isSuccess && !hasChanges && !touchedSinceSave;
 
@@ -352,6 +358,16 @@ export const EditBibleForm: FC<EditBibleFormProps> = ({
 
       {styleProfileField}
       {styleProfileTruncated}
+
+      <BibleSubjectRulesEditor
+        projectId={projectId}
+        value={subjectRules}
+        onChange={(next) => {
+          setTouchedSinceSave(true);
+          setSubjectRules(next);
+        }}
+        errorFor={errorFor}
+      />
 
       {justSaved ? (
         <output

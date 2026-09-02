@@ -51,7 +51,7 @@ describe('EN_CATALOGUE', () => {
   it('does not deny a capability this build has since gained', () => {
     const outdated = Object.entries(EN_CATALOGUE)
       .filter(([, value]) =>
-        /no dialogue route|cannot yet create one|done through the orchestrator|no way to (create|start) one|neither is offered here/i.test(
+        /no dialogue route|cannot yet create one|done through the orchestrator|no way to (create|start) one|neither is offered here|are not written here|cannot be written from here/i.test(
           value,
         ),
       )

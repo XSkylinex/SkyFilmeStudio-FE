@@ -24,6 +24,10 @@ import type {
   BibleFormField,
   BibleFormValues,
 } from '@/features/bible/interfaces/bible-form-values';
+import { BibleSubjectRulesEditor } from '@/features/bible/components/bible-subject-rules-editor';
+import { subjectRulesFromValues } from '@/features/bible/helpers/subject-rules-from-values';
+import { subjectRulesValuesFrom } from '@/features/bible/helpers/subject-rules-values';
+import type { SubjectRulesValues } from '@/features/bible/interfaces/subject-rules-values';
 import { styleProfilesQueryOptions } from '@/features/styles/api/style-profiles.query';
 import type { CreateBibleFormProps } from './create-bible-form.interface';
 import './create-bible-form.css';
@@ -44,6 +48,9 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
   );
 
   const [values, setValues] = useState<BibleFormValues>(initialValues);
+  const [subjectRules, setSubjectRules] = useState<
+    readonly SubjectRulesValues[]
+  >(subjectRulesValuesFrom(carriedSubjectRules ?? []));
   const [fieldErrors, setFieldErrors] = useState<
     Record<string, TranslationKey>
   >({});
@@ -86,7 +93,7 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
       world: worldFromValues(values),
       ...(carriesNarrative && narrative !== undefined ? { narrative } : {}),
       audio: audioFromValues(values),
-      subjectRules: carriedSubjectRules ?? [],
+      subjectRules: subjectRulesFromValues(subjectRules),
       ...(values.styleProfileId === ''
         ? {}
         : { styleProfileId: values.styleProfileId }),
@@ -377,9 +384,12 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
       {styleProfileField}
       {styleProfileTruncated}
 
-      <p className="create-bible-form__note">
-        {translate('bible.form.subjectRules')}
-      </p>
+      <BibleSubjectRulesEditor
+        projectId={projectId}
+        value={subjectRules}
+        onChange={setSubjectRules}
+        errorFor={errorFor}
+      />
 
       {failure === null ? null : (
         <p className="create-bible-form__refusal" role="alert">

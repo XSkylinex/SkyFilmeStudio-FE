@@ -966,6 +966,27 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'bible.subjects.voiceRules': 'כללי קול',
   'bible.subjects.voiceRules.notApplicable':
     'הדמות הזו אינה מדברת, ולכן כללי קול אינם יכולים לחול עליה.',
+  'bible.subjects.editor.explained':
+    'בלוק אחד לכל סובייקט שיש לו כללים בתנ״ך. אילו סובייקטים קיימים מגיע מרשימת הסובייקטים של הפרויקט, כך שכלל מוצמד כאן לסובייקט לפי שמו ובחוזה לפי המזהה שלו.',
+  'bible.subjects.editor.unreadable':
+    'לא ניתן היה לקרוא את הסובייקטים של הפרויקט, ולכן לא ניתן לבחור סובייקט; הכללים שכבר כאן נשמרים כפי שהם.',
+  'bible.subjects.editor.firstPageOnly':
+    'זהו העמוד הראשון של הסובייקטים בלבד. לאורקסטרטור יש יותר ממה שרשום כאן.',
+  'bible.subjects.editor.entry': 'כללי סובייקט {position}',
+  'bible.subjects.editor.subject': 'סובייקט',
+  'bible.subjects.editor.choose': 'בחר סובייקט',
+  'bible.subjects.editor.add': 'הוסף כללים לסובייקט',
+  'bible.subjects.editor.remove': 'הסר את הכללים האלה',
+  'bible.subjects.editor.removeContext': 'הסר כללי סובייקט {position}',
+  'bible.subjects.editor.relationship.with': 'עם',
+  'bible.subjects.editor.relationship.description': 'יחס',
+  'bible.subjects.editor.relationship.add': 'הוסף יחס',
+  'bible.subjects.editor.relationship.addContext':
+    'הוסף יחס לכללי סובייקט {entry}',
+  'bible.subjects.editor.relationship.remove': 'הסר',
+  'bible.subjects.editor.relationship.removeContext':
+    'הסר יחס {position} מכללי סובייקט {entry}',
+  'bible.subjects.unknown': 'אף סובייקט בפרויקט הזה אינו נושא את המזהה הזה.',
   'bible.subjects.relationships': 'יחסים',
   'bible.create.action': 'התחילו טיוטה',
   'bible.create.next': 'התחילו את הגרסה הבאה',
@@ -986,8 +1007,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'bible.form.styleProfile.firstPageOnly':
     'הרשימה הזו כוללת רק את העמוד הראשון של פרופילי הסגנון. באורקסטרטור יש יותר ממה שמוצג כאן.',
   'bible.form.languages.hint': 'תג שפה אחד בכל שורה.',
-  'bible.form.subjectRules':
-    'כללי דמויות אינם נכתבים כאן. כל בלוק מזוהה לפי מזהה של דמות, והמסך הזה אינו מושיט יד לספריית הדמויות כדי להציע אחד.',
   'bible.form.kindUnreadable':
     'לא ניתן היה לקרוא את הפרויקט הזה, ולכן לא ידוע אם סוגו נושא כללי נרטיב. החלק הזה מושמט במקום להיות מוצע במקום שבו האורקסטרטור היה דוחה אותו.',
   'bible.publish.action': 'פרסמו את הגרסה הזו',
@@ -1003,8 +1022,6 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'bible.gaps.heading': 'מה המסך הזה עדיין לא יכול לעשות',
   'bible.gaps.pin':
     'הפקה מתעדת מול איזו גרסת ביבל היא תכננה. אפשר לקרוא את הקיבוע הזה אך לא לקבוע אותו מכאן: הנתיב שקובע אותו מקבל מבנה בקשה שהאורקסטרטור אינו מפרסם.',
-  'bible.gaps.subjectRules':
-    'בלוק של דמות מזוהה לפי המזהה שלו בלבד, ואי אפשר לכתוב אותו מכאן כלל. הביבל אינו נושא שם לדמות, והמסך הזה אינו מושיט יד לפיצ׳ר אחר כדי למצוא אחד או להציע אחד.',
   'bible.gaps.markdownSource':
     'התצוגה המחוללת מוצגת כטקסט ולא כמסמך מעובד. עיבוד שלה היה מחייב הוספת מפענח Markdown, ושום דבר חיצוני אינו מגיע לבאנדל הזה.',
   'storyboard.title': 'סקירת סטוריבורד',

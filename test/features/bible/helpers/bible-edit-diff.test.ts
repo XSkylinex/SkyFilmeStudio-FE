@@ -1,6 +1,11 @@
-import { styleProfileIdSchema } from 'sky-filme-studio-be/contracts';
+import {
+  styleProfileIdSchema,
+  subjectIdSchema,
+} from 'sky-filme-studio-be/contracts';
+import type { BibleSubjectRules } from 'sky-filme-studio-be/contracts';
 import { bibleEditDiff } from '@/features/bible/helpers/bible-edit-diff';
 import { bibleFormValuesFrom } from '@/features/bible/helpers/bible-form-values';
+import { EMPTY_SUBJECT_RULES_VALUES } from '@/features/bible/helpers/subject-rules-values';
 import { buildProjectBible } from '../../../fixtures/project-bible.fixture';
 
 const STYLE_PROFILE_ID = styleProfileIdSchema.parse(
@@ -102,5 +107,68 @@ describe('bibleEditDiff', () => {
     };
 
     expect(bibleEditDiff(bible, edited, true)).toEqual({});
+  });
+});
+
+describe('bibleEditDiff subject rules', () => {
+  const MIRA_ID = subjectIdSchema.parse('11111111-1111-4111-8111-111111111111');
+  const rules: BibleSubjectRules = {
+    subjectId: MIRA_ID,
+    immutableVisualTraits: ['Short dark hair'],
+    allowedVariations: [],
+    prohibitedChanges: [],
+    scaleRelationships: [],
+    wardrobeVariants: [],
+    speaks: false,
+    voiceRules: [],
+    relationships: [],
+  };
+
+  it('leaves subject rules alone when the editor was never shown', () => {
+    const bible = buildProjectBible({ subjectRules: [rules] });
+
+    expect(
+      bibleEditDiff(bible, bibleFormValuesFrom(bible), true),
+    ).not.toHaveProperty('subjectRules');
+  });
+
+  it('does not count re-spacing a subject’s rule list as a change either', () => {
+    const bible = buildProjectBible({ subjectRules: [rules] });
+
+    expect(
+      bibleEditDiff(bible, bibleFormValuesFrom(bible), true, [
+        {
+          ...EMPTY_SUBJECT_RULES_VALUES,
+          subjectId: MIRA_ID,
+          immutableVisualTraits: '  Short dark hair \n\n',
+        },
+      ]),
+    ).toEqual({});
+  });
+
+  it('sends every subject block once any of them changed, because the update takes the whole list', () => {
+    const bible = buildProjectBible({ subjectRules: [rules] });
+
+    const patch = bibleEditDiff(bible, bibleFormValuesFrom(bible), true, [
+      {
+        ...EMPTY_SUBJECT_RULES_VALUES,
+        subjectId: MIRA_ID,
+        immutableVisualTraits: 'Short dark hair',
+        speaks: true,
+        voiceRules: 'Never shouts',
+      },
+    ]);
+
+    expect(patch).toEqual({
+      subjectRules: [{ ...rules, speaks: true, voiceRules: ['Never shouts'] }],
+    });
+  });
+
+  it('sends an empty list when the last block is removed, since an absent key would keep it', () => {
+    const bible = buildProjectBible({ subjectRules: [rules] });
+
+    expect(
+      bibleEditDiff(bible, bibleFormValuesFrom(bible), true, []).subjectRules,
+    ).toEqual([]);
   });
 });

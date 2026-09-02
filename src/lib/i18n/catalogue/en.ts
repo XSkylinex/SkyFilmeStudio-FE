@@ -978,6 +978,27 @@ export const EN_CATALOGUE = {
   'bible.subjects.voiceRules': 'Voice rules',
   'bible.subjects.voiceRules.notApplicable':
     'This subject does not speak, so voice rules cannot apply to it.',
+  'bible.subjects.editor.explained':
+    "One block per subject the bible has rules for. Which subjects exist comes from the project's subject list, so a rule is attached to a subject by name here and by its id on the wire.",
+  'bible.subjects.editor.unreadable':
+    "The project's subjects could not be read, so no subject can be chosen; the rules already here are kept as they are.",
+  'bible.subjects.editor.firstPageOnly':
+    'This is the first page of subjects only. The orchestrator has more than are listed here.',
+  'bible.subjects.editor.entry': 'Subject rules {position}',
+  'bible.subjects.editor.subject': 'Subject',
+  'bible.subjects.editor.choose': 'Choose a subject',
+  'bible.subjects.editor.add': 'Add rules for a subject',
+  'bible.subjects.editor.remove': 'Remove these rules',
+  'bible.subjects.editor.removeContext': 'Remove subject rules {position}',
+  'bible.subjects.editor.relationship.with': 'With',
+  'bible.subjects.editor.relationship.description': 'Relationship',
+  'bible.subjects.editor.relationship.add': 'Add a relationship',
+  'bible.subjects.editor.relationship.addContext':
+    'Add a relationship to subject rules {entry}',
+  'bible.subjects.editor.relationship.remove': 'Remove',
+  'bible.subjects.editor.relationship.removeContext':
+    'Remove relationship {position} from subject rules {entry}',
+  'bible.subjects.unknown': 'No subject in this project carries this id.',
   'bible.subjects.relationships': 'Relationships',
   'bible.create.action': 'Start a draft',
   'bible.create.next': 'Start the next version',
@@ -998,8 +1019,6 @@ export const EN_CATALOGUE = {
   'bible.form.styleProfile.firstPageOnly':
     'This lists the first page of style profiles only. The orchestrator holds more than are shown here.',
   'bible.form.languages.hint': 'One language tag per line.',
-  'bible.form.subjectRules':
-    'Subject rules are not written here. Each block is keyed on a subject id, and this screen does not reach into the subject library to offer one.',
   'bible.form.kindUnreadable':
     'This project could not be read, so whether its kind carries narrative rules is unknown. That section is left out rather than offered where the orchestrator would refuse it.',
   'bible.publish.action': 'Publish this version',
@@ -1017,8 +1036,6 @@ export const EN_CATALOGUE = {
   'bible.gaps.heading': 'What this screen cannot do yet',
   'bible.gaps.pin':
     'A production records which bible version it planned against. That pin can be read, but not set from here: the route that sets it takes a request shape the orchestrator does not publish.',
-  'bible.gaps.subjectRules':
-    'A subject block is identified by its id alone, and cannot be written from here at all. The bible carries no name for a subject, and this screen does not reach into another feature to resolve or to offer one.',
   'bible.gaps.markdownSource':
     'The generated view is shown as text rather than as a rendered document. Rendering it would mean adding a Markdown parser, and nothing external reaches this bundle.',
   'storyboard.title': 'Storyboard review',

@@ -1,0 +1,59 @@
+@layer features {
+  .bible-subject-rules-editor {
+    margin: 0;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-inline-size: 0;
+  }
+
+  .bible-subject-rules-editor__legend {
+    font-weight: var(--font-weight-medium);
+    padding-inline: var(--space-1);
+  }
+
+  .bible-subject-rules-editor__note {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .bible-subject-rules-editor__entry {
+    margin: 0;
+    min-inline-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .bible-subject-rules-editor__entry-legend {
+    font-weight: var(--font-weight-medium);
+    padding-inline: var(--space-1);
+  }
+
+  .bible-subject-rules-editor__relationships {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .bible-subject-rules-editor__subheading {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .bible-subject-rules-editor__relationship {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-2);
+    align-items: end;
+  }
+}
