@@ -8,6 +8,7 @@ const GAP_KEYS = [
   'audio.gaps.tierNotStored',
   'audio.gaps.music',
   'audio.gaps.sfx',
+  'audio.gaps.scoreEdit',
   'audio.gaps.stems',
   'audio.gaps.loudness',
   'audio.gaps.asr',

@@ -17,6 +17,10 @@ const PRODUCTION_ID = productionIdSchema.parse(
 );
 
 const server = mockOrchestratorServer(
+  http.get('/productions/:productionId/score', () => HttpResponse.json([])),
+  http.get('/projects/:projectId/music-cues', () =>
+    HttpResponse.json({ items: [] }),
+  ),
   http.get(API_PATH.productionMixes(PRODUCTION_ID), () =>
     HttpResponse.json([]),
   ),

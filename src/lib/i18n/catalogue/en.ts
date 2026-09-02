@@ -1594,6 +1594,35 @@ export const EN_CATALOGUE = {
   'audio.gaps.tierNotStored':
     'An animation tier cannot be recorded against a line. The route computes one and returns it, and the orchestrator has no column, no table and no read route for the answer.',
   'audio.takes.forLine': 'Takes for line {order}',
+  'audio.score.heading': 'The score',
+  'audio.score.explain':
+    'A cue is assigned to a scene by the Music Supervisor, from the cues this project’s soundtrack library holds. Scoring replaces the whole assignment, so it is a decision about the production rather than an edit to one scene.',
+  'audio.score.run': 'Score this production',
+  'audio.score.running': 'Scoring…',
+  'audio.score.brief': 'Brief',
+  'audio.score.brief.hint':
+    'Optional. What the score is for, in your own words, if the bible’s music identity is not enough on its own.',
+  'audio.score.variety': 'Most of the production one cue may cover',
+  'audio.score.variety.hint':
+    'Optional, between 0 and 1. Leave it empty to let the orchestrator decide; set it to refuse a score that leans on one cue.',
+  'audio.score.failed.title': 'The production was not scored',
+  'audio.score.unreadable': 'The score could not be read.',
+  'audio.score.none':
+    'This production has no score yet. Scoring assigns a cue to every scene that needs one.',
+  'audio.score.assigned': 'Cues assigned: {count}',
+  'audio.score.scene.heading': 'Cues on this scene',
+  'audio.score.scene.none': 'No cue is assigned to this scene.',
+  'audio.score.cue.unknown':
+    'A cue the soundtrack library did not return; it may have been removed since the score was made.',
+  'audio.score.cue.startsAt': 'Starts at:',
+  'audio.score.cue.gain': 'Gain:',
+  'audio.score.cue.loop': 'Loops:',
+  'audio.score.cue.loop.yes': 'Yes',
+  'audio.score.cue.loop.no': 'No',
+  'audio.score.cue.fades': 'Fades:',
+  'audio.score.cue.fades.value': '{fadeIn} in, {fadeOut} out',
+  'audio.gaps.scoreEdit':
+    'A cue placement cannot be adjusted here. The orchestrator publishes a route that replaces a scene’s cues wholesale and a request shape for it; what it has no way to express is moving one cue without restating the rest, so an editor would have to reconstruct the whole scene from the screen.',
   'audio.mix.heading': 'The mix',
   'audio.mix.explain':
     'A scene is mixed from its four stems — dialogue, music, effects and ambience — and the production is those scene mixes concatenated and corrected once. Both are submitted and never awaited: the answer is a render job, not a file.',
@@ -1638,7 +1667,7 @@ export const EN_CATALOGUE = {
   'audio.gaps.playback':
     'No audio can be played. Nothing in the orchestrator serves an artifact’s bytes, so a take is shown as its record — duration, peak level, hashes — rather than as sound.',
   'audio.gaps.music':
-    'Cue assignment and scene scoring are not here. The orchestrator publishes the routes for both, and this screen has not been built against them yet; the project soundtrack itself has its own screen.',
+    'Scoring assigns cues to scenes and is above. What is not here is assigning one cue by hand: the route replaces a scene’s cues wholesale, so choosing one means restating the rest.',
   'audio.gaps.sfx':
     'Placing an effect against a shot is not here. The orchestrator publishes the route, and this screen has not been built against it yet; the library the effects come from has its own screen.',
   'audio.gaps.stems':
