@@ -224,7 +224,12 @@ Each unticked box names what it waits for, rather than being left blank.
 - [ ] the ducking envelope is visualised against dialogue timings — half its inputs exist (each
       line's measured duration) and the other half is a cue's safe dialogue level, which **waits for
       BE-21**
-- [ ] reusable OP/ED and title audio surfaced — **waits for BE-21**
+- [x] reusable OP/ED and title audio surfaced — **built 2026-09-02**, beside the cues on
+      `/projects/:id/music`. Each opening or ending is a **lineage**, not a file: versions fold onto
+      the lineage they belong to, the approved one is named on the card, and an import either starts
+      a lineage or is the next version of one — which is how a season replaces its titles without
+      losing what came before. A frame or duration the orchestrator did not measure says so rather
+      than showing a blank
 
 ## Delivered beyond this list
 
