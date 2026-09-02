@@ -12,6 +12,7 @@ import {
   propIdSchema,
   renderJobIdSchema,
   sceneIdSchema,
+  sfxAssetIdSchema,
   shotIdSchema,
   sourceAssetIdSchema,
   storyboardFrameIdSchema,
@@ -92,6 +93,10 @@ const SAMPLE_SCENE_ID = sceneIdSchema.parse(
 
 const SAMPLE_SHOT_ID = shotIdSchema.parse(
   '11111111-1111-4111-8111-111111111111',
+);
+
+const SAMPLE_SFX_ASSET_ID = sfxAssetIdSchema.parse(
+  '77777777-7777-4777-8777-777777777777',
 );
 
 const SAMPLE_STORYBOARD_FRAME_ID = storyboardFrameIdSchema.parse(
@@ -220,6 +225,9 @@ const everyPath: Record<string, string> = {
   planningBudget: API_PATH.planningBudget(SAMPLE_PRODUCTION_ID),
   planningApproval: API_PATH.planningApproval(SAMPLE_PRODUCTION_ID),
   planningScenes: API_PATH.planningScenes(SAMPLE_PRODUCTION_ID),
+  sfxAssets: API_PATH.sfxAssets(),
+  sfxAsset: API_PATH.sfxAsset(SAMPLE_SFX_ASSET_ID),
+  approveSfxAsset: API_PATH.approveSfxAsset(SAMPLE_SFX_ASSET_ID),
   sceneShots: API_PATH.sceneShots(SAMPLE_SCENE_ID),
   shotStoryboardFrames: API_PATH.shotStoryboardFrames(SAMPLE_SHOT_ID),
   shotKeyframeStatus: API_PATH.shotKeyframeStatus(SAMPLE_SHOT_ID),
