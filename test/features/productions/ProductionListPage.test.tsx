@@ -11,10 +11,14 @@ import { renderInApp } from '../../render-in-app';
 import { buildProduction } from '../../fixtures/production.fixture';
 import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
-const server = mockOrchestratorServer();
-
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
+);
+
+const server = mockOrchestratorServer(
+  http.get(API_PATH.productionProfiles(PROJECT_ID), () =>
+    HttpResponse.json({ items: [] }),
+  ),
 );
 
 const renderPage = (
@@ -51,6 +55,22 @@ describe('ProductionListPage', () => {
 
     expect(
       screen.getByRole('heading', { name: 'That is not a project id' }),
+    ).toBeInTheDocument();
+  });
+
+  it('carries the structure profiles section beneath the productions', async () => {
+    orchestratorHasProductions([]);
+
+    renderPage();
+
+    expect(
+      await screen.findByRole('heading', {
+        level: 2,
+        name: 'Structure profiles',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText('No structure profile yet'),
     ).toBeInTheDocument();
   });
 

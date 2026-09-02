@@ -850,6 +850,61 @@ export const EN_CATALOGUE = {
   'productions.edit.modeChange':
     'Changing this changes which stages the production needs. Nothing already planned is re-run.',
   'productions.edit.failed.title': 'The changes were not saved',
+  'productions.profiles.heading': 'Structure profiles',
+  'productions.profiles.explain':
+    'A reusable shape a production can be bound to: its target runtime and tolerance, its frame and audio format, and the sections it is built from. None of them is the format; a thirty-second piece carries its own.',
+  'productions.profiles.loading': 'Reading this project’s structure profiles…',
+  'productions.profiles.error.title':
+    'The structure profiles could not be read',
+  'productions.profiles.empty.title': 'No structure profile yet',
+  'productions.profiles.empty.description':
+    'A production can be created without one. Add one here to give several productions the same shape and tolerance.',
+  'productions.profiles.truncated':
+    'This is the first page of structure profiles only. The orchestrator has more than are listed here.',
+  'productions.profiles.target': 'Target runtime:',
+  'productions.profiles.tolerance': 'Tolerance:',
+  'productions.profiles.frame': 'Frame:',
+  'productions.profiles.frame.value': '{width}×{height} at {fps} fps',
+  'productions.profiles.audio': 'Audio:',
+  'productions.profiles.audio.value': '{sampleRate} Hz, {channels} channels',
+  'productions.profiles.sections': 'Sections:',
+  'productions.profiles.sections.value': '{count} in all, {reusable} reusable',
+  'productions.profiles.sections.none': 'None declared',
+  'productions.profiles.create.open': 'New structure profile',
+  'productions.profiles.create.heading': 'New structure profile',
+  'productions.profiles.create.submit': 'Create structure profile',
+  'productions.profiles.create.submitting': 'Creating…',
+  'productions.profiles.create.failed.title':
+    'The structure profile was not created',
+  'productions.profiles.form.name': 'Name',
+  'productions.profiles.form.description': 'Description',
+  'productions.profiles.form.tolerance': 'Runtime tolerance in seconds',
+  'productions.profiles.form.tolerance.hint':
+    'How far a production bound to this profile may sit from the target before its plan is refused. Required here; a production may still declare its own.',
+  'productions.profiles.form.format.hint':
+    'Nothing here assumes a format. Every value is what productions bound to this profile are rendered at.',
+  'productions.profiles.form.fps': 'Frames per second',
+  'productions.profiles.form.width': 'Width in pixels',
+  'productions.profiles.form.height': 'Height in pixels',
+  'productions.profiles.form.aspectRatio': 'Aspect ratio',
+  'productions.profiles.form.aspectRatio.hint':
+    'Written as the frame is described, such as 16:9. Nothing here computes it from the pixels.',
+  'productions.profiles.form.sampleRateHz': 'Audio sample rate in Hz',
+  'productions.profiles.form.audioChannels': 'Audio channels',
+  'productions.profiles.form.sections': 'Sections',
+  'productions.profiles.form.sections.hint':
+    'Optional. Each section spans a start and an end in seconds; two may share a boundary but not a span, which the orchestrator refuses. A reusable section counts toward the runtime budget of every production bound to this profile.',
+  'productions.profiles.form.section': 'Section {position}',
+  'productions.profiles.form.section.label': 'Label',
+  'productions.profiles.form.section.start': 'Start in seconds',
+  'productions.profiles.form.section.end': 'End in seconds',
+  'productions.profiles.form.section.reusable': 'Reusable',
+  'productions.profiles.form.section.reusable.yes': 'Yes',
+  'productions.profiles.form.section.reusable.no': 'No',
+  'productions.profiles.form.section.add': 'Add a section',
+  'productions.profiles.form.section.remove': 'Remove',
+  'productions.profiles.form.section.removeContext':
+    'Remove section {position}',
   'planner.error.title': 'This production could not be read',
   'planner.loading': 'Reading this production…',
   'planner.summary.kind': 'Kind:',
