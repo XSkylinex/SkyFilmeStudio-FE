@@ -13,6 +13,7 @@ import './production-nav.css';
 export const ProductionNav: FC<ProductionNavProps> = ({
   mode,
   stageStates,
+  continuityPath,
 }) => {
   const translate = useTranslate();
   const stages = resolveProductionStages(mode, stageStates);
@@ -40,6 +41,11 @@ export const ProductionNav: FC<ProductionNavProps> = ({
           </span>
         </NavLink>
       ))}
+      {continuityPath === undefined ? null : (
+        <NavLink to={continuityPath} className="production-nav__reference" end>
+          {translate('page.continuity.title')}
+        </NavLink>
+      )}
     </nav>
   );
 };

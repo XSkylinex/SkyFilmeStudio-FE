@@ -1,0 +1,37 @@
+@layer features {
+  .continuity-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-5);
+  }
+
+  .continuity-page__title {
+    margin: 0;
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+  }
+
+  .continuity-page__description {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+
+  .continuity-page__gaps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .continuity-page__gaps-title {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text);
+  }
+
+  .continuity-page__gaps-list {
+    margin: 0;
+    padding-inline-start: var(--space-5);
+    color: var(--color-text-secondary);
+  }
+}

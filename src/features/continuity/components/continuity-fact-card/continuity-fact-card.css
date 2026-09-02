@@ -1,0 +1,53 @@
+@layer features {
+  .continuity-fact-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-raised);
+  }
+
+  .continuity-fact-card__property {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
+  }
+
+  .continuity-fact-card__value {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text);
+  }
+
+  .continuity-fact-card__figures {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-1) var(--space-3);
+    margin: 0;
+    font-size: var(--font-size-sm);
+  }
+
+  .continuity-fact-card__figures dt {
+    color: var(--color-text-secondary);
+  }
+
+  .continuity-fact-card__figures dd {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .continuity-fact-card__id {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    overflow-wrap: anywhere;
+  }
+
+  .continuity-fact-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+}

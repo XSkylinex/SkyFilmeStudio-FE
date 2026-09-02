@@ -1,0 +1,19 @@
+@layer features {
+  .planning-context-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .planning-context-panel__title {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    color: var(--color-text);
+  }
+
+  .planning-context-panel__description,
+  .planning-context-panel__slugline {
+    margin: 0;
+    color: var(--color-text-secondary);
+  }
+}

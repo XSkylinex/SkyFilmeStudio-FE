@@ -1,5 +1,7 @@
+import type { ContinuityFactFilter } from '@/lib/api/interfaces/continuity-fact-filter';
 import type {
   CanonicalAssetSetId,
+  ContinuityFactId,
   DialogueLineId,
   LocationId,
   LocationPlateId,
@@ -219,6 +221,30 @@ export const API_PATH = {
     `/productions/${productionId}/continuity-facts/in-force?${new URLSearchParams(
       { scene: sceneId },
     ).toString()}`,
+  continuityFacts: (
+    productionId: ProductionId,
+    filter: ContinuityFactFilter = {},
+  ): string => {
+    const query = new URLSearchParams();
+    if (filter.entityId !== undefined) {
+      query.set('entityId', filter.entityId);
+    }
+    if (filter.property !== undefined) {
+      query.set('property', filter.property);
+    }
+    const search = query.toString();
+    return `/productions/${productionId}/continuity-facts${
+      search === '' ? '' : `?${search}`
+    }`;
+  },
+  continuityFact: (
+    productionId: ProductionId,
+    factId: ContinuityFactId,
+  ): string => `/productions/${productionId}/continuity-facts/${factId}`,
+  planningContext: (productionId: ProductionId, sceneId: SceneId): string =>
+    `/productions/${productionId}/planning-context?${new URLSearchParams({
+      scene: sceneId,
+    }).toString()}`,
   renderJob: (renderJobId: RenderJobId): string =>
     `/render-jobs/${renderJobId}`,
   sceneDialogueLines: (sceneId: SceneId): string =>

@@ -89,17 +89,18 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,469 keys in English
-and Hebrew**, counted 2026-09-02 after the production bible pin — 1,464 after the music candidates,
-1,414 after the shot effects editor, 1,389 after the score, 1,366 after the plate writes, 1,338
-after the mix panels, 1,305 after the music and opening-ending libraries, 1,261 after the music and
-opening-ending libraries, 1,222 after the SFX library, 1,179 after the pronunciation writes, 1,164
-after two audio-mix refusals, 1,162 after the structure-profile form, 1,117 after the production
-edit form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103 after two
-more BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the night
-before, after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass
-and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen,
-the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,527 keys in English
+and Hebrew**, counted 2026-09-02 after the continuity review fixes — 1,524 after the continuity
+writes, 1,503 after the continuity screen, 1,469 after the production bible pin, 1,464 after the
+music candidates, 1,414 after the shot effects editor, 1,389 after the score, 1,366 after the plate
+writes, 1,338 after the mix panels, 1,305 after the music and opening-ending libraries, 1,261 after
+the music and opening-ending libraries, 1,222 after the SFX library, 1,179 after the pronunciation
+writes, 1,164 after two audio-mix refusals, 1,162 after the structure-profile form, 1,117 after the
+production edit form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103
+after two more BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the
+night before, after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third
+pass and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system
+screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -609,6 +610,38 @@ so it invalidates the shots it retimed and the planner budget computed from them
 route in the orchestrator serves an artifact's bytes — `src/artifacts/` has a module and a repository
 and no controller, and the only `StreamableFile` responses in the whole backend are the source-asset
 thumbnail and proxy. One missing controller holds back both phases.
+
+**The continuity record became a screen on 2026-09-02, and nothing was blocking it.** Every status
+line in `plan/` tracks a route that does not exist yet; nothing tracked a route that does exist and
+that this repo had never called. Diffing all **170** orchestrator routes against `API_PATH` found
+**35** uncalled. Five of them are continuity, and four of those five are now built:
+the continuity-fact collection, its `POST`, its `DELETE`, and `GET /planning-context`.
+`/projects/:id/productions/:id/continuity` reads the whole record rather than the per-scene subset
+the storyboard was showing, records a fact by hand, deletes a wrong one, and reads the Markdown
+context a planning role was handed for a scene. **It does not name an entity**: a fact carries a
+bare uuid and no type field, so resolving one would mean guessing across three features and reaching
+into their queries — the same invention `plan/08` refused over plate kinds. It does not edit either,
+because there is no update route, which is exactly why delete is offered. **The instrument matters
+more than the screen**: ask what is published and uncalled, not only what is missing.
+
+**Twenty stylesheets were reading a design token that does not exist, and all four gate stages were
+green over it since the day each shipped.** CSS drops a declaration whose `var()` names an undefined
+property and inherits instead, silently. Twenty-three declarations across those twenty files, and
+three misspellings, each measured in Chrome against `tokens.css`: `--font-family-mono` is
+`--font-mono` and computes to **Times**, so every hash, path, seed and dB figure this app marks as
+notation had been rendering in the body serif in twelve stylesheets; `--color-text-primary` is
+`--color-text`, in five; and `--color-text-danger` is `--tone-danger-fg`, in six, which was the
+expensive one — those six are refusal and error messages, rendering in the ordinary text colour with
+nothing marking them as failures.
+
+`test/styles/every-css-variable-is-defined.test.ts` collects every `--name:` defined anywhere under
+`src/` and every fallback-free `var()` read, and fails naming the file and the property. **It asks
+"is this defined somewhere", not "is this in scope"** — 140 of those definitions are component-scoped
+rather than tokens, so a stylesheet reading another component's private property would still pass.
+It catches the bug class it was written for and no more. Its worth was settled the same day: rebasing
+onto a master that had merged an hour earlier, it failed immediately on a twenty-first stylesheet
+written after it. **That is the sixth time `plan/16`'s point has held**, and the first where the
+defect was a token name rather than markup.
 
 **FE-12's advisory half landed the same evening, and the row that said it was blocked was right about
 the blockers and wrong about the word.** `/productions/:id/shots` reads a production's scenes, each

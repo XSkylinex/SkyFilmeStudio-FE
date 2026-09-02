@@ -28,6 +28,7 @@ export const SHOTS_SEGMENT = 'shots';
 export const SHOT_ID_PARAM = 'shotId';
 export const AUDIO_SEGMENT = 'audio';
 export const TIMELINE_SEGMENT = 'timeline';
+export const CONTINUITY_SEGMENT = 'continuity';
 
 export const projectListPath = (): string => ROOT_PATH;
 
@@ -115,3 +116,8 @@ export const productionTimelinePath = (
   projectId: string,
   productionId: string,
 ): string => `${productionPath(projectId, productionId)}/${TIMELINE_SEGMENT}`;
+
+export const productionContinuityPath = (
+  projectId: string,
+  productionId: string,
+): string => `${productionPath(projectId, productionId)}/${CONTINUITY_SEGMENT}`;

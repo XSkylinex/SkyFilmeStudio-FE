@@ -8,7 +8,10 @@ import { Dialog } from '@/lib/components/dialog';
 import { formatDuration } from '@/lib/format/format-duration';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { PRODUCTION_STATE_TONE } from '@/lib/status-tone/production-state.tone';
-import { productionPlanPath } from '@/shell/routes/routes.constants';
+import {
+  productionContinuityPath,
+  productionPlanPath,
+} from '@/shell/routes/routes.constants';
 import {
   NARRATIVE_MODE_LABEL,
   PRODUCTION_KIND_LABEL,
@@ -138,6 +141,15 @@ export const ProductionCard: FC<ProductionCardProps> = ({
         >
           {translate('library.edit')}
         </Button>
+        <Link
+          className="production-card__continuity"
+          to={productionContinuityPath(projectId, production.id)}
+          aria-label={translate('productions.card.continuity.context', {
+            title: production.title,
+          })}
+        >
+          {translate('productions.card.continuity')}
+        </Link>
       </div>
 
       <Dialog

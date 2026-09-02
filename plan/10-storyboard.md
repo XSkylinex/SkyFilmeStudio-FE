@@ -1,9 +1,10 @@
 # FE-10 — Storyboard review
 
 > **Depends on:** 09 · **Blocks:** 12 · **Backend needs:** BE-16, BE-18 · **Plan authority:** §17, §39, §49.4
-> **Status:** partly done 2026-09-01 — the strip reads and the keyframe gate approves. What is left is
-> unbuildable rather than unbuilt: no route serves an artifact's bytes, and seven write DTOs are
-> unpublished
+> **Status:** partly done 2026-09-01, extended 2026-09-02 — the strip reads, the keyframe gate
+> approves, and the continuity record is now readable and writable in full at its own route. What is
+> left is unbuildable rather than unbuilt: no route serves an artifact's bytes, and seven write DTOs
+> are unpublished
 
 ## Goal
 
@@ -164,6 +165,56 @@ after the shot is rendered, and this is the screen where a human can catch it.
 Storyboard generation is a queue of jobs. Show progress per shot via the socket, and make the page
 usable while frames are still arriving — reserved boxes, no layout shift.
 
+## The continuity record, added 2026-09-02
+
+This section was not in the phase when it was written, and the work in it was not blocked on
+anything. It was found by diffing every route the orchestrator exposes against this repo's own path
+table, which is a different question from the one every status line here has been asking.
+
+**The first version of that diff said 164 routes, and 164 was wrong.** The extractor took the first
+`@Controller` in a file as the base for every route in it, and seven backend files hold more than
+one controller, so their routes were filed under the wrong prefix — which also made a route this
+repo does call look uncalled. The corrected figure is **170 routes, 35 of them called by nothing
+here**. The instrument had produced the right answers and the wrong count, which is exactly why it
+survived: the routes it pointed at were genuinely uncalled either way. It was caught by running the
+diff to completion, where it claimed 156 of 164 routes were uncalled — including
+`/projects/:projectId/subjects`, which this app has read since FE-07. `git.md`'s rule is about a
+zero; this is the same rule applied to a count, and only the zero had been checked. The corrected
+version validates in both directions in the same run: a route known to exist resolves, an invented
+one does not.
+Every entry in `plan/` tracks a route that does **not** exist yet. Nothing was tracking a route that
+does exist and that nobody had called.
+
+Five came back: the continuity-fact collection with its `POST`, its member `GET` and its `DELETE`,
+and `GET /productions/:productionId/planning-context`. Four of the five are built here. The member
+`GET /productions/:productionId/continuity-facts/:id` is not, and stays in the uncalled column: the
+list already carries every field a single fact has, so a second route to fetch one row would add a
+request and no information. This phase had claimed continuity with one
+box — the per-scene `in-force` read on the scene panel — and that read is the subset the
+orchestrator computes for one scene, not the record. `createContinuityFactRequestSchema` was
+published the whole time, confirmed with the resolver probe rather than a grep of `dist-esm/`, and
+against controls: `projectSchema` published, `createProjectRequestSchema` absent.
+
+`/projects/:projectId/productions/:productionId/continuity` now holds all of it. A fact's scope
+reads as the scene numbers a person recognises, including the two cases that are not a range — a
+fact that holds onward with no end scene, and a scope naming a scene the current plan no longer has.
+Facts are recorded by hand and deleted. The planning context is read per scene as Markdown, which is
+the orchestrator's own stated reason for publishing it: a wrong plan is diagnosed by reading what it
+was produced from.
+
+**What it deliberately does not do.** It does not name an entity. A fact carries a bare uuid and no
+type field, so resolving one would mean guessing across subjects, props and locations and reaching
+into three features' queries to do it — the same invention `plan/08` refused over plate kinds. The
+id is shown as notation and the gap is stated on screen. It does not edit a fact either, because
+there is no update route; a correction is a delete and a new fact, which is why delete is offered at
+all.
+
+**One thing this phase should have caught earlier.** The scenes query has four consumers now and
+three of them are outside the feature that owns it. The convention here moves shared code down on
+its second consumer and there is no shared home for a query, so this is the fourth screen to reach
+across. That decision is Alex's and it now has more evidence behind it than when it was first
+raised over the style queries.
+
 ## Verification
 
 ```bash
@@ -217,7 +268,11 @@ been done; **that is a gap in this phase's verification, not a passed check.**
       earlier pass carried a copy of the backend's unpublished `NEEDS_NO_KEYFRAME` list; the gate now
       reports the requirement the orchestrator returns, which also covers the commoner second cause of
       `NOT_REQUIRED` — a shot with no canonical subject that nobody marked by hand
-- [x] continuity facts appear alongside their scene
+- [x] continuity facts appear alongside their scene — and, as of 2026-09-02, the whole record is
+      readable at its own route rather than only the subset in force for an open scene
+- [x] a continuity fact can be recorded by a person and a wrong one removed — the correction the
+      automated stages cannot make
+- [x] the context a scene was planned from can be read as the orchestrator wrote it
 - [x] keyboard-first review works end to end — real buttons in DOM order with `aria-expanded`, so Tab
       and Enter reach every control. Deliberately **no** single-key shortcuts: FE-16 fixed a Level A
       failure of SC 2.1.4 in this repo already

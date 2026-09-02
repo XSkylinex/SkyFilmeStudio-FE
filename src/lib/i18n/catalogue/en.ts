@@ -1881,6 +1881,83 @@ export const EN_CATALOGUE = {
     'This is the bible version the production is pinned to, which is not necessarily the project’s current one. Publishing a newer bible does not move a production that has already planned.',
   'planner.summary.bibleUnresolved':
     'This production is not pinned to a bible version, or the version it names no longer resolves. The orchestrator answers both cases the same way, so this screen cannot tell them apart. Pinning is not available here either, because the request shape for it is not published.',
+  'page.continuity.title': 'Continuity',
+  'page.continuity.description':
+    'Every fact this production has recorded about what must stay consistent, and the context a planning role was handed for a scene.',
+  'continuity.list.title': 'Recorded facts',
+  'continuity.list.description':
+    'A fact holds over a range of scenes. It is what stops a subject who was muddied in scene 6 from arriving clean in scene 7.',
+  'continuity.list.error.title': 'The continuity facts could not be read',
+  'continuity.list.empty.title': 'No continuity facts yet',
+  'continuity.list.empty.description':
+    'Nothing has been recorded for this production. Facts are written by the planning stages as they run, and by hand on this screen.',
+  'continuity.list.empty.filtered.title': 'No facts match this filter',
+  'continuity.list.empty.filtered.description':
+    'Clear the filter to see everything this production has recorded.',
+  'continuity.list.firstPageOnly':
+    'This is the first page of facts and the orchestrator has more. Filter by an exact property to reach the rest; this screen does not follow the cursor yet.',
+  'continuity.filter.property': 'Property (exact match)',
+  'continuity.filter.entityActive': 'Showing one entity only:',
+  'continuity.filter.clear': 'Clear the filter',
+  'continuity.card.scope': 'Holds for',
+  'continuity.card.source': 'Recorded from',
+  'continuity.card.entity': 'Entity',
+  'continuity.card.onlyEntity': 'Only this entity',
+  'continuity.card.onlyEntityContext':
+    ', the one whose {property} is {value}',
+  'continuity.scope.range': 'Scenes {start} to {end}',
+  'continuity.scope.open': 'Scene {start} onward',
+  'continuity.scope.unplanned':
+    'A scene this fact names is not in the production’s current plan',
+  'continuity.context.title': 'The context a scene was planned from',
+  'continuity.context.description':
+    'The orchestrator hands a planning role exactly this document. A wrong plan is diagnosed by reading what it was produced from.',
+  'continuity.context.scene': 'Scene',
+  'continuity.context.choose': 'Choose a scene',
+  'continuity.context.sceneOption': 'Scene {order}',
+  'continuity.context.error.title': 'That context could not be read',
+  'continuity.context.noScenes.title': 'This production has no scenes yet',
+  'continuity.context.noScenes.description':
+    'A planning context is built for one scene at a time, so there is nothing to read until the plan produces scenes.',
+  'continuity.gaps.heading': 'What this screen cannot do yet',
+  'continuity.gaps.entityName':
+    'A fact names its entity by id and carries no type, so nothing here can turn that id into a subject, prop or location name.',
+  'continuity.gaps.paging':
+    'Only the first fifty facts are read, and the cursor the orchestrator returns is not followed. The property filter matches a whole property exactly rather than searching, so a fact past the fiftieth is reachable only by knowing its property string.',
+  'productions.card.continuity': 'Continuity',
+  'productions.card.continuity.context':
+    'Open the continuity facts for {title}',
+  'continuity.create.open': 'Record a fact',
+  'continuity.create.heading': 'Record a continuity fact',
+  'continuity.create.entity': 'Entity id',
+  'continuity.create.entity.hint':
+    'The subject, prop or location this fact is about, named by id because the orchestrator records no type for it. A subject’s id is in the address bar of its own page. A prop’s and a location’s are not shown anywhere in this app yet, so a fact about one cannot be recorded here.',
+  'continuity.create.property': 'Property',
+  'continuity.create.property.hint':
+    'What the fact is about, such as a costume or a state a subject is in. One value per property is in force at a time.',
+  'continuity.create.value': 'Value',
+  'continuity.create.source': 'Recorded from',
+  'continuity.create.source.hint':
+    'What happened that makes this true. It is what a later reader has to judge the fact by.',
+  'continuity.create.start': 'Holds from scene',
+  'continuity.create.end': 'Holds to scene',
+  'continuity.create.end.hint':
+    'Leave this open if the fact holds for the rest of the production.',
+  'continuity.create.end.open': 'To the end of the production',
+  'continuity.create.submit': 'Record this fact',
+  'continuity.create.saving': 'Recording…',
+  'continuity.create.failed.title': 'That fact was not recorded',
+  'continuity.card.remove': 'Delete',
+  'continuity.card.removing': 'Deleting…',
+  'continuity.card.removeContext': 'the fact that {property} is {value}',
+  'continuity.card.remove.failed.title': 'That fact was not deleted',
+  'continuity.gaps.noUpdate':
+    'A recorded fact cannot be edited. The orchestrator publishes create and delete and no update route, so a correction is a delete followed by a new fact.',
+  'continuity.scope.scenesUnread':
+    'The production’s scenes could not be read, so this fact’s range cannot be resolved to scene numbers',
+  'continuity.context.scenesUnread.title': 'The production’s scenes could not be read',
+  'continuity.create.scenesUnread':
+    'The production’s scenes could not be read, so a fact cannot be recorded — a fact has to name the scene it starts at.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

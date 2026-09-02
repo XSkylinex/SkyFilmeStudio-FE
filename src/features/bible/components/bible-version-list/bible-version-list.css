@@ -28,7 +28,7 @@
 
   .bible-version-list__number {
     display: inline-block;
-    font-family: var(--font-family-mono);
+    font-family: var(--font-mono);
   }
 
   .bible-version-list__when {

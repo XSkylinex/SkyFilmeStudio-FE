@@ -6,7 +6,7 @@ import { useTranslate } from '@/lib/i18n/use-translate';
 import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { projectBibleMarkdownQueryOptions } from '@/features/bible/api/project-bible-markdown.query';
-import { BibleMarkdownView } from '@/features/bible/components/bible-markdown-view';
+import { MarkdownView } from '@/lib/components/markdown-view';
 import type { BibleMarkdownPanelProps } from './bible-markdown-panel.interface';
 import './bible-markdown-panel.css';
 
@@ -43,7 +43,7 @@ export const BibleMarkdownPanel: FC<BibleMarkdownPanelProps> = ({
       {isPending ? (
         <Skeleton shape="rect" />
       ) : (
-        <BibleMarkdownView
+        <MarkdownView
           markdown={data}
           label={translate('bible.markdown.title')}
         />

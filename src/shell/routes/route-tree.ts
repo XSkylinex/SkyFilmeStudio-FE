@@ -35,6 +35,7 @@ import {
   SUBJECTS_SEGMENT,
   SUBJECT_ID_PARAM,
   SYSTEM_SEGMENT,
+  CONTINUITY_SEGMENT,
   TIMELINE_SEGMENT,
   VOICES_SEGMENT,
   productionPlanPath,
@@ -116,6 +117,16 @@ const productionRoutes: RouteObject[] = [
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.audio.title'),
+  },
+  {
+    path: CONTINUITY_SEGMENT,
+    lazy: () =>
+      import('@/features/continuity/ContinuityPage').then((routeModule) => ({
+        Component: routeModule.ContinuityPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
+    ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('page.continuity.title'),
   },
   {
     path: TIMELINE_SEGMENT,

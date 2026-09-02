@@ -7,10 +7,14 @@ import { SCENE_CONTINUITY_FACTS_STALE_TIME_MS } from '@/lib/query/query.constant
 
 const sceneContinuityFactsSchema = continuityFactSchema.array();
 
+export const sceneContinuityFactsQueryPrefix = (
+  productionId: ProductionId,
+): string[] => ['scene-continuity-facts', productionId];
+
 export const sceneContinuityFactsQueryKey = (
   productionId: ProductionId,
   sceneId: SceneId,
-): string[] => ['scene-continuity-facts', productionId, sceneId];
+): string[] => [...sceneContinuityFactsQueryPrefix(productionId), sceneId];
 
 export const sceneContinuityFactsQueryOptions = (
   productionId: ProductionId,
