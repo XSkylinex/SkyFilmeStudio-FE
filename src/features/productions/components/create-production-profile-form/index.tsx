@@ -95,6 +95,7 @@ export const CreateProductionProfileForm: FC<
 
     const result = createProductionProfileRequestSchema.safeParse(
       productionProfileCandidateFrom(values),
+      { reportInput: true },
     );
 
     if (!result.success) {
