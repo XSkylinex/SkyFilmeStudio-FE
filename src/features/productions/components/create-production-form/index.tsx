@@ -30,6 +30,7 @@ import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view'
 import { createProductionMutationOptions } from '@/features/productions/api/create-production.mutation';
 import { productionProfilesQueryOptions } from '@/features/productions/api/production-profiles.query';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
+import { invalidFieldCount } from '@/lib/helpers/invalid-field-count';
 import {
   NARRATIVE_MODE_LABEL,
   PRODUCTION_KIND_LABEL,
@@ -196,7 +197,7 @@ export const CreateProductionForm: FC<CreateProductionFormProps> = ({
         <form className="create-production-form__form" onSubmit={handleSubmit}>
           {hasFieldErrors ? (
             <ValidationSummary
-              count={Object.keys(fieldErrors).length}
+              count={invalidFieldCount(fieldErrors)}
               attempt={attempt}
             />
           ) : null}

@@ -243,7 +243,11 @@ validation announced on one form out of nine, and nothing telling anyone which f
 and **both closed on 2026-09-01 in a third pass.** The required count in the plan was wrong in an
 instructive way: it counted keys the wire needs present, and every form sends every key, so a field
 whose schema accepts `''` is not one a person has to fill. Asking `safeParse('')` gives thirteen, not
-twelve, and an empty prop form reporting one invalid field rather than two is what exposed it. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
+twelve, and an empty prop form reporting one invalid field rather than two is what exposed it.
+**The announced count was wrong the other way until 2026-09-02**: it counted keys, and
+`fieldErrorsFromIssues` keys every prefix of a path so a section can show a nested failure, so one bad
+language tag on the bible form announced "Fields needing attention: 3" — measured, not inferred.
+`invalidFieldCount` counts leaves, with a trailing list index folded into its box. "Media code is out of the entry chunk" is **no longer vacuous**: FE-07's asset detail page
 is the first `<video>` in this codebase, its route is `lazy`, and it builds as its own chunk rather
 than into the entry. `plan/16` carries the measurement and the one caveat — React DOM's own media
 event plumbing is in the entry either way and is not ours to move.
