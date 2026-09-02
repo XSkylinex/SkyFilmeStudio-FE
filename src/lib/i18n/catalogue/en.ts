@@ -1975,6 +1975,15 @@ export const EN_CATALOGUE = {
   'audio.score.scene.saving': 'Saving…',
   'audio.score.scene.saved': 'The placements were saved.',
   'audio.score.scene.failed.title': 'The placements were not saved',
+  'voices.dictionaries.remove': 'Delete',
+  'voices.dictionaries.removing': 'Deleting…',
+  'voices.dictionaries.removeContext': 'the {language} pronunciation dictionary',
+  'voices.dictionaries.remove.failed.title':
+    'That pronunciation dictionary was not deleted',
+  'voices.dictionaries.remove.held':
+    'A dictionary is deleted by hiding it, and its terms are left attached to it rather than removed. So a dictionary can only be deleted once its terms are gone, which keeps a term from surviving in a dictionary nothing lists.',
+  'voices.dictionaries.remove.unknown':
+    'This dictionary’s terms could not be read, so whether it is safe to delete is unknown and no delete is offered.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

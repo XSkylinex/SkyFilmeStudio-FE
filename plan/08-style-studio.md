@@ -96,6 +96,26 @@ Surface the animation clip library, OP/ED/title/eyecatch/credits assets, and the
 BE-13. These are why the second production is cheaper than the first (§49.2) — a library nobody can
 find gets rebuilt instead.
 
+## The pronunciation dictionary can be removed, added 2026-09-02
+
+`DELETE /projects/:projectId/pronunciation-dictionaries/:id` was published and called by nothing
+here, found by diffing every orchestrator route against this repo's path table. Until now a
+dictionary could be created and never removed, which is the same dead end this phase closed on the
+style library.
+
+**It is offered only on an empty dictionary, and that is not caution — it is what the route does.**
+`softDeleteDictionary` sets `deletedAt` on the dictionary row and touches nothing else, so its
+entries keep pointing at it and survive in a dictionary nothing lists. There is no `ErrorCode`
+separating a dictionary safe to remove from one that would orphan terms, so the screen decides from
+the dictionary's own term list rather than letting the person find out afterwards. That is the
+structural guard FE-07 established, applied to a delete: the control is not rendered at all while a
+term exists, and the sentence in its place says why.
+
+When the term list cannot be read the control is withheld and says so, rather than rendering
+nothing. Its first test passed while the query was still loading, which is the shape
+`testing.md` names — an absence asserted before the thing had a chance to appear. The explicit
+sentence is what makes that assertion real.
+
 ## Verification
 
 ```bash
