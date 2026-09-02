@@ -7,6 +7,7 @@ import { useTranslate } from '@/lib/i18n/use-translate';
 import { ShotQcCard } from '@/features/shots/components/shot-qc-card';
 import { AWAITING_REVIEW_STATES } from '@/features/shots/shots.constants';
 import { sceneShotsQueryOptions } from '@/features/storyboard/api/scene-shots.query';
+import { SceneContinuity } from '@/features/storyboard/components/scene-continuity';
 import type { SceneShotReviewProps } from './scene-shot-review.interface';
 import './scene-shot-review.css';
 
@@ -55,6 +56,11 @@ export const SceneShotReview: FC<SceneShotReviewProps> = ({
 
       {open ? (
         <div className="scene-shot-review__detail">
+          <SceneContinuity
+            productionId={scene.productionId}
+            sceneId={scene.id}
+          />
+
           {shots.error && shots.data === undefined ? (
             <p className="scene-shot-review__note">
               {translate('shots.list.error')}

@@ -11,8 +11,10 @@ import {
   PRODUCTION_ID_PARAM,
   PROJECT_ID_PARAM,
 } from '@/shell/routes/routes.constants';
+import userEvent from '@testing-library/user-event';
 import { renderInApp } from '../../render-in-app';
 import { mockOrchestratorServer } from '../../lib/api/msw-server';
+import { buildContinuityFact } from '../../fixtures/continuity-fact.fixture';
 import { buildScene } from '../../fixtures/scene.fixture';
 
 const PRODUCTION_ID = productionIdSchema.parse(
@@ -71,6 +73,35 @@ describe('ShotsPage', () => {
       'Scene 2',
       'What this screen cannot do yet',
     ]);
+  });
+
+  it('shows the facts in force for a scene beside its shots, so the expected state is part of the displayed correct', async () => {
+    const user = userEvent.setup();
+    const scene = buildScene({ order: 1 });
+    server.use(
+      http.get(API_PATH.planningScenes(PRODUCTION_ID), () =>
+        HttpResponse.json([scene]),
+      ),
+      http.get(API_PATH.sceneShots(scene.id), () => HttpResponse.json([])),
+      http.get('/productions/:productionId/continuity-facts/in-force', () =>
+        HttpResponse.json([
+          buildContinuityFact({
+            property: 'wardrobe.jacket-condition',
+            value: 'torn at the left sleeve',
+          }),
+        ]),
+      ),
+    );
+
+    renderAt(PRODUCTION_ID);
+
+    await user.click(await screen.findByRole('button', { name: /scene 1$/i }));
+
+    expect(
+      await screen.findByRole('heading', { name: 'Facts in force here' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('wardrobe.jacket-condition')).toBeInTheDocument();
+    expect(screen.getByText('torn at the left sleeve')).toBeInTheDocument();
   });
 
   it('says what it cannot do, and that a decision is read rather than made here', async () => {
