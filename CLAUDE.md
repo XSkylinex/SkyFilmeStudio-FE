@@ -530,6 +530,15 @@ contract's own `refine` rather than a rule invented here, and the form's require
 chosen origin. Approval is structural in the FE-07 sense: an approved effect renders no Approve and
 no Remove at all, so a reload cannot re-offer either.
 
+**The soundtrack library reads and decides as of 2026-09-02**, on `/projects/:id/music` — a cue's
+category, mood, tags, measured duration, tempo, key, loop points, and the **safe dialogue level that
+makes the ducking envelope computable rather than drawn by hand**, with approve and remove on the
+card. **Rendering and promoting a cue are not here, and the reason is a type rather than a route**:
+`GET /music-cues/renders` answers with `MusicCueRender`, declared in the orchestrator's repository
+file and never published through `./contracts`, so the render list has no shape to parse and the
+promotion has no render id to name. Both request DTOs are published — it is the response type that is
+missing, and the screen says so rather than offering a control that cannot work.
+
 **FE-13 made the dialogue audio real on 2026-09-01, and its stated dependency gated none of it.**
 `/productions/:id/audio` was an `EmptyState`; it now reads a production's scenes, the lines each
 carries, and every take a line has produced — model, seed, voice-profile SHA-256, audio hash, sample
