@@ -841,6 +841,15 @@ export const EN_CATALOGUE = {
   'productions.create.blocked.description':
     'Every production is pinned to a style version, and this project has none yet. Create the first one in the style library, then come back here.',
   'productions.create.failed.title': 'The production was not created',
+  'productions.edit.context': 'the production {title}',
+  'productions.edit.title': 'Edit this production',
+  'productions.edit.explain':
+    'Only the fields that change are sent. A saved change moves the runtime budget and nothing else: no stage is re-run.',
+  'productions.edit.cannotClear':
+    'Set once, this cannot be emptied from here: the update reads an absent key as leave alone and has no way to say none. Replace it instead.',
+  'productions.edit.modeChange':
+    'Changing this changes which stages the production needs. Nothing already planned is re-run.',
+  'productions.edit.failed.title': 'The changes were not saved',
   'planner.error.title': 'This production could not be read',
   'planner.loading': 'Reading this production…',
   'planner.summary.kind': 'Kind:',

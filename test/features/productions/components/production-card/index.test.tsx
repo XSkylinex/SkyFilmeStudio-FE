@@ -1,16 +1,31 @@
+import { http, HttpResponse } from 'msw';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import {
   productionProfileIdSchema,
   projectIdSchema,
 } from 'sky-filme-studio-be/contracts';
 import type { Production } from 'sky-filme-studio-be/contracts';
+import { API_PATH } from '@/lib/api/api.constants';
 import { ProductionCard } from '@/features/productions/components/production-card';
+import { renderInApp } from '../../../../render-in-app';
 import { renderInStore } from '../../../../render-in-store';
 import { buildProduction } from '../../../../fixtures/production.fixture';
+import { buildStyleProfile } from '../../../../fixtures/style-profile.fixture';
+import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
+);
+
+mockOrchestratorServer(
+  http.get(API_PATH.styleProfiles(PROJECT_ID), () =>
+    HttpResponse.json({ items: [buildStyleProfile()] }),
+  ),
+  http.get(API_PATH.productionProfiles(PROJECT_ID), () =>
+    HttpResponse.json({ items: [] }),
+  ),
 );
 
 const renderCard = (production: Production): void => {
@@ -24,6 +39,31 @@ const renderCard = (production: Production): void => {
 };
 
 describe('ProductionCard', () => {
+  it('offers Edit named for the production, and keeps that control mounted while the form is open', async () => {
+    const user = userEvent.setup();
+    renderInApp(
+      <MemoryRouter>
+        <ul>
+          <ProductionCard
+            projectId={PROJECT_ID}
+            production={buildProduction({ title: 'Pilot' })}
+          />
+        </ul>
+      </MemoryRouter>,
+    );
+
+    const edit = screen.getByRole('button', {
+      name: 'Edit the production Pilot',
+    });
+    await user.click(edit);
+
+    expect(
+      await screen.findByRole('heading', { name: 'Edit this production' }),
+    ).toBeInTheDocument();
+    expect(await screen.findByLabelText('Title')).toHaveValue('Pilot');
+    expect(edit).toBeInTheDocument();
+  });
+
   it('shows a formatted tolerance when the production declares one', () => {
     renderCard(buildProduction({ runtimeToleranceSeconds: 30 }));
 

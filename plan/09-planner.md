@@ -111,6 +111,26 @@ planning. Measured against a running orchestrator on 2026-08-22 rather than read
 `GET /productions/:id/planning/stages`, `GET …/budget` and `POST …/approval`. Every request and
 response shape is published through `./contracts`.
 
+**A production is edited as of 2026-09-02.** `PATCH /projects/:id/productions/:id` had been published
+since BE-15 and this repo never built against it, so a title typed wrong stayed wrong — the dead-end
+class FE-16's second pass found on the style library. The card now offers Edit, and the form sends
+only the fields that changed, because `updateProductionRequestSchema` is `.partial()` with a refine
+that refuses an empty body. Kind and mode are offered too, since the DTO accepts them and
+`ProductionsService.update` applies them; the hint says the stage list follows the mode and nothing
+already planned is re-run, which is what that service does and all it does. **One asymmetry, said on
+the field**: every optional field is `.optional()` with no `null`, so once a logline, brief,
+tolerance, sequence number or structure profile is set it cannot be emptied from here — an absent key
+is *leave alone* and there is no way to say *none*. The form names it on the field the moment it is
+emptied rather than saving a no-op.
+
+**A transitions control is not built, and the reason is one missing export.**
+`POST :id/transitions` and `transitionProductionRequestSchema` are published, but the table that says
+which moves are legal from a state — `PRODUCTION_TRANSITIONS` and `canTransition` — lives in
+`src/productions/constants/` in the sibling and is not re-exported through `src/contracts/index.ts`.
+Offering every state and explaining `PRODUCTION_TRANSITION_INVALID` afterwards is the defect `plan/08`
+refused in the keyframe-requirement picker, and copying the table here is the second source of truth
+FE-10 removed. Reported to the backend session on 2026-09-02; one export unblocks it.
+
 **Not offered at all, and this is what blocks most of this phase.**
 
 - **No route runs a planning stage.** `PlanningService.runStage` exists, refuses a stage the mode does
