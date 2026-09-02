@@ -1641,7 +1641,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.gaps.music':
     'ההלחנה משייכת קיוז לסצנות והיא למעלה. מה שאינו כאן הוא שיוך קיו יחיד ביד: הנתיב מחליף את הקיוז של סצנה במלואם, ולכן בחירת אחד משמעה שחזור כל השאר.',
   'audio.gaps.sfx':
-    'הצבת אפקט מול שוט אינה כאן. האורקסטרטור מפרסם את הנתיב, והמסך הזה עדיין לא נבנה מולו; לספרייה שממנה מגיעים האפקטים יש מסך משלה.',
+    'הצבת אפקט מול שוט נעשית במסך סקירת השוטים, במקום שבו השוט נמצא, ולא כאן. לספרייה שממנה מגיעים האפקטים יש מסך משלה.',
   'audio.gaps.stems':
     'אי אפשר לקבוע רמה לסטם, להשתיק אותו או לבודד אותו. מיקס נשלח כמכלול וארבעת הסטמים שלו מתועדים לפי מזהה, בלי נתיב שמחזיר אחד ובלי שהבקשה מבטאת שליטה פר־סטם.',
   'audio.gaps.loudness':
@@ -1670,6 +1670,33 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'shots.shot.label': 'שוט {order}',
   'shots.shot.checks': 'בדיקות אוטומטיות',
   'shots.shot.checksContext': 'לשוט {order}',
+  'shots.cues.title': 'אפקטים ואמביינס',
+  'shots.cues.toggle': 'אפקטים',
+  'shots.cues.toggleContext': 'לשוט {order}',
+  'shots.cues.explain':
+    'מה מתנגן מעל השוט הזה, מתוך ספריית האפקטים של ההתקנה. הרשימה כולה נשלחת בבת אחת, מפני שהראוט מחליף את הקיוז של השוט ולא מוסיף להם.',
+  'shots.cues.none': 'שום דבר אינו ממוקם על השוט הזה.',
+  'shots.cues.unreadable': 'לא ניתן היה לקרוא את האפקטים של השוט הזה.',
+  'shots.cues.entry': 'אפקט {position}',
+  'shots.cues.field.asset': 'אפקט',
+  'shots.cues.field.asset.none': 'בחרו אפקט',
+  'shots.cues.field.asset.unreadable':
+    'לא ניתן היה לקרוא את ספריית האפקטים, ולכן אי אפשר לבחור כאן אף אחד.',
+  'shots.cues.field.stem': 'סטם',
+  'shots.cues.field.stem.FX': 'אפקטים',
+  'shots.cues.field.stem.AMB': 'אמביינס',
+  'shots.cues.field.at': 'מתחיל ב־, במילישניות',
+  'shots.cues.field.duration': 'משך במילישניות',
+  'shots.cues.field.gain': 'עוצמה בדציבלים',
+  'shots.cues.field.fadeIn': 'דעיכת כניסה, במילישניות',
+  'shots.cues.field.fadeOut': 'דעיכת יציאה, במילישניות',
+  'shots.cues.add': 'הוספת אפקט',
+  'shots.cues.remove': 'הסרה',
+  'shots.cues.removeContext': 'הסרת אפקט {position}',
+  'shots.cues.save': 'שמירת האפקטים בשוט הזה',
+  'shots.cues.saving': 'שומר…',
+  'shots.cues.saved': 'נשמר.',
+  'shots.cues.failed.title': 'האפקטים לא נשמרו',
   'shots.qc.title': 'בדיקות אוטומטיות',
   'shots.qc.advisory':
     'אוטומטי. הבדיקות האלה מייעצות בלבד ואף אחת מהן אינה אישור — אדם מחליט על השוט, וההחלטה הזאת מופיעה במצב השוט למעלה.',

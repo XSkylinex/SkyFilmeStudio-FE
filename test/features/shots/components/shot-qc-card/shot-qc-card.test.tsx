@@ -10,7 +10,10 @@ import { buildShot } from '../../../../fixtures/shot.fixture';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 import { renderInApp } from '../../../../render-in-app';
 
-const server = mockOrchestratorServer();
+const server = mockOrchestratorServer(
+  http.get('/sfx-assets', () => HttpResponse.json({ items: [] })),
+  http.get('/shots/:shotId/audio-cues', () => HttpResponse.json([])),
+);
 
 const SCENE_ID = sceneIdSchema.parse('44444444-4444-4444-8444-444444444444');
 

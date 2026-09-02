@@ -1669,7 +1669,7 @@ export const EN_CATALOGUE = {
   'audio.gaps.music':
     'Scoring assigns cues to scenes and is above. What is not here is assigning one cue by hand: the route replaces a scene’s cues wholesale, so choosing one means restating the rest.',
   'audio.gaps.sfx':
-    'Placing an effect against a shot is not here. The orchestrator publishes the route, and this screen has not been built against it yet; the library the effects come from has its own screen.',
+    'Placing an effect against a shot is done on the shot review screen, where the shot is, rather than here. The library the effects come from has its own screen.',
   'audio.gaps.stems':
     'A stem cannot be levelled, soloed or muted. A mix is submitted whole and its four stems are recorded by id, with no route returning one and nothing in the request expressing a per-stem control.',
   'audio.gaps.loudness':
@@ -1698,6 +1698,33 @@ export const EN_CATALOGUE = {
   'shots.shot.label': 'Shot {order}',
   'shots.shot.checks': 'Automated checks',
   'shots.shot.checksContext': 'for shot {order}',
+  'shots.cues.title': 'Effects and ambience',
+  'shots.cues.toggle': 'Effects',
+  'shots.cues.toggleContext': 'for shot {order}',
+  'shots.cues.explain':
+    'What plays over this shot, from the installation’s effects library. The whole list is sent at once, because the route replaces a shot’s cues rather than adding to them.',
+  'shots.cues.none': 'Nothing is placed on this shot.',
+  'shots.cues.unreadable': 'This shot’s effects could not be read.',
+  'shots.cues.entry': 'Effect {position}',
+  'shots.cues.field.asset': 'Effect',
+  'shots.cues.field.asset.none': 'Choose an effect',
+  'shots.cues.field.asset.unreadable':
+    'The effects library could not be read, so none can be chosen here.',
+  'shots.cues.field.stem': 'Stem',
+  'shots.cues.field.stem.FX': 'Effects',
+  'shots.cues.field.stem.AMB': 'Ambience',
+  'shots.cues.field.at': 'Starts at, in milliseconds',
+  'shots.cues.field.duration': 'Duration in milliseconds',
+  'shots.cues.field.gain': 'Gain in decibels',
+  'shots.cues.field.fadeIn': 'Fade in, in milliseconds',
+  'shots.cues.field.fadeOut': 'Fade out, in milliseconds',
+  'shots.cues.add': 'Add an effect',
+  'shots.cues.remove': 'Remove',
+  'shots.cues.removeContext': 'Remove effect {position}',
+  'shots.cues.save': 'Save the effects on this shot',
+  'shots.cues.saving': 'Saving…',
+  'shots.cues.saved': 'Saved.',
+  'shots.cues.failed.title': 'The effects were not saved',
   'shots.qc.title': 'Automated checks',
   'shots.qc.advisory':
     'Automated. These are advisory and none of them is an approval — a person decides on the shot, and that decision shows in the shot’s state above.',
