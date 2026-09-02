@@ -12,6 +12,7 @@ import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view'
 import { requestShotReviewMutationOptions } from '@/features/shots/api/request-shot-review.mutation';
 import { shotQcRunsQueryOptions } from '@/features/shots/api/shot-qc-runs.query';
 import { QcRunView } from '@/features/shots/components/qc-run';
+import { ShotAudioCues } from '@/features/shots/components/shot-audio-cues';
 import { REVIEWABLE_SHOT_STATES } from '@/features/shots/shots.constants';
 import {
   SHOT_STATE_LABEL,
@@ -134,6 +135,8 @@ export const ShotQcCard: FC<ShotQcCardProps> = ({ shot, sceneId }) => {
           )}
         </section>
       ) : null}
+
+      {open ? <ShotAudioCues shot={shot} /> : null}
     </li>
   );
 };

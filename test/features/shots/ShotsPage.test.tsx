@@ -21,7 +21,10 @@ const PRODUCTION_ID = productionIdSchema.parse(
   '3f9a1c6e-1f0d-4a2b-8c7d-5e6f70819a2b',
 );
 
-const server = mockOrchestratorServer();
+const server = mockOrchestratorServer(
+  http.get('/sfx-assets', () => HttpResponse.json({ items: [] })),
+  http.get('/shots/:shotId/audio-cues', () => HttpResponse.json([])),
+);
 
 const renderAt = (productionId: string): void => {
   renderInApp(
