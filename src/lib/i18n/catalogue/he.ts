@@ -832,6 +832,15 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'productions.create.blocked.description':
     'כל הפקה מוצמדת לגרסת סגנון, ולפרויקט הזה עדיין אין אף אחת. צרו את הראשונה בספריית הסגנונות ואז חזרו לכאן.',
   'productions.create.failed.title': 'ההפקה לא נוצרה',
+  'productions.edit.context': 'ההפקה {title}',
+  'productions.edit.title': 'עריכת ההפקה הזו',
+  'productions.edit.explain':
+    'נשלחים רק השדות שהשתנו. שינוי שנשמר מזיז את תקציב זמן הריצה ותו לא: אף שלב אינו מורץ מחדש.',
+  'productions.edit.cannotClear':
+    'משנקבע, אי אפשר לרוקן אותו מכאן: העדכון קורא מפתח חסר כ"להשאיר כמו שהוא" ואין לו דרך לומר "אין". יש להחליף אותו במקום זאת.',
+  'productions.edit.modeChange':
+    'שינוי כאן משנה אילו שלבים ההפקה צריכה. דבר שכבר תוכנן אינו מורץ מחדש.',
+  'productions.edit.failed.title': 'השינויים לא נשמרו',
   'planner.error.title': 'לא ניתן היה לקרוא את ההפקה הזו',
   'planner.loading': 'קורא את ההפקה…',
   'planner.summary.kind': 'סוג:',

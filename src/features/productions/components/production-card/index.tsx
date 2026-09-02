@@ -1,7 +1,10 @@
 import type { FC, ReactNode } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@/lib/components/badge';
+import { Button } from '@/lib/components/button';
 import { ContentText } from '@/lib/components/content-text';
+import { Dialog } from '@/lib/components/dialog';
 import { formatDuration } from '@/lib/format/format-duration';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { PRODUCTION_STATE_TONE } from '@/lib/status-tone/production-state.tone';
@@ -11,6 +14,7 @@ import {
   PRODUCTION_KIND_LABEL,
   PRODUCTION_STATE_LABEL,
 } from '@/features/productions/productions.constants';
+import { EditProductionForm } from '@/features/productions/components/edit-production-form';
 import type { ProductionCardProps } from './production-card.interface';
 import './production-card.css';
 
@@ -19,6 +23,7 @@ export const ProductionCard: FC<ProductionCardProps> = ({
   production,
 }) => {
   const translate = useTranslate();
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   let toleranceValue: ReactNode;
 
@@ -122,6 +127,32 @@ export const ProductionCard: FC<ProductionCardProps> = ({
           {translate('productions.card.toleranceUndeclared.detail')}
         </p>
       ) : null}
+
+      <div className="production-card__actions">
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          aria-label={`${translate('library.edit')} ${translate('productions.edit.context', { title: production.title })}`}
+          onClick={() => setIsEditOpen(true)}
+        >
+          {translate('library.edit')}
+        </Button>
+      </div>
+
+      <Dialog
+        open={isEditOpen}
+        title={translate('productions.edit.title')}
+        onClose={() => setIsEditOpen(false)}
+      >
+        {isEditOpen ? (
+          <EditProductionForm
+            projectId={projectId}
+            production={production}
+            onClose={() => setIsEditOpen(false)}
+          />
+        ) : null}
+      </Dialog>
     </li>
   );
 };

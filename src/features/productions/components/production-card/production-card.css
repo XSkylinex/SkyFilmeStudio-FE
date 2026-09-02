@@ -73,4 +73,9 @@
     font-size: var(--font-size-xs);
     line-height: var(--line-height-relaxed);
   }
+
+  .production-card__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
 }
