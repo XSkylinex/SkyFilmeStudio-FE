@@ -9,6 +9,7 @@ import { Select } from '@/lib/components/select';
 import { Textarea } from '@/lib/components/textarea';
 import { ValidationSummary } from '@/lib/components/validation-summary';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
+import { invalidFieldCount } from '@/lib/helpers/invalid-field-count';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
 import type { TranslationKey } from '@/lib/i18n/catalogue/en';
 import { useTranslate } from '@/lib/i18n/use-translate';
@@ -142,7 +143,7 @@ export const CreateBibleForm: FC<CreateBibleFormProps> = ({
     <form className="create-bible-form" onSubmit={handleSubmit}>
       {Object.keys(fieldErrors).length === 0 ? null : (
         <ValidationSummary
-          count={Object.keys(fieldErrors).length}
+          count={invalidFieldCount(fieldErrors)}
           attempt={attempt}
         />
       )}

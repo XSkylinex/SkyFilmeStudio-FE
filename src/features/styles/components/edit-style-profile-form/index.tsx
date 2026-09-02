@@ -8,6 +8,7 @@ import { Input } from '@/lib/components/input';
 import { Textarea } from '@/lib/components/textarea';
 import { ValidationSummary } from '@/lib/components/validation-summary';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
+import { invalidFieldCount } from '@/lib/helpers/invalid-field-count';
 import { diffNullableText } from '@/lib/helpers/diff-nullable-text';
 import { parseLines } from '@/lib/helpers/parse-lines';
 import { focusWhenShown } from '@/lib/helpers/focus-when-shown';
@@ -116,7 +117,7 @@ export const EditStyleProfileForm: FC<EditStyleProfileFormProps> = ({
       <form className="edit-style-profile-form__form" onSubmit={handleSubmit}>
         {Object.keys(fieldErrors).length === 0 ? null : (
           <ValidationSummary
-            count={Object.keys(fieldErrors).length}
+            count={invalidFieldCount(fieldErrors)}
             attempt={attempt}
           />
         )}

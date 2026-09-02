@@ -193,7 +193,14 @@ times in one session.
   attempt counter so it takes focus again on the next failed submit — without the key, only the
   first failure is ever heard, and a test was watched failing with it removed. Every form renders it
   first inside `<form>`. The create-production form's `role="alert"` banner, the unreliable shape,
-  is gone with its string and its rule.
+  is gone with its string and its rule. **The number it announced was wrong until 2026-09-02.**
+  Every form passed `Object.keys(fieldErrors).length`, and `fieldErrorsFromIssues` keys every prefix
+  of a failing path on purpose, so a section's field can show a failure recorded at a list index
+  beneath it. On a flat form the two are equal; on the bible's sectioned forms one bad language tag
+  announced *Fields needing attention: 3* — measured by rendering the form, not inferred from the
+  helper. `invalidFieldCount` counts the leaves of that map and folds a trailing list index into the
+  box it belongs to, so two bad tags in one box are one field and the same field in two subject
+  blocks is two. All thirteen forms use it, and the bible form's test pins the number.
 - **Nothing conveys which fields are required — fixed 2026-09-01, and the count was wrong.** This
   bullet said twelve, read off the contract. That counted keys the wire needs present, and every
   form always sends every key, so a field whose schema accepts `''` is one the user may leave blank.

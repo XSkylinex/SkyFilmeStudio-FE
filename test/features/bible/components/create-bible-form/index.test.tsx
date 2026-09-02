@@ -151,6 +151,30 @@ describe('CreateBibleForm', () => {
     ).toBeInTheDocument();
   });
 
+  it('counts the field that failed, not every prefix of its path', async () => {
+    styleLibraryServes();
+    capturePost();
+
+    renderInApp(
+      <CreateBibleForm
+        projectId={PROJECT_ID}
+        carriesNarrative
+        initialValues={EMPTY_BIBLE_FORM_VALUES}
+        onClose={() => undefined}
+      />,
+    );
+
+    await userEvent.type(
+      await screen.findByLabelText('Languages'),
+      'not a tag',
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+    expect(
+      await screen.findByText(/Fields needing attention/),
+    ).toHaveTextContent('Fields needing attention: 1');
+  });
+
   it('carries the source version’s subject rules into the next version rather than dropping them', async () => {
     styleLibraryServes();
     const posted = capturePost();
