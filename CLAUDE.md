@@ -551,7 +551,9 @@ reviewer, the one write the contract publishes because it takes no body. **The s
 verdict wears the tone FE-04 gave a technical check, and `test/lib/status-tone/qc-outcome.tone.test.ts`
 pins that no automated tone is ever `SUCCESS` while `APPROVED` is. What stays blocked has three
 separate reasons — no artifact bytes, two DTOs not re-exported, no render-profile route — and the
-phase file keeps them apart because each moves on its own.
+phase file keeps them apart because each moves on its own. **The facts in force for each scene sit
+above its shots as of 2026-09-02**, from the storyboard's own read, so the expected state is part of
+what the reviewer sees beside the checks; the picture to hold them against is still the artifact bytes.
 
 **Two other phases were re-measured at the same time and their rows corrected.** FE-12 read "not
 started" while every route it needs had already landed; it is blocked, on three separate things —

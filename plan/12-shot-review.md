@@ -164,8 +164,11 @@ Each unticked box names what it waits for.
       sixteen technical checks and the run verdict**, with the tone rule pinned by a test. The eight
       per-trait identity verdicts are **not** per-trait here: no route returns one for a shot, and
       `findings` arrives unshaped
-- [ ] continuity expectations are part of the displayed "correct" — the facts in force are read by
-      the storyboard for a scene; not composed here, because there is nothing yet to hold them against
+- [~] continuity expectations are part of the displayed "correct" — **composed here as of
+      2026-09-02**: each scene in the review queue shows the facts in force for it, from the same
+      `in-force` read the storyboard makes, above the shots and their checks. What is still absent is
+      the picture to hold them against, which is the artifact bytes; until then the expected state
+      is read beside the automated checks rather than compared to anything
 - [ ] all six operations exist; every regeneration mode is explicit — **`submitVideoRenderRequestSchema`
       and `reviewShotRequestSchema` are not re-exported**
 - [ ] `RETAKE_REGION` has a real time-range selection — same
