@@ -1,5 +1,6 @@
 import {
   canonicalAssetSetIdSchema,
+  continuityFactIdSchema,
   dialogueLineIdSchema,
   locationIdSchema,
   locationPlateIdSchema,
@@ -99,6 +100,9 @@ const SAMPLE_PROJECT_BIBLE_VERSION_ID = projectBibleVersionIdSchema.parse(
 
 const SAMPLE_SCENE_ID = sceneIdSchema.parse(
   '00000000-0000-4000-8000-000000000000',
+);
+const SAMPLE_CONTINUITY_FACT_ID = continuityFactIdSchema.parse(
+  '77777777-7777-4777-8777-777777777777',
 );
 
 const SAMPLE_SHOT_ID = shotIdSchema.parse(
@@ -289,7 +293,51 @@ const everyPath: Record<string, string> = {
   shotQcRuns: API_PATH.shotQcRuns(SAMPLE_SHOT_ID),
   shotQcRequestReview: API_PATH.shotQcRequestReview(SAMPLE_SHOT_ID),
   productionBible: API_PATH.productionBible(SAMPLE_PRODUCTION_ID),
+  continuityFacts: API_PATH.continuityFacts(SAMPLE_PRODUCTION_ID),
+  continuityFact: API_PATH.continuityFact(
+    SAMPLE_PRODUCTION_ID,
+    SAMPLE_CONTINUITY_FACT_ID,
+  ),
+  planningContext: API_PATH.planningContext(
+    SAMPLE_PRODUCTION_ID,
+    SAMPLE_SCENE_ID,
+  ),
 };
+
+describe('API_PATH.continuityFacts', () => {
+  it('sends no query string when nothing is filtered', () => {
+    expect(API_PATH.continuityFacts(SAMPLE_PRODUCTION_ID)).toBe(
+      `/productions/${SAMPLE_PRODUCTION_ID}/continuity-facts`,
+    );
+  });
+
+  it('narrows to one entity, which is the only way this app can name one', () => {
+    expect(
+      API_PATH.continuityFacts(SAMPLE_PRODUCTION_ID, {
+        entityId: SAMPLE_SCENE_ID,
+      }),
+    ).toBe(
+      `/productions/${SAMPLE_PRODUCTION_ID}/continuity-facts?entityId=${SAMPLE_SCENE_ID}`,
+    );
+  });
+
+  it('escapes a property rather than pasting it into the query string', () => {
+    expect(
+      API_PATH.continuityFacts(SAMPLE_PRODUCTION_ID, {
+        property: 'costume state',
+      }),
+    ).toContain('property=costume+state');
+  });
+
+  it('omits an absent filter instead of sending it empty', () => {
+    expect(
+      API_PATH.continuityFacts(SAMPLE_PRODUCTION_ID, {
+        property: 'mood',
+        entityId: undefined,
+      }),
+    ).toBe(`/productions/${SAMPLE_PRODUCTION_ID}/continuity-facts?property=mood`);
+  });
+});
 
 describe('API_PATH', () => {
   it('covers every path builder the module exports, so this list cannot fall behind', () => {
