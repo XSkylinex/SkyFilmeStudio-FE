@@ -23,7 +23,50 @@ forbids building a screen on one, so nothing here reads it.
 
 **The effects, stems, mix and loudness halves have no routes at all** — not unpublished shapes, no
 controllers. That is a different blocker from the music half and is recorded separately rather than
-merged into one line.
+merged into one line. **Corrected 2026-09-02, measured on the unmerged branch's 09:28 build:** the
+effects half has a controller there now, and the paragraph below says exactly what the branch holds.
+
+**What `be-21-audio` holds, measured 2026-09-02 so the day it merges is a checklist and not a
+survey.** Read from the sibling's working tree and from what the live `dist-esm` build exports
+through `sky-filme-studio-be/contracts`; nothing here is built on any of it until the branch is on
+master, per `state-and-data.md`.
+
+- **Controllers, with their routes.** `projects/:projectId/music-cues` — `POST` and `GET` `renders`,
+  `POST`, `GET`, `GET :id`, `POST :id/approve`, `DELETE :id`.
+  `projects/:projectId/opening-ending-assets` — `POST`, `GET`, `GET approved`, `GET :id`,
+  `POST :id/approve`, `DELETE :id`. `sfx-assets` — `POST`, `GET`, `GET :id`, `POST :id/approve`,
+  `DELETE :id`. `productions/:productionId/score` — `POST`, `GET`; `scenes/:sceneId/cues` — `PUT`,
+  `GET`; `shots/:shotId/audio-cues` — `PUT`, `GET`.
+- **Published through the barrel**, by the resolver this repo compiles with: `musicCueSchema`,
+  `musicProfileSchema`, `measuredMusicProfileSchema`, `sfxAssetSchema`, `openingEndingAssetSchema`,
+  `sceneCueSchema`, `audioCueSchema`, `sceneScorePlanSchema`, `sceneScoreAssignmentSchema`,
+  `audioStemSchema`, `sceneMixSchema`, `productionMixSchema`; the request DTOs
+  `submitMusicCueRequestSchema`, `promoteMusicCueRequestSchema`, `importSfxAssetRequestSchema`,
+  `importOpeningEndingAssetRequestSchema`, `scoreProductionRequestSchema`,
+  `replaceSceneCuesRequestSchema`, `replaceAudioCuesRequestSchema`; and the four list-query
+  schemas. Six refusal codes from it are already in the taxonomy here.
+- **The mixes landed on the branch later the same day**, so the sentence above them is corrected
+  rather than left: `scenes/:sceneId/mixes` and `productions/:productionId/mixes` each carry a
+  bodiless `POST` returning `202` and a `GET` that lists. A scene mix is refused with
+  `AUDIO_TIMELINE_CONFLICT` when a line or cue would overrun its shot, and a production mix with
+  `SCENE_MIX_MISSING` naming every scene not yet mixed; both are in the taxonomy here already. The
+  submit **response** is `SubmitMixResult`, an interface in the service rather than a published
+  schema — `submitRenderResponseSchema` is the published `{ renderJobId }` shape, and whether the two
+  agree is a thing to check at build time, not to assume.
+- **Still absent even on the branch:** no route serves an artifact's bytes, so nothing here gains
+  playback whatever else merges. `Shot.audioCueIds` is removed on the branch, which is why
+  `test/fixtures/shot.fixture.ts` asks the schema whether the key exists.
+- **The order to build when it merges:** drop the fixture's conditional; absorb any refusal code the
+  merge adds; the SFX library (import, list, approve, delete — the same shape as the four creative
+  libraries); music cues (submit a render, list renders, list, approve, delete) and the OP/ED assets
+  beside them; scoring (score a production, then the scene cue and shot audio-cue lists with their
+  `PUT` replacements); then the mixes, which are the phase's §34 half and the first submit-and-wait
+  writes outside the render queue. Every one of those is a §32–§34 step and none needs a screen that
+  does not exist.
+- **`BE-21` is a PR as of 2026-09-02 afternoon** — 38 commits, awaiting review — so what this
+  paragraph measures on a working tree becomes master's the moment it merges. Re-measure then rather
+  than trusting this list: it was already corrected once between the branch's morning and afternoon
+  builds.
 
 **Nothing can be played.** No route in the orchestrator serves an artifact's bytes; the only
 `StreamableFile` responses are the source-asset thumbnail and proxy. So a take is shown as its record
@@ -150,8 +193,9 @@ Each unticked box names what it waits for, rather than being left blank.
       BE-21 to reach master**
 - [ ] scene scoring with a visible cue-vs-scene strip — **waits for BE-21**; there is no cue to score
       a scene with
-- [ ] SFX/ambience library with tags and licence provenance shown — **no controller exists**, which is
-      a different blocker from the two above
+- [ ] SFX/ambience library with tags and licence provenance shown — **a controller exists on
+      `be-21-audio` as of 2026-09-02 and is not on master**, the same blocker as the two above now
+      rather than a different one
 - [x] per-line dialogue audio with measured duration and single-line regeneration — **done, with one
       part of the box unmet**: the duration is the measured `durationMs`, the voice profile is
       identified by id and SHA-256, and each line is re-voiced on its own in either pass. The QC
@@ -160,7 +204,10 @@ Each unticked box names what it waits for, rather than being left blank.
       so "peak not clipped" is answerable; "decodes" and "not silent" are not
 - [ ] ASR round-trip presented as advisory — `asrReviewSchema` is **a published contract with no
       route**, the same shape as `continuityReviewSchema` in phase 09
-- [ ] DX/MX/FX/AMB stems with level, solo and mute, then scene and production mixes — **no routes**
+- [ ] DX/MX/FX/AMB stems with level, solo and mute, then scene and production mixes — **no routes on
+      master; both mix routes exist on the unmerged `be-21-audio` branch** as of 2026-09-02 and are
+      in this phase's build order. Level, solo and mute are a further question: a mix is submitted
+      bodiless and returns a render job, so nothing in the request expresses a per-stem control
 - [ ] loudness shown as measured numbers against the target, not a tick — **no route serves a
       measured LUFS or true peak**, so a number here would be invented
 - [ ] the ducking envelope is visualised against dialogue timings — half its inputs exist (each
