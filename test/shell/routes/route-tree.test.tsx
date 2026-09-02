@@ -81,6 +81,7 @@ describe('routeTree', () => {
       'plan',
       'productions',
       'props',
+      'sfx',
       'shots',
       'shots/:shotId',
       'storyboard',
