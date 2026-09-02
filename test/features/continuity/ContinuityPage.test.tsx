@@ -111,7 +111,7 @@ describe('ContinuityPage', () => {
 
     await user.click(
       await screen.findByRole('button', {
-        name: /Show only the facts about the entity/,
+        name: /^Only this entity/,
       }),
     );
 

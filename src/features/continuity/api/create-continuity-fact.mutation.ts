@@ -9,6 +9,8 @@ import type {
 import { API_PATH } from '@/lib/api/api.constants';
 import { requestJson } from '@/lib/api/request-json';
 import { continuityFactsQueryPrefix } from '@/features/continuity/api/continuity-facts.query';
+import { planningContextQueryPrefix } from '@/features/continuity/api/planning-context.query';
+import { sceneContinuityFactsQueryPrefix } from '@/features/storyboard/api/scene-continuity-facts.query';
 
 const createContinuityFact = (
   productionId: ProductionId,
@@ -28,8 +30,16 @@ export const createContinuityFactMutationOptions = (
     mutationFn: (request: CreateContinuityFactRequest) =>
       createContinuityFact(productionId, request),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: continuityFactsQueryPrefix(productionId),
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: continuityFactsQueryPrefix(productionId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: planningContextQueryPrefix(productionId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: sceneContinuityFactsQueryPrefix(productionId),
+        }),
+      ]);
     },
   });

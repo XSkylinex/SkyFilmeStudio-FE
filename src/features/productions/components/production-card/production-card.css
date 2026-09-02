@@ -80,7 +80,15 @@
   }
 
   .production-card__continuity {
+    align-self: center;
     font-size: var(--font-size-sm);
     color: var(--color-accent);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+  }
+
+  .production-card__continuity:hover,
+  .production-card__continuity:focus-visible {
+    text-decoration: underline;
   }
 }

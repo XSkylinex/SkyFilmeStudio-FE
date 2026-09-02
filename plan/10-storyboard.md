@@ -185,8 +185,11 @@ one does not.
 Every entry in `plan/` tracks a route that does **not** exist yet. Nothing was tracking a route that
 does exist and that nobody had called.
 
-Three came back: the continuity-fact collection with its `POST`, its member `GET` and its `DELETE`,
-and `GET /productions/:productionId/planning-context`. This phase had claimed continuity with one
+Five came back: the continuity-fact collection with its `POST`, its member `GET` and its `DELETE`,
+and `GET /productions/:productionId/planning-context`. Four of the five are built here. The member
+`GET /productions/:productionId/continuity-facts/:id` is not, and stays in the uncalled column: the
+list already carries every field a single fact has, so a second route to fetch one row would add a
+request and no information. This phase had claimed continuity with one
 box — the per-scene `in-force` read on the scene panel — and that read is the subset the
 orchestrator computes for one scene, not the record. `createContinuityFactRequestSchema` was
 published the whole time, confirmed with the resolver probe rather than a grep of `dist-esm/`, and

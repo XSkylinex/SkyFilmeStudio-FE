@@ -7,6 +7,6 @@ import type {
 export interface ContinuityFactCardProps {
   readonly productionId: ProductionId;
   readonly fact: ContinuityFact;
-  readonly scenes: readonly Scene[];
+  readonly scenes: readonly Scene[] | undefined;
   readonly onFilterByEntity: (entityId: string) => void;
 }

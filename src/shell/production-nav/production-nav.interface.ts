@@ -3,4 +3,5 @@ import type { ProductionStageStates } from '@/shell/interfaces/production-stage-
 export interface ProductionNavProps {
   mode: string;
   stageStates: ProductionStageStates;
+  continuityPath: string | undefined;
 }

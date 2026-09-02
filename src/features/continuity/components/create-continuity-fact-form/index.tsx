@@ -42,7 +42,7 @@ export const CreateContinuityFactForm: FC<CreateContinuityFactFormProps> = ({
   >({});
   const [attempt, setAttempt] = useState(0);
 
-  const available = orderedScenes(scenes);
+  const available = orderedScenes(scenes ?? []);
 
   const errorFor = (field: string): string => {
     const key = fieldErrors[field];
@@ -83,23 +83,27 @@ export const CreateContinuityFactForm: FC<CreateContinuityFactFormProps> = ({
 
   return (
     <section className="create-continuity-fact-form">
-      <div className="create-continuity-fact-form__header">
-        <h3 className="create-continuity-fact-form__heading">
-          {translate('continuity.create.heading')}
-        </h3>
-        <Button type="button" variant="ghost" size="md" onClick={onClose}>
-          {translate('library.cancel')}
-        </Button>
-      </div>
+      {scenes === undefined ? (
+        <p className="create-continuity-fact-form__blocked">
+          {translate('continuity.create.scenesUnread')}
+        </p>
+      ) : null}
 
       {create.isSuccess ? (
-        <output
-          className="create-continuity-fact-form__done"
-          ref={focusWhenShown}
-          tabIndex={-1}
-        >
-          {translate('library.created')}
-        </output>
+        <>
+          <output
+            className="create-continuity-fact-form__done"
+            ref={focusWhenShown}
+            tabIndex={-1}
+          >
+            {translate('library.created')}
+          </output>
+          <div className="create-continuity-fact-form__actions">
+            <Button type="button" variant="ghost" size="md" onClick={onClose}>
+              {translate('library.cancel')}
+            </Button>
+          </div>
+        </>
       ) : (
         <form
           className="create-continuity-fact-form__form"
@@ -198,13 +202,23 @@ export const CreateContinuityFactForm: FC<CreateContinuityFactFormProps> = ({
             />
           )}
 
-          <Button type="submit" variant="primary" size="md" disabled={create.isPending}>
-            {translate(
-              create.isPending
-                ? 'continuity.create.saving'
-                : 'continuity.create.submit',
-            )}
-          </Button>
+          <div className="create-continuity-fact-form__actions">
+            <Button type="button" variant="ghost" size="md" onClick={onClose}>
+              {translate('library.cancel')}
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              size="md"
+              disabled={create.isPending || scenes === undefined}
+            >
+              {translate(
+                create.isPending
+                  ? 'continuity.create.saving'
+                  : 'continuity.create.submit',
+              )}
+            </Button>
+          </div>
         </form>
       )}
     </section>

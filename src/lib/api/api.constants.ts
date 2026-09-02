@@ -232,9 +232,6 @@ export const API_PATH = {
     if (filter.property !== undefined) {
       query.set('property', filter.property);
     }
-    if (filter.cursor !== undefined) {
-      query.set('cursor', filter.cursor);
-    }
     const search = query.toString();
     return `/productions/${productionId}/continuity-facts${
       search === '' ? '' : `?${search}`

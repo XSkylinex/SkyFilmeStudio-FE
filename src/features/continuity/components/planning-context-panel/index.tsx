@@ -4,10 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { sceneIdSchema } from 'sky-filme-studio-be/contracts';
 import { ContentText } from '@/lib/components/content-text';
 import { EmptyState } from '@/lib/components/empty-state';
+import { ErrorState } from '@/lib/components/error-state';
 import { Field } from '@/lib/components/field';
 import { Select } from '@/lib/components/select';
 import { Skeleton } from '@/lib/components/skeleton';
 import { useTranslate } from '@/lib/i18n/use-translate';
+import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-error-description';
+import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { productionScenesQueryOptions } from '@/features/storyboard/api/production-scenes.query';
 import { PlanningContextDocument } from '@/features/continuity/components/planning-context-document';
 import { orderedScenes } from '@/features/continuity/helpers/ordered-scenes';
@@ -34,7 +37,17 @@ export const PlanningContextPanel: FC<PlanningContextPanelProps> = ({
         {translate('continuity.context.description')}
       </p>
 
-      {scenes.isPending ? (
+      {scenes.error && scenes.data === undefined ? (
+        <ErrorState
+          title={translate('continuity.context.scenesUnread.title')}
+          description={composeRouteErrorDescription(
+            resolveRouteErrorView(scenes.error),
+            translate,
+          )}
+          detail={resolveRouteErrorView(scenes.error).detail}
+          headingLevel={3}
+        />
+      ) : scenes.isPending ? (
         <Skeleton shape="text" />
       ) : available.length === 0 ? (
         <EmptyState

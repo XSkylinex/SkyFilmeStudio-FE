@@ -66,10 +66,10 @@ export const ContinuityFactCard: FC<ContinuityFactCardProps> = ({
           type="button"
           variant="ghost"
           size="sm"
-          aria-label={translate('continuity.card.onlyEntityContext', {
-            property: fact.property,
-            value: fact.value,
-          })}
+          aria-label={`${translate('continuity.card.onlyEntity')}${translate(
+            'continuity.card.onlyEntityContext',
+            { property: fact.property, value: fact.value },
+          )}`}
           onClick={() => onFilterByEntity(fact.entityId)}
         >
           {translate('continuity.card.onlyEntity')}
@@ -78,10 +78,10 @@ export const ContinuityFactCard: FC<ContinuityFactCardProps> = ({
           type="button"
           variant="ghost"
           size="sm"
-          aria-label={translate('continuity.card.removeContext', {
-            property: fact.property,
-            value: fact.value,
-          })}
+          aria-label={`${translate('continuity.card.remove')} ${translate(
+            'continuity.card.removeContext',
+            { property: fact.property, value: fact.value },
+          )}`}
           disabled={remove.isPending}
           onClick={() => remove.mutate(fact.id)}
         >

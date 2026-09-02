@@ -111,7 +111,7 @@ export const ContinuityFactList: FC<ContinuityFactListProps> = ({
               key={fact.id}
               productionId={productionId}
               fact={fact}
-              scenes={scenes.data ?? []}
+              scenes={scenes.data}
               onFilterByEntity={setEntityId}
             />
           ))}
@@ -143,7 +143,7 @@ export const ContinuityFactList: FC<ContinuityFactListProps> = ({
         {isCreateOpen ? (
           <CreateContinuityFactForm
             productionId={productionId}
-            scenes={scenes.data ?? []}
+            scenes={scenes.data}
             onClose={() => setIsCreateOpen(false)}
           />
         ) : null}

@@ -1895,8 +1895,8 @@ export const EN_CATALOGUE = {
   'continuity.list.empty.filtered.description':
     'Clear the filter to see everything this production has recorded.',
   'continuity.list.firstPageOnly':
-    'This is the first page of facts and the orchestrator has more. No screen in this app pages a cursor yet.',
-  'continuity.filter.property': 'Property',
+    'This is the first page of facts and the orchestrator has more. Filter by an exact property to reach the rest; this screen does not follow the cursor yet.',
+  'continuity.filter.property': 'Property (exact match)',
   'continuity.filter.entityActive': 'Showing one entity only:',
   'continuity.filter.clear': 'Clear the filter',
   'continuity.card.scope': 'Holds for',
@@ -1904,7 +1904,7 @@ export const EN_CATALOGUE = {
   'continuity.card.entity': 'Entity',
   'continuity.card.onlyEntity': 'Only this entity',
   'continuity.card.onlyEntityContext':
-    'Show only the facts about the entity whose {property} is {value}',
+    ', the one whose {property} is {value}',
   'continuity.scope.range': 'Scenes {start} to {end}',
   'continuity.scope.open': 'Scene {start} onward',
   'continuity.scope.unplanned':
@@ -1923,7 +1923,7 @@ export const EN_CATALOGUE = {
   'continuity.gaps.entityName':
     'A fact names its entity by id and carries no type, so nothing here can turn that id into a subject, prop or location name.',
   'continuity.gaps.paging':
-    'Only the first page of facts is read. The cursor the orchestrator returns is not followed by any screen in this app.',
+    'Only the first fifty facts are read, and the cursor the orchestrator returns is not followed. The property filter matches a whole property exactly rather than searching, so a fact past the fiftieth is reachable only by knowing its property string.',
   'productions.card.continuity': 'Continuity',
   'productions.card.continuity.context':
     'Open the continuity facts for {title}',
@@ -1931,7 +1931,7 @@ export const EN_CATALOGUE = {
   'continuity.create.heading': 'Record a continuity fact',
   'continuity.create.entity': 'Entity id',
   'continuity.create.entity.hint':
-    'The subject, prop or location this fact is about. The orchestrator identifies it by id alone, so the id has to be copied from wherever that entity is listed.',
+    'The subject, prop or location this fact is about, named by id because the orchestrator records no type for it. A subject’s id is in the address bar of its own page. A prop’s and a location’s are not shown anywhere in this app yet, so a fact about one cannot be recorded here.',
   'continuity.create.property': 'Property',
   'continuity.create.property.hint':
     'What the fact is about, such as a costume or a state a subject is in. One value per property is in force at a time.',
@@ -1949,10 +1949,15 @@ export const EN_CATALOGUE = {
   'continuity.create.failed.title': 'That fact was not recorded',
   'continuity.card.remove': 'Delete',
   'continuity.card.removing': 'Deleting…',
-  'continuity.card.removeContext': 'Delete the fact that {property} is {value}',
+  'continuity.card.removeContext': 'the fact that {property} is {value}',
   'continuity.card.remove.failed.title': 'That fact was not deleted',
   'continuity.gaps.noUpdate':
     'A recorded fact cannot be edited. The orchestrator publishes create and delete and no update route, so a correction is a delete followed by a new fact.',
+  'continuity.scope.scenesUnread':
+    'The production’s scenes could not be read, so this fact’s range cannot be resolved to scene numbers',
+  'continuity.context.scenesUnread.title': 'The production’s scenes could not be read',
+  'continuity.create.scenesUnread':
+    'The production’s scenes could not be read, so a fact cannot be recorded — a fact has to name the scene it starts at.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;

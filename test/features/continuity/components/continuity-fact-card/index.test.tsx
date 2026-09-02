@@ -44,9 +44,20 @@ describe('ContinuityFactCard', () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', {
-        name: 'Show only the facts about the entity whose wardrobe.jacket-condition is torn at the left sleeve',
+        name: 'Only this entity, the one whose wardrobe.jacket-condition is torn at the left sleeve',
       }),
     ).toBeInTheDocument();
+  });
+
+  it('contains each visible label inside its own accessible name', () => {
+    renderCard();
+
+    for (const visible of ['Delete', 'Only this entity']) {
+      const control = screen.getByText(visible);
+      const name = control.getAttribute('aria-label') ?? '';
+
+      expect(name).toContain(visible);
+    }
   });
 
   it('shows the entity id as notation, since it is not a name in any language', () => {

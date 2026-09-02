@@ -1866,16 +1866,15 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'continuity.list.empty.filtered.description':
     'נקו את הסינון כדי לראות את כל מה שההפקה רשמה.',
   'continuity.list.firstPageOnly':
-    'זהו העמוד הראשון של העובדות ולאורקסטרטור יש עוד. אף מסך ביישום הזה עדיין אינו עוקב אחר סמן עימוד.',
-  'continuity.filter.property': 'תכונה',
+    'זהו העמוד הראשון של העובדות ולאורקסטרטור יש עוד. סננו לפי תכונה מדויקת כדי להגיע לשאר; המסך הזה אינו עוקב עדיין אחר הסמן.',
+  'continuity.filter.property': 'תכונה (התאמה מדויקת)',
   'continuity.filter.entityActive': 'מוצגת ישות אחת בלבד:',
   'continuity.filter.clear': 'ניקוי הסינון',
   'continuity.card.scope': 'תקף עבור',
   'continuity.card.source': 'נרשם מתוך',
   'continuity.card.entity': 'ישות',
   'continuity.card.onlyEntity': 'רק ישות זו',
-  'continuity.card.onlyEntityContext':
-    'הצגת העובדות על הישות אשר {property} שלה הוא {value} בלבד',
+  'continuity.card.onlyEntityContext': ', זו אשר {property} שלה הוא {value}',
   'continuity.scope.range': 'סצנות {start} עד {end}',
   'continuity.scope.open': 'מסצנה {start} והלאה',
   'continuity.scope.unplanned':
@@ -1894,14 +1893,14 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'continuity.gaps.entityName':
     'עובדה מציינת את הישות שלה במזהה בלבד ואינה נושאת סוג, ולכן דבר כאן אינו יכול להפוך את המזהה הזה לשם של נושא, אביזר או מיקום.',
   'continuity.gaps.paging':
-    'נקרא רק העמוד הראשון של העובדות. אחר הסמן שהאורקסטרטור מחזיר לא עוקב אף מסך ביישום הזה.',
+    'נקראות רק חמישים העובדות הראשונות, ואחר הסמן שהאורקסטרטור מחזיר אין מעקב. סינון התכונה מתאים תכונה שלמה במדויק ואינו חיפוש, ולכן עובדה מעבר לחמישים הראשונות נגישה רק אם ידועה מחרוזת התכונה שלה.',
   'productions.card.continuity': 'רציפות',
   'productions.card.continuity.context': 'פתיחת עובדות הרציפות של {title}',
   'continuity.create.open': 'רישום עובדה',
   'continuity.create.heading': 'רישום עובדת רציפות',
   'continuity.create.entity': 'מזהה ישות',
   'continuity.create.entity.hint':
-    'הנושא, האביזר או המיקום שהעובדה עוסקת בו. האורקסטרטור מזהה אותו במזהה בלבד, ולכן יש להעתיק את המזהה מהמקום שבו הישות מופיעה.',
+    'הנושא, האביזר או המיקום שהעובדה עוסקת בו, המצוין במזהה משום שהאורקסטרטור אינו רושם עבורו סוג. המזהה של נושא נמצא בשורת הכתובת של הדף שלו. המזהים של אביזר ושל מיקום אינם מוצגים עדיין בשום מקום ביישום הזה, ולכן לא ניתן לרשום כאן עובדה על אחד מהם.',
   'continuity.create.property': 'תכונה',
   'continuity.create.property.hint':
     'במה העובדה עוסקת, למשל תלבושת או מצב שבו נמצא נושא. ערך אחד לכל תכונה תקף בכל רגע.',
@@ -1919,8 +1918,13 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'continuity.create.failed.title': 'העובדה לא נרשמה',
   'continuity.card.remove': 'מחיקה',
   'continuity.card.removing': 'מוחק…',
-  'continuity.card.removeContext': 'מחיקת העובדה ש{property} הוא {value}',
+  'continuity.card.removeContext': 'את העובדה ש{property} הוא {value}',
   'continuity.card.remove.failed.title': 'העובדה לא נמחקה',
   'continuity.gaps.noUpdate':
     'עובדה רשומה אינה ניתנת לעריכה. האורקסטרטור מפרסם יצירה ומחיקה וללא נתיב עדכון, ולכן תיקון הוא מחיקה ולאחריה עובדה חדשה.',
+  'continuity.scope.scenesUnread':
+    'לא ניתן היה לקרוא את סצנות ההפקה, ולכן לא ניתן לפתור את טווח העובדה הזו למספרי סצנות',
+  'continuity.context.scenesUnread.title': 'לא ניתן היה לקרוא את סצנות ההפקה',
+  'continuity.create.scenesUnread':
+    'לא ניתן היה לקרוא את סצנות ההפקה, ולכן לא ניתן לרשום עובדה — עובדה חייבת לציין את הסצנה שבה היא מתחילה.',
 };

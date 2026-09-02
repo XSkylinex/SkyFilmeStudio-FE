@@ -4,8 +4,12 @@ import { resolveSceneOrder } from '@/features/continuity/helpers/resolve-scene-o
 
 export const describeScope = (
   fact: ContinuityFact,
-  scenes: readonly Scene[],
+  scenes: readonly Scene[] | undefined,
 ): ContinuityScope => {
+  if (scenes === undefined) {
+    return { messageKey: 'continuity.scope.scenesUnread', values: {} };
+  }
+
   const start = resolveSceneOrder(scenes, fact.scopeStartScene);
 
   if (start === undefined) {
