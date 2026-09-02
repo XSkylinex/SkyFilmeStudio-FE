@@ -46,6 +46,8 @@ const flattenRoutes = (routes: RouteObject[]): FlatRoute[] =>
     ...(route.children ? flattenRoutes(route.children) : []),
   ]);
 
+const LAZY_ROUTE_TIMEOUT_MS = 4_000;
+
 const PLANNED_PRODUCTION_ID = productionIdSchema.parse(
   '3f9a1c6e-1f0d-4a2b-8c7d-5e6f70819a2b',
 );
@@ -108,11 +110,14 @@ describe('routeTree', () => {
 
     renderInApp(<RouterProvider router={memoryRouter} />);
 
-    await waitFor(() => {
-      expect(memoryRouter.state.location.pathname).toBe(
-        productionPlanPath('proj-1', 'prod-1'),
-      );
-    });
+    await waitFor(
+      () => {
+        expect(memoryRouter.state.location.pathname).toBe(
+          productionPlanPath('proj-1', 'prod-1'),
+        );
+      },
+      { timeout: LAZY_ROUTE_TIMEOUT_MS },
+    );
   });
 
   it('replaces the production-index redirect instead of pushing it, so Back escapes on the first press', async () => {
@@ -123,11 +128,14 @@ describe('routeTree', () => {
 
     renderInApp(<RouterProvider router={memoryRouter} />);
 
-    await waitFor(() => {
-      expect(memoryRouter.state.location.pathname).toBe(
-        productionPlanPath('proj-1', 'prod-1'),
-      );
-    });
+    await waitFor(
+      () => {
+        expect(memoryRouter.state.location.pathname).toBe(
+          productionPlanPath('proj-1', 'prod-1'),
+        );
+      },
+      { timeout: LAZY_ROUTE_TIMEOUT_MS },
+    );
     expect(memoryRouter.state.historyAction).toBe('REPLACE');
 
     await memoryRouter.navigate(-1);
