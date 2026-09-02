@@ -15,6 +15,7 @@ import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view'
 import { approveLocationMutationOptions } from '@/features/locations/api/approve-location.mutation';
 import { EditLocationForm } from '@/features/locations/components/edit-location-form';
 import { PlateCoverage } from '@/features/locations/components/plate-coverage';
+import { PlateList } from '@/features/locations/components/plate-list';
 import type { LocationCardProps } from './location-card.interface';
 import './location-card.css';
 
@@ -67,6 +68,8 @@ export const LocationCard: FC<LocationCardProps> = ({
       )}
 
       <PlateCoverage projectId={projectId} locationId={location.id} />
+
+      <PlateList projectId={projectId} locationId={location.id} />
 
       {approve.error ? (
         <div className="location-card__refusal" role="alert">

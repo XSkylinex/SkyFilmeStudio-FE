@@ -651,6 +651,40 @@ export const EN_CATALOGUE = {
   'locations.card.immutableFeatures': 'Immutable features:',
   'locations.card.context': 'the location {name}',
   'locations.approveError.title': 'That location was not approved',
+  'plates.heading': 'Plates',
+  'plates.add': 'Add a plate',
+  'plates.add.heading': 'New plate',
+  'plates.edit': 'Edit',
+  'plates.edit.heading': 'Edit this plate',
+  'plates.edit.context': 'the {kind} plate',
+  'plates.field.kind': 'Kind',
+  'plates.field.kind.hint':
+    'In capitals with underscores. The four the orchestrator suggests are listed; a kind of your own is equally valid.',
+  'plates.field.anchor': 'Anchored to',
+  'plates.field.anchor.hint':
+    'A plate points at exactly one thing. Changing which kind of thing it points at is sent as a single change, because clearing one anchor before setting the other is refused.',
+  'plates.anchor.SOURCE_ASSET': 'A source asset',
+  'plates.anchor.ARTIFACT': 'An artifact',
+  'plates.field.sourceAsset': 'Source asset',
+  'plates.field.sourceAsset.none': 'Choose a source asset',
+  'plates.field.sourceAsset.unreadable':
+    'The project’s assets could not be read, so none can be chosen here.',
+  'plates.field.artifactId': 'Artifact id',
+  'plates.field.artifactId.hint':
+    'Typed rather than chosen: nothing in the orchestrator lists artifacts, so an id is the only way to name one.',
+  'plates.card.approved': 'Approved',
+  'plates.card.draft': 'Draft',
+  'plates.card.anchor.sourceAsset': 'Source asset:',
+  'plates.card.anchor.artifact': 'Artifact:',
+  'plates.card.artifactNoImage':
+    'A plate anchored to an artifact has no picture here: no route serves an artifact’s bytes.',
+  'plates.card.frozen':
+    'An approved plate is frozen: add another rather than editing this one.',
+  'plates.empty': 'This location has no plates yet.',
+  'plates.unreadable': 'This location’s plates could not be read.',
+  'plates.create.failed.title': 'The plate was not created',
+  'plates.edit.failed.title': 'The plate was not changed',
+  'plates.approveError.title': 'The plate was not approved',
   'locations.plates.title': 'Plate coverage',
   'locations.plates.none':
     'No plates at all, so any scene here resolves from text rather than from a canonical image.',

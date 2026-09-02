@@ -7,7 +7,14 @@ import { LocationList } from '@/features/locations/components/location-list';
 import { renderInApp } from '../../../../render-in-app';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
-const server = mockOrchestratorServer();
+const server = mockOrchestratorServer(
+  http.get('/projects/:projectId/locations/:locationId/plates', () =>
+    HttpResponse.json({ items: [] }),
+  ),
+  http.get('/projects/:projectId/assets', () =>
+    HttpResponse.json({ items: [] }),
+  ),
+);
 
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
