@@ -237,7 +237,13 @@ outlives the row. `src/lib/components/action-result/` is the primitive — an `<
 that takes focus when shown and re-takes it per result, keyed on a counter rather than on
 `isSuccess`, because a success flag that never resets is a bug this repo has already shipped once.
 That pattern was hand-rolled in **38 files** before this, which is the argument for the primitive
-rather than a thirty-ninth copy.
+rather than a thirty-ninth copy. **Migrating those 38 is a design decision, not a rename**: they
+carry 38 class names and four colour treatments — 26 `--color-text-secondary`, 8 `--color-text`, 2
+`--tone-success-fg`, 2 with no colour at all — so a wholesale replacement is right for 26 and a
+visual change for 12, in the layer no gate stage reads. The same audit looked for the stale-message
+bug the second pass fixed on the bible's publish button and found **no remaining instance**; the two
+components that act on several items at once already guard on the acted-upon id, which is what shows
+the instrument could tell guarded from unguarded.
 
 **FE-16 ran a second pass on 2026-09-01, for the same reason and with the same result.** The surface
 had roughly doubled since August — four creative-library screens, eight create and edit forms, the

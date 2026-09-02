@@ -325,8 +325,21 @@ What the gate did not tell us, and was checked by loading the app in Chrome agai
       `ActionResult` is the primitive for it — `<output tabIndex={-1}>` that takes focus when shown
       and re-takes it on each new result, keyed on a counter rather than on `isSuccess`, because the
       second pass already found a success flag that never resets re-announcing a stale result. The
-      pattern was hand-rolled in **38 files** before this; those are not migrated here, and that
-      count is the argument for doing it.
+      pattern was hand-rolled in **38 files** before this and they are not migrated.
+
+      **Corrected 2026-09-02, later the same evening: that migration is not the mechanical rename it
+      was described as.** The 38 sites carry 38 distinct class names and four different colour
+      treatments — 26 on `--color-text-secondary`, 8 on `--color-text`, 2 on `--tone-success-fg` and
+      2 with no colour rule at all. `ActionResult` uses the majority one, so replacing the markup
+      wholesale is correct for 26 and a deliberate visual change for the other 12, in a layer the
+      gate cannot see at all. It is one behaviour with several appearances rather than one pattern
+      copied 38 times, and unifying it is a design decision about what an announcement should look
+      like. The audit that produced those figures also looked for the stale-announcement bug the
+      second pass found on the bible's publish button and **found no remaining instance**: the two
+      components that act on several items at once, the style lineage card and the storyboard
+      frames, both already guard on the acted-upon id, and every other site either unmounts on
+      success or owns a single record. That negative is from an instrument shown to discriminate —
+      it is what identified those two as guarded.
 
       The storyboard and shot review remain **FE-10, FE-12**
 - [x] the automated-pass vs human-approved distinction survives being read aloud — **pinned
