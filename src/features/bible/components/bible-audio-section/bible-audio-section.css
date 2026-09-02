@@ -45,8 +45,8 @@
     padding: var(--space-1) var(--space-2);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    color: var(--color-text-primary);
-    font-family: var(--font-family-mono);
+    color: var(--color-text);
+    font-family: var(--font-mono);
     font-size: var(--font-size-xs);
   }
 

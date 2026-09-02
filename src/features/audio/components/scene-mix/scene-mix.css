@@ -47,7 +47,7 @@
 
   .scene-mix__notation {
     display: inline-block;
-    font-family: var(--font-family-mono);
+    font-family: var(--font-mono);
     font-size: var(--font-size-xs);
   }
 }

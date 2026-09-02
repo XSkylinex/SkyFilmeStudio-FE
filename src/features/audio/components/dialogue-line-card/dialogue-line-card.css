@@ -62,6 +62,6 @@
   .dialogue-line-card__refusal {
     margin: 0;
     font-size: var(--font-size-sm);
-    color: var(--color-text-danger);
+    color: var(--tone-danger-fg);
   }
 }

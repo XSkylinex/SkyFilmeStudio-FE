@@ -11,7 +11,7 @@
 
   .bible-field__value {
     margin: 0;
-    color: var(--color-text-primary);
+    color: var(--color-text);
     font-size: var(--font-size-sm);
     line-height: var(--line-height-relaxed);
   }
