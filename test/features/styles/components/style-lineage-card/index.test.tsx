@@ -36,6 +36,38 @@ const renderCard = (): void => {
 };
 
 describe('StyleLineageCard', () => {
+  it('shows what each version changed from the one before it, and nothing for the first', async () => {
+    server.use(
+      http.get(API_PATH.styleProfileVersions(PROJECT_ID), () =>
+        HttpResponse.json([
+          buildStyleProfile({
+            id: styleProfileIdSchema.parse(
+              '11111111-1111-4111-8111-111111111111',
+            ),
+            version: 1,
+            approved: true,
+            cameraRules: ['85mm'],
+          }),
+          buildStyleProfile({
+            id: styleProfileIdSchema.parse(
+              '22222222-2222-4222-8222-222222222222',
+            ),
+            version: 2,
+            cameraRules: ['85mm', 'slow push-in'],
+          }),
+        ]),
+      ),
+    );
+
+    renderCard();
+
+    expect(await screen.findByText('What changed from v1')).toBeInTheDocument();
+    expect(screen.getByText('slow push-in').closest('li')).toHaveTextContent(
+      /added/,
+    );
+    expect(screen.getAllByText(/What changed from/)).toHaveLength(1);
+  });
+
   it('offers editing on a draft version, in place beside its approve control', async () => {
     server.use(
       http.get(API_PATH.styleProfileVersions(PROJECT_ID), () =>

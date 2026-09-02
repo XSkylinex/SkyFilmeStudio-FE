@@ -568,6 +568,13 @@ export const EN_CATALOGUE = {
   'styles.version.label': 'v{version}',
   'styles.version.approved': 'Approved',
   'styles.version.context': 'version {version} of {name}',
+  'styles.diff.summary': 'What changed from v{version}',
+  'styles.diff.none': 'No differences from v{version}.',
+  'styles.diff.removed': 'removed',
+  'styles.diff.added': 'added',
+  'styles.diff.referenceAssetIds': 'Reference assets',
+  'styles.diff.imageGenerationDefaults': 'Image generation defaults',
+  'styles.diff.videoGenerationDefaults': 'Video generation defaults',
   'styles.approveError.title': 'That version was not approved',
   'page.styles.title': 'Styles',
   'page.styles.description':

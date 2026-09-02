@@ -562,6 +562,13 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'styles.version.label': 'גרסה {version}',
   'styles.version.approved': 'מאושרת',
   'styles.version.context': 'גרסה {version} של {name}',
+  'styles.diff.summary': 'מה השתנה מגרסה {version}',
+  'styles.diff.none': 'אין הבדלים מגרסה {version}.',
+  'styles.diff.removed': 'הוסר',
+  'styles.diff.added': 'נוסף',
+  'styles.diff.referenceAssetIds': 'נכסי ייחוס',
+  'styles.diff.imageGenerationDefaults': 'ברירות מחדל ליצירת תמונה',
+  'styles.diff.videoGenerationDefaults': 'ברירות מחדל ליצירת וידאו',
   'styles.approveError.title': 'הגרסה הזו לא אושרה',
   'page.styles.title': 'סגנונות',
   'page.styles.description':
