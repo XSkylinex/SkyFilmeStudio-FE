@@ -1430,6 +1430,10 @@ export const EN_CATALOGUE = {
     'This opening or ending asset is approved and cannot be edited. Import a new version instead; productions stay pinned to the version they used.',
   'error.OPENING_ENDING_VERSION_CONFLICT':
     'Another writer took that version number first. Nothing was changed — try again and the next version will be allocated.',
+  'error.SFX_ASSET_NOT_APPROVED':
+    'That step needs an approved SFX asset, and this one is not approved. Approve the asset first, or choose one that already is.',
+  'error.MUSIC_CUE_VARIETY_OVERUSED':
+    'This music cue has already been placed as often as the production’s variety rule allows, so it was not placed again. Choose a different cue for this placement.',
   'error.malformedText':
     'The orchestrator answered that request with something other than the document that was asked for. Nothing here can be trusted to be the bible’s own text.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;

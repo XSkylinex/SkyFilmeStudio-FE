@@ -55,8 +55,9 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **seventy-four as of
-2026-09-01 evening, sixty-seven that morning, thirty-five as of 2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **seventy-six as of
+2026-09-02 morning, seventy-four the evening before, sixty-seven that morning, thirty-five as of
+2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
 loopback-only base URL. Ten of them were mapped while they existed **only on an unmerged backend
@@ -88,8 +89,9 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,101 keys in English and
-Hebrew**, counted 2026-09-02 after the bible's subject-rules editor — 1,087 the night before, after
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,103 keys in English and
+Hebrew**, counted 2026-09-02 after two more BE-21 refusals — 1,101 that morning after the bible's
+subject-rules editor, 1,087 the night before, after
 the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21
 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the

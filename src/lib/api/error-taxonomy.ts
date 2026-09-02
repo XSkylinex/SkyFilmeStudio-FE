@@ -298,4 +298,12 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'TRANSIENT',
     messageKey: 'error.OPENING_ENDING_VERSION_CONFLICT',
   },
+  SFX_ASSET_NOT_APPROVED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SFX_ASSET_NOT_APPROVED',
+  },
+  MUSIC_CUE_VARIETY_OVERUSED: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.MUSIC_CUE_VARIETY_OVERUSED',
+  },
 };
