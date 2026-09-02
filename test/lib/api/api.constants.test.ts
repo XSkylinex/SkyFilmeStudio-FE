@@ -7,6 +7,7 @@ import {
   productionProfileIdSchema,
   projectBibleVersionIdSchema,
   projectIdSchema,
+  pronunciationDictionaryEntryIdSchema,
   pronunciationDictionaryIdSchema,
   propIdSchema,
   renderJobIdSchema,
@@ -55,6 +56,11 @@ const SAMPLE_VOICE_PROFILE_ID = voiceProfileIdSchema.parse(
 
 const SAMPLE_PRONUNCIATION_DICTIONARY_ID =
   pronunciationDictionaryIdSchema.parse('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
+
+const SAMPLE_PRONUNCIATION_ENTRY_ID =
+  pronunciationDictionaryEntryIdSchema.parse(
+    'eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee',
+  );
 
 const SAMPLE_LOCATION_ID = locationIdSchema.parse(
   'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
@@ -157,6 +163,11 @@ const everyPath: Record<string, string> = {
   pronunciationDictionaryEntries: API_PATH.pronunciationDictionaryEntries(
     SAMPLE_PROJECT_ID,
     SAMPLE_PRONUNCIATION_DICTIONARY_ID,
+  ),
+  pronunciationDictionaryEntry: API_PATH.pronunciationDictionaryEntry(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PRONUNCIATION_DICTIONARY_ID,
+    SAMPLE_PRONUNCIATION_ENTRY_ID,
   ),
   locations: API_PATH.locations(SAMPLE_PROJECT_ID),
   location: API_PATH.location(SAMPLE_PROJECT_ID, SAMPLE_LOCATION_ID),
