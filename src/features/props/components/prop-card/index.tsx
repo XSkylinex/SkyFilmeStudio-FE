@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ApprovalControls } from '@/lib/components/approval-controls';
 import { Badge } from '@/lib/components/badge';
 import { Button } from '@/lib/components/button';
@@ -14,6 +14,7 @@ import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-erro
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { approvePropMutationOptions } from '@/features/props/api/approve-prop.mutation';
 import { EditPropForm } from '@/features/props/components/edit-prop-form';
+import { projectSubjectsQueryOptions } from '@/features/subjects/api/project-subjects.query';
 import type { PropCardProps } from './prop-card.interface';
 import './prop-card.css';
 
@@ -24,6 +25,13 @@ export const PropCard: FC<PropCardProps> = ({ projectId, prop }) => {
     approvePropMutationOptions(projectId, queryClient),
   );
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const subjects = useQuery({
+    ...projectSubjectsQueryOptions(projectId),
+    enabled: prop.ownerSubjectId !== undefined,
+  });
+  const owner = subjects.data?.items.find(
+    (subject) => subject.id === prop.ownerSubjectId,
+  );
 
   return (
     <li className="prop-card">
@@ -40,7 +48,11 @@ export const PropCard: FC<PropCardProps> = ({ projectId, prop }) => {
         {prop.ownerSubjectId === undefined ? null : (
           <Badge
             tone={STATUS_TONE.NEUTRAL}
-            label={translate('props.card.owned')}
+            label={
+              owner === undefined
+                ? translate('props.card.owned')
+                : translate('props.card.ownedBy', { name: owner.displayName })
+            }
           />
         )}
       </div>

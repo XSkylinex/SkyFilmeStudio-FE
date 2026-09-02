@@ -650,6 +650,7 @@ export const EN_CATALOGUE = {
   'props.card.approved': 'Approved',
   'props.card.draft': 'Draft',
   'props.card.owned': 'Belongs to a subject',
+  'props.card.ownedBy': 'Belongs to {name}',
   'props.card.continuityRules': 'Continuity rules',
   'props.card.noContinuityRules':
     'No continuity rules recorded, so nothing about this prop will be checked between scenes.',

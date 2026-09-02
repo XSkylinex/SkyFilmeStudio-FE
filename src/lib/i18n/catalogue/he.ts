@@ -643,6 +643,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'props.card.approved': 'מאושר',
   'props.card.draft': 'טיוטה',
   'props.card.owned': 'שייך לדמות',
+  'props.card.ownedBy': 'שייך ל־{name}',
   'props.card.continuityRules': 'כללי רציפות',
   'props.card.noContinuityRules':
     'לא נרשמו כללי רציפות, ולכן שום דבר באבזר הזה לא ייבדק בין סצנות.',

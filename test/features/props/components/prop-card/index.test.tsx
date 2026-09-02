@@ -1,20 +1,65 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import { projectIdSchema } from 'sky-filme-studio-be/contracts';
+import {
+  projectIdSchema,
+  subjectIdSchema,
+} from 'sky-filme-studio-be/contracts';
 import { API_PATH } from '@/lib/api/api.constants';
 import { PropCard } from '@/features/props/components/prop-card';
 import { renderInApp } from '../../../../render-in-app';
 import { buildProp } from '../../../../fixtures/prop.fixture';
+import { buildSubject } from '../../../../fixtures/subject.fixture';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
 );
+const MIRA_ID = subjectIdSchema.parse('11111111-1111-4111-8111-111111111111');
+const GONE_ID = subjectIdSchema.parse('99999999-9999-4999-8999-999999999999');
 
-const server = mockOrchestratorServer();
+const server = mockOrchestratorServer(
+  http.get(API_PATH.projectSubjects(PROJECT_ID), () =>
+    HttpResponse.json({
+      items: [buildSubject({ id: MIRA_ID, displayName: 'Mira' })],
+    }),
+  ),
+);
 
 describe('PropCard', () => {
+  it('names the subject a prop belongs to, from the project’s subject list', async () => {
+    renderInApp(
+      <PropCard
+        projectId={PROJECT_ID}
+        prop={buildProp({ ownerSubjectId: MIRA_ID })}
+      />,
+    );
+
+    expect(await screen.findByText('Belongs to Mira')).toBeInTheDocument();
+    expect(screen.queryByText('Belongs to a subject')).not.toBeInTheDocument();
+    expect(screen.queryByText(MIRA_ID)).not.toBeInTheDocument();
+  });
+
+  it('keeps the wording generic when no listed subject carries the owner id, rather than inventing a name', async () => {
+    renderInApp(
+      <PropCard
+        projectId={PROJECT_ID}
+        prop={buildProp({ ownerSubjectId: GONE_ID })}
+      />,
+    );
+
+    expect(await screen.findByText('Belongs to a subject')).toBeInTheDocument();
+    await screen.findByRole('button', { name: /^Edit/ });
+    expect(screen.queryByText(/Belongs to Mira/)).not.toBeInTheDocument();
+  });
+
+  it('says nothing about an owner when the prop has none', async () => {
+    renderInApp(<PropCard projectId={PROJECT_ID} prop={buildProp()} />);
+
+    await screen.findByRole('button', { name: /^Edit/ });
+    expect(screen.queryByText(/Belongs to/)).not.toBeInTheDocument();
+  });
+
   it('offers Edit on a draft prop, prefilled with its current values', async () => {
     const user = userEvent.setup();
     const prop = buildProp();
