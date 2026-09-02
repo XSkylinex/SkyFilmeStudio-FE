@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import {
   locationIdSchema,
@@ -17,13 +17,17 @@ import {
 } from '../../fixtures/location.fixture';
 import { mockOrchestratorServer } from '../../lib/api/msw-server';
 
-const server = mockOrchestratorServer();
-
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
 );
 const LOCATION_ID = locationIdSchema.parse(
   'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+);
+
+const server = mockOrchestratorServer(
+  http.get(API_PATH.projectAssets(PROJECT_ID), () =>
+    HttpResponse.json({ items: [] }),
+  ),
 );
 
 const renderPage = (): void => {
@@ -51,6 +55,16 @@ const orchestratorServes = (
       HttpResponse.json({ items: plates }),
     ),
   );
+};
+
+const coverageStrip = (): HTMLElement => {
+  const strip = screen.getByText('Plate coverage').closest('div');
+
+  if (strip === null) {
+    throw new Error('the plate coverage strip is not on screen');
+  }
+
+  return strip;
 };
 
 describe('LocationsPage', () => {
@@ -96,9 +110,16 @@ describe('LocationsPage', () => {
 
     renderPage();
 
-    expect(await screen.findByText('WIDE_ESTABLISHING')).toBeInTheDocument();
-    expect(screen.getByText('MEDIUM_LEFT')).toBeInTheDocument();
-    expect(screen.getByText('None approved — drafts: 1')).toBeInTheDocument();
+    await screen.findAllByText('WIDE_ESTABLISHING');
+    expect(
+      within(coverageStrip()).getByText('WIDE_ESTABLISHING'),
+    ).toBeInTheDocument();
+    expect(
+      within(coverageStrip()).getByText('MEDIUM_LEFT'),
+    ).toBeInTheDocument();
+    expect(
+      within(coverageStrip()).getByText('None approved — drafts: 1'),
+    ).toBeInTheDocument();
   });
 
   it('shows a kind the orchestrator invented, not only the suggested four', async () => {
@@ -114,7 +135,10 @@ describe('LocationsPage', () => {
 
     renderPage();
 
-    expect(await screen.findByText('UNDER_THE_STAIR')).toBeInTheDocument();
+    await screen.findAllByText('UNDER_THE_STAIR');
+    expect(
+      within(coverageStrip()).getByText('UNDER_THE_STAIR'),
+    ).toBeInTheDocument();
   });
 
   it('frames uncovered suggested kinds as suggestions, never as requirements', async () => {
@@ -140,7 +164,8 @@ describe('LocationsPage', () => {
 
     renderPage();
 
-    expect(await screen.findByText('NIGHT')).toBeInTheDocument();
+    await screen.findAllByText('NIGHT');
+    expect(within(coverageStrip()).getByText('NIGHT')).toBeInTheDocument();
     expect(
       screen.getByText(/suggestions, not requirements/),
     ).toBeInTheDocument();

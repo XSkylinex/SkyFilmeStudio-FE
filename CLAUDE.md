@@ -89,15 +89,15 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,338 keys in English
-and Hebrew**, counted 2026-09-02 after the mix panels — 1,305 after the music and opening-ending
-libraries, 1,261 after the music and opening-ending libraries, 1,222 after the SFX library, 1,179
-after the pronunciation writes, 1,164 after two audio-mix refusals, 1,162 after the
-structure-profile form, 1,117 after the production edit form, 1,111 after the style version diff,
-1,104 after the prop owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning after the
-bible's subject-rules editor, 1,087 the night before, after the canonical comparison, dialogue
-editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the same evening
-— 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,366 keys in English
+and Hebrew**, counted 2026-09-02 after the plate writes — 1,338 after the mix panels, 1,305 after
+the music and opening-ending libraries, 1,261 after the music and opening-ending libraries, 1,222
+after the SFX library, 1,179 after the pronunciation writes, 1,164 after two audio-mix refusals,
+1,162 after the structure-profile form, 1,117 after the production edit form, 1,111 after the style
+version diff, 1,104 after the prop owner's name, 1,103 after two more BE-21 refusals, 1,101 that
+morning after the bible's subject-rules editor, 1,087 the night before, after the canonical
+comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals
+absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -290,10 +290,14 @@ read-only and told the reader to delete and re-add an entry it gave no way to de
 has no update DTO and no `PATCH`, so removing and re-adding is the change, and now it is offered.
 **Hebrew is first-class in the typing, not only the reading**: the term field is wrapped in the
 dictionary's own direction and the field itself stays `dir="auto"`, so a Latin term in a Hebrew
-dictionary still reads correctly. **Canonical plates are the one deliberate omission**: a plate is anchored
+dictionary still reads correctly. **Canonical plates were the one deliberate omission until 2026-09-02**: a plate is anchored
 to exactly one of a source asset or an artifact, checked against the stored row after a merge, so
 switching anchors must be a single `PATCH` sending both fields and the obvious two-step flow fails on
-its first step with no `ErrorCode`. `plan/08` carries the argument.
+its first step with no `ErrorCode`. **They are built now, with the design that argument asked for**:
+the anchor is chosen as a kind rather than as two fields, and the patch carries the new anchor and an
+explicit `null` for the old one together, so the failing sequence is unreachable from the screen
+rather than merely discouraged. An artifact id is typed rather than chosen, because nothing lists
+artifacts. `plan/08` carries both the argument and what answered it.
 
 **Editing a style profile does not create a version, and that is the trap this phase was built
 around.** `plan/08` step 1 says "changing a style creates a new version"; that is the product

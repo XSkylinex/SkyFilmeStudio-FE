@@ -1,0 +1,36 @@
+@layer features {
+  .plate-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    min-inline-size: 0;
+  }
+
+  .plate-form__heading {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text-heading);
+  }
+
+  .plate-form__note {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .plate-form__done {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .plate-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+}

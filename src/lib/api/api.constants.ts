@@ -131,6 +131,12 @@ export const API_PATH = {
     `/projects/${projectId}/locations/${locationId}`,
   approveLocation: (projectId: ProjectId, locationId: LocationId): string =>
     `/projects/${projectId}/locations/${locationId}/approve`,
+  locationPlate: (
+    projectId: ProjectId,
+    locationId: LocationId,
+    locationPlateId: LocationPlateId,
+  ): string =>
+    `/projects/${projectId}/locations/${locationId}/plates/${locationPlateId}`,
   locationPlates: (projectId: ProjectId, locationId: LocationId): string =>
     `/projects/${projectId}/locations/${locationId}/plates`,
   approvedLocationPlate: (
