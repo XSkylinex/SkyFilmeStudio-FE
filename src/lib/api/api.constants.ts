@@ -203,6 +203,7 @@ export const API_PATH = {
   sceneMixes: (sceneId: SceneId): string => `/scenes/${sceneId}/mixes`,
   productionMixes: (productionId: ProductionId): string =>
     `/productions/${productionId}/mixes`,
+  sceneCues: (sceneId: SceneId): string => `/scenes/${sceneId}/cues`,
   sceneShots: (sceneId: SceneId): string => `/scenes/${sceneId}/shots`,
   shotStoryboardFrames: (shotId: ShotId): string =>
     `/shots/${shotId}/storyboard/frames`,

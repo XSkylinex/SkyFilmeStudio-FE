@@ -267,6 +267,7 @@ const everyPath: Record<string, string> = {
   sceneMixes: API_PATH.sceneMixes(SAMPLE_SCENE_ID),
   productionMixes: API_PATH.productionMixes(SAMPLE_PRODUCTION_ID),
   sceneShots: API_PATH.sceneShots(SAMPLE_SCENE_ID),
+  sceneCues: API_PATH.sceneCues(SAMPLE_SCENE_ID),
   shotStoryboardFrames: API_PATH.shotStoryboardFrames(SAMPLE_SHOT_ID),
   shotKeyframeStatus: API_PATH.shotKeyframeStatus(SAMPLE_SHOT_ID),
   storyboardFrameComparison: API_PATH.storyboardFrameComparison(

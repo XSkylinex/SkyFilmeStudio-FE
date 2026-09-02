@@ -204,13 +204,25 @@ Each unticked box names what it waits for, rather than being left blank.
       the library needs and the render does not carry — its name, where it loops, and the level
       dialogue may sit over it at. A candidate still cannot be heard before that decision, because
       nothing serves an artifact's bytes; the decision is made from the record
-- [~] scene scoring with a visible cue-vs-scene strip — **built 2026-09-02.** Scoring is run on the
-      production with an optional brief and an optional cap on how much of it one cue may cover, and
-      every scene shows the cues assigned to it by name, with the start offset, gain, loop and fades
-      the mix will use. Still unticked for the second half of the phrase: **a placement cannot be
-      adjusted**. `PUT /scenes/:sceneId/cues` replaces a scene's cues wholesale and
-      `replaceSceneCuesRequestSchema` says so, so moving one cue means restating the rest — an editor
-      would have to reconstruct the scene from the screen, which is a design rather than a form
+- [x] scene scoring with a visible cue-vs-scene strip — **built 2026-09-02, and a placement became
+      adjustable the same evening.** Scoring is run on the production with an optional brief and an
+      optional cap on how much of it one cue may cover, and every scene shows the cues assigned to
+      it by name, with the start offset, gain, loop and fades the mix will use. **The half that was
+      open is closed**: `PUT /scenes/:sceneId/cues` replaces a scene's cues wholesale, which was
+      recorded here as "a design rather than a form" — and the design already existed one level
+      down. A shot's audio cues are edited exactly this way: the screen holds the whole list, every
+      save sends all of it, and `order` is a row's position rather than a number anyone types. The
+      scene editor is that helper again against `sceneCueSchema`.
+
+      Two things it does that the shot editor did not have to. The read moved to
+      `GET /scenes/:sceneId/cues`, the route the `PUT` replaces, rather than filtering the
+      production-wide score — reading through one route and writing through another is how a
+      wholesale replace loses a row. And a placement naming a cue the library does not return keeps
+      that cue **selectable**: the soundtrack read is one page, so a `<Select>` built from it alone
+      would show nothing chosen and silently blank the placement on save. The saved payload is
+      asserted, and the assertion was watched failing on a hard-coded `order` before it was
+      believed — the first version of that test passed against it, because every case it had ended
+      with a single cue
 - [x] SFX/ambience library with tags and licence provenance shown — **built 2026-09-02**, and
       **placed against shots the same day**: a shot's effects and ambience are edited on the shot
       review screen, where the shot is. The whole list is sent at once because `PUT

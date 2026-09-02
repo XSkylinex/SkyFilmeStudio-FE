@@ -1648,9 +1648,9 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.score.scene.none': 'לא שויך קיו לסצנה הזו.',
   'audio.score.cue.unknown':
     'קיו שספריית הפסקול לא החזירה; ייתכן שהוסר מאז שהפסקול הולחן.',
-  'audio.score.cue.startsAt': 'מתחיל ב־:',
-  'audio.score.cue.gain': 'עוצמה:',
-  'audio.score.cue.loop': 'בלופ:',
+  'audio.score.cue.startsAt': 'מתחיל ב־ (מ״ש)',
+  'audio.score.cue.gain': 'עוצמה (dB)',
+  'audio.score.cue.loop': 'בלופ',
   'audio.score.cue.loop.yes': 'כן',
   'audio.score.cue.loop.no': 'לא',
   'audio.score.cue.fades': 'דעיכות:',
@@ -1927,4 +1927,21 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'continuity.context.scenesUnread.title': 'לא ניתן היה לקרוא את סצנות ההפקה',
   'continuity.create.scenesUnread':
     'לא ניתן היה לקרוא את סצנות ההפקה, ולכן לא ניתן לרשום עובדה — עובדה חייבת לציין את הסצנה שבה היא מתחילה.',
+  'audio.score.cue.name': 'קיו',
+  'audio.score.cue.choose': 'בחרו קיו',
+  'audio.score.cue.entry': 'מיקום {position}',
+  'audio.score.cue.fadeIn': 'עליית עוצמה (מ״ש)',
+  'audio.score.cue.fadeOut': 'ירידת עוצמה (מ״ש)',
+  'audio.score.cue.add': 'הוספת מיקום',
+  'audio.score.cue.remove': 'הסרה',
+  'audio.score.cue.removeContext': 'את מיקום {position} מהסצנה הזו',
+  'audio.score.cue.libraryUnreadable':
+    'לא ניתן היה לקרוא את פסקול הפרויקט, ולכן ניתן להתאים מיקום אך לא לבחור עבורו קיו אחר.',
+  'audio.score.scene.wholesale':
+    'האורקסטרטור מחליף את מיקומי הסצנה כמקשה אחת, ולכן שמירה שולחת את כל המיקומים שלהלן בסדר המוצג. הסדר שלהם הוא מיקומם כאן, ולא מספר שיש להקליד.',
+  'audio.score.scene.unreadable': 'לא ניתן היה לקרוא את מיקומי הסצנה הזו',
+  'audio.score.scene.save': 'שמירת המיקומים',
+  'audio.score.scene.saving': 'שומר…',
+  'audio.score.scene.saved': 'המיקומים נשמרו.',
+  'audio.score.scene.failed.title': 'המיקומים לא נשמרו',
 };
