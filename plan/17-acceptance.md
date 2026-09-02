@@ -149,14 +149,26 @@ something outside it (`floor-check.mjs`).
       no socket transport to inject
 - [ ] the §62 walkthrough completes on **both** machines — not started; needs a working pipeline
 - [ ] step 13 completed with two materially different style/source cases — not started
-- [~] a full session produces **zero** non-loopback requests — **the runtime half was measured on
-      2026-09-02**, in Chrome against `yarn preview` of the built bundle: all twenty-one routes were
-      visited in one tab, from the project list through every project and production screen to a
-      not-found address, with network tracking on. **310 requests, every one to `127.0.0.1:4173` or
-      a `data:` URI** — the gallery's inline placeholder images — and none to any other host. The
-      orchestrator was down, so each API call was a `502` from the preview proxy and nothing rendered;
-      a session with renders in it is the half still open, and it needs a working pipeline rather than
-      a browser. The build-time guard remains the static half
+- [~] a full session produces **zero** non-loopback requests — **re-measured 2026-09-02 evening**,
+      in Chrome against `yarn preview` of the built bundle, after the continuity screen, the scene
+      cue editor and the dictionary delete had landed. Twenty-six addresses were visited in one tab,
+      from the project list through every project and production screen — including the continuity
+      route the earlier run predates — to a not-found address. **366 requests: 360 to
+      `localhost:4173`, six `data:` URIs, none to any other host.** The six are the icon masks and
+      the gallery's inline placeholder images, one of them a deliberately broken PNG.
+
+      **The instrument nearly produced a false negative and the correction is the point.** Network
+      tracking begins when the reading tool is first called, so the first full pass — every route
+      visited — recorded **nothing at all**, and "zero external requests" from that run would have
+      been true and worthless. Start the tracker, then navigate. It was validated in the same run
+      rather than assumed: the first read returned a `502` for `/system/mode`, which is a true
+      positive, and filtering by `localhost:4173` returned 360 against a total of 366, so the filter
+      discriminates rather than matching everything.
+
+      The orchestrator was down, so each API call was a `502` from the preview proxy and nothing
+      rendered. A session with renders in it is the half still open, and it needs a working pipeline
+      rather than a browser. The build-time guard remains the static half
+
 - [x] the external-URL build assertion still works — `test/build/find-external-urls.test.ts`
 - [ ] no memory growth or leaked listeners over a long render — needs a render
 - [ ] the app works on both platforms within the declared browser floor — not measured
