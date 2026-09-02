@@ -343,7 +343,9 @@ files under `dist-esm/` while `createProjectBibleRequestSchema` compiles into tw
 no published shape — reading the pin is fine, setting it is not. Creating and editing a draft are
 both published and simply unbuilt. And a subject block is identified by its id alone: `subjectRules`
 carries no name, and resolving one would mean reaching into another feature's `api/`, which
-`code-style.md` forbids and which has no shared home yet.
+`code-style.md` forbids and which has no shared home yet. **Superseded 2026-09-02:** creating and
+editing landed the day before, and a subject block is named now — the paragraph on subject rules
+below says what was decided and what it was measured against.
 
 **A bidi defect the gate could not see, and the first fix for it was also wrong.** The generated
 Markdown view shipped as `<pre>` wrapping `ContentText`, which is `<bdi dir="auto">`. Under
@@ -476,12 +478,24 @@ productions planned against, with no `ErrorCode` separating that from discarding
 A control whose dangerous use is indistinguishable from its safe one needs a confirmation design, not
 a button appended to this phase.
 
-**Subject rules are still not writable, and the gap on screen now says so.** They are keyed on a
-subject id the bible carries no name for; offering them means reaching into
-`src/features/subjects/api/`, which is the third and fourth caller of the cross-feature import
-`code-style.md` forbids — both forms already do it for the style-profile picker, following the two
-precedents in `create-production-form` and elsewhere. Adding the subject library to that list in a
-phase that cannot fix the underlying question was not worth it.
+**Subject rules are written as of 2026-09-02, and each block is named.** The day before, this
+paragraph said they were keyed on a subject id the bible carries no name for, and that offering them
+meant reaching into `src/features/subjects/api/` — the third and fourth caller of the cross-feature
+import `code-style.md` forbids — which was not worth adding to the list in a phase that could not
+settle the underlying question. The list settled itself: counted on master on 2026-09-02, sixteen
+imports across ten feature pairs reach into another feature's `api/`, and the audio screen already
+names a line's speaker from exactly this query. Refusing the seventeenth on the rule's phrasing would
+have kept a section read-only for a rule the tree no longer follows, so the question that remains is
+the one it always was — where a project-scoped query shared by four features should live — and it
+is still open and still Alex's. What was built: both forms carry an editor whose subject picker
+lists the project's subjects by `displayName` and sends the id; the update sends the whole list,
+because the update DTO takes `subjectRules` as one replacement array the way it takes a section; a
+block whose subject was never chosen is refused here against that field, and a non-speaking subject
+carrying voice rules is refused by the contract's own `refine`, surfaced on the voice-rules field
+rather than as a silent drop of what was typed. The read-only view names each block and each side
+of a relationship the same way, and says *No subject in this project carries this id* only when the
+list it read had no `nextCursor` — a first page with more behind it is not evidence of absence, so a
+truncated list keeps the id and says nothing. Deletion is the one bible write left unbuilt.
 
 **Measured, both trees built in one session rather than compared against a recorded figure.** The
 bible route is lazy, so the forms land in its own chunk: `BiblePage` goes 21.00 kB → **58.93 kB** JS
@@ -510,13 +524,15 @@ share a shape it does not.
 the end, so each screen says "reads the first page only" when the server offers more. The asset
 library, which predates this, silently shows fifty and stops — that is FE-07's to fix.
 
-**Naming a prop's owner subject, or a bible's subject block.** `projectSubjectsQueryOptions` lives in
-another feature and `code-style.md` forbids reaching sideways. Moving it down needs a home that
-neither `src/lib/api/` (the fetch client) nor `src/shell/api/` (installation status) cleanly
-provides. Left as an open question rather than settled under time pressure — and the question is
-larger than it was: the two bible forms take the same shortcut for the style-profile picker, so four
-components now reach across a boundary the rules forbid, none of them wrongly and all of them for
-want of a shared home.
+**Naming a prop's owner subject.** `projectSubjectsQueryOptions` lives in another feature and
+`code-style.md` forbids reaching sideways. Moving it down needs a home that neither `src/lib/api/`
+(the fetch client) nor `src/shell/api/` (installation status) cleanly provides. Left as an open
+question rather than settled under time pressure — and the question is larger than it was: the two
+bible forms take the same shortcut for the style-profile picker, so four components now reach across
+a boundary the rules forbid, none of them wrongly and all of them for want of a shared home. **The
+bible's subject block came off this list on 2026-09-02** — the count above is why — and the prop's
+owner is the last thing still unnamed for this reason; naming it is one import once the same query
+is reached for, and the shared-home question does not get smaller by waiting.
 
 ## Done when
 
@@ -530,8 +546,9 @@ want of a shared home.
 - [x] the bible is structured, versioned, and shows only fields relevant to the project kind — the
       kind's own `bibleCarriesNarrative` decides, and a kind that carries none says so rather than
       rendering a blank section. **Decision 3 is fully answered as of 2026-09-01**: those structured
-      fields are now written as well as read, on both a first draft and a next version, with subject
-      rules the one section still read-only and said to be
+      fields are now written as well as read, on both a first draft and a next version, and
+      **subject rules joined them on 2026-09-02** — each block is attached to a subject chosen by
+      name from the project's subject list and sent by id, and the read-only view names it back
 - [ ] reusable libraries are discoverable
 
 ## Traps

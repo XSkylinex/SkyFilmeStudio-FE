@@ -88,9 +88,10 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,087 keys in English and
-Hebrew**, counted 2026-09-01 night after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass
-and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,101 keys in English and
+Hebrew**, counted 2026-09-02 after the bible's subject-rules editor — 1,087 the night before, after
+the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21
+refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -421,8 +422,9 @@ assertion fail, not the test.**
 **What the screen cannot do, and says so.** `PUT /productions/:productionId/bible` exists, but
 `pinProjectBibleRequestSchema` compiles into **zero** files under `dist-esm/` while
 `createProjectBibleRequestSchema` compiles into two — so a production's pinned bible can be read and
-not set. A subject block is identified by its id alone, because `subjectRules` carries no name and
-resolving one would mean reaching into another feature's `api/`.
+not set. A subject block was identified by its id alone until 2026-09-02, because `subjectRules`
+carries no name and resolving one meant reaching into another feature's `api/`; it is named now, and
+the subject-rules paragraph below says what that reach was measured against.
 
 **The bible writes as of 2026-09-01, and creating and editing were published the whole time.** `POST
 /projects/:projectId/bible` starts a draft and `PATCH /projects/:projectId/bible/:id` edits one, so a
@@ -438,11 +440,23 @@ takes `projectKind` off the record; creating cannot, so `GET /projects/:id` was 
 single-project read here, keyed `['project', id]` rather than under the collection key, because
 `invalidateQueries` prefix-matches and a list invalidation must not refetch every detail.
 
-**Still not writable, and said on screen rather than only here:** subject rules, which are keyed on a
-subject id the bible carries no name for; and deletion, which is published and refused for a
-different reason than the canonical plates are — the immutability trigger permits `deleted_at` on a
-published row, so `DELETE` will soft-delete a bible productions planned against as readily as a draft
-nobody used, with no `ErrorCode` separating the two.
+**Subject rules write as of 2026-09-02, and each block is named.** The day before, they were the one
+bible section still read-only, refused here because naming a subject meant importing
+`projectSubjectsQueryOptions` across a feature boundary `code-style.md` forbids. Counted on master
+that morning, sixteen imports across ten feature pairs already do exactly that, and the audio screen
+names a line's speaker from this very query — so the rule's phrasing was no longer describing the
+tree, and refusing on it would have kept a section read-only for nothing. The open question is
+unchanged and still Alex's: where a project-scoped query four features share should live. Both
+forms now carry an editor that lists the project's subjects by name and sends the id; the update
+sends the whole list, because the DTO takes `subjectRules` as one replacement array; and the read-only
+view names each block and each relationship, calling a subject missing **only when the list it read
+had no `nextCursor`** — a truncated first page keeps the id and says nothing, because absence from a
+partial list is not absence.
+
+**Still not writable, and said on screen rather than only here:** deletion, which is published and
+refused for a different reason than the canonical plates are — the immutability trigger permits
+`deleted_at` on a published row, so `DELETE` will soft-delete a bible productions planned against as
+readily as a draft nobody used, with no `ErrorCode` separating the two.
 
 **FE-10 made the storyboard read, and the keyframe gate real, on 2026-09-01.** `/storyboard` was an
 `EmptyState` saying "Not connected to the orchestrator yet"; it is now a strip of scenes, each opening
