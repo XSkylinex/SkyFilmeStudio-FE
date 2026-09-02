@@ -149,7 +149,10 @@ export const ProjectBibleView: FC<ProjectBibleViewProps> = ({ projectId }) => {
             projectKind={selected.projectKind}
           />
           <BibleAudioSection audio={selected.audio} />
-          <BibleSubjectRulesSection subjectRules={selected.subjectRules} />
+          <BibleSubjectRulesSection
+            projectId={projectId}
+            subjectRules={selected.subjectRules}
+          />
         </div>
       )}
 

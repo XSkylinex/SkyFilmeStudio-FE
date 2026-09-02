@@ -998,6 +998,7 @@ export const EN_CATALOGUE = {
   'bible.subjects.editor.relationship.remove': 'Remove',
   'bible.subjects.editor.relationship.removeContext':
     'Remove relationship {position} from subject rules {entry}',
+  'bible.subjects.unknown': 'No subject in this project carries this id.',
   'bible.subjects.relationships': 'Relationships',
   'bible.create.action': 'Start a draft',
   'bible.create.next': 'Start the next version',

@@ -986,6 +986,7 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'bible.subjects.editor.relationship.remove': 'הסר',
   'bible.subjects.editor.relationship.removeContext':
     'הסר יחס {position} מכללי סובייקט {entry}',
+  'bible.subjects.unknown': 'אף סובייקט בפרויקט הזה אינו נושא את המזהה הזה.',
   'bible.subjects.relationships': 'יחסים',
   'bible.create.action': 'התחילו טיוטה',
   'bible.create.next': 'התחילו את הגרסה הבאה',
