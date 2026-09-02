@@ -200,7 +200,13 @@ times in one session.
   announced *Fields needing attention: 3* — measured by rendering the form, not inferred from the
   helper. `invalidFieldCount` counts the leaves of that map and folds a trailing list index into the
   box it belongs to, so two bad tags in one box are one field and the same field in two subject
-  blocks is two. All thirteen forms use it, and the bible form's test pins the number.
+  blocks is two. All thirteen forms use it, and the bible form's test pins the number. **An empty
+  number box reads as needing a value since 2026-09-02**: the structure-profile form sends `NaN` for
+  an empty required number so nothing is defaulted, and Zod reports that as a wrong type — so the
+  sentence was *not the kind of value this field takes* for a box a person simply left empty. With
+  `reportInput` the issue carries what was parsed, and `fieldErrorsFromIssues` maps a number field
+  whose input is `NaN` or absent to the same *This needs a value* an empty text field gets, while a
+  box holding the wrong kind of value keeps the sentence that says so.
 - **Nothing conveys which fields are required — fixed 2026-09-01, and the count was wrong.** This
   bullet said twelve, read off the contract. That counted keys the wire needs present, and every
   form always sends every key, so a field whose schema accepts `''` is one the user may leave blank.

@@ -1,6 +1,7 @@
 import { createProductionRequestSchema } from 'sky-filme-studio-be/contracts';
 import { fieldErrorsFromIssues } from '@/lib/helpers/field-errors-from-issues';
 import { createProjectBibleRequestSchema } from 'sky-filme-studio-be/contracts';
+import { z } from 'zod';
 import type { ZodError } from 'zod';
 import { EN_CATALOGUE } from '@/lib/i18n/catalogue/en';
 
@@ -47,6 +48,35 @@ describe('fieldErrorsFromIssues', () => {
     expect(key).toBeDefined();
     expect(EN_CATALOGUE[key as keyof typeof EN_CATALOGUE]).toBeTruthy();
     expect(key).not.toMatch(/expected|Too small|Invalid/);
+  });
+
+  it('calls an empty number box a missing value, not a value of the wrong kind', () => {
+    const result = createProjectBibleRequestSchema
+      .omit({})
+      .extend({ fps: z.number().positive() })
+      .safeParse({ fps: Number.NaN }, { reportInput: true });
+
+    if (result.success) {
+      throw new Error('expected an empty number to fail validation');
+    }
+
+    expect(fieldErrorsFromIssues(result.error)['fps']).toBe(
+      'form.invalid.required',
+    );
+  });
+
+  it('still calls a wrong kind of value a wrong kind when the box was not empty', () => {
+    const result = createProjectBibleRequestSchema
+      .extend({ fps: z.number().positive() })
+      .safeParse({ fps: 'twenty-four' }, { reportInput: true });
+
+    if (result.success) {
+      throw new Error('expected a string to fail a number field');
+    }
+
+    expect(fieldErrorsFromIssues(result.error)['fps']).toBe(
+      'form.invalid.type',
+    );
   });
 
   it('maps two bad fields independently, without inventing a third', () => {

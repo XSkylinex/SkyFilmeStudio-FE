@@ -13,7 +13,10 @@ const keyFor = (issue: ZodIssue): TranslationKey => {
     return 'form.invalid.tooBig';
   }
   if (issue.code === 'invalid_type') {
-    return 'form.invalid.type';
+    return issue.expected === 'number' &&
+      (issue.input === undefined || Number.isNaN(issue.input))
+      ? 'form.invalid.required'
+      : 'form.invalid.type';
   }
 
   return 'form.invalid.value';

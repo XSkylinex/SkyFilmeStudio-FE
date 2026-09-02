@@ -106,6 +106,7 @@ describe('CreateProductionProfileForm', () => {
       await screen.findByText(/Fields needing attention: 1/),
     ).toBeInTheDocument();
     expect(screen.getByLabelText('Frames per second')).toBeInvalid();
+    expect(screen.getByText('This needs a value.')).toBeInTheDocument();
     expect(posted.body()).toBeUndefined();
   });
 
