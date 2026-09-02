@@ -189,8 +189,16 @@ scene list fails it. Each invalidation was proven by deleting it and watching `e
 
 Each unticked box names what it waits for, rather than being left blank.
 
-- [ ] the OST library exists with full per-cue metadata; reuse is the obvious action — **waits for
-      BE-21 to reach master**
+- [~] the OST library exists with full per-cue metadata; reuse is the obvious action — **the library
+      is real as of 2026-09-02**, on `/projects/:id/music`: every cue with its category, mood, tags,
+      measured duration, tempo, key, loop points and the safe dialogue level, approved and removed
+      from the card. Still unticked because **reuse is not yet the obvious action**: a cue is
+      rendered and then promoted, and the render list cannot be read here — `GET
+      /projects/:id/music-cues/renders` answers with `MusicCueRender`, a type declared in
+      `src/music/music-cue-renders.repository.ts` and never published through the barrel, so there is
+      no shape to parse and no render id for `promoteMusicCueRequestSchema` to name. Both request
+      DTOs are published; it is the response type that is missing, which is the same class of gap the
+      mix routes had until BE-21's follow-up
 - [ ] scene scoring with a visible cue-vs-scene strip — **waits for BE-21**; there is no cue to score
       a scene with
 - [x] SFX/ambience library with tags and licence provenance shown — **built 2026-09-02**, the first
@@ -216,7 +224,12 @@ Each unticked box names what it waits for, rather than being left blank.
 - [ ] the ducking envelope is visualised against dialogue timings — half its inputs exist (each
       line's measured duration) and the other half is a cue's safe dialogue level, which **waits for
       BE-21**
-- [ ] reusable OP/ED and title audio surfaced — **waits for BE-21**
+- [x] reusable OP/ED and title audio surfaced — **built 2026-09-02**, beside the cues on
+      `/projects/:id/music`. Each opening or ending is a **lineage**, not a file: versions fold onto
+      the lineage they belong to, the approved one is named on the card, and an import either starts
+      a lineage or is the next version of one — which is how a season replaces its titles without
+      losing what came before. A frame or duration the orchestrator did not measure says so rather
+      than showing a blank
 
 ## Delivered beyond this list
 

@@ -78,6 +78,7 @@ describe('routeTree', () => {
       'bible',
       'design-system',
       'locations',
+      'music',
       'plan',
       'productions',
       'props',

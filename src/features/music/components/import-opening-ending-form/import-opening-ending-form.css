@@ -1,0 +1,42 @@
+@layer features {
+  .import-opening-ending-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface-raised);
+    min-inline-size: 0;
+  }
+
+  .import-opening-ending-form__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .import-opening-ending-form__heading {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    color: var(--color-text-heading);
+  }
+
+  .import-opening-ending-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .import-opening-ending-form__done {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .import-opening-ending-form__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
