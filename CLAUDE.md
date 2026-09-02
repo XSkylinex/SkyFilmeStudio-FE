@@ -610,6 +610,30 @@ route in the orchestrator serves an artifact's bytes — `src/artifacts/` has a 
 and no controller, and the only `StreamableFile` responses in the whole backend are the source-asset
 thumbnail and proxy. One missing controller holds back both phases.
 
+**The continuity record became a screen on 2026-09-02, and nothing was blocking it.** Every status
+line in `plan/` tracks a route that does not exist yet; nothing tracked a route that does exist and
+that this repo had never called. Diffing all 164 orchestrator routes against `API_PATH` found four:
+the continuity-fact collection, its `POST`, its `DELETE`, and `GET /planning-context`.
+`/projects/:id/productions/:id/continuity` reads the whole record rather than the per-scene subset
+the storyboard was showing, records a fact by hand, deletes a wrong one, and reads the Markdown
+context a planning role was handed for a scene. **It does not name an entity**: a fact carries a
+bare uuid and no type field, so resolving one would mean guessing across three features and reaching
+into their queries — the same invention `plan/08` refused over plate kinds. It does not edit either,
+because there is no update route, which is exactly why delete is offered. **The instrument matters
+more than the screen**: ask what is published and uncalled, not only what is missing.
+
+**Twenty-two stylesheets were reading a design token that does not exist, and all four gate stages
+were green over it since the day each shipped.** CSS drops a declaration whose `var()` names an
+undefined property and inherits instead, silently. Measured in Chrome against `tokens.css`:
+`--font-family-mono` computes to **Times**, so every hash, path, seed and dB figure this app marks
+as notation has been rendering in the body serif in fourteen stylesheets. `--color-text-primary` is
+`--color-text`. `--color-text-danger` is `--tone-danger-fg`, and that one was the expensive one —
+six refusal and error messages were rendering in the ordinary text colour with nothing marking them
+as failures. `test/styles/every-css-variable-is-defined.test.ts` collects every definition and every
+fallback-free read under `src/` and fails naming the file and the property. **That is the sixth time
+`plan/16`'s point has held**, and the first time the defect was in a token name rather than in
+markup.
+
 **FE-12's advisory half landed the same evening, and the row that said it was blocked was right about
 the blockers and wrong about the word.** `/productions/:id/shots` reads a production's scenes, each
 shot's lifecycle state, and every `QcRun` recorded against it — kind, verdict, the sixteen technical
