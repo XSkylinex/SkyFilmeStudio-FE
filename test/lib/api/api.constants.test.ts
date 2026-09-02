@@ -6,6 +6,7 @@ import {
   productionIdSchema,
   productionProfileIdSchema,
   projectBibleVersionIdSchema,
+  musicCueIdSchema,
   projectIdSchema,
   pronunciationDictionaryEntryIdSchema,
   pronunciationDictionaryIdSchema,
@@ -53,6 +54,10 @@ const SAMPLE_STYLE_PROFILE_ID = styleProfileIdSchema.parse(
 
 const SAMPLE_VOICE_PROFILE_ID = voiceProfileIdSchema.parse(
   '99999999-9999-4999-8999-999999999999',
+);
+
+const SAMPLE_MUSIC_CUE_ID = musicCueIdSchema.parse(
+  '88888888-8888-4888-8888-888888888888',
 );
 
 const SAMPLE_PRONUNCIATION_DICTIONARY_ID =
@@ -160,6 +165,12 @@ const everyPath: Record<string, string> = {
   approveVoiceProfile: API_PATH.approveVoiceProfile(
     SAMPLE_PROJECT_ID,
     SAMPLE_VOICE_PROFILE_ID,
+  ),
+  musicCues: API_PATH.musicCues(SAMPLE_PROJECT_ID),
+  musicCue: API_PATH.musicCue(SAMPLE_PROJECT_ID, SAMPLE_MUSIC_CUE_ID),
+  approveMusicCue: API_PATH.approveMusicCue(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_MUSIC_CUE_ID,
   ),
   pronunciationDictionaries:
     API_PATH.pronunciationDictionaries(SAMPLE_PROJECT_ID),

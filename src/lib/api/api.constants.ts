@@ -6,6 +6,7 @@ import type {
   ProductionId,
   ProductionProfileId,
   ProjectBibleVersionId,
+  MusicCueId,
   ProjectId,
   PronunciationDictionaryEntryId,
   PronunciationDictionaryId,
@@ -90,6 +91,12 @@ export const API_PATH = {
   sfxAsset: (sfxAssetId: SfxAssetId): string => `/sfx-assets/${sfxAssetId}`,
   approveSfxAsset: (sfxAssetId: SfxAssetId): string =>
     `/sfx-assets/${sfxAssetId}/approve`,
+  musicCues: (projectId: ProjectId): string =>
+    `/projects/${projectId}/music-cues`,
+  musicCue: (projectId: ProjectId, musicCueId: MusicCueId): string =>
+    `/projects/${projectId}/music-cues/${musicCueId}`,
+  approveMusicCue: (projectId: ProjectId, musicCueId: MusicCueId): string =>
+    `/projects/${projectId}/music-cues/${musicCueId}/approve`,
   pronunciationDictionaries: (projectId: ProjectId): string =>
     `/projects/${projectId}/pronunciation-dictionaries`,
   pronunciationDictionaryByLanguage: (projectId: ProjectId): string =>
