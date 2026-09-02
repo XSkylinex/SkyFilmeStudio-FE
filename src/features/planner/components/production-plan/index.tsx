@@ -19,6 +19,7 @@ import { PlanApproval } from '@/features/planner/components/plan-approval';
 import { PlannerGaps } from '@/features/planner/components/planner-gaps';
 import { PlanningStageList } from '@/features/planner/components/planning-stage-list';
 import { RuntimeBudgetPanel } from '@/features/planner/components/runtime-budget-panel';
+import { BiblePin } from '@/features/planner/components/bible-pin';
 import { StylePin } from '@/features/planner/components/style-pin';
 import type { ProductionPlanProps } from './production-plan.interface';
 import './production-plan.css';
@@ -88,6 +89,8 @@ export const ProductionPlan: FC<ProductionPlanProps> = ({
       </dl>
 
       <StylePin projectId={projectId} styleProfileId={data.styleProfileId} />
+
+      <BiblePin productionId={data.id} />
 
       {data.logline === undefined ? null : (
         <p className="production-plan__logline">

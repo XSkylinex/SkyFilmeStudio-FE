@@ -288,6 +288,7 @@ const everyPath: Record<string, string> = {
   shotAudioCues: API_PATH.shotAudioCues(SAMPLE_SHOT_ID),
   shotQcRuns: API_PATH.shotQcRuns(SAMPLE_SHOT_ID),
   shotQcRequestReview: API_PATH.shotQcRequestReview(SAMPLE_SHOT_ID),
+  productionBible: API_PATH.productionBible(SAMPLE_PRODUCTION_ID),
 };
 
 describe('API_PATH', () => {

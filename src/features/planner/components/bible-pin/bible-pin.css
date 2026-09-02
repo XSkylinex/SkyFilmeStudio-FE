@@ -1,0 +1,35 @@
+@layer features {
+  .bible-pin {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+  }
+
+  .bible-pin__figure {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .bible-pin__figure dt {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .bible-pin__figure dd {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .bible-pin__notation {
+    font-family: var(--font-mono);
+  }
+
+  .bible-pin__note,
+  .bible-pin__unresolved {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+}

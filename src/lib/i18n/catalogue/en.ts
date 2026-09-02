@@ -1874,6 +1874,13 @@ export const EN_CATALOGUE = {
     'This music cue has already been placed as often as the production’s variety rule allows, so it was not placed again. Choose a different cue for this placement.',
   'error.malformedText':
     'The orchestrator answered that request with something other than the document that was asked for. Nothing here can be trusted to be the bible’s own text.',
+  'planner.summary.bibleVersion': 'Bible version this production planned against',
+  'planner.summary.biblePublished': 'Published',
+  'planner.summary.bibleUnpublished': 'Not published',
+  'planner.summary.biblePinned':
+    'This is the bible version the production is pinned to, which is not necessarily the project’s current one. Publishing a newer bible does not move a production that has already planned.',
+  'planner.summary.bibleUnresolved':
+    'This production is not pinned to a bible version, or the version it names no longer resolves. The orchestrator answers both cases the same way, so this screen cannot tell them apart. Pinning is not available here either, because the request shape for it is not published.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;
