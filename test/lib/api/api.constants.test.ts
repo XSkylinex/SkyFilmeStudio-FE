@@ -209,6 +209,11 @@ const everyPath: Record<string, string> = {
     SAMPLE_PROJECT_ID,
     SAMPLE_LOCATION_ID,
   ),
+  locationPlate: API_PATH.locationPlate(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_LOCATION_ID,
+    SAMPLE_LOCATION_PLATE_ID,
+  ),
   approvedLocationPlate: API_PATH.approvedLocationPlate(
     SAMPLE_PROJECT_ID,
     SAMPLE_LOCATION_ID,
