@@ -279,6 +279,28 @@ Both fail silently through a green gate, because the values are contract enum me
 *tables* are unpublished. Both were re-checked at commit time. The stage name and the state name come
 from the contract's own `PLANNING_STAGE` and `PRODUCTION_STATE`, never from a string literal.
 
+## The pinned bible, added 2026-09-02
+
+`GET /productions/:productionId/bible` was published and called by nothing here, found by the same
+route diff that turned up the continuity surface. §46's distinction is the reason it matters: the
+bible a production **planned against** is not the project's current one, and publishing a newer
+bible deliberately does not move a production that has already planned. Until now this screen showed
+the pinned style profile and said nothing at all about the bible, so the two halves of the same
+question were half-answered.
+
+The panel copies `StylePin` exactly, with one difference worth stating. Its query lives in this
+feature's own `api/` rather than reaching into the bible feature's, because a production's pinned
+bible is this screen's own production data — which is what a feature's `api/` is for. `StylePin`
+reaches sideways into `src/features/styles/api/`, and that remains the open decision it always was.
+
+**The three 404s cannot be told apart, and the sentence says so.** The controller raises a plain
+`NotFoundException` for a missing production, for a production that has pinned nothing, and for a
+pin that no longer resolves. None of them carries an `ErrorCode`, so `StudioErrorFilter` never sees
+them and they arrive codeless and identical. Reporting one cause as if it were certain would be the
+same defect as offering a control the route cannot express, so the line names both live causes.
+Pinning is still not offered: `pinProjectBibleRequestSchema` is not published, re-confirmed today
+with the resolver probe.
+
 ## Verification
 
 ```bash

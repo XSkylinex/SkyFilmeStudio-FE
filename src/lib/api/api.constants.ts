@@ -210,6 +210,8 @@ export const API_PATH = {
     `/storyboard-frames/${frameId}/comparison`,
   storyboardFrameApproval: (frameId: StoryboardFrameId): string =>
     `/storyboard-frames/${frameId}/approval`,
+  productionBible: (productionId: ProductionId): string =>
+    `/productions/${productionId}/bible`,
   continuityFactsInForce: (
     productionId: ProductionId,
     sceneId: SceneId,

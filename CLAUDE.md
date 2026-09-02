@@ -89,16 +89,17 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,464 keys in English
-and Hebrew**, counted 2026-09-02 after the music candidates — 1,414 after the shot effects editor,
-1,389 after the score, 1,366 after the plate writes, 1,338 after the mix panels, 1,305 after the
-music and opening-ending libraries, 1,261 after the music and opening-ending libraries, 1,222 after
-the SFX library, 1,179 after the pronunciation writes, 1,164 after two audio-mix refusals, 1,162
-after the structure-profile form, 1,117 after the production edit form, 1,111 after the style
-version diff, 1,104 after the prop owner's name, 1,103 after two more BE-21 refusals, 1,101 that
-morning after the bible's subject-rules editor, 1,087 the night before, after the canonical
-comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals
-absorbed the same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,469 keys in English
+and Hebrew**, counted 2026-09-02 after the production bible pin — 1,464 after the music candidates,
+1,414 after the shot effects editor, 1,389 after the score, 1,366 after the plate writes, 1,338
+after the mix panels, 1,305 after the music and opening-ending libraries, 1,261 after the music and
+opening-ending libraries, 1,222 after the SFX library, 1,179 after the pronunciation writes, 1,164
+after two audio-mix refusals, 1,162 after the structure-profile form, 1,117 after the production
+edit form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103 after two
+more BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the night
+before, after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass
+and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen,
+the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
