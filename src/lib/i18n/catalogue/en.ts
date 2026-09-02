@@ -1604,13 +1604,13 @@ export const EN_CATALOGUE = {
   'audio.gaps.playback':
     'No audio can be played. Nothing in the orchestrator serves an artifact’s bytes, so a take is shown as its record — duration, peak level, hashes — rather than as sound.',
   'audio.gaps.music':
-    'The project soundtrack, cue assignment and scene scoring are not here. The orchestrator publishes no route for any of them.',
+    'Cue assignment and scene scoring are not here. The orchestrator publishes the routes for both, and this screen has not been built against them yet; the project soundtrack itself has its own screen.',
   'audio.gaps.sfx':
-    'The SFX and ambience library has no routes at all, so nothing can be indexed, assigned, or shown with the licence metadata that makes it safe to use.',
+    'Placing an effect against a shot is not here. The orchestrator publishes the route, and this screen has not been built against it yet; the library the effects come from has its own screen.',
   'audio.gaps.stems':
-    'Stems and the mix — dialogue, music, effects and ambience, with levels, solo and mute — have no routes, so no level can be set here.',
+    'A stem cannot be levelled, soloed or muted. A mix is submitted whole and its four stems are recorded by id, with no route returning one and nothing in the request expressing a per-stem control.',
   'audio.gaps.loudness':
-    'The loudness numbers that decide whether an export is acceptable are not served, so this screen cannot show a measured value against its target.',
+    'Loudness is measured on a production mix and shown above. What is still absent is the same measurement per scene: a scene mix carries no loudness figures, so only the finished production can be judged.',
   'audio.gaps.asr':
     'The advisory ASR round-trip is a published contract with no route, so a line cannot be checked against what a recogniser heard.',
   'form.invalid': 'Fields needing attention: {count}',
