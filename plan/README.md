@@ -37,6 +37,23 @@ They are in `../CLAUDE.md` and `../.claude/rules/`. The short version:
 
 | # | Phase | Depends on | Backend needs | Status |
 | - | ----- | ---------- | ------------- | ------ |
+**Every remaining blocker was re-probed on 2026-09-02 evening, and all of them held.** BE-21 and its
+follow-up published a great deal that day, and two plan boxes went stale within hours of being
+written, so the rest were re-measured rather than assumed. The instrument is a throwaway vitest file
+importing `* as contracts from 'sky-filme-studio-be/contracts'` and asking the resolver this repo
+compiles with — **not** a grep of `dist-esm/`, which calls a re-exported DTO unpublished. It produced
+a true positive the same afternoon: it reported `musicCueRenderSchema` absent before the backend
+merged it and present after, which is what makes its absences worth reporting.
+
+Still absent, each one the stated blocker of an open box: `createProjectRequestSchema`,
+`importSourceAssetRequestSchema`, `ingestSourceAssetRequestSchema`, `createSubjectRequestSchema`,
+`registerSubjectRequestSchema`, `addCanonicalReferenceRequestSchema`,
+`createCanonicalSetRequestSchema`, `createStoryboardFrameRequestSchema`,
+`regenerateStoryboardFrameRequestSchema`, `reviewShotRequestSchema` and
+`submitVideoRenderRequestSchema`. `contracts/media/timeline.ts` publishes four schemas and no
+controller reaches any of them, so `plan/14`'s status line is still exact. `GET /render-jobs` still
+does not exist, so `plan/11` is unchanged, and there is still no gateway for `plan/05`.
+
 | 00 | [Toolchain & repository hardening](00-toolchain.md) | — | — | done 2026-08-15 |
 | 01 | [Document shell & app identity](01-document-shell.md) | 00 | — | done 2026-08-15 |
 | 02 | [Design system & tokens](02-design-system.md) | 01 | — | done 2026-08-17 |
