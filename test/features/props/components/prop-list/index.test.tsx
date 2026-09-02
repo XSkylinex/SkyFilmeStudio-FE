@@ -7,10 +7,14 @@ import { PropList } from '@/features/props/components/prop-list';
 import { renderInApp } from '../../../../render-in-app';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
-const server = mockOrchestratorServer();
-
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
+);
+
+const server = mockOrchestratorServer(
+  http.get(API_PATH.projectSubjects(PROJECT_ID), () =>
+    HttpResponse.json({ items: [] }),
+  ),
 );
 
 describe('PropList', () => {

@@ -290,6 +290,9 @@ suggestions rendered separately and labelled as suggestions. No percentage, beca
 four would assert a closed set.
 
 **Props (step 6).** Continuity rules render, and the card says where the prop appears is unknown.
+**The owner is named as of 2026-09-02** — the card reads the project's subject list and says *Belongs
+to Mira* rather than *Belongs to a subject*, and falls back to the generic wording when no listed
+subject carries the id, because a name the list does not hold is a name this repo would be inventing.
 
 ## Five things measured here that this file previously got wrong or did not know
 
@@ -531,8 +534,8 @@ question rather than settled under time pressure — and the question is larger 
 bible forms take the same shortcut for the style-profile picker, so four components now reach across
 a boundary the rules forbid, none of them wrongly and all of them for want of a shared home. **The
 bible's subject block came off this list on 2026-09-02** — the count above is why — and the prop's
-owner is the last thing still unnamed for this reason; naming it is one import once the same query
-is reached for, and the shared-home question does not get smaller by waiting.
+owner followed the same day, so nothing is left unnamed for this reason. The shared-home question
+did not get smaller by waiting, and it is still open.
 
 ## Done when
 
