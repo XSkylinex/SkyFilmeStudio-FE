@@ -89,11 +89,11 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,103 keys in English and
-Hebrew**, counted 2026-09-02 after two more BE-21 refusals — 1,101 that morning after the bible's
-subject-rules editor, 1,087 the night before, after
-the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21
-refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,110 keys in English and
+Hebrew**, counted 2026-09-02 after the style version diff — 1,103 after two more BE-21 refusals,
+1,101 that morning after the bible's subject-rules editor, 1,087 the night before after the canonical
+comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21 refusals
+absorbed the same evening — 109 when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -266,7 +266,10 @@ FE-08 made the creative library read. `/styles`, `/voices`, `/locations` and `/p
 the orchestrator, and each carries the fact its step exists for — a style **lineage** with its
 approved head, a voice split on whether it belongs to a subject, plate coverage over the kinds a
 location actually has, and a prop's continuity rules. `src/features/{styles,voices,locations,props}/`
-hold the slices; `plan/08` records which Done-when boxes are ticked and which cannot be.
+hold the slices; `plan/08` records which Done-when boxes are ticked and which cannot be. **Step 1's box
+ticked on 2026-09-02**: each style version after the first says what changed from the one below it,
+field by field as removed and added lines, computed here from the versions page the card already
+reads — no route was needed, which is why it had stayed unbuilt for two weeks.
 
 **All four now create and edit, as of 2026-09-01.** `/styles`, `/voices`, `/locations` and `/props`
 each offer an Add control and a per-record Edit, against the `POST` and `PATCH` every one of them

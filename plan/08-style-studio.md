@@ -273,6 +273,12 @@ pinned to is not shown** — `productionSchema.styleProfileId` exists but **no p
 `Production`**, so it is unreachable. Three controllers do mount on `productions/:productionId` and one
 404s "No production", so "no route reads a production" would be false; the accurate claim is about the
 return type, and the screen now says it that way. Approval is per version and the control is named for the version it would approve.
+**What changed between versions renders as of 2026-09-02.** `styleVersionDiff` compares a version
+with the newest one below it across the thirteen content fields — never `version`, `approved` or an
+id — as lines: a text field is one line, a rule list is its rules, and a generation-defaults object
+is one `key: value` line per entry, because the object has no other readable form. Reordering a list
+is not a change; a rule that came or went is. The card renders it under a `<details>` per version so
+the list stays a list, and the word *removed* or *added* sits beside each line for SC 1.4.1.
 
 **Voices (step 3).** Split on `subjectId` being absent, so narrator and standalone voices are a
 visible category rather than an afterthought. The one-approved-voice-per-subject limit is **enforced
@@ -537,7 +543,7 @@ is reached for, and the shared-home question does not get smaller by waiting.
 ## Done when
 
 - [x] style modes are open-ended, with no default style presented — nothing in `src/` names one
-- [ ] versioning is visible: lineages and their approved head **are**, and as of FE-09 so is **which version a production is pinned to**. **The warning exists now** — an approved version offers *create the next version* rather than an edit, and says productions stay pinned to the version they used before the user commits. Still unticked because **diffs between versions are unbuilt**: they are computable from `/versions` and nothing renders them, so "what changed between versions" is the one part of step 1 still missing
+- [x] versioning is visible: lineages and their approved head **are**, and as of FE-09 so is **which version a production is pinned to**. **The warning exists now** — an approved version offers *create the next version* rather than an edit, and says productions stay pinned to the version they used before the user commits. **Ticked 2026-09-02: diffs between versions render.** Every version after the first carries *What changed from v{n}*, computed from the same `/versions` page, listing each field's removed and added lines with the word beside each line rather than a colour alone, and saying *No differences* when a next version was created without an edit
 - [ ] the same-subject-two-styles comparison exists and demonstrates identity is unchanged
 - [x] voices support subject, narrator and standalone roles; one voice per subject is stated where it is enforced
 - [ ] the pronunciation dictionary works per language with Hebrew first-class — **the audible preview has no route**
