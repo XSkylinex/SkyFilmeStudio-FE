@@ -23,6 +23,7 @@ const everyBuiltPath: Record<string, string> = {
   projectLocationsPath: routes.projectLocationsPath(PROJECT_ID),
   projectPropsPath: routes.projectPropsPath(PROJECT_ID),
   projectBiblePath: routes.projectBiblePath(PROJECT_ID),
+  projectMusicPath: routes.projectMusicPath(PROJECT_ID),
   productionListPath: routes.productionListPath(PROJECT_ID),
   productionPath: routes.productionPath(PROJECT_ID, PRODUCTION_ID),
   productionPlanPath: routes.productionPlanPath(PROJECT_ID, PRODUCTION_ID),
