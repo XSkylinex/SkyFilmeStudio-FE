@@ -1,0 +1,38 @@
+@layer features {
+  .add-pronunciation-entry-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-block-start: var(--space-2);
+    min-inline-size: 0;
+  }
+
+  .add-pronunciation-entry-form__heading {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .add-pronunciation-entry-form__fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--space-2);
+    align-items: end;
+  }
+
+  .add-pronunciation-entry-form__done {
+    display: block;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .add-pronunciation-entry-form__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .add-pronunciation-entry-form__term,
+  .add-pronunciation-entry-form__notation {
+    min-inline-size: 0;
+  }
+}

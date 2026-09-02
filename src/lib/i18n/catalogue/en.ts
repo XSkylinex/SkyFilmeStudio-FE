@@ -611,6 +611,24 @@ export const EN_CATALOGUE = {
   'voices.dictionaries.editNote':
     'An entry cannot be edited: the orchestrator publishes no route for it, so changing one means deleting it and adding the replacement.',
   'voices.entries.none': 'This dictionary has no entries.',
+  'voices.dictionaries.add': 'Add a dictionary',
+  'voices.dictionaries.add.heading': 'New pronunciation dictionary',
+  'voices.dictionaries.add.language.hint':
+    'One dictionary per language, written as a language tag. A second for a language this project already has is refused.',
+  'voices.dictionaries.add.failed.title': 'The dictionary was not created',
+  'voices.entries.add': 'Add an entry',
+  'voices.entries.add.heading': 'New entry',
+  'voices.entries.add.term': 'Term',
+  'voices.entries.add.term.hint':
+    'The word as it appears in a script. It is content, so it is typed in this dictionary’s own language and direction.',
+  'voices.entries.add.phonemes': 'Phoneme override',
+  'voices.entries.add.phonemes.hint':
+    'Optional, and notation rather than language. Leave it empty to record the term without one.',
+  'voices.entries.add.failed.title': 'The entry was not added',
+  'voices.entries.remove': 'Remove',
+  'voices.entries.removeContext': 'Remove the entry {term}',
+  'voices.entries.removing': 'Removing…',
+  'voices.entries.remove.failed.title': 'The entry was not removed',
   'voices.entries.unreadable':
     'The entries for this dictionary could not be read, so this is unknown rather than empty.',
   'voices.entries.truncated':
