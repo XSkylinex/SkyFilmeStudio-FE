@@ -612,7 +612,8 @@ thumbnail and proxy. One missing controller holds back both phases.
 
 **The continuity record became a screen on 2026-09-02, and nothing was blocking it.** Every status
 line in `plan/` tracks a route that does not exist yet; nothing tracked a route that does exist and
-that this repo had never called. Diffing all 164 orchestrator routes against `API_PATH` found four:
+that this repo had never called. Diffing all **170** orchestrator routes against `API_PATH` found
+**35** uncalled, four of them buildable today:
 the continuity-fact collection, its `POST`, its `DELETE`, and `GET /planning-context`.
 `/projects/:id/productions/:id/continuity` reads the whole record rather than the per-scene subset
 the storyboard was showing, records a fact by hand, deletes a wrong one, and reads the Markdown

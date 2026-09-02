@@ -168,8 +168,20 @@ usable while frames are still arriving — reserved boxes, no layout shift.
 ## The continuity record, added 2026-09-02
 
 This section was not in the phase when it was written, and the work in it was not blocked on
-anything. It was found by diffing all 164 routes the orchestrator exposes against this repo's own
-path table, which is a different question from the one every status line here has been asking.
+anything. It was found by diffing every route the orchestrator exposes against this repo's own path
+table, which is a different question from the one every status line here has been asking.
+
+**The first version of that diff said 164 routes, and 164 was wrong.** The extractor took the first
+`@Controller` in a file as the base for every route in it, and seven backend files hold more than
+one controller, so their routes were filed under the wrong prefix — which also made a route this
+repo does call look uncalled. The corrected figure is **170 routes, 35 of them called by nothing
+here**. The instrument had produced the right answers and the wrong count, which is exactly why it
+survived: the routes it pointed at were genuinely uncalled either way. It was caught by running the
+diff to completion, where it claimed 156 of 164 routes were uncalled — including
+`/projects/:projectId/subjects`, which this app has read since FE-07. `git.md`'s rule is about a
+zero; this is the same rule applied to a count, and only the zero had been checked. The corrected
+version validates in both directions in the same run: a route known to exist resolves, an invented
+one does not.
 Every entry in `plan/` tracks a route that does **not** exist yet. Nothing was tracking a route that
 does exist and that nobody had called.
 
