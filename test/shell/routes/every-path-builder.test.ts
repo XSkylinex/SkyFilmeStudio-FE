@@ -11,6 +11,7 @@ const SHOT_ID = 'shot-1';
 const everyBuiltPath: Record<string, string> = {
   projectListPath: routes.projectListPath(),
   designSystemPath: routes.designSystemPath(),
+  sfxLibraryPath: routes.sfxLibraryPath(),
   systemPath: routes.systemPath(),
   projectDashboardPath: routes.projectDashboardPath(PROJECT_ID),
   projectAssetsPath: routes.projectAssetsPath(PROJECT_ID),

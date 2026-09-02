@@ -2,6 +2,7 @@ export const ROOT_PATH = '/';
 
 export const DESIGN_SYSTEM_SEGMENT = 'design-system';
 export const SYSTEM_SEGMENT = 'system';
+export const SFX_SEGMENT = 'sfx';
 
 export const PROJECTS_SEGMENT = 'projects';
 export const PROJECT_ID_PARAM = 'projectId';
@@ -32,6 +33,8 @@ export const projectListPath = (): string => ROOT_PATH;
 export const designSystemPath = (): string => `/${DESIGN_SYSTEM_SEGMENT}`;
 
 export const systemPath = (): string => `/${SYSTEM_SEGMENT}`;
+
+export const sfxLibraryPath = (): string => `/${SFX_SEGMENT}`;
 
 export const projectDashboardPath = (projectId: string): string =>
   `/${PROJECTS_SEGMENT}/${projectId}`;

@@ -13,6 +13,7 @@ import type {
   RenderJobId,
   SceneId,
   ShotId,
+  SfxAssetId,
   SourceAssetId,
   StoryboardFrameId,
   StyleProfileId,
@@ -85,6 +86,10 @@ export const API_PATH = {
     voiceProfileId: VoiceProfileId,
   ): string =>
     `/projects/${projectId}/voice-profiles/${voiceProfileId}/approve`,
+  sfxAssets: (): string => '/sfx-assets',
+  sfxAsset: (sfxAssetId: SfxAssetId): string => `/sfx-assets/${sfxAssetId}`,
+  approveSfxAsset: (sfxAssetId: SfxAssetId): string =>
+    `/sfx-assets/${sfxAssetId}/approve`,
   pronunciationDictionaries: (projectId: ProjectId): string =>
     `/projects/${projectId}/pronunciation-dictionaries`,
   pronunciationDictionaryByLanguage: (projectId: ProjectId): string =>

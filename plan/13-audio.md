@@ -193,9 +193,12 @@ Each unticked box names what it waits for, rather than being left blank.
       BE-21 to reach master**
 - [ ] scene scoring with a visible cue-vs-scene strip — **waits for BE-21**; there is no cue to score
       a scene with
-- [ ] SFX/ambience library with tags and licence provenance shown — **a controller exists on
-      `be-21-audio` as of 2026-09-02 and is not on master**, the same blocker as the two above now
-      rather than a different one
+- [x] SFX/ambience library with tags and licence provenance shown — **built 2026-09-02**, the first
+      thing taken from the BE-21 build order the day it merged. `/sfx` is a top-level route because
+      `sfx-assets` is not project-scoped: the library belongs to the installation, which is what §30's
+      reuse means, and putting it under a project would have misrepresented the route. Import, list,
+      approve and remove; tags and licence are on every card, and a licence is required for an
+      imported sound because the contract's own `refine` says so
 - [x] per-line dialogue audio with measured duration and single-line regeneration — **done, with one
       part of the box unmet**: the duration is the measured `durationMs`, the voice profile is
       identified by id and SHA-256, and each line is re-voiced on its own in either pass. The QC

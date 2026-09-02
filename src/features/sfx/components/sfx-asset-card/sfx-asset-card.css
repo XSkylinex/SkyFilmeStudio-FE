@@ -1,0 +1,65 @@
+@layer features {
+  .sfx-asset-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    min-inline-size: 0;
+  }
+
+  .sfx-asset-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .sfx-asset-card__name {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text-heading);
+  }
+
+  .sfx-asset-card__figures {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--space-1) var(--space-3);
+    margin: 0;
+    font-size: var(--font-size-sm);
+  }
+
+  .sfx-asset-card__figures dt {
+    color: var(--color-text-secondary);
+  }
+
+  .sfx-asset-card__figures dd {
+    margin: 0;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .sfx-asset-card__notation {
+    display: inline-block;
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+  }
+
+  .sfx-asset-card__absent {
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+
+  .sfx-asset-card__frozen {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .sfx-asset-card__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+  }
+}

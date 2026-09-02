@@ -89,13 +89,14 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,179 keys in English
-and Hebrew**, counted 2026-09-02 after the pronunciation writes — 1,164 after two audio-mix
-refusals, 1,162 after the structure-profile form, 1,117 after the production edit form, 1,111 after
-the style version diff, 1,104 after the prop owner's name, 1,103 after two more BE-21 refusals,
-1,101 that morning after the bible's subject-rules editor, 1,087 the night before, after the
-canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four BE-21
-refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,222 keys in English
+and Hebrew**, counted 2026-09-02 after the SFX library — 1,179 after the pronunciation writes, 1,164
+after two audio-mix refusals, 1,162 after the structure-profile form, 1,117 after the production
+edit form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103 after two
+more BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the night
+before, after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass
+and four BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen,
+the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
@@ -518,6 +519,16 @@ anchors the orchestrator records rather than two images side by side.
 keyframe from a copy of the backend's unpublished `NEEDS_NO_KEYFRAME` list would have disagreed
 silently the day a strategy was added to it, and it stated one of the two causes of `NOT_REQUIRED` as
 if it were the only one. The gate reports what the wire returns.
+
+**The SFX library is the first thing BE-21 unblocked, built the day it merged (2026-09-02).** `/sfx`
+is a **top-level** route, not a project one, because `sfx-assets` is not project-scoped — the library
+belongs to the installation and is the reuse §30 credits for clips, so filing it under a project
+would have said something untrue about the route. It imports, lists, approves and removes, and every
+card carries the two things the library exists to keep: its tags and its licence. **A licence is
+required for an imported sound and absent is legitimate for a generated one**, which is the
+contract's own `refine` rather than a rule invented here, and the form's required marker follows the
+chosen origin. Approval is structural in the FE-07 sense: an approved effect renders no Approve and
+no Remove at all, so a reload cannot re-offer either.
 
 **FE-13 made the dialogue audio real on 2026-09-01, and its stated dependency gated none of it.**
 `/productions/:id/audio` was an `EmptyState`; it now reads a production's scenes, the lines each

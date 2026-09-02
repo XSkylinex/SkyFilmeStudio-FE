@@ -8,6 +8,7 @@ import {
   projectStylesPath,
   projectSubjectsPath,
   projectVoicesPath,
+  sfxLibraryPath,
   systemPath,
 } from '@/shell/routes/routes.constants';
 import type { AppShellNavLink } from '../app-shell.interface';
@@ -18,6 +19,7 @@ export const resolveAppShellNavLinks = (
   const globalLinks: AppShellNavLink[] = [
     { to: projectListPath(), labelKey: 'page.projects.title' },
     { to: systemPath(), labelKey: 'page.system.title' },
+    { to: sfxLibraryPath(), labelKey: 'page.sfx.title' },
   ];
 
   if (!projectId) {

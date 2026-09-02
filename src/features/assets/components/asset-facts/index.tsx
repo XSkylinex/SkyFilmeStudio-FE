@@ -2,11 +2,11 @@ import type { FC } from 'react';
 import { Badge } from '@/lib/components/badge';
 import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { formatDateTime } from '@/lib/format/format-date-time';
+import { ORIGIN_LABEL_KEY } from '@/lib/i18n/origin-label.constants';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { selectInterfaceLanguage } from '@/shell/shell.slice';
 import { useAppSelector } from '@/shell/store/hooks';
 import {
-  ASSET_ORIGIN_LABEL_KEY,
   ASSET_PRIVACY_LABEL_KEY,
   ASSET_TYPE_LABEL_KEY,
 } from '@/features/assets/assets.constants';
@@ -30,7 +30,7 @@ export const AssetFacts: FC<AssetFactsProps> = ({ asset }) => {
         />
         <Badge
           tone={STATUS_TONE.NEUTRAL}
-          label={translate(ASSET_ORIGIN_LABEL_KEY[asset.origin])}
+          label={translate(ORIGIN_LABEL_KEY[asset.origin])}
         />
         <Badge
           tone={
