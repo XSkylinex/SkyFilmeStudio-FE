@@ -709,6 +709,57 @@ export const EN_CATALOGUE = {
   'page.timeline.description':
     "This production's assembled cut and final export. Not connected to the orchestrator yet.",
   'page.system.title': 'System',
+  'page.sfx.title': 'Sound effects',
+  'page.sfx.description':
+    'The effects and ambience library. It belongs to this installation rather than to any one project, so a sound imported once is reused everywhere instead of being cut again.',
+  'sfx.loading': 'Reading the effects library…',
+  'sfx.error.title': 'The effects library could not be read',
+  'sfx.empty.title': 'No effects yet',
+  'sfx.empty.description':
+    'Import a sound to start the library. Every entry records where it came from and, when it was imported, under what licence.',
+  'sfx.truncated':
+    'This is the first page of effects only. The orchestrator has more than are listed here.',
+  'sfx.card.approved': 'Approved',
+  'sfx.card.draft': 'Draft',
+  'sfx.card.category': 'Category:',
+  'sfx.card.tags': 'Tags:',
+  'sfx.card.tags.none': 'None',
+  'sfx.card.origin': 'Origin:',
+  'sfx.card.licence': 'Licence:',
+  'sfx.card.licence.none':
+    'None recorded, which the contract allows only for a sound this installation made itself.',
+  'sfx.card.path': 'File:',
+  'sfx.card.hash': 'SHA-256:',
+  'sfx.card.duration': 'Duration:',
+  'sfx.card.sampleRate': 'Sample rate:',
+  'sfx.card.channels': 'Channels:',
+  'sfx.card.unmeasured': 'Not measured',
+  'sfx.card.frozen':
+    'An approved effect is frozen: import another rather than editing this one.',
+  'sfx.card.context': 'the effect {name}',
+  'sfx.card.remove': 'Remove',
+  'sfx.card.removing': 'Removing…',
+  'sfx.card.removeContext': 'Remove the effect {name}',
+  'sfx.card.remove.failed.title': 'The effect was not removed',
+  'sfx.approveError.title': 'The effect was not approved',
+  'sfx.import.open': 'Import a sound',
+  'sfx.import.heading': 'Import a sound',
+  'sfx.import.sourcePath': 'Path to the file',
+  'sfx.import.sourcePath.hint':
+    'Where the sound is on this machine. Nothing is uploaded: the orchestrator reads the file where it already is.',
+  'sfx.import.name': 'Name',
+  'sfx.import.category': 'Category',
+  'sfx.import.category.hint':
+    'In capitals with underscores, such as FOOTSTEPS. The categories are yours to invent; nothing here ships a list.',
+  'sfx.import.tags': 'Tags',
+  'sfx.import.tags.hint': 'One per line. Optional.',
+  'sfx.import.origin': 'Origin',
+  'sfx.import.licence': 'Licence',
+  'sfx.import.licence.hint':
+    'Required for an imported sound, because the library records what may be shipped. A sound this installation generated needs none.',
+  'sfx.import.submit': 'Import',
+  'sfx.import.submitting': 'Importing…',
+  'sfx.import.failed.title': 'The sound was not imported',
   'page.system.description':
     'Hardware profile, installed models, disk space, preflight and the operating mode of this installation.',
   'form.invalid.required': 'This needs a value.',

@@ -26,6 +26,7 @@ import {
   PROPS_SEGMENT,
   QUEUE_SEGMENT,
   ROOT_PATH,
+  SFX_SEGMENT,
   SHOTS_SEGMENT,
   SHOT_ID_PARAM,
   STORYBOARD_SEGMENT,
@@ -272,6 +273,16 @@ export const routeTree: RouteObject[] = [
         ErrorBoundary: RouteErrorBoundary,
         handle: routeHandle('route.project'),
         children: projectRoutes,
+      },
+      {
+        path: SFX_SEGMENT,
+        lazy: () =>
+          import('@/features/sfx/SfxPage').then((routeModule) => ({
+            Component: routeModule.SfxPage,
+          })),
+        HydrateFallback: RouteHydrateFallback,
+        ErrorBoundary: RouteErrorBoundary,
+        handle: routeHandle('page.sfx.title'),
       },
       {
         path: SYSTEM_SEGMENT,

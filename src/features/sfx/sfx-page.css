@@ -1,0 +1,19 @@
+@layer features {
+  .sfx-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .sfx-page__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--font-size-2xl);
+  }
+
+  .sfx-page__description {
+    margin: 0;
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+}

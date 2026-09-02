@@ -1,0 +1,32 @@
+@layer features {
+  .sfx-library {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .sfx-library__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sfx-library__loading,
+  .sfx-library__truncated {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .sfx-library__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .sfx-library__placeholder {
+    min-block-size: var(--space-8);
+  }
+}
