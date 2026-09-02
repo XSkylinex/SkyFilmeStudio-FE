@@ -10,13 +10,21 @@ import { CreateBibleForm } from '@/features/bible/components/create-bible-form';
 import { EMPTY_BIBLE_FORM_VALUES } from '@/features/bible/helpers/bible-form-values';
 import { buildProjectBible } from '../../../../fixtures/project-bible.fixture';
 import { buildStyleProfile } from '../../../../fixtures/style-profile.fixture';
+import { buildSubject } from '../../../../fixtures/subject.fixture';
 import { renderInApp } from '../../../../render-in-app';
 import { mockOrchestratorServer } from '../../../../lib/api/msw-server';
 
-const server = mockOrchestratorServer();
-
 const PROJECT_ID = projectIdSchema.parse(
   'c2f2e6a4-9f4a-4a2b-8f4c-0f8b6d9a1e11',
+);
+const MIRA_ID = subjectIdSchema.parse('11111111-1111-4111-8111-111111111111');
+
+const server = mockOrchestratorServer(
+  http.get(API_PATH.projectSubjects(PROJECT_ID), () =>
+    HttpResponse.json({
+      items: [buildSubject({ id: MIRA_ID, displayName: 'Mira' })],
+    }),
+  ),
 );
 
 const styleLibraryServes = (): void => {
@@ -191,6 +199,72 @@ describe('CreateBibleForm', () => {
     expect(posted.body()).toMatchObject({
       subjectRules: [{ immutableVisualTraits: ['A chipped left horn'] }],
     });
+  });
+
+  it('sends the rules typed for a subject, keyed on the id of the subject chosen by name', async () => {
+    const user = userEvent.setup();
+    styleLibraryServes();
+    const posted = capturePost();
+
+    renderInApp(
+      <CreateBibleForm
+        projectId={PROJECT_ID}
+        carriesNarrative
+        initialValues={EMPTY_BIBLE_FORM_VALUES}
+        onClose={() => undefined}
+      />,
+    );
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Add rules for a subject' }),
+    );
+    await screen.findByRole('option', { name: 'Mira' });
+    await user.selectOptions(screen.getByLabelText('Subject'), MIRA_ID);
+    await user.type(
+      screen.getByLabelText('Immutable visual traits'),
+      'A chipped left horn',
+    );
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+
+    await waitFor(() => {
+      expect(posted.body()).toBeDefined();
+    });
+    expect(posted.body()).toMatchObject({
+      subjectRules: [
+        {
+          subjectId: MIRA_ID,
+          immutableVisualTraits: ['A chipped left horn'],
+          speaks: false,
+          relationships: [],
+        },
+      ],
+    });
+  });
+
+  it('refuses a block whose subject was never chosen, against that field, and sends nothing', async () => {
+    const user = userEvent.setup();
+    styleLibraryServes();
+    const posted = capturePost();
+
+    renderInApp(
+      <CreateBibleForm
+        projectId={PROJECT_ID}
+        carriesNarrative
+        initialValues={EMPTY_BIBLE_FORM_VALUES}
+        onClose={() => undefined}
+      />,
+    );
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Add rules for a subject' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Add' }));
+
+    expect(
+      await screen.findByText('The contract will not accept this value.'),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText('Subject')).toBeInvalid();
+    expect(posted.body()).toBeUndefined();
   });
 
   it('says so when the style library offers more profiles than it listed', async () => {
