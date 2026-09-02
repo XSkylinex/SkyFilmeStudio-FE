@@ -1,6 +1,7 @@
 @layer primitives {
   .skeleton {
     --skeleton-shimmer-duration: calc(var(--duration-slow) * 6);
+    --skeleton-rect-max-block-size: 12rem;
 
     box-sizing: border-box;
     display: block;
@@ -30,6 +31,7 @@
 
     &[data-shape='rect'] {
       aspect-ratio: 16 / 9;
+      max-block-size: var(--skeleton-rect-max-block-size);
       border-radius: var(--radius-md);
     }
   }
