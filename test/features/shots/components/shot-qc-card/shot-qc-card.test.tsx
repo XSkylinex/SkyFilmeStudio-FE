@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { sceneIdSchema } from 'sky-filme-studio-be/contracts';
 import type { ShotState } from 'sky-filme-studio-be/contracts';
@@ -71,6 +71,40 @@ describe('ShotQcCard', () => {
         'success',
       );
     }
+  });
+
+  it('keeps the automated verdict advisory when read aloud: kind before verdict, and never the word a human decision uses', async () => {
+    const user = userEvent.setup();
+    const shot = buildShot({ state: 'APPROVED' });
+    server.use(
+      http.get(API_PATH.shotQcRuns(shot.id), () =>
+        HttpResponse.json([buildQcRun({ outcome: 'PASS' })]),
+      ),
+    );
+
+    renderCard('APPROVED');
+    await user.click(
+      screen.getByRole('button', { name: 'Automated checks for shot 0' }),
+    );
+    await screen.findByText(/none of them is an approval/);
+
+    const section = screen
+      .getByRole('heading', { level: 4, name: 'Automated checks' })
+      .closest('section');
+    expect(section).not.toBeNull();
+    const read = section?.textContent ?? '';
+
+    const heading = read.indexOf('Automated checks');
+    const advisory = read.indexOf('none of them is an approval');
+    const kind = read.indexOf('Technical');
+    const verdict = read.indexOf('Pass');
+    expect(heading).toBeGreaterThanOrEqual(0);
+    expect(advisory).toBeGreaterThan(heading);
+    expect(kind).toBeGreaterThan(advisory);
+    expect(verdict).toBeGreaterThan(kind);
+
+    expect(within(section as HTMLElement).queryByText('Approved')).toBeNull();
+    expect(screen.getByText('Approved')).toBeInTheDocument();
   });
 
   it('never announces a hand-over the refetched shot does not carry', () => {
