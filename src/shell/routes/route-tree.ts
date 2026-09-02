@@ -16,6 +16,7 @@ import {
   ASSET_ID_PARAM,
   AUDIO_SEGMENT,
   BIBLE_SEGMENT,
+  MUSIC_SEGMENT,
   DESIGN_SYSTEM_SEGMENT,
   LOCATIONS_SEGMENT,
   PLAN_SEGMENT,
@@ -224,6 +225,16 @@ const projectRoutes: RouteObject[] = [
     HydrateFallback: RouteHydrateFallback,
     ErrorBoundary: RouteErrorBoundary,
     handle: routeHandle('page.bible.title'),
+  },
+  {
+    path: MUSIC_SEGMENT,
+    lazy: () =>
+      import('@/features/music/MusicPage').then((routeModule) => ({
+        Component: routeModule.MusicPage,
+      })),
+    HydrateFallback: RouteHydrateFallback,
+    ErrorBoundary: RouteErrorBoundary,
+    handle: routeHandle('page.music.title'),
   },
   {
     path: PRODUCTIONS_SEGMENT,

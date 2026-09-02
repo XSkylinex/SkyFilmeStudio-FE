@@ -16,6 +16,7 @@ export const VOICES_SEGMENT = 'voices';
 export const LOCATIONS_SEGMENT = 'locations';
 export const PROPS_SEGMENT = 'props';
 export const BIBLE_SEGMENT = 'bible';
+export const MUSIC_SEGMENT = 'music';
 
 export const PRODUCTIONS_SEGMENT = 'productions';
 export const PRODUCTION_ID_PARAM = 'productionId';
@@ -67,6 +68,9 @@ export const projectPropsPath = (projectId: string): string =>
 
 export const projectBiblePath = (projectId: string): string =>
   `${projectDashboardPath(projectId)}/${BIBLE_SEGMENT}`;
+
+export const projectMusicPath = (projectId: string): string =>
+  `${projectDashboardPath(projectId)}/${MUSIC_SEGMENT}`;
 
 export const productionListPath = (projectId: string): string =>
   `${projectDashboardPath(projectId)}/${PRODUCTIONS_SEGMENT}`;

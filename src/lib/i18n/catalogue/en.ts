@@ -1065,6 +1065,54 @@ export const EN_CATALOGUE = {
   'planner.gaps.continuity':
     'Show continuity or tone findings beside the scenes they concern. Both have a schema and neither has a route.',
   'page.bible.title': 'Project bible',
+  'page.music.title': 'Music',
+  'page.music.description':
+    'The soundtrack library for this project: cues that exist, what each one is for, and the level dialogue sits over it at. A cue is reused across productions rather than re-rendered for each.',
+  'music.loading': 'Reading the soundtrack library…',
+  'music.error.title': 'The soundtrack library could not be read',
+  'music.empty.title': 'No cues yet',
+  'music.empty.description':
+    'A cue is rendered and then promoted into this library, which is where reuse begins.',
+  'music.truncated':
+    'This is the first page of cues only. The orchestrator has more than are listed here.',
+  'music.card.approved': 'Approved',
+  'music.card.draft': 'Draft',
+  'music.card.category': 'Category:',
+  'music.card.mood': 'Mood:',
+  'music.card.tags': 'Tags:',
+  'music.card.tags.none': 'None',
+  'music.card.duration': 'Duration:',
+  'music.card.tempo': 'Tempo:',
+  'music.card.tempo.unknown':
+    'Not reported, which a local model often cannot do',
+  'music.card.key': 'Key:',
+  'music.card.loopable': 'Loops:',
+  'music.card.loopable.yes': 'Yes',
+  'music.card.loopable.no': 'No',
+  'music.card.intro': 'Intro:',
+  'music.card.outro': 'Outro:',
+  'music.card.safeLevel': 'Dialogue sits over it at:',
+  'music.card.safeLevel.explain':
+    'This is what makes the ducking envelope computable rather than drawn by hand.',
+  'music.card.origin': 'Origin:',
+  'music.card.licence': 'Licence:',
+  'music.card.licence.none':
+    'None recorded, which the contract allows for a cue this installation generated.',
+  'music.card.path': 'File:',
+  'music.card.hash': 'SHA-256 fingerprint:',
+  'music.card.frozen':
+    'An approved cue is frozen: productions may already be scored with it.',
+  'music.card.context': 'the cue {name}',
+  'music.card.remove': 'Remove',
+  'music.card.removing': 'Removing…',
+  'music.card.removeContext': 'Remove the cue {name}',
+  'music.card.remove.failed.title': 'The cue was not removed',
+  'music.approveError.title': 'The cue was not approved',
+  'music.gaps.heading': 'What this screen cannot do yet',
+  'music.gaps.renders':
+    'A cue is rendered first and then promoted, and the render list cannot be read here: the route answers with a type the orchestrator keeps in a repository file rather than publishing, so there is no shape to parse and no render id for the promotion to name. Rendering and promoting a cue happen at the orchestrator until that type is published.',
+  'music.gaps.playback':
+    'No cue can be heard here. Nothing in the orchestrator serves an artifact’s bytes, so a cue is shown as its record — measured duration, tempo, level and both hashes — rather than as sound.',
   'bible.title': 'Project bible',
   'bible.loading': 'Loading the project bible',
   'bible.error.title': 'The project bible could not be read',
