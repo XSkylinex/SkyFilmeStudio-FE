@@ -1897,4 +1897,30 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
     'נקרא רק העמוד הראשון של העובדות. אחר הסמן שהאורקסטרטור מחזיר לא עוקב אף מסך ביישום הזה.',
   'productions.card.continuity': 'רציפות',
   'productions.card.continuity.context': 'פתיחת עובדות הרציפות של {title}',
+  'continuity.create.open': 'רישום עובדה',
+  'continuity.create.heading': 'רישום עובדת רציפות',
+  'continuity.create.entity': 'מזהה ישות',
+  'continuity.create.entity.hint':
+    'הנושא, האביזר או המיקום שהעובדה עוסקת בו. האורקסטרטור מזהה אותו במזהה בלבד, ולכן יש להעתיק את המזהה מהמקום שבו הישות מופיעה.',
+  'continuity.create.property': 'תכונה',
+  'continuity.create.property.hint':
+    'במה העובדה עוסקת, למשל תלבושת או מצב שבו נמצא נושא. ערך אחד לכל תכונה תקף בכל רגע.',
+  'continuity.create.value': 'ערך',
+  'continuity.create.source': 'נרשם מתוך',
+  'continuity.create.source.hint':
+    'מה קרה שהופך את זה לנכון. זה מה שקורא מאוחר יותר יצטרך לשפוט לפיו את העובדה.',
+  'continuity.create.start': 'תקף מסצנה',
+  'continuity.create.end': 'תקף עד סצנה',
+  'continuity.create.end.hint':
+    'השאירו פתוח אם העובדה תקפה עד סוף ההפקה.',
+  'continuity.create.end.open': 'עד סוף ההפקה',
+  'continuity.create.submit': 'רישום העובדה',
+  'continuity.create.saving': 'רושם…',
+  'continuity.create.failed.title': 'העובדה לא נרשמה',
+  'continuity.card.remove': 'מחיקה',
+  'continuity.card.removing': 'מוחק…',
+  'continuity.card.removeContext': 'מחיקת העובדה ש{property} הוא {value}',
+  'continuity.card.remove.failed.title': 'העובדה לא נמחקה',
+  'continuity.gaps.noUpdate':
+    'עובדה רשומה אינה ניתנת לעריכה. האורקסטרטור מפרסם יצירה ומחיקה וללא נתיב עדכון, ולכן תיקון הוא מחיקה ולאחריה עובדה חדשה.',
 };

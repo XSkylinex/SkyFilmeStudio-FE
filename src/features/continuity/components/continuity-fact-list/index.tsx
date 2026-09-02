@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FC } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/lib/components/button';
+import { Dialog } from '@/lib/components/dialog';
 import { EmptyState } from '@/lib/components/empty-state';
 import { ErrorState } from '@/lib/components/error-state';
 import { Field } from '@/lib/components/field';
@@ -13,6 +14,7 @@ import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view'
 import { productionScenesQueryOptions } from '@/features/storyboard/api/production-scenes.query';
 import { continuityFactsQueryOptions } from '@/features/continuity/api/continuity-facts.query';
 import { ContinuityFactCard } from '@/features/continuity/components/continuity-fact-card';
+import { CreateContinuityFactForm } from '@/features/continuity/components/create-continuity-fact-form';
 import type { ContinuityFactListProps } from './continuity-fact-list.interface';
 import './continuity-fact-list.css';
 
@@ -22,6 +24,7 @@ export const ContinuityFactList: FC<ContinuityFactListProps> = ({
   const translate = useTranslate();
   const [property, setProperty] = useState('');
   const [entityId, setEntityId] = useState('');
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const filter = {
     ...(property === '' ? {} : { property }),
@@ -106,6 +109,7 @@ export const ContinuityFactList: FC<ContinuityFactListProps> = ({
           {facts.data.items.map((fact) => (
             <ContinuityFactCard
               key={fact.id}
+              productionId={productionId}
               fact={fact}
               scenes={scenes.data ?? []}
               onFilterByEntity={setEntityId}
@@ -119,6 +123,31 @@ export const ContinuityFactList: FC<ContinuityFactListProps> = ({
           {translate('continuity.list.firstPageOnly')}
         </p>
       )}
+
+      <div className="continuity-fact-list__actions">
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={() => setIsCreateOpen(true)}
+        >
+          {translate('continuity.create.open')}
+        </Button>
+      </div>
+
+      <Dialog
+        open={isCreateOpen}
+        title={translate('continuity.create.heading')}
+        onClose={() => setIsCreateOpen(false)}
+      >
+        {isCreateOpen ? (
+          <CreateContinuityFactForm
+            productionId={productionId}
+            scenes={scenes.data ?? []}
+            onClose={() => setIsCreateOpen(false)}
+          />
+        ) : null}
+      </Dialog>
     </section>
   );
 };

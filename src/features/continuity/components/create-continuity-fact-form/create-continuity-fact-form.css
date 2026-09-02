@@ -1,0 +1,30 @@
+@layer features {
+  .create-continuity-fact-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .create-continuity-fact-form__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .create-continuity-fact-form__heading {
+    margin: 0;
+    font-size: var(--font-size-md);
+    color: var(--color-text);
+  }
+
+  .create-continuity-fact-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .create-continuity-fact-form__done {
+    color: var(--tone-success-fg);
+  }
+}

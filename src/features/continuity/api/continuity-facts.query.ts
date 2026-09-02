@@ -8,12 +8,15 @@ import { CONTINUITY_FACTS_STALE_TIME_MS } from '@/lib/query/query.constants';
 
 const continuityFactPageSchema = pageSchema(continuityFactSchema);
 
+export const continuityFactsQueryPrefix = (
+  productionId: ProductionId,
+): string[] => ['continuity-facts', productionId];
+
 export const continuityFactsQueryKey = (
   productionId: ProductionId,
   filter: ContinuityFactFilter = {},
 ): string[] => [
-  'continuity-facts',
-  productionId,
+  ...continuityFactsQueryPrefix(productionId),
   filter.entityId ?? '',
   filter.property ?? '',
 ];

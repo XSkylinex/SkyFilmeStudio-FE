@@ -48,4 +48,9 @@
     font-size: var(--font-size-sm);
     color: var(--color-text-secondary);
   }
+
+  .continuity-fact-list__actions {
+    display: flex;
+    gap: var(--space-2);
+  }
 }

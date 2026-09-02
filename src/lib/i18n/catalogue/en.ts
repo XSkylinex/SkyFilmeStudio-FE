@@ -1927,6 +1927,32 @@ export const EN_CATALOGUE = {
   'productions.card.continuity': 'Continuity',
   'productions.card.continuity.context':
     'Open the continuity facts for {title}',
+  'continuity.create.open': 'Record a fact',
+  'continuity.create.heading': 'Record a continuity fact',
+  'continuity.create.entity': 'Entity id',
+  'continuity.create.entity.hint':
+    'The subject, prop or location this fact is about. The orchestrator identifies it by id alone, so the id has to be copied from wherever that entity is listed.',
+  'continuity.create.property': 'Property',
+  'continuity.create.property.hint':
+    'What the fact is about, such as a costume or a state a subject is in. One value per property is in force at a time.',
+  'continuity.create.value': 'Value',
+  'continuity.create.source': 'Recorded from',
+  'continuity.create.source.hint':
+    'What happened that makes this true. It is what a later reader has to judge the fact by.',
+  'continuity.create.start': 'Holds from scene',
+  'continuity.create.end': 'Holds to scene',
+  'continuity.create.end.hint':
+    'Leave this open if the fact holds for the rest of the production.',
+  'continuity.create.end.open': 'To the end of the production',
+  'continuity.create.submit': 'Record this fact',
+  'continuity.create.saving': 'Recording…',
+  'continuity.create.failed.title': 'That fact was not recorded',
+  'continuity.card.remove': 'Delete',
+  'continuity.card.removing': 'Deleting…',
+  'continuity.card.removeContext': 'Delete the fact that {property} is {value}',
+  'continuity.card.remove.failed.title': 'That fact was not deleted',
+  'continuity.gaps.noUpdate':
+    'A recorded fact cannot be edited. The orchestrator publishes create and delete and no update route, so a correction is a delete followed by a new fact.',
 } satisfies Record<string, string> & Record<`error.${ErrorCode}`, string>;
 
 export type TranslationKey = keyof typeof EN_CATALOGUE;
