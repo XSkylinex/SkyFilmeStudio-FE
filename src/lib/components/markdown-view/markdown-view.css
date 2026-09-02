@@ -1,5 +1,5 @@
-@layer features {
-  .bible-markdown-view {
+@layer primitives {
+  .markdown-view {
     max-block-size: 32rem;
     margin: 0;
     padding: var(--space-4);

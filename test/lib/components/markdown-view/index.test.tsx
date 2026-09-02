@@ -1,13 +1,13 @@
 import { screen } from '@testing-library/react';
-import { BibleMarkdownView } from '@/features/bible/components/bible-markdown-view';
-import { renderInApp } from '../../../../render-in-app';
+import { MarkdownView } from '@/lib/components/markdown-view';
+import { renderInApp } from '../../../render-in-app';
 
 const DOCUMENT = '## World rules\n- Genre: תעודה קצרה\n  - ללא אלימות גרפית';
 
-describe('BibleMarkdownView', () => {
+describe('MarkdownView', () => {
   it('resolves direction per line, so a Hebrew line keeps its own sentence order', () => {
     renderInApp(
-      <BibleMarkdownView markdown={DOCUMENT} label="Generated view" />,
+      <MarkdownView markdown={DOCUMENT} label="Generated view" />,
     );
 
     expect(
@@ -17,7 +17,7 @@ describe('BibleMarkdownView', () => {
 
   it('is reachable by keyboard, because it is a scroll container', () => {
     renderInApp(
-      <BibleMarkdownView markdown={DOCUMENT} label="Generated view" />,
+      <MarkdownView markdown={DOCUMENT} label="Generated view" />,
     );
 
     expect(
@@ -27,7 +27,7 @@ describe('BibleMarkdownView', () => {
 
   it('keeps the document exactly as the orchestrator wrote it', () => {
     renderInApp(
-      <BibleMarkdownView markdown={DOCUMENT} label="Generated view" />,
+      <MarkdownView markdown={DOCUMENT} label="Generated view" />,
     );
 
     expect(
