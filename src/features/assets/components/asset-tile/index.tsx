@@ -6,12 +6,12 @@ import { STATUS_TONE } from '@/lib/status-tone.constants';
 import { API_PATH } from '@/lib/api/api.constants';
 import { mediaUrl } from '@/lib/api/media-url';
 import { formatDateTime } from '@/lib/format/format-date-time';
+import { ORIGIN_LABEL_KEY } from '@/lib/i18n/origin-label.constants';
 import { useTranslate } from '@/lib/i18n/use-translate';
 import { projectAssetPath } from '@/shell/routes/routes.constants';
 import { selectInterfaceLanguage } from '@/shell/shell.slice';
 import { useAppSelector } from '@/shell/store/hooks';
 import {
-  ASSET_ORIGIN_LABEL_KEY,
   ASSET_PRIVACY_LABEL_KEY,
   ASSET_TYPE_LABEL_KEY,
 } from '@/features/assets/assets.constants';
@@ -47,7 +47,7 @@ export const AssetTile: FC<AssetTileProps> = ({ projectId, asset }) => {
         />
         <Badge
           tone={STATUS_TONE.NEUTRAL}
-          label={translate(ASSET_ORIGIN_LABEL_KEY[asset.origin])}
+          label={translate(ORIGIN_LABEL_KEY[asset.origin])}
         />
         <Badge
           tone={
