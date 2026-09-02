@@ -582,10 +582,13 @@ did not get smaller by waiting, and it is still open.
       fields are now written as well as read, on both a first draft and a next version, and
       **subject rules joined them on 2026-09-02** — each block is attached to a subject chosen by
       name from the project's subject list and sent by id, and the read-only view names it back
-- [ ] reusable libraries are discoverable — **no controller on master serves one, measured
-      2026-09-02.** The first with a controller is the global SFX library on the unmerged
-      `be-21-audio` branch, alongside per-project opening/ending assets; both are `plan/13`'s to
-      build when that branch merges, and this box follows them
+- [x] reusable libraries are discoverable — **built 2026-09-02, later the same day the sentence above
+      was written.** BE-21 merged and both libraries followed it: the **global** SFX and ambience
+      library at `/sfx`, which belongs to the installation rather than to a project, and the
+      per-project opening and ending assets, which are discoverable as **lineages** so that a season
+      replaces its titles without losing what came before. The project's soundtrack library sits
+      beside the second. Each is reached from the navigation rather than found by knowing a URL,
+      which is what discoverable had to mean here
 
 ## Traps
 
