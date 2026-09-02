@@ -306,4 +306,12 @@ export const ERROR_CODE_GUIDANCE: Record<ErrorCode, ErrorCodeGuidance> = {
     presentation: 'PERSISTENT',
     messageKey: 'error.MUSIC_CUE_VARIETY_OVERUSED',
   },
+  AUDIO_TIMELINE_CONFLICT: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.AUDIO_TIMELINE_CONFLICT',
+  },
+  SCENE_MIX_MISSING: {
+    presentation: 'PERSISTENT',
+    messageKey: 'error.SCENE_MIX_MISSING',
+  },
 };

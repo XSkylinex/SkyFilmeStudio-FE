@@ -55,8 +55,8 @@ FE-04 built the seam to the orchestrator. `package.json` depends on
 `sky-filme-studio-be@portal:../sky-filme-studio-be`, every wire type is imported from
 `sky-filme-studio-be/contracts`, and a one-word rename in the backend contract breaks `yarn typecheck`
 here — that was demonstrated, not assumed. `src/lib/api/` holds the single `fetch` wrapper, the
-`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **seventy-six as of
-2026-09-02 morning, seventy-four the evening before, sixty-seven that morning, thirty-five as of
+`StudioError` taxonomy covering every `ERROR_CODE` the contract defines — **seventy-eight as of
+2026-09-02 afternoon, seventy-six that morning, seventy-four the evening before, sixty-seven that morning, thirty-five as of
 2026-08-22**, fourteen of them added in one day: four by BE-12 and ten by BE-13, each one breaking
 `yarn typecheck` here the moment it landed, read from
 `../sky-filme-studio-be/src/contracts/enums/error-code.ts` — and the
@@ -89,12 +89,13 @@ Rolldown cannot tree-shake CJS.
 to this phase. FE-06 moved the three installation-status queries out of `src/features/system/api/`
 and into `src/shell/api/`.
 
-FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,162 keys in English
-and Hebrew**, counted 2026-09-02 after the structure-profile form — 1,117 after the production edit
-form, 1,111 after the style version diff, 1,104 after the prop owner's name, 1,103 after two more
-BE-21 refusals, 1,101 that morning after the bible's subject-rules editor, 1,087 the night before,
-after the canonical comparison, dialogue editing, FE-12's advisory half, FE-16's third pass and four
-BE-21 refusals absorbed the same evening — 109 when FE-15 closed, then the system screen, the
+FE-15 added the i18n mechanism: `src/lib/i18n/` holds a typed catalogue of **1,164 keys in English
+and Hebrew**, counted 2026-09-02 after two audio-mix refusals — 1,162 after the structure-profile
+form, 1,117 after the production edit form, 1,111 after the style version diff, 1,104 after the prop
+owner's name, 1,103 after two more BE-21 refusals, 1,101 that morning after the bible's
+subject-rules editor, 1,087 the night before, after the canonical comparison, dialogue editing,
+FE-12's advisory half, FE-16's third pass and four BE-21 refusals absorbed the same evening — 109
+when FE-15 closed, then the system screen, the
 primitive layer FE-15's migration never reached, the asset library, asset detail, subject review, the
 four creative-library screens, FE-09's production list, create form and planner, the project bible
 and its two write forms, the storyboard review, whose 120 keys include a label for every value of
