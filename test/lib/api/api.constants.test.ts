@@ -195,6 +195,10 @@ const everyPath: Record<string, string> = {
     API_PATH.pronunciationDictionaries(SAMPLE_PROJECT_ID),
   pronunciationDictionaryByLanguage:
     API_PATH.pronunciationDictionaryByLanguage(SAMPLE_PROJECT_ID),
+  pronunciationDictionary: API_PATH.pronunciationDictionary(
+    SAMPLE_PROJECT_ID,
+    SAMPLE_PRONUNCIATION_DICTIONARY_ID,
+  ),
   pronunciationDictionaryEntries: API_PATH.pronunciationDictionaryEntries(
     SAMPLE_PROJECT_ID,
     SAMPLE_PRONUNCIATION_DICTIONARY_ID,

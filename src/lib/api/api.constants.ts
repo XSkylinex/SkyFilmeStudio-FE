@@ -124,6 +124,11 @@ export const API_PATH = {
     entryId: PronunciationDictionaryEntryId,
   ): string =>
     `/projects/${projectId}/pronunciation-dictionaries/${dictionaryId}/entries/${entryId}`,
+  pronunciationDictionary: (
+    projectId: ProjectId,
+    dictionaryId: PronunciationDictionaryId,
+  ): string =>
+    `/projects/${projectId}/pronunciation-dictionaries/${dictionaryId}`,
   pronunciationDictionaryEntries: (
     projectId: ProjectId,
     dictionaryId: PronunciationDictionaryId,

@@ -1944,4 +1944,12 @@ export const HE_CATALOGUE: Record<TranslationKey, string> = {
   'audio.score.scene.saving': 'שומר…',
   'audio.score.scene.saved': 'המיקומים נשמרו.',
   'audio.score.scene.failed.title': 'המיקומים לא נשמרו',
+  'voices.dictionaries.remove': 'מחיקה',
+  'voices.dictionaries.removing': 'מוחק…',
+  'voices.dictionaries.removeContext': 'את מילון ההגייה של {language}',
+  'voices.dictionaries.remove.failed.title': 'מילון ההגייה לא נמחק',
+  'voices.dictionaries.remove.held':
+    'מילון נמחק על ידי הסתרתו, והמונחים שלו נשארים מקושרים אליו במקום להימחק. לכן ניתן למחוק מילון רק לאחר שהמונחים שלו הוסרו, וכך מונח אינו שורד במילון שאף אחד אינו מציג.',
+  'voices.dictionaries.remove.unknown':
+    'לא ניתן היה לקרוא את המונחים של המילון הזה, ולכן לא ידוע אם בטוח למחוק אותו ולא מוצעת מחיקה.',
 };

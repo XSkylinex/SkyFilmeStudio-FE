@@ -10,6 +10,7 @@ import { composeRouteErrorDescription } from '@/shell/helpers/compose-route-erro
 import { resolveRouteErrorView } from '@/shell/helpers/resolve-route-error-view';
 import { pronunciationDictionariesQueryOptions } from '@/features/voices/api/pronunciation-dictionaries.query';
 import { CreatePronunciationDictionaryForm } from '@/features/voices/components/create-pronunciation-dictionary-form';
+import { DeletePronunciationDictionary } from '@/features/voices/components/delete-pronunciation-dictionary';
 import { PronunciationEntries } from '@/features/voices/components/pronunciation-entries';
 import type { PronunciationDictionariesProps } from './pronunciation-dictionaries.interface';
 import './pronunciation-dictionaries.css';
@@ -82,6 +83,11 @@ export const PronunciationDictionaries: FC<PronunciationDictionariesProps> = ({
                   <span dir="ltr">{dictionary.language}</span>
                 </h4>
                 <PronunciationEntries
+                  projectId={projectId}
+                  dictionaryId={dictionary.id}
+                  language={dictionary.language}
+                />
+                <DeletePronunciationDictionary
                   projectId={projectId}
                   dictionaryId={dictionary.id}
                   language={dictionary.language}
